@@ -42,10 +42,16 @@ const (
 	FieldMenus = "menus"
 	// FieldApis holds the string denoting the apis field in the database.
 	FieldApis = "apis"
+	// FieldPermissions holds the string denoting the permissions field in the database.
+	FieldPermissions = "permissions"
+	// FieldCustomOrgUnitIds holds the string denoting the custom_org_unit_ids field in the database.
+	FieldCustomOrgUnitIds = "custom_org_unit_ids"
 	// FieldDataScope holds the string denoting the data_scope field in the database.
 	FieldDataScope = "data_scope"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldType holds the string denoting the type field in the database.
+	FieldType = "type"
 	// EdgeParent holds the string denoting the parent edge name in mutations.
 	EdgeParent = "parent"
 	// EdgeChildren holds the string denoting the children edge name in mutations.
@@ -79,8 +85,11 @@ var Columns = []string{
 	FieldCode,
 	FieldMenus,
 	FieldApis,
+	FieldPermissions,
+	FieldCustomOrgUnitIds,
 	FieldDataScope,
 	FieldStatus,
+	FieldType,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -109,13 +118,11 @@ type DataScope string
 
 // DataScope values.
 const (
-	DataScopeAll          DataScope = "ALL"
-	DataScopeCustom       DataScope = "CUSTOM"
-	DataScopeSelf         DataScope = "SELF"
-	DataScopeOrg          DataScope = "ORG"
-	DataScopeOrgAndChild  DataScope = "ORG_AND_CHILD"
-	DataScopeDept         DataScope = "DEPT"
-	DataScopeDeptAndChild DataScope = "DEPT_AND_CHILD"
+	DataScopeAll           DataScope = "ALL"
+	DataScopeSelf          DataScope = "SELF"
+	DataScopeUnitOnly      DataScope = "UNIT_ONLY"
+	DataScopeUnitAndChild  DataScope = "UNIT_AND_CHILD"
+	DataScopeSelectedUnits DataScope = "SELECTED_UNITS"
 )
 
 func (ds DataScope) String() string {
@@ -125,7 +132,7 @@ func (ds DataScope) String() string {
 // DataScopeValidator is a validator for the "data_scope" field enum values. It is called by the builders before save.
 func DataScopeValidator(ds DataScope) error {
 	switch ds {
-	case DataScopeAll, DataScopeCustom, DataScopeSelf, DataScopeOrg, DataScopeOrgAndChild, DataScopeDept, DataScopeDeptAndChild:
+	case DataScopeAll, DataScopeSelf, DataScopeUnitOnly, DataScopeUnitAndChild, DataScopeSelectedUnits:
 		return nil
 	default:
 		return fmt.Errorf("role: invalid enum value for data_scope field: %q", ds)
@@ -155,6 +162,32 @@ func StatusValidator(s Status) error {
 		return nil
 	default:
 		return fmt.Errorf("role: invalid enum value for status field: %q", s)
+	}
+}
+
+// Type defines the type for the "type" enum field.
+type Type string
+
+// TypeSystem is the default value of the Type enum.
+const DefaultType = TypeSystem
+
+// Type values.
+const (
+	TypeSystem Type = "SYSTEM"
+	TypeCustom Type = "CUSTOM"
+)
+
+func (_type Type) String() string {
+	return string(_type)
+}
+
+// TypeValidator is a validator for the "type" field enum values. It is called by the builders before save.
+func TypeValidator(_type Type) error {
+	switch _type {
+	case TypeSystem, TypeCustom:
+		return nil
+	default:
+		return fmt.Errorf("role: invalid enum value for type field: %q", _type)
 	}
 }
 
@@ -234,6 +267,11 @@ func ByDataScope(opts ...sql.OrderTermOption) OrderOption {
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
+// ByType orders the results by the type field.
+func ByType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldType, opts...).ToFunc()
 }
 
 // ByParentField orders the results by parent field.

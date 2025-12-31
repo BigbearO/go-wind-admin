@@ -98,24 +98,28 @@ func (m *Role) validate(all bool) error {
 		// no validation rules for Name
 	}
 
-	if m.SortOrder != nil {
-		// no validation rules for SortOrder
-	}
-
 	if m.Code != nil {
 		// no validation rules for Code
+	}
+
+	if m.SortOrder != nil {
+		// no validation rules for SortOrder
 	}
 
 	if m.Status != nil {
 		// no validation rules for Status
 	}
 
-	if m.Remark != nil {
-		// no validation rules for Remark
+	if m.Type != nil {
+		// no validation rules for Type
 	}
 
 	if m.DataScope != nil {
 		// no validation rules for DataScope
+	}
+
+	if m.Remark != nil {
+		// no validation rules for Remark
 	}
 
 	if m.TenantId != nil {

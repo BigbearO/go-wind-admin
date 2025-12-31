@@ -47,10 +47,16 @@ type Role struct {
 	Menus []uint32 `json:"menus,omitempty"`
 	// 分配的API列表
 	Apis []uint32 `json:"apis,omitempty"`
+	// 权限点列表
+	Permissions []uint32 `json:"permissions,omitempty"`
+	// 当 DataScope 为 SELECTED_UNITS 时关联的组织单元列表
+	CustomOrgUnitIds []uint32 `json:"custom_org_unit_ids,omitempty"`
 	// 数据权限范围
 	DataScope *role.DataScope `json:"data_scope,omitempty"`
 	// 角色状态
 	Status *role.Status `json:"status,omitempty"`
+	// 角色类型
+	Type *role.Type `json:"type,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the RoleQuery when eager-loading is set.
 	Edges        RoleEdges `json:"edges"`
@@ -93,11 +99,11 @@ func (*Role) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case role.FieldMenus, role.FieldApis:
+		case role.FieldMenus, role.FieldApis, role.FieldPermissions, role.FieldCustomOrgUnitIds:
 			values[i] = new([]byte)
 		case role.FieldID, role.FieldCreatedBy, role.FieldUpdatedBy, role.FieldDeletedBy, role.FieldSortOrder, role.FieldParentID, role.FieldTenantID:
 			values[i] = new(sql.NullInt64)
-		case role.FieldRemark, role.FieldName, role.FieldCode, role.FieldDataScope, role.FieldStatus:
+		case role.FieldRemark, role.FieldName, role.FieldCode, role.FieldDataScope, role.FieldStatus, role.FieldType:
 			values[i] = new(sql.NullString)
 		case role.FieldCreatedAt, role.FieldUpdatedAt, role.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -222,6 +228,22 @@ func (_m *Role) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field apis: %w", err)
 				}
 			}
+		case role.FieldPermissions:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field permissions", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Permissions); err != nil {
+					return fmt.Errorf("unmarshal field permissions: %w", err)
+				}
+			}
+		case role.FieldCustomOrgUnitIds:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field custom_org_unit_ids", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.CustomOrgUnitIds); err != nil {
+					return fmt.Errorf("unmarshal field custom_org_unit_ids: %w", err)
+				}
+			}
 		case role.FieldDataScope:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field data_scope", values[i])
@@ -235,6 +257,13 @@ func (_m *Role) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Status = new(role.Status)
 				*_m.Status = role.Status(value.String)
+			}
+		case role.FieldType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field type", values[i])
+			} else if value.Valid {
+				_m.Type = new(role.Type)
+				*_m.Type = role.Type(value.String)
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -348,6 +377,12 @@ func (_m *Role) String() string {
 	builder.WriteString("apis=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Apis))
 	builder.WriteString(", ")
+	builder.WriteString("permissions=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Permissions))
+	builder.WriteString(", ")
+	builder.WriteString("custom_org_unit_ids=")
+	builder.WriteString(fmt.Sprintf("%v", _m.CustomOrgUnitIds))
+	builder.WriteString(", ")
 	if v := _m.DataScope; v != nil {
 		builder.WriteString("data_scope=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
@@ -355,6 +390,11 @@ func (_m *Role) String() string {
 	builder.WriteString(", ")
 	if v := _m.Status; v != nil {
 		builder.WriteString("status=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	if v := _m.Type; v != nil {
+		builder.WriteString("type=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteByte(')')

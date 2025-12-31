@@ -13,14 +13,19 @@ import (
 func Server() middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {
 		return func(ctx context.Context, req interface{}) (interface{}, error) {
-			_, tTenantId, tAuthority := metadata.FromOperatorMetadata(ctx)
-
-			if tTenantId != nil && tAuthority != nil {
-				ctx = viewer.NewContext(ctx, viewer.UserViewer{
-					Authority: *tAuthority,
-					TenantId:  tTenantId,
-				})
+			data := metadata.FromOperatorMetadata(ctx)
+			if data == nil {
+				return handler(ctx, req)
 			}
+
+			userViewer := viewer.NewUserViewer(
+				data.GetUserID(),
+				data.GetTenantID(),
+				data.GetOrgUnitID(),
+				data.GetIsPlatformAdmin(),
+				data.GetDataScope(),
+			)
+			ctx = viewer.NewContext(ctx, userViewer)
 
 			return handler(ctx, req)
 		}

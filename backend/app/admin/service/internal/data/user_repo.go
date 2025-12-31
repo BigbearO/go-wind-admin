@@ -45,10 +45,8 @@ type userRepo struct {
 	entClient *entCrud.EntClient[*ent.Client]
 	log       *log.Helper
 
-	mapper             *mapper.CopierMapper[userV1.User, ent.User]
-	statusConverter    *mapper.EnumTypeConverter[userV1.User_Status, user.Status]
-	genderConverter    *mapper.EnumTypeConverter[userV1.User_Gender, user.Gender]
-	authorityConverter *mapper.EnumTypeConverter[userV1.User_Authority, user.Authority]
+	mapper          *mapper.CopierMapper[userV1.User, ent.User]
+	genderConverter *mapper.EnumTypeConverter[userV1.User_Gender, user.Gender]
 
 	repository *entCrud.Repository[
 		ent.UserQuery, ent.UserSelect,
@@ -62,12 +60,10 @@ type userRepo struct {
 
 func NewUserRepo(ctx *bootstrap.Context, entClient *entCrud.EntClient[*ent.Client]) UserRepo {
 	repo := &userRepo{
-		log:                ctx.NewLoggerHelper("user/repo/admin-service"),
-		entClient:          entClient,
-		mapper:             mapper.NewCopierMapper[userV1.User, ent.User](),
-		statusConverter:    mapper.NewEnumTypeConverter[userV1.User_Status, user.Status](userV1.User_Status_name, userV1.User_Status_value),
-		genderConverter:    mapper.NewEnumTypeConverter[userV1.User_Gender, user.Gender](userV1.User_Gender_name, userV1.User_Gender_value),
-		authorityConverter: mapper.NewEnumTypeConverter[userV1.User_Authority, user.Authority](userV1.User_Authority_name, userV1.User_Authority_value),
+		log:             ctx.NewLoggerHelper("user/repo/admin-service"),
+		entClient:       entClient,
+		mapper:          mapper.NewCopierMapper[userV1.User, ent.User](),
+		genderConverter: mapper.NewEnumTypeConverter[userV1.User_Gender, user.Gender](userV1.User_Gender_name, userV1.User_Gender_value),
 	}
 
 	repo.init()
@@ -88,9 +84,7 @@ func (r *userRepo) init() {
 	r.mapper.AppendConverters(copierutil.NewTimeStringConverterPair())
 	r.mapper.AppendConverters(copierutil.NewTimeTimestamppbConverterPair())
 
-	r.mapper.AppendConverters(r.statusConverter.NewConverterPair())
 	r.mapper.AppendConverters(r.genderConverter.NewConverterPair())
-	r.mapper.AppendConverters(r.authorityConverter.NewConverterPair())
 }
 
 func (r *userRepo) Count(ctx context.Context) (int, error) {
@@ -168,15 +162,9 @@ func (r *userRepo) Create(ctx context.Context, req *userV1.CreateUserRequest) (*
 		SetNillableAddress(req.Data.Address).
 		SetNillableDescription(req.Data.Description).
 		SetNillableRemark(req.Data.Remark).
-		SetNillableLastLoginTime(timeutil.TimestamppbToTime(req.Data.LastLoginTime)).
+		SetNillableLastLoginAt(timeutil.TimestamppbToTime(req.Data.LastLoginAt)).
 		SetNillableLastLoginIP(req.Data.LastLoginIp).
-		SetNillableStatus(r.statusConverter.ToEntity(req.Data.Status)).
 		SetNillableGender(r.genderConverter.ToEntity(req.Data.Gender)).
-		SetNillableAuthority(r.authorityConverter.ToEntity(req.Data.Authority)).
-		SetNillableOrgID(req.Data.OrgId).
-		SetNillableDepartmentID(req.Data.DepartmentId).
-		SetNillablePositionID(req.Data.PositionId).
-		SetNillableWorkID(req.Data.WorkId).
 		SetNillableCreatedBy(req.Data.CreatedBy).
 		SetNillableCreatedAt(timeutil.TimestamppbToTime(req.Data.CreatedAt))
 
@@ -200,7 +188,7 @@ func (r *userRepo) Create(ctx context.Context, req *userV1.CreateUserRequest) (*
 		for _, roleId := range req.Data.GetRoleIds() {
 			roleIds = append(roleIds, int(roleId))
 		}
-		builder.SetRoleIds(roleIds)
+		//builder.SetRoleIds(roleIds)
 	}
 
 	if ret, err := builder.Save(ctx); err != nil {
@@ -247,15 +235,9 @@ func (r *userRepo) Update(ctx context.Context, req *userV1.UpdateUserRequest) er
 				SetNillableAddress(req.Data.Address).
 				SetNillableDescription(req.Data.Description).
 				SetNillableRemark(req.Data.Remark).
-				SetNillableLastLoginTime(timeutil.TimestamppbToTime(req.Data.LastLoginTime)).
+				SetNillableLastLoginAt(timeutil.TimestamppbToTime(req.Data.LastLoginAt)).
 				SetNillableLastLoginIP(req.Data.LastLoginIp).
-				SetNillableStatus(r.statusConverter.ToEntity(req.Data.Status)).
 				SetNillableGender(r.genderConverter.ToEntity(req.Data.Gender)).
-				//SetNillableAuthority(r.authorityConverter.ToEntity(req.Data.Authority)).
-				SetNillableOrgID(req.Data.OrgId).
-				SetNillableDepartmentID(req.Data.DepartmentId).
-				SetNillablePositionID(req.Data.PositionId).
-				SetNillableWorkID(req.Data.WorkId).
 				SetNillableUpdatedBy(req.Data.UpdatedBy).
 				SetNillableUpdatedAt(timeutil.TimestamppbToTime(req.Data.UpdatedAt))
 
@@ -268,7 +250,7 @@ func (r *userRepo) Update(ctx context.Context, req *userV1.UpdateUserRequest) er
 				for _, roleId := range req.Data.GetRoleIds() {
 					roleIds = append(roleIds, int(roleId))
 				}
-				builder.SetRoleIds(roleIds)
+				//builder.SetRoleIds(roleIds)
 			}
 		},
 		func(s *sql.Selector) {

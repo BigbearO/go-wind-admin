@@ -25,6 +25,7 @@ var (
 	_ annotations.FieldBehavior
 	_ redact.FieldRules
 	_ servicev1.User
+	_ servicev1.Role
 )
 
 // RegisterRedactedAuthenticationServiceServer wraps the AuthenticationServiceServer with the redacted server and registers the service in GRPC
@@ -140,6 +141,8 @@ func (x *LoginRequest) Redact() string {
 	// Safe field: Code
 
 	// Safe field: ClientType
+
+	// Safe field: DeviceId
 	return x.String()
 }
 
@@ -223,28 +226,6 @@ func (x *RegisterUserResponse) Redact() string {
 	return x.String()
 }
 
-// Redact method implementation for UserTokenPayload
-func (x *UserTokenPayload) Redact() string {
-	if x == nil {
-		return ""
-	}
-
-	// Safe field: UserId
-
-	// Safe field: TenantId
-
-	// Safe field: Username
-
-	// Safe field: ClientId
-
-	// Safe field: Authority
-
-	// Safe field: Roles
-
-	// Safe field: DeviceId
-	return x.String()
-}
-
 // Redact method implementation for WhoAmIResponse
 func (x *WhoAmIResponse) Redact() string {
 	if x == nil {
@@ -254,7 +235,5 @@ func (x *WhoAmIResponse) Redact() string {
 	// Safe field: UserId
 
 	// Safe field: Username
-
-	// Safe field: Authority
 	return x.String()
 }

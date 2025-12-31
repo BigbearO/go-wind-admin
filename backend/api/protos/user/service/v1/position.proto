@@ -34,8 +34,19 @@ service PositionService {
 message Position {
   // 职位状态
   enum Status {
-    OFF = 0;         // 禁用
-    ON = 1;          // 启用
+    OFF = 0;     // 打开
+    ON = 1;   // 关闭
+  }
+
+  // 职位类型
+  enum Type {
+    REGULAR = 0;    // 普通职位
+    LEADER = 1;     // 领导职位
+    MANAGER = 2;    // 管理职位
+    INTERN = 3;     // 实习职位
+    CONTRACT = 4;   // 合同职位
+
+    OTHER = 100;     // 其他职位
   }
 
   optional uint32 id = 1 [
@@ -45,37 +56,85 @@ message Position {
 
   optional string name = 2 [json_name = "name", (gnostic.openapi.v3.property) = {description: "职位名称"}];  // 职位名称
   optional string code = 3 [json_name = "code", (gnostic.openapi.v3.property) = {description: "唯一编码（建议规则：部门编码 + 职位类型 + 序号，如 “FIN-LEADER-001”），用于数据同步和快速识别"}];  // 唯一编码（建议规则：部门编码 + 职位类型 + 序号，如 “FIN-LEADER-001”），用于数据同步和快速识别
-  optional uint32 quota = 4 [json_name = "quota", (gnostic.openapi.v3.property) = {description: "编制人数（该职位最多可容纳的员工数量，0表示无限制）"}];  // 编制人数（该职位最多可容纳的员工数量，0表示无限制）
-  optional int32 sort_order = 5 [json_name = "sortOrder", (gnostic.openapi.v3.property) = {description: "排序顺序，值越小越靠前"}];  // 排序顺序，值越小越靠前
+
+  optional uint32 headcount = 4 [
+    json_name = "headcount",
+    (gnostic.openapi.v3.property) = {description: "编制人数（该职位最多可容纳的员工数量，0表示无限制）"}
+  ];  // 编制人数（该职位最多可容纳的员工数量，0表示无限制）
+
+  optional int32 sort_order = 5 [
+    json_name = "sortOrder",
+    (gnostic.openapi.v3.property) = {description: "排序顺序，值越小越靠前"}
+  ];  // 排序顺序，值越小越靠前
 
   optional Status status = 6 [(gnostic.openapi.v3.property) = {description: "状态"}]; // 状态
-  optional string remark = 7 [json_name = "remark", (gnostic.openapi.v3.property) = {description: "备注"}];  // 备注
-  optional string description = 8 [json_name = "description", (gnostic.openapi.v3.property) = {description: "职责描述"}];  // 职责描述
+  optional Type type = 7 [json_name = "type", (gnostic.openapi.v3.property) = {description: "职位类型"}];  // 职位类型
 
-  optional uint32 organization_id = 10 [
-    json_name = "organizationId",
-    (gnostic.openapi.v3.property) = {description: "所属组织ID"}
-  ];  // 所属组织ID
+  optional string remark = 8 [
+    json_name = "remark",
+    (gnostic.openapi.v3.property) = {description: "备注"}
+  ];  // 备注
+  optional string description = 9 [
+    json_name = "description",
+    (gnostic.openapi.v3.property) = {description: "职位描述"}
+  ];  // 职位描述
 
-  optional string organization_name = 11 [
-    json_name = "organizationName",
-    (gnostic.openapi.v3.property) = {description: "所属组织名称"}
-  ];  // 所属组织名称
+  optional string job_family = 10 [
+    json_name = "jobFamily",
+    (gnostic.openapi.v3.property) = {description: "职类/序列"}
+  ];  // 职类/序列
+  optional string job_grade = 11 [
+    json_name = "jobGrade",
+    (gnostic.openapi.v3.property) = {description: "职级"}
+  ];  // 职级
+  optional int32 level = 12 [
+    json_name = "level",
+    (gnostic.openapi.v3.property) = {description: "数值化职级"}
+  ];  // 数值化职级
+  optional bool is_key_position = 13 [
+    json_name = "isKeyPosition",
+    (gnostic.openapi.v3.property) = {description: "是否关键岗位"}
+  ];  // 是否关键岗位
 
-  optional uint32 department_id = 12 [
-    json_name = "departmentId",
-    (gnostic.openapi.v3.property) = {description: "所属部门ID"}
-  ];  // 所属部门ID
+  optional uint32 tenant_id = 20 [
+    json_name = "tenantId",
+    (gnostic.openapi.v3.property) = {description: "租户ID"}
+  ];  // 租户ID
+  optional string tenant_name = 21 [
+    json_name = "tenantName",
+    (gnostic.openapi.v3.property) = {description: "租户名称"}
+  ];  // 租户名称
 
-  optional string department_name = 13 [
-    json_name = "departmentName",
-    (gnostic.openapi.v3.property) = {description: "所属部门名称"}
-  ];  // 所属部门名称
+  optional uint32 org_unit_id = 22 [
+    json_name = "orgUnitId",
+    (gnostic.openapi.v3.property) = {description: "所属组织单元ID"}
+  ];  // 所属组织单元ID
+  optional string org_unit_name = 23 [
+    json_name = "orgUnitName",
+    (gnostic.openapi.v3.property) = {description: "所属组织单元名称"}
+  ];  // 所属组织单元名称
 
-  optional uint32 tenant_id = 14 [json_name = "tenantId", (gnostic.openapi.v3.property) = {description: "租户ID"}];  // 租户ID
+  optional uint32 reports_to_position_id = 24 [
+    json_name = "reportsToPositionId",
+    (gnostic.openapi.v3.property) = {description: "汇报关系用户ID"}
+  ];  // 汇报关系用户ID
+  optional string reports_to_position_name = 25 [
+    json_name = "reportsToPositionName",
+    (gnostic.openapi.v3.property) = {description: "汇报关系用户名称"}
+  ];  // 汇报关系用户名称
 
-  optional uint32 parent_id = 50 [json_name = "parentId", (gnostic.openapi.v3.property) = {description: "父节点ID"}];  // 父节点ID
-  repeated Position children = 51 [json_name = "children", (gnostic.openapi.v3.property) = {description: "子节点树"}];  // 子节点树
+  optional google.protobuf.Timestamp start_at = 50 [
+    json_name = "startAt",
+    (gnostic.openapi.v3.property) = {description: "生效时间（UTC）"}
+  ];// 生效时间
+
+  optional google.protobuf.Timestamp end_at = 51 [
+    json_name = "endAt",
+    (gnostic.openapi.v3.property) = {description: "失效时间（UTC）"}
+  ];// 失效时间
+
+  optional uint32 parent_id = 60 [json_name = "parentId", (gnostic.openapi.v3.property) = {description: "父节点ID"}];  // 父节点ID
+  repeated Position children = 61 [json_name = "children", (gnostic.openapi.v3.property) = {description: "子节点树"}];  // 子节点树
 
   optional uint32 created_by = 100 [json_name = "createdBy", (gnostic.openapi.v3.property) = {description: "创建者ID"}]; // 创建者ID
   optional uint32 updated_by = 101 [json_name = "updatedBy", (gnostic.openapi.v3.property) = {description: "更新者ID"}]; // 更新者ID

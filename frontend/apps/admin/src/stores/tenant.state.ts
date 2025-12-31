@@ -115,23 +115,23 @@ export const useTenantStore = defineStore('tenant', () => {
 export const tenantTypeList = computed(() => [
   {
     value: 'TRIAL',
-    label: $t('enum.tenantType.TRIAL'),
+    label: $t('enum.tenant.type.TRIAL'),
   },
   {
     value: 'PAID',
-    label: $t('enum.tenantType.PAID'),
+    label: $t('enum.tenant.type.PAID'),
   },
   {
     value: 'INTERNAL',
-    label: $t('enum.tenantType.INTERNAL'),
+    label: $t('enum.tenant.type.INTERNAL'),
   },
   {
     value: 'PARTNER',
-    label: $t('enum.tenantType.PARTNER'),
+    label: $t('enum.tenant.type.PARTNER'),
   },
   {
     value: 'CUSTOM',
-    label: $t('enum.tenantType.CUSTOM'),
+    label: $t('enum.tenant.type.CUSTOM'),
   },
 ]);
 
@@ -173,19 +173,19 @@ export function tenantTypeToColor(tenantType: Tenant_Type) {
 export const tenantStatusList = computed(() => [
   {
     value: 'ON',
-    label: $t('enum.tenantStatus.ON'),
+    label: $t('enum.tenant.status.ON'),
   },
   {
     value: 'OFF',
-    label: $t('enum.tenantStatus.OFF'),
+    label: $t('enum.tenant.status.OFF'),
   },
   {
     value: 'EXPIRED',
-    label: $t('enum.tenantStatus.EXPIRED'),
+    label: $t('enum.tenant.status.EXPIRED'),
   },
   {
     value: 'FREEZE',
-    label: $t('enum.tenantStatus.FREEZE'),
+    label: $t('enum.tenant.status.FREEZE'),
   },
 ]);
 
@@ -223,15 +223,15 @@ export function tenantStatusToColor(tenantStatus: Tenant_Status) {
 export const tenantAuditStatusList = computed(() => [
   {
     value: 'PENDING',
-    label: $t('enum.tenantAuditStatus.PENDING'),
+    label: $t('enum.tenant.auditStatus.PENDING'),
   },
   {
     value: 'APPROVED',
-    label: $t('enum.tenantAuditStatus.APPROVED'),
+    label: $t('enum.tenant.auditStatus.APPROVED'),
   },
   {
     value: 'REJECTED',
-    label: $t('enum.tenantAuditStatus.REJECTED'),
+    label: $t('enum.tenant.auditStatus.REJECTED'),
   },
 ]);
 

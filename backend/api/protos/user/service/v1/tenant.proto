@@ -133,8 +133,8 @@ message Tenant {
     (gnostic.openapi.v3.property) = {description: "成员数量"}
   ];  // 成员数量
 
-  optional google.protobuf.Timestamp last_login_time = 31 [
-    json_name = "lastLoginTime",
+  optional google.protobuf.Timestamp last_login_at = 31 [
+    json_name = "lastLoginAt",
     (gnostic.openapi.v3.property) = {description: "最后登录时间"}
   ]; // 最后登录时间
 

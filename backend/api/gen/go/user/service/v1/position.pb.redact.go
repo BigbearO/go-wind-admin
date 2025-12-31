@@ -124,25 +124,41 @@ func (x *Position) Redact() string {
 
 	// Safe field: Code
 
-	// Safe field: Quota
+	// Safe field: Headcount
 
 	// Safe field: SortOrder
 
 	// Safe field: Status
 
+	// Safe field: Type
+
 	// Safe field: Remark
 
 	// Safe field: Description
 
-	// Safe field: OrganizationId
+	// Safe field: JobFamily
 
-	// Safe field: OrganizationName
+	// Safe field: JobGrade
 
-	// Safe field: DepartmentId
+	// Safe field: Level
 
-	// Safe field: DepartmentName
+	// Safe field: IsKeyPosition
 
 	// Safe field: TenantId
+
+	// Safe field: TenantName
+
+	// Safe field: OrgUnitId
+
+	// Safe field: OrgUnitName
+
+	// Safe field: ReportsToPositionId
+
+	// Safe field: ReportsToPositionName
+
+	// Safe field: StartAt
+
+	// Safe field: EndAt
 
 	// Safe field: ParentId
 

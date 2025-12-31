@@ -288,44 +288,16 @@ func (_c *UserCreate) SetNillableGender(v *user.Gender) *UserCreate {
 	return _c
 }
 
-// SetAuthority sets the "authority" field.
-func (_c *UserCreate) SetAuthority(v user.Authority) *UserCreate {
-	_c.mutation.SetAuthority(v)
+// SetLastLoginAt sets the "last_login_at" field.
+func (_c *UserCreate) SetLastLoginAt(v time.Time) *UserCreate {
+	_c.mutation.SetLastLoginAt(v)
 	return _c
 }
 
-// SetNillableAuthority sets the "authority" field if the given value is not nil.
-func (_c *UserCreate) SetNillableAuthority(v *user.Authority) *UserCreate {
+// SetNillableLastLoginAt sets the "last_login_at" field if the given value is not nil.
+func (_c *UserCreate) SetNillableLastLoginAt(v *time.Time) *UserCreate {
 	if v != nil {
-		_c.SetAuthority(*v)
-	}
-	return _c
-}
-
-// SetStatus sets the "status" field.
-func (_c *UserCreate) SetStatus(v user.Status) *UserCreate {
-	_c.mutation.SetStatus(v)
-	return _c
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_c *UserCreate) SetNillableStatus(v *user.Status) *UserCreate {
-	if v != nil {
-		_c.SetStatus(*v)
-	}
-	return _c
-}
-
-// SetLastLoginTime sets the "last_login_time" field.
-func (_c *UserCreate) SetLastLoginTime(v time.Time) *UserCreate {
-	_c.mutation.SetLastLoginTime(v)
-	return _c
-}
-
-// SetNillableLastLoginTime sets the "last_login_time" field if the given value is not nil.
-func (_c *UserCreate) SetNillableLastLoginTime(v *time.Time) *UserCreate {
-	if v != nil {
-		_c.SetLastLoginTime(*v)
+		_c.SetLastLoginAt(*v)
 	}
 	return _c
 }
@@ -344,65 +316,17 @@ func (_c *UserCreate) SetNillableLastLoginIP(v *string) *UserCreate {
 	return _c
 }
 
-// SetOrgID sets the "org_id" field.
-func (_c *UserCreate) SetOrgID(v uint32) *UserCreate {
-	_c.mutation.SetOrgID(v)
+// SetIsBanned sets the "is_banned" field.
+func (_c *UserCreate) SetIsBanned(v bool) *UserCreate {
+	_c.mutation.SetIsBanned(v)
 	return _c
 }
 
-// SetNillableOrgID sets the "org_id" field if the given value is not nil.
-func (_c *UserCreate) SetNillableOrgID(v *uint32) *UserCreate {
+// SetNillableIsBanned sets the "is_banned" field if the given value is not nil.
+func (_c *UserCreate) SetNillableIsBanned(v *bool) *UserCreate {
 	if v != nil {
-		_c.SetOrgID(*v)
+		_c.SetIsBanned(*v)
 	}
-	return _c
-}
-
-// SetDepartmentID sets the "department_id" field.
-func (_c *UserCreate) SetDepartmentID(v uint32) *UserCreate {
-	_c.mutation.SetDepartmentID(v)
-	return _c
-}
-
-// SetNillableDepartmentID sets the "department_id" field if the given value is not nil.
-func (_c *UserCreate) SetNillableDepartmentID(v *uint32) *UserCreate {
-	if v != nil {
-		_c.SetDepartmentID(*v)
-	}
-	return _c
-}
-
-// SetPositionID sets the "position_id" field.
-func (_c *UserCreate) SetPositionID(v uint32) *UserCreate {
-	_c.mutation.SetPositionID(v)
-	return _c
-}
-
-// SetNillablePositionID sets the "position_id" field if the given value is not nil.
-func (_c *UserCreate) SetNillablePositionID(v *uint32) *UserCreate {
-	if v != nil {
-		_c.SetPositionID(*v)
-	}
-	return _c
-}
-
-// SetWorkID sets the "work_id" field.
-func (_c *UserCreate) SetWorkID(v uint32) *UserCreate {
-	_c.mutation.SetWorkID(v)
-	return _c
-}
-
-// SetNillableWorkID sets the "work_id" field if the given value is not nil.
-func (_c *UserCreate) SetNillableWorkID(v *uint32) *UserCreate {
-	if v != nil {
-		_c.SetWorkID(*v)
-	}
-	return _c
-}
-
-// SetRoleIds sets the "role_ids" field.
-func (_c *UserCreate) SetRoleIds(v []int) *UserCreate {
-	_c.mutation.SetRoleIds(v)
 	return _c
 }
 
@@ -467,13 +391,9 @@ func (_c *UserCreate) defaults() {
 		v := user.DefaultGender
 		_c.mutation.SetGender(v)
 	}
-	if _, ok := _c.mutation.Authority(); !ok {
-		v := user.DefaultAuthority
-		_c.mutation.SetAuthority(v)
-	}
-	if _, ok := _c.mutation.Status(); !ok {
-		v := user.DefaultStatus
-		_c.mutation.SetStatus(v)
+	if _, ok := _c.mutation.IsBanned(); !ok {
+		v := user.DefaultIsBanned
+		_c.mutation.SetIsBanned(v)
 	}
 }
 
@@ -507,19 +427,6 @@ func (_c *UserCreate) check() error {
 	if v, ok := _c.mutation.Gender(); ok {
 		if err := user.GenderValidator(v); err != nil {
 			return &ValidationError{Name: "gender", err: fmt.Errorf(`ent: validator failed for field "User.gender": %w`, err)}
-		}
-	}
-	if _, ok := _c.mutation.Authority(); !ok {
-		return &ValidationError{Name: "authority", err: errors.New(`ent: missing required field "User.authority"`)}
-	}
-	if v, ok := _c.mutation.Authority(); ok {
-		if err := user.AuthorityValidator(v); err != nil {
-			return &ValidationError{Name: "authority", err: fmt.Errorf(`ent: validator failed for field "User.authority": %w`, err)}
-		}
-	}
-	if v, ok := _c.mutation.Status(); ok {
-		if err := user.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "User.status": %w`, err)}
 		}
 	}
 	if v, ok := _c.mutation.ID(); ok {
@@ -636,41 +543,17 @@ func (_c *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_spec.SetField(user.FieldGender, field.TypeEnum, value)
 		_node.Gender = &value
 	}
-	if value, ok := _c.mutation.Authority(); ok {
-		_spec.SetField(user.FieldAuthority, field.TypeEnum, value)
-		_node.Authority = &value
-	}
-	if value, ok := _c.mutation.Status(); ok {
-		_spec.SetField(user.FieldStatus, field.TypeEnum, value)
-		_node.Status = &value
-	}
-	if value, ok := _c.mutation.LastLoginTime(); ok {
-		_spec.SetField(user.FieldLastLoginTime, field.TypeTime, value)
-		_node.LastLoginTime = &value
+	if value, ok := _c.mutation.LastLoginAt(); ok {
+		_spec.SetField(user.FieldLastLoginAt, field.TypeTime, value)
+		_node.LastLoginAt = &value
 	}
 	if value, ok := _c.mutation.LastLoginIP(); ok {
 		_spec.SetField(user.FieldLastLoginIP, field.TypeString, value)
 		_node.LastLoginIP = &value
 	}
-	if value, ok := _c.mutation.OrgID(); ok {
-		_spec.SetField(user.FieldOrgID, field.TypeUint32, value)
-		_node.OrgID = &value
-	}
-	if value, ok := _c.mutation.DepartmentID(); ok {
-		_spec.SetField(user.FieldDepartmentID, field.TypeUint32, value)
-		_node.DepartmentID = &value
-	}
-	if value, ok := _c.mutation.PositionID(); ok {
-		_spec.SetField(user.FieldPositionID, field.TypeUint32, value)
-		_node.PositionID = &value
-	}
-	if value, ok := _c.mutation.WorkID(); ok {
-		_spec.SetField(user.FieldWorkID, field.TypeUint32, value)
-		_node.WorkID = &value
-	}
-	if value, ok := _c.mutation.RoleIds(); ok {
-		_spec.SetField(user.FieldRoleIds, field.TypeJSON, value)
-		_node.RoleIds = value
+	if value, ok := _c.mutation.IsBanned(); ok {
+		_spec.SetField(user.FieldIsBanned, field.TypeBool, value)
+		_node.IsBanned = value
 	}
 	return _node, _spec
 }
@@ -1030,39 +913,21 @@ func (u *UserUpsert) ClearGender() *UserUpsert {
 	return u
 }
 
-// SetStatus sets the "status" field.
-func (u *UserUpsert) SetStatus(v user.Status) *UserUpsert {
-	u.Set(user.FieldStatus, v)
+// SetLastLoginAt sets the "last_login_at" field.
+func (u *UserUpsert) SetLastLoginAt(v time.Time) *UserUpsert {
+	u.Set(user.FieldLastLoginAt, v)
 	return u
 }
 
-// UpdateStatus sets the "status" field to the value that was provided on create.
-func (u *UserUpsert) UpdateStatus() *UserUpsert {
-	u.SetExcluded(user.FieldStatus)
+// UpdateLastLoginAt sets the "last_login_at" field to the value that was provided on create.
+func (u *UserUpsert) UpdateLastLoginAt() *UserUpsert {
+	u.SetExcluded(user.FieldLastLoginAt)
 	return u
 }
 
-// ClearStatus clears the value of the "status" field.
-func (u *UserUpsert) ClearStatus() *UserUpsert {
-	u.SetNull(user.FieldStatus)
-	return u
-}
-
-// SetLastLoginTime sets the "last_login_time" field.
-func (u *UserUpsert) SetLastLoginTime(v time.Time) *UserUpsert {
-	u.Set(user.FieldLastLoginTime, v)
-	return u
-}
-
-// UpdateLastLoginTime sets the "last_login_time" field to the value that was provided on create.
-func (u *UserUpsert) UpdateLastLoginTime() *UserUpsert {
-	u.SetExcluded(user.FieldLastLoginTime)
-	return u
-}
-
-// ClearLastLoginTime clears the value of the "last_login_time" field.
-func (u *UserUpsert) ClearLastLoginTime() *UserUpsert {
-	u.SetNull(user.FieldLastLoginTime)
+// ClearLastLoginAt clears the value of the "last_login_at" field.
+func (u *UserUpsert) ClearLastLoginAt() *UserUpsert {
+	u.SetNull(user.FieldLastLoginAt)
 	return u
 }
 
@@ -1084,117 +949,21 @@ func (u *UserUpsert) ClearLastLoginIP() *UserUpsert {
 	return u
 }
 
-// SetOrgID sets the "org_id" field.
-func (u *UserUpsert) SetOrgID(v uint32) *UserUpsert {
-	u.Set(user.FieldOrgID, v)
+// SetIsBanned sets the "is_banned" field.
+func (u *UserUpsert) SetIsBanned(v bool) *UserUpsert {
+	u.Set(user.FieldIsBanned, v)
 	return u
 }
 
-// UpdateOrgID sets the "org_id" field to the value that was provided on create.
-func (u *UserUpsert) UpdateOrgID() *UserUpsert {
-	u.SetExcluded(user.FieldOrgID)
+// UpdateIsBanned sets the "is_banned" field to the value that was provided on create.
+func (u *UserUpsert) UpdateIsBanned() *UserUpsert {
+	u.SetExcluded(user.FieldIsBanned)
 	return u
 }
 
-// AddOrgID adds v to the "org_id" field.
-func (u *UserUpsert) AddOrgID(v uint32) *UserUpsert {
-	u.Add(user.FieldOrgID, v)
-	return u
-}
-
-// ClearOrgID clears the value of the "org_id" field.
-func (u *UserUpsert) ClearOrgID() *UserUpsert {
-	u.SetNull(user.FieldOrgID)
-	return u
-}
-
-// SetDepartmentID sets the "department_id" field.
-func (u *UserUpsert) SetDepartmentID(v uint32) *UserUpsert {
-	u.Set(user.FieldDepartmentID, v)
-	return u
-}
-
-// UpdateDepartmentID sets the "department_id" field to the value that was provided on create.
-func (u *UserUpsert) UpdateDepartmentID() *UserUpsert {
-	u.SetExcluded(user.FieldDepartmentID)
-	return u
-}
-
-// AddDepartmentID adds v to the "department_id" field.
-func (u *UserUpsert) AddDepartmentID(v uint32) *UserUpsert {
-	u.Add(user.FieldDepartmentID, v)
-	return u
-}
-
-// ClearDepartmentID clears the value of the "department_id" field.
-func (u *UserUpsert) ClearDepartmentID() *UserUpsert {
-	u.SetNull(user.FieldDepartmentID)
-	return u
-}
-
-// SetPositionID sets the "position_id" field.
-func (u *UserUpsert) SetPositionID(v uint32) *UserUpsert {
-	u.Set(user.FieldPositionID, v)
-	return u
-}
-
-// UpdatePositionID sets the "position_id" field to the value that was provided on create.
-func (u *UserUpsert) UpdatePositionID() *UserUpsert {
-	u.SetExcluded(user.FieldPositionID)
-	return u
-}
-
-// AddPositionID adds v to the "position_id" field.
-func (u *UserUpsert) AddPositionID(v uint32) *UserUpsert {
-	u.Add(user.FieldPositionID, v)
-	return u
-}
-
-// ClearPositionID clears the value of the "position_id" field.
-func (u *UserUpsert) ClearPositionID() *UserUpsert {
-	u.SetNull(user.FieldPositionID)
-	return u
-}
-
-// SetWorkID sets the "work_id" field.
-func (u *UserUpsert) SetWorkID(v uint32) *UserUpsert {
-	u.Set(user.FieldWorkID, v)
-	return u
-}
-
-// UpdateWorkID sets the "work_id" field to the value that was provided on create.
-func (u *UserUpsert) UpdateWorkID() *UserUpsert {
-	u.SetExcluded(user.FieldWorkID)
-	return u
-}
-
-// AddWorkID adds v to the "work_id" field.
-func (u *UserUpsert) AddWorkID(v uint32) *UserUpsert {
-	u.Add(user.FieldWorkID, v)
-	return u
-}
-
-// ClearWorkID clears the value of the "work_id" field.
-func (u *UserUpsert) ClearWorkID() *UserUpsert {
-	u.SetNull(user.FieldWorkID)
-	return u
-}
-
-// SetRoleIds sets the "role_ids" field.
-func (u *UserUpsert) SetRoleIds(v []int) *UserUpsert {
-	u.Set(user.FieldRoleIds, v)
-	return u
-}
-
-// UpdateRoleIds sets the "role_ids" field to the value that was provided on create.
-func (u *UserUpsert) UpdateRoleIds() *UserUpsert {
-	u.SetExcluded(user.FieldRoleIds)
-	return u
-}
-
-// ClearRoleIds clears the value of the "role_ids" field.
-func (u *UserUpsert) ClearRoleIds() *UserUpsert {
-	u.SetNull(user.FieldRoleIds)
+// ClearIsBanned clears the value of the "is_banned" field.
+func (u *UserUpsert) ClearIsBanned() *UserUpsert {
+	u.SetNull(user.FieldIsBanned)
 	return u
 }
 
@@ -1223,9 +992,6 @@ func (u *UserUpsertOne) UpdateNewValues() *UserUpsertOne {
 		}
 		if _, exists := u.create.mutation.Username(); exists {
 			s.SetIgnore(user.FieldUsername)
-		}
-		if _, exists := u.create.mutation.Authority(); exists {
-			s.SetIgnore(user.FieldAuthority)
 		}
 	}))
 	return u
@@ -1615,45 +1381,24 @@ func (u *UserUpsertOne) ClearGender() *UserUpsertOne {
 	})
 }
 
-// SetStatus sets the "status" field.
-func (u *UserUpsertOne) SetStatus(v user.Status) *UserUpsertOne {
+// SetLastLoginAt sets the "last_login_at" field.
+func (u *UserUpsertOne) SetLastLoginAt(v time.Time) *UserUpsertOne {
 	return u.Update(func(s *UserUpsert) {
-		s.SetStatus(v)
+		s.SetLastLoginAt(v)
 	})
 }
 
-// UpdateStatus sets the "status" field to the value that was provided on create.
-func (u *UserUpsertOne) UpdateStatus() *UserUpsertOne {
+// UpdateLastLoginAt sets the "last_login_at" field to the value that was provided on create.
+func (u *UserUpsertOne) UpdateLastLoginAt() *UserUpsertOne {
 	return u.Update(func(s *UserUpsert) {
-		s.UpdateStatus()
+		s.UpdateLastLoginAt()
 	})
 }
 
-// ClearStatus clears the value of the "status" field.
-func (u *UserUpsertOne) ClearStatus() *UserUpsertOne {
+// ClearLastLoginAt clears the value of the "last_login_at" field.
+func (u *UserUpsertOne) ClearLastLoginAt() *UserUpsertOne {
 	return u.Update(func(s *UserUpsert) {
-		s.ClearStatus()
-	})
-}
-
-// SetLastLoginTime sets the "last_login_time" field.
-func (u *UserUpsertOne) SetLastLoginTime(v time.Time) *UserUpsertOne {
-	return u.Update(func(s *UserUpsert) {
-		s.SetLastLoginTime(v)
-	})
-}
-
-// UpdateLastLoginTime sets the "last_login_time" field to the value that was provided on create.
-func (u *UserUpsertOne) UpdateLastLoginTime() *UserUpsertOne {
-	return u.Update(func(s *UserUpsert) {
-		s.UpdateLastLoginTime()
-	})
-}
-
-// ClearLastLoginTime clears the value of the "last_login_time" field.
-func (u *UserUpsertOne) ClearLastLoginTime() *UserUpsertOne {
-	return u.Update(func(s *UserUpsert) {
-		s.ClearLastLoginTime()
+		s.ClearLastLoginAt()
 	})
 }
 
@@ -1678,136 +1423,24 @@ func (u *UserUpsertOne) ClearLastLoginIP() *UserUpsertOne {
 	})
 }
 
-// SetOrgID sets the "org_id" field.
-func (u *UserUpsertOne) SetOrgID(v uint32) *UserUpsertOne {
+// SetIsBanned sets the "is_banned" field.
+func (u *UserUpsertOne) SetIsBanned(v bool) *UserUpsertOne {
 	return u.Update(func(s *UserUpsert) {
-		s.SetOrgID(v)
+		s.SetIsBanned(v)
 	})
 }
 
-// AddOrgID adds v to the "org_id" field.
-func (u *UserUpsertOne) AddOrgID(v uint32) *UserUpsertOne {
+// UpdateIsBanned sets the "is_banned" field to the value that was provided on create.
+func (u *UserUpsertOne) UpdateIsBanned() *UserUpsertOne {
 	return u.Update(func(s *UserUpsert) {
-		s.AddOrgID(v)
+		s.UpdateIsBanned()
 	})
 }
 
-// UpdateOrgID sets the "org_id" field to the value that was provided on create.
-func (u *UserUpsertOne) UpdateOrgID() *UserUpsertOne {
+// ClearIsBanned clears the value of the "is_banned" field.
+func (u *UserUpsertOne) ClearIsBanned() *UserUpsertOne {
 	return u.Update(func(s *UserUpsert) {
-		s.UpdateOrgID()
-	})
-}
-
-// ClearOrgID clears the value of the "org_id" field.
-func (u *UserUpsertOne) ClearOrgID() *UserUpsertOne {
-	return u.Update(func(s *UserUpsert) {
-		s.ClearOrgID()
-	})
-}
-
-// SetDepartmentID sets the "department_id" field.
-func (u *UserUpsertOne) SetDepartmentID(v uint32) *UserUpsertOne {
-	return u.Update(func(s *UserUpsert) {
-		s.SetDepartmentID(v)
-	})
-}
-
-// AddDepartmentID adds v to the "department_id" field.
-func (u *UserUpsertOne) AddDepartmentID(v uint32) *UserUpsertOne {
-	return u.Update(func(s *UserUpsert) {
-		s.AddDepartmentID(v)
-	})
-}
-
-// UpdateDepartmentID sets the "department_id" field to the value that was provided on create.
-func (u *UserUpsertOne) UpdateDepartmentID() *UserUpsertOne {
-	return u.Update(func(s *UserUpsert) {
-		s.UpdateDepartmentID()
-	})
-}
-
-// ClearDepartmentID clears the value of the "department_id" field.
-func (u *UserUpsertOne) ClearDepartmentID() *UserUpsertOne {
-	return u.Update(func(s *UserUpsert) {
-		s.ClearDepartmentID()
-	})
-}
-
-// SetPositionID sets the "position_id" field.
-func (u *UserUpsertOne) SetPositionID(v uint32) *UserUpsertOne {
-	return u.Update(func(s *UserUpsert) {
-		s.SetPositionID(v)
-	})
-}
-
-// AddPositionID adds v to the "position_id" field.
-func (u *UserUpsertOne) AddPositionID(v uint32) *UserUpsertOne {
-	return u.Update(func(s *UserUpsert) {
-		s.AddPositionID(v)
-	})
-}
-
-// UpdatePositionID sets the "position_id" field to the value that was provided on create.
-func (u *UserUpsertOne) UpdatePositionID() *UserUpsertOne {
-	return u.Update(func(s *UserUpsert) {
-		s.UpdatePositionID()
-	})
-}
-
-// ClearPositionID clears the value of the "position_id" field.
-func (u *UserUpsertOne) ClearPositionID() *UserUpsertOne {
-	return u.Update(func(s *UserUpsert) {
-		s.ClearPositionID()
-	})
-}
-
-// SetWorkID sets the "work_id" field.
-func (u *UserUpsertOne) SetWorkID(v uint32) *UserUpsertOne {
-	return u.Update(func(s *UserUpsert) {
-		s.SetWorkID(v)
-	})
-}
-
-// AddWorkID adds v to the "work_id" field.
-func (u *UserUpsertOne) AddWorkID(v uint32) *UserUpsertOne {
-	return u.Update(func(s *UserUpsert) {
-		s.AddWorkID(v)
-	})
-}
-
-// UpdateWorkID sets the "work_id" field to the value that was provided on create.
-func (u *UserUpsertOne) UpdateWorkID() *UserUpsertOne {
-	return u.Update(func(s *UserUpsert) {
-		s.UpdateWorkID()
-	})
-}
-
-// ClearWorkID clears the value of the "work_id" field.
-func (u *UserUpsertOne) ClearWorkID() *UserUpsertOne {
-	return u.Update(func(s *UserUpsert) {
-		s.ClearWorkID()
-	})
-}
-
-// SetRoleIds sets the "role_ids" field.
-func (u *UserUpsertOne) SetRoleIds(v []int) *UserUpsertOne {
-	return u.Update(func(s *UserUpsert) {
-		s.SetRoleIds(v)
-	})
-}
-
-// UpdateRoleIds sets the "role_ids" field to the value that was provided on create.
-func (u *UserUpsertOne) UpdateRoleIds() *UserUpsertOne {
-	return u.Update(func(s *UserUpsert) {
-		s.UpdateRoleIds()
-	})
-}
-
-// ClearRoleIds clears the value of the "role_ids" field.
-func (u *UserUpsertOne) ClearRoleIds() *UserUpsertOne {
-	return u.Update(func(s *UserUpsert) {
-		s.ClearRoleIds()
+		s.ClearIsBanned()
 	})
 }
 
@@ -2001,9 +1634,6 @@ func (u *UserUpsertBulk) UpdateNewValues() *UserUpsertBulk {
 			}
 			if _, exists := b.mutation.Username(); exists {
 				s.SetIgnore(user.FieldUsername)
-			}
-			if _, exists := b.mutation.Authority(); exists {
-				s.SetIgnore(user.FieldAuthority)
 			}
 		}
 	}))
@@ -2394,45 +2024,24 @@ func (u *UserUpsertBulk) ClearGender() *UserUpsertBulk {
 	})
 }
 
-// SetStatus sets the "status" field.
-func (u *UserUpsertBulk) SetStatus(v user.Status) *UserUpsertBulk {
+// SetLastLoginAt sets the "last_login_at" field.
+func (u *UserUpsertBulk) SetLastLoginAt(v time.Time) *UserUpsertBulk {
 	return u.Update(func(s *UserUpsert) {
-		s.SetStatus(v)
+		s.SetLastLoginAt(v)
 	})
 }
 
-// UpdateStatus sets the "status" field to the value that was provided on create.
-func (u *UserUpsertBulk) UpdateStatus() *UserUpsertBulk {
+// UpdateLastLoginAt sets the "last_login_at" field to the value that was provided on create.
+func (u *UserUpsertBulk) UpdateLastLoginAt() *UserUpsertBulk {
 	return u.Update(func(s *UserUpsert) {
-		s.UpdateStatus()
+		s.UpdateLastLoginAt()
 	})
 }
 
-// ClearStatus clears the value of the "status" field.
-func (u *UserUpsertBulk) ClearStatus() *UserUpsertBulk {
+// ClearLastLoginAt clears the value of the "last_login_at" field.
+func (u *UserUpsertBulk) ClearLastLoginAt() *UserUpsertBulk {
 	return u.Update(func(s *UserUpsert) {
-		s.ClearStatus()
-	})
-}
-
-// SetLastLoginTime sets the "last_login_time" field.
-func (u *UserUpsertBulk) SetLastLoginTime(v time.Time) *UserUpsertBulk {
-	return u.Update(func(s *UserUpsert) {
-		s.SetLastLoginTime(v)
-	})
-}
-
-// UpdateLastLoginTime sets the "last_login_time" field to the value that was provided on create.
-func (u *UserUpsertBulk) UpdateLastLoginTime() *UserUpsertBulk {
-	return u.Update(func(s *UserUpsert) {
-		s.UpdateLastLoginTime()
-	})
-}
-
-// ClearLastLoginTime clears the value of the "last_login_time" field.
-func (u *UserUpsertBulk) ClearLastLoginTime() *UserUpsertBulk {
-	return u.Update(func(s *UserUpsert) {
-		s.ClearLastLoginTime()
+		s.ClearLastLoginAt()
 	})
 }
 
@@ -2457,136 +2066,24 @@ func (u *UserUpsertBulk) ClearLastLoginIP() *UserUpsertBulk {
 	})
 }
 
-// SetOrgID sets the "org_id" field.
-func (u *UserUpsertBulk) SetOrgID(v uint32) *UserUpsertBulk {
+// SetIsBanned sets the "is_banned" field.
+func (u *UserUpsertBulk) SetIsBanned(v bool) *UserUpsertBulk {
 	return u.Update(func(s *UserUpsert) {
-		s.SetOrgID(v)
+		s.SetIsBanned(v)
 	})
 }
 
-// AddOrgID adds v to the "org_id" field.
-func (u *UserUpsertBulk) AddOrgID(v uint32) *UserUpsertBulk {
+// UpdateIsBanned sets the "is_banned" field to the value that was provided on create.
+func (u *UserUpsertBulk) UpdateIsBanned() *UserUpsertBulk {
 	return u.Update(func(s *UserUpsert) {
-		s.AddOrgID(v)
+		s.UpdateIsBanned()
 	})
 }
 
-// UpdateOrgID sets the "org_id" field to the value that was provided on create.
-func (u *UserUpsertBulk) UpdateOrgID() *UserUpsertBulk {
+// ClearIsBanned clears the value of the "is_banned" field.
+func (u *UserUpsertBulk) ClearIsBanned() *UserUpsertBulk {
 	return u.Update(func(s *UserUpsert) {
-		s.UpdateOrgID()
-	})
-}
-
-// ClearOrgID clears the value of the "org_id" field.
-func (u *UserUpsertBulk) ClearOrgID() *UserUpsertBulk {
-	return u.Update(func(s *UserUpsert) {
-		s.ClearOrgID()
-	})
-}
-
-// SetDepartmentID sets the "department_id" field.
-func (u *UserUpsertBulk) SetDepartmentID(v uint32) *UserUpsertBulk {
-	return u.Update(func(s *UserUpsert) {
-		s.SetDepartmentID(v)
-	})
-}
-
-// AddDepartmentID adds v to the "department_id" field.
-func (u *UserUpsertBulk) AddDepartmentID(v uint32) *UserUpsertBulk {
-	return u.Update(func(s *UserUpsert) {
-		s.AddDepartmentID(v)
-	})
-}
-
-// UpdateDepartmentID sets the "department_id" field to the value that was provided on create.
-func (u *UserUpsertBulk) UpdateDepartmentID() *UserUpsertBulk {
-	return u.Update(func(s *UserUpsert) {
-		s.UpdateDepartmentID()
-	})
-}
-
-// ClearDepartmentID clears the value of the "department_id" field.
-func (u *UserUpsertBulk) ClearDepartmentID() *UserUpsertBulk {
-	return u.Update(func(s *UserUpsert) {
-		s.ClearDepartmentID()
-	})
-}
-
-// SetPositionID sets the "position_id" field.
-func (u *UserUpsertBulk) SetPositionID(v uint32) *UserUpsertBulk {
-	return u.Update(func(s *UserUpsert) {
-		s.SetPositionID(v)
-	})
-}
-
-// AddPositionID adds v to the "position_id" field.
-func (u *UserUpsertBulk) AddPositionID(v uint32) *UserUpsertBulk {
-	return u.Update(func(s *UserUpsert) {
-		s.AddPositionID(v)
-	})
-}
-
-// UpdatePositionID sets the "position_id" field to the value that was provided on create.
-func (u *UserUpsertBulk) UpdatePositionID() *UserUpsertBulk {
-	return u.Update(func(s *UserUpsert) {
-		s.UpdatePositionID()
-	})
-}
-
-// ClearPositionID clears the value of the "position_id" field.
-func (u *UserUpsertBulk) ClearPositionID() *UserUpsertBulk {
-	return u.Update(func(s *UserUpsert) {
-		s.ClearPositionID()
-	})
-}
-
-// SetWorkID sets the "work_id" field.
-func (u *UserUpsertBulk) SetWorkID(v uint32) *UserUpsertBulk {
-	return u.Update(func(s *UserUpsert) {
-		s.SetWorkID(v)
-	})
-}
-
-// AddWorkID adds v to the "work_id" field.
-func (u *UserUpsertBulk) AddWorkID(v uint32) *UserUpsertBulk {
-	return u.Update(func(s *UserUpsert) {
-		s.AddWorkID(v)
-	})
-}
-
-// UpdateWorkID sets the "work_id" field to the value that was provided on create.
-func (u *UserUpsertBulk) UpdateWorkID() *UserUpsertBulk {
-	return u.Update(func(s *UserUpsert) {
-		s.UpdateWorkID()
-	})
-}
-
-// ClearWorkID clears the value of the "work_id" field.
-func (u *UserUpsertBulk) ClearWorkID() *UserUpsertBulk {
-	return u.Update(func(s *UserUpsert) {
-		s.ClearWorkID()
-	})
-}
-
-// SetRoleIds sets the "role_ids" field.
-func (u *UserUpsertBulk) SetRoleIds(v []int) *UserUpsertBulk {
-	return u.Update(func(s *UserUpsert) {
-		s.SetRoleIds(v)
-	})
-}
-
-// UpdateRoleIds sets the "role_ids" field to the value that was provided on create.
-func (u *UserUpsertBulk) UpdateRoleIds() *UserUpsertBulk {
-	return u.Update(func(s *UserUpsert) {
-		s.UpdateRoleIds()
-	})
-}
-
-// ClearRoleIds clears the value of the "role_ids" field.
-func (u *UserUpsertBulk) ClearRoleIds() *UserUpsertBulk {
-	return u.Update(func(s *UserUpsert) {
-		s.ClearRoleIds()
+		s.ClearIsBanned()
 	})
 }
 

@@ -29,6 +29,7 @@ type PositionRepo struct {
 
 	mapper          *mapper.CopierMapper[userV1.Position, ent.Position]
 	statusConverter *mapper.EnumTypeConverter[userV1.Position_Status, position.Status]
+	typeConverter   *mapper.EnumTypeConverter[userV1.Position_Type, position.Type]
 
 	repository *entCrud.Repository[
 		ent.PositionQuery, ent.PositionSelect,
@@ -42,10 +43,15 @@ type PositionRepo struct {
 
 func NewPositionRepo(ctx *bootstrap.Context, entClient *entCrud.EntClient[*ent.Client]) *PositionRepo {
 	repo := &PositionRepo{
-		log:             ctx.NewLoggerHelper("position/repo/admin-service"),
-		entClient:       entClient,
-		mapper:          mapper.NewCopierMapper[userV1.Position, ent.Position](),
-		statusConverter: mapper.NewEnumTypeConverter[userV1.Position_Status, position.Status](userV1.Position_Status_name, userV1.Position_Status_value),
+		log:       ctx.NewLoggerHelper("position/repo/admin-service"),
+		entClient: entClient,
+		mapper:    mapper.NewCopierMapper[userV1.Position, ent.Position](),
+		statusConverter: mapper.NewEnumTypeConverter[userV1.Position_Status, position.Status](
+			userV1.Position_Status_name, userV1.Position_Status_value,
+		),
+		typeConverter: mapper.NewEnumTypeConverter[userV1.Position_Type, position.Type](
+			userV1.Position_Type_name, userV1.Position_Type_value,
+		),
 	}
 
 	repo.init()
@@ -67,6 +73,7 @@ func (r *PositionRepo) init() {
 	r.mapper.AppendConverters(copierutil.NewTimeTimestamppbConverterPair())
 
 	r.mapper.AppendConverters(r.statusConverter.NewConverterPair())
+	r.mapper.AppendConverters(r.typeConverter.NewConverterPair())
 }
 
 func (r *PositionRepo) Count(ctx context.Context, whereCond []func(s *sql.Selector)) (int, error) {
@@ -209,15 +216,23 @@ func (r *PositionRepo) Create(ctx context.Context, req *userV1.CreatePositionReq
 
 	builder := r.entClient.Client().Position.Create().
 		SetNillableName(req.Data.Name).
-		SetNillableParentID(req.Data.ParentId).
-		SetNillableSortOrder(req.Data.SortOrder).
 		SetNillableCode(req.Data.Code).
+		SetNillableParentID(req.Data.ParentId).
+		SetNillableTenantID(req.Data.TenantId).
+		SetOrgUnitID(req.Data.GetOrgUnitId()).
+		SetReportsToPositionID(req.Data.GetReportsToPositionId()).
+		SetNillableSortOrder(req.Data.SortOrder).
 		SetNillableStatus(r.statusConverter.ToEntity(req.Data.Status)).
-		SetNillableRemark(req.Data.Remark).
-		SetNillableQuota(req.Data.Quota).
+		SetNillableType(r.typeConverter.ToEntity(req.Data.Type)).
+		SetNillableJobFamily(req.Data.JobFamily).
+		SetNillableJobGrade(req.Data.JobGrade).
+		SetNillableLevel(req.Data.Level).
+		SetNillableIsKeyPosition(req.Data.IsKeyPosition).
+		SetNillableHeadcount(req.Data.Headcount).
 		SetNillableDescription(req.Data.Description).
-		SetOrganizationID(req.Data.GetOrganizationId()).
-		SetDepartmentID(req.Data.GetDepartmentId()).
+		SetNillableRemark(req.Data.Remark).
+		SetNillableStartAt(timeutil.TimestamppbToTime(req.Data.StartAt)).
+		SetNillableEndAt(timeutil.TimestamppbToTime(req.Data.EndAt)).
 		SetNillableCreatedBy(req.Data.CreatedBy).
 		SetNillableCreatedAt(timeutil.TimestamppbToTime(req.Data.CreatedAt))
 
@@ -264,26 +279,27 @@ func (r *PositionRepo) Update(ctx context.Context, req *userV1.UpdatePositionReq
 		func(dto *userV1.Position) {
 			builder.
 				SetNillableName(req.Data.Name).
-				SetNillableParentID(req.Data.ParentId).
-				SetNillableSortOrder(req.Data.SortOrder).
 				SetNillableCode(req.Data.Code).
+				SetNillableParentID(req.Data.ParentId).
+				SetNillableOrgUnitID(req.Data.OrgUnitId).
+				SetNillableReportsToPositionID(req.Data.ReportsToPositionId).
+				SetNillableSortOrder(req.Data.SortOrder).
 				SetNillableStatus(r.statusConverter.ToEntity(req.Data.Status)).
-				SetNillableRemark(req.Data.Remark).
-				SetNillableQuota(req.Data.Quota).
+				SetNillableType(r.typeConverter.ToEntity(req.Data.Type)).
+				SetNillableJobFamily(req.Data.JobFamily).
+				SetNillableJobGrade(req.Data.JobGrade).
+				SetNillableLevel(req.Data.Level).
+				SetNillableIsKeyPosition(req.Data.IsKeyPosition).
+				SetNillableHeadcount(req.Data.Headcount).
 				SetNillableDescription(req.Data.Description).
+				SetNillableRemark(req.Data.Remark).
+				SetNillableStartAt(timeutil.TimestamppbToTime(req.Data.StartAt)).
+				SetNillableEndAt(timeutil.TimestamppbToTime(req.Data.EndAt)).
 				SetNillableUpdatedBy(req.Data.UpdatedBy).
 				SetNillableUpdatedAt(timeutil.TimestamppbToTime(req.Data.UpdatedAt))
 
 			if req.Data.UpdatedAt == nil {
 				builder.SetUpdatedAt(time.Now())
-			}
-
-			if req.Data.OrganizationId == nil {
-				builder.SetOrganizationID(req.Data.GetOrganizationId())
-			}
-
-			if req.Data.DepartmentId == nil {
-				builder.SetDepartmentID(req.Data.GetDepartmentId())
 			}
 		},
 		func(s *sql.Selector) {

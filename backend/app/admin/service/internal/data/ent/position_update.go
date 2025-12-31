@@ -217,6 +217,26 @@ func (_u *PositionUpdate) ClearParentID() *PositionUpdate {
 	return _u
 }
 
+// SetStatus sets the "status" field.
+func (_u *PositionUpdate) SetStatus(v position.Status) *PositionUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_u *PositionUpdate) SetNillableStatus(v *position.Status) *PositionUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
+	}
+	return _u
+}
+
+// ClearStatus clears the value of the "status" field.
+func (_u *PositionUpdate) ClearStatus() *PositionUpdate {
+	_u.mutation.ClearStatus()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *PositionUpdate) SetName(v string) *PositionUpdate {
 	_u.mutation.SetName(v)
@@ -257,65 +277,51 @@ func (_u *PositionUpdate) ClearCode() *PositionUpdate {
 	return _u
 }
 
-// SetOrganizationID sets the "organization_id" field.
-func (_u *PositionUpdate) SetOrganizationID(v uint32) *PositionUpdate {
-	_u.mutation.ResetOrganizationID()
-	_u.mutation.SetOrganizationID(v)
+// SetOrgUnitID sets the "org_unit_id" field.
+func (_u *PositionUpdate) SetOrgUnitID(v uint32) *PositionUpdate {
+	_u.mutation.ResetOrgUnitID()
+	_u.mutation.SetOrgUnitID(v)
 	return _u
 }
 
-// SetNillableOrganizationID sets the "organization_id" field if the given value is not nil.
-func (_u *PositionUpdate) SetNillableOrganizationID(v *uint32) *PositionUpdate {
+// SetNillableOrgUnitID sets the "org_unit_id" field if the given value is not nil.
+func (_u *PositionUpdate) SetNillableOrgUnitID(v *uint32) *PositionUpdate {
 	if v != nil {
-		_u.SetOrganizationID(*v)
+		_u.SetOrgUnitID(*v)
 	}
 	return _u
 }
 
-// AddOrganizationID adds value to the "organization_id" field.
-func (_u *PositionUpdate) AddOrganizationID(v int32) *PositionUpdate {
-	_u.mutation.AddOrganizationID(v)
+// AddOrgUnitID adds value to the "org_unit_id" field.
+func (_u *PositionUpdate) AddOrgUnitID(v int32) *PositionUpdate {
+	_u.mutation.AddOrgUnitID(v)
 	return _u
 }
 
-// SetDepartmentID sets the "department_id" field.
-func (_u *PositionUpdate) SetDepartmentID(v uint32) *PositionUpdate {
-	_u.mutation.ResetDepartmentID()
-	_u.mutation.SetDepartmentID(v)
+// SetReportsToPositionID sets the "reports_to_position_id" field.
+func (_u *PositionUpdate) SetReportsToPositionID(v uint32) *PositionUpdate {
+	_u.mutation.ResetReportsToPositionID()
+	_u.mutation.SetReportsToPositionID(v)
 	return _u
 }
 
-// SetNillableDepartmentID sets the "department_id" field if the given value is not nil.
-func (_u *PositionUpdate) SetNillableDepartmentID(v *uint32) *PositionUpdate {
+// SetNillableReportsToPositionID sets the "reports_to_position_id" field if the given value is not nil.
+func (_u *PositionUpdate) SetNillableReportsToPositionID(v *uint32) *PositionUpdate {
 	if v != nil {
-		_u.SetDepartmentID(*v)
+		_u.SetReportsToPositionID(*v)
 	}
 	return _u
 }
 
-// AddDepartmentID adds value to the "department_id" field.
-func (_u *PositionUpdate) AddDepartmentID(v int32) *PositionUpdate {
-	_u.mutation.AddDepartmentID(v)
+// AddReportsToPositionID adds value to the "reports_to_position_id" field.
+func (_u *PositionUpdate) AddReportsToPositionID(v int32) *PositionUpdate {
+	_u.mutation.AddReportsToPositionID(v)
 	return _u
 }
 
-// SetStatus sets the "status" field.
-func (_u *PositionUpdate) SetStatus(v position.Status) *PositionUpdate {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *PositionUpdate) SetNillableStatus(v *position.Status) *PositionUpdate {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// ClearStatus clears the value of the "status" field.
-func (_u *PositionUpdate) ClearStatus() *PositionUpdate {
-	_u.mutation.ClearStatus()
+// ClearReportsToPositionID clears the value of the "reports_to_position_id" field.
+func (_u *PositionUpdate) ClearReportsToPositionID() *PositionUpdate {
+	_u.mutation.ClearReportsToPositionID()
 	return _u
 }
 
@@ -339,30 +345,171 @@ func (_u *PositionUpdate) ClearDescription() *PositionUpdate {
 	return _u
 }
 
-// SetQuota sets the "quota" field.
-func (_u *PositionUpdate) SetQuota(v uint32) *PositionUpdate {
-	_u.mutation.ResetQuota()
-	_u.mutation.SetQuota(v)
+// SetJobFamily sets the "job_family" field.
+func (_u *PositionUpdate) SetJobFamily(v string) *PositionUpdate {
+	_u.mutation.SetJobFamily(v)
 	return _u
 }
 
-// SetNillableQuota sets the "quota" field if the given value is not nil.
-func (_u *PositionUpdate) SetNillableQuota(v *uint32) *PositionUpdate {
+// SetNillableJobFamily sets the "job_family" field if the given value is not nil.
+func (_u *PositionUpdate) SetNillableJobFamily(v *string) *PositionUpdate {
 	if v != nil {
-		_u.SetQuota(*v)
+		_u.SetJobFamily(*v)
 	}
 	return _u
 }
 
-// AddQuota adds value to the "quota" field.
-func (_u *PositionUpdate) AddQuota(v int32) *PositionUpdate {
-	_u.mutation.AddQuota(v)
+// ClearJobFamily clears the value of the "job_family" field.
+func (_u *PositionUpdate) ClearJobFamily() *PositionUpdate {
+	_u.mutation.ClearJobFamily()
 	return _u
 }
 
-// ClearQuota clears the value of the "quota" field.
-func (_u *PositionUpdate) ClearQuota() *PositionUpdate {
-	_u.mutation.ClearQuota()
+// SetJobGrade sets the "job_grade" field.
+func (_u *PositionUpdate) SetJobGrade(v string) *PositionUpdate {
+	_u.mutation.SetJobGrade(v)
+	return _u
+}
+
+// SetNillableJobGrade sets the "job_grade" field if the given value is not nil.
+func (_u *PositionUpdate) SetNillableJobGrade(v *string) *PositionUpdate {
+	if v != nil {
+		_u.SetJobGrade(*v)
+	}
+	return _u
+}
+
+// ClearJobGrade clears the value of the "job_grade" field.
+func (_u *PositionUpdate) ClearJobGrade() *PositionUpdate {
+	_u.mutation.ClearJobGrade()
+	return _u
+}
+
+// SetLevel sets the "level" field.
+func (_u *PositionUpdate) SetLevel(v int32) *PositionUpdate {
+	_u.mutation.ResetLevel()
+	_u.mutation.SetLevel(v)
+	return _u
+}
+
+// SetNillableLevel sets the "level" field if the given value is not nil.
+func (_u *PositionUpdate) SetNillableLevel(v *int32) *PositionUpdate {
+	if v != nil {
+		_u.SetLevel(*v)
+	}
+	return _u
+}
+
+// AddLevel adds value to the "level" field.
+func (_u *PositionUpdate) AddLevel(v int32) *PositionUpdate {
+	_u.mutation.AddLevel(v)
+	return _u
+}
+
+// ClearLevel clears the value of the "level" field.
+func (_u *PositionUpdate) ClearLevel() *PositionUpdate {
+	_u.mutation.ClearLevel()
+	return _u
+}
+
+// SetHeadcount sets the "headcount" field.
+func (_u *PositionUpdate) SetHeadcount(v uint32) *PositionUpdate {
+	_u.mutation.ResetHeadcount()
+	_u.mutation.SetHeadcount(v)
+	return _u
+}
+
+// SetNillableHeadcount sets the "headcount" field if the given value is not nil.
+func (_u *PositionUpdate) SetNillableHeadcount(v *uint32) *PositionUpdate {
+	if v != nil {
+		_u.SetHeadcount(*v)
+	}
+	return _u
+}
+
+// AddHeadcount adds value to the "headcount" field.
+func (_u *PositionUpdate) AddHeadcount(v int32) *PositionUpdate {
+	_u.mutation.AddHeadcount(v)
+	return _u
+}
+
+// ClearHeadcount clears the value of the "headcount" field.
+func (_u *PositionUpdate) ClearHeadcount() *PositionUpdate {
+	_u.mutation.ClearHeadcount()
+	return _u
+}
+
+// SetIsKeyPosition sets the "is_key_position" field.
+func (_u *PositionUpdate) SetIsKeyPosition(v bool) *PositionUpdate {
+	_u.mutation.SetIsKeyPosition(v)
+	return _u
+}
+
+// SetNillableIsKeyPosition sets the "is_key_position" field if the given value is not nil.
+func (_u *PositionUpdate) SetNillableIsKeyPosition(v *bool) *PositionUpdate {
+	if v != nil {
+		_u.SetIsKeyPosition(*v)
+	}
+	return _u
+}
+
+// ClearIsKeyPosition clears the value of the "is_key_position" field.
+func (_u *PositionUpdate) ClearIsKeyPosition() *PositionUpdate {
+	_u.mutation.ClearIsKeyPosition()
+	return _u
+}
+
+// SetType sets the "type" field.
+func (_u *PositionUpdate) SetType(v position.Type) *PositionUpdate {
+	_u.mutation.SetType(v)
+	return _u
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (_u *PositionUpdate) SetNillableType(v *position.Type) *PositionUpdate {
+	if v != nil {
+		_u.SetType(*v)
+	}
+	return _u
+}
+
+// SetStartAt sets the "start_at" field.
+func (_u *PositionUpdate) SetStartAt(v time.Time) *PositionUpdate {
+	_u.mutation.SetStartAt(v)
+	return _u
+}
+
+// SetNillableStartAt sets the "start_at" field if the given value is not nil.
+func (_u *PositionUpdate) SetNillableStartAt(v *time.Time) *PositionUpdate {
+	if v != nil {
+		_u.SetStartAt(*v)
+	}
+	return _u
+}
+
+// ClearStartAt clears the value of the "start_at" field.
+func (_u *PositionUpdate) ClearStartAt() *PositionUpdate {
+	_u.mutation.ClearStartAt()
+	return _u
+}
+
+// SetEndAt sets the "end_at" field.
+func (_u *PositionUpdate) SetEndAt(v time.Time) *PositionUpdate {
+	_u.mutation.SetEndAt(v)
+	return _u
+}
+
+// SetNillableEndAt sets the "end_at" field if the given value is not nil.
+func (_u *PositionUpdate) SetNillableEndAt(v *time.Time) *PositionUpdate {
+	if v != nil {
+		_u.SetEndAt(*v)
+	}
+	return _u
+}
+
+// ClearEndAt clears the value of the "end_at" field.
+func (_u *PositionUpdate) ClearEndAt() *PositionUpdate {
+	_u.mutation.ClearEndAt()
 	return _u
 }
 
@@ -447,6 +594,11 @@ func (_u *PositionUpdate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *PositionUpdate) check() error {
+	if v, ok := _u.mutation.Status(); ok {
+		if err := position.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "Position.status": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Name(); ok {
 		if err := position.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Position.name": %w`, err)}
@@ -457,9 +609,9 @@ func (_u *PositionUpdate) check() error {
 			return &ValidationError{Name: "code", err: fmt.Errorf(`ent: validator failed for field "Position.code": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.Status(); ok {
-		if err := position.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "Position.status": %w`, err)}
+	if v, ok := _u.mutation.GetType(); ok {
+		if err := position.TypeValidator(v); err != nil {
+			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Position.type": %w`, err)}
 		}
 	}
 	return nil
@@ -543,6 +695,12 @@ func (_u *PositionUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.TenantIDCleared() {
 		_spec.ClearField(position.FieldTenantID, field.TypeUint32)
 	}
+	if value, ok := _u.mutation.Status(); ok {
+		_spec.SetField(position.FieldStatus, field.TypeEnum, value)
+	}
+	if _u.mutation.StatusCleared() {
+		_spec.ClearField(position.FieldStatus, field.TypeEnum)
+	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(position.FieldName, field.TypeString, value)
 	}
@@ -555,23 +713,20 @@ func (_u *PositionUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.CodeCleared() {
 		_spec.ClearField(position.FieldCode, field.TypeString)
 	}
-	if value, ok := _u.mutation.OrganizationID(); ok {
-		_spec.SetField(position.FieldOrganizationID, field.TypeUint32, value)
+	if value, ok := _u.mutation.OrgUnitID(); ok {
+		_spec.SetField(position.FieldOrgUnitID, field.TypeUint32, value)
 	}
-	if value, ok := _u.mutation.AddedOrganizationID(); ok {
-		_spec.AddField(position.FieldOrganizationID, field.TypeUint32, value)
+	if value, ok := _u.mutation.AddedOrgUnitID(); ok {
+		_spec.AddField(position.FieldOrgUnitID, field.TypeUint32, value)
 	}
-	if value, ok := _u.mutation.DepartmentID(); ok {
-		_spec.SetField(position.FieldDepartmentID, field.TypeUint32, value)
+	if value, ok := _u.mutation.ReportsToPositionID(); ok {
+		_spec.SetField(position.FieldReportsToPositionID, field.TypeUint32, value)
 	}
-	if value, ok := _u.mutation.AddedDepartmentID(); ok {
-		_spec.AddField(position.FieldDepartmentID, field.TypeUint32, value)
+	if value, ok := _u.mutation.AddedReportsToPositionID(); ok {
+		_spec.AddField(position.FieldReportsToPositionID, field.TypeUint32, value)
 	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(position.FieldStatus, field.TypeEnum, value)
-	}
-	if _u.mutation.StatusCleared() {
-		_spec.ClearField(position.FieldStatus, field.TypeEnum)
+	if _u.mutation.ReportsToPositionIDCleared() {
+		_spec.ClearField(position.FieldReportsToPositionID, field.TypeUint32)
 	}
 	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(position.FieldDescription, field.TypeString, value)
@@ -579,14 +734,56 @@ func (_u *PositionUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(position.FieldDescription, field.TypeString)
 	}
-	if value, ok := _u.mutation.Quota(); ok {
-		_spec.SetField(position.FieldQuota, field.TypeUint32, value)
+	if value, ok := _u.mutation.JobFamily(); ok {
+		_spec.SetField(position.FieldJobFamily, field.TypeString, value)
 	}
-	if value, ok := _u.mutation.AddedQuota(); ok {
-		_spec.AddField(position.FieldQuota, field.TypeUint32, value)
+	if _u.mutation.JobFamilyCleared() {
+		_spec.ClearField(position.FieldJobFamily, field.TypeString)
 	}
-	if _u.mutation.QuotaCleared() {
-		_spec.ClearField(position.FieldQuota, field.TypeUint32)
+	if value, ok := _u.mutation.JobGrade(); ok {
+		_spec.SetField(position.FieldJobGrade, field.TypeString, value)
+	}
+	if _u.mutation.JobGradeCleared() {
+		_spec.ClearField(position.FieldJobGrade, field.TypeString)
+	}
+	if value, ok := _u.mutation.Level(); ok {
+		_spec.SetField(position.FieldLevel, field.TypeInt32, value)
+	}
+	if value, ok := _u.mutation.AddedLevel(); ok {
+		_spec.AddField(position.FieldLevel, field.TypeInt32, value)
+	}
+	if _u.mutation.LevelCleared() {
+		_spec.ClearField(position.FieldLevel, field.TypeInt32)
+	}
+	if value, ok := _u.mutation.Headcount(); ok {
+		_spec.SetField(position.FieldHeadcount, field.TypeUint32, value)
+	}
+	if value, ok := _u.mutation.AddedHeadcount(); ok {
+		_spec.AddField(position.FieldHeadcount, field.TypeUint32, value)
+	}
+	if _u.mutation.HeadcountCleared() {
+		_spec.ClearField(position.FieldHeadcount, field.TypeUint32)
+	}
+	if value, ok := _u.mutation.IsKeyPosition(); ok {
+		_spec.SetField(position.FieldIsKeyPosition, field.TypeBool, value)
+	}
+	if _u.mutation.IsKeyPositionCleared() {
+		_spec.ClearField(position.FieldIsKeyPosition, field.TypeBool)
+	}
+	if value, ok := _u.mutation.GetType(); ok {
+		_spec.SetField(position.FieldType, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.StartAt(); ok {
+		_spec.SetField(position.FieldStartAt, field.TypeTime, value)
+	}
+	if _u.mutation.StartAtCleared() {
+		_spec.ClearField(position.FieldStartAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.EndAt(); ok {
+		_spec.SetField(position.FieldEndAt, field.TypeTime, value)
+	}
+	if _u.mutation.EndAtCleared() {
+		_spec.ClearField(position.FieldEndAt, field.TypeTime)
 	}
 	if _u.mutation.ParentCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -872,6 +1069,26 @@ func (_u *PositionUpdateOne) ClearParentID() *PositionUpdateOne {
 	return _u
 }
 
+// SetStatus sets the "status" field.
+func (_u *PositionUpdateOne) SetStatus(v position.Status) *PositionUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_u *PositionUpdateOne) SetNillableStatus(v *position.Status) *PositionUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
+	}
+	return _u
+}
+
+// ClearStatus clears the value of the "status" field.
+func (_u *PositionUpdateOne) ClearStatus() *PositionUpdateOne {
+	_u.mutation.ClearStatus()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *PositionUpdateOne) SetName(v string) *PositionUpdateOne {
 	_u.mutation.SetName(v)
@@ -912,65 +1129,51 @@ func (_u *PositionUpdateOne) ClearCode() *PositionUpdateOne {
 	return _u
 }
 
-// SetOrganizationID sets the "organization_id" field.
-func (_u *PositionUpdateOne) SetOrganizationID(v uint32) *PositionUpdateOne {
-	_u.mutation.ResetOrganizationID()
-	_u.mutation.SetOrganizationID(v)
+// SetOrgUnitID sets the "org_unit_id" field.
+func (_u *PositionUpdateOne) SetOrgUnitID(v uint32) *PositionUpdateOne {
+	_u.mutation.ResetOrgUnitID()
+	_u.mutation.SetOrgUnitID(v)
 	return _u
 }
 
-// SetNillableOrganizationID sets the "organization_id" field if the given value is not nil.
-func (_u *PositionUpdateOne) SetNillableOrganizationID(v *uint32) *PositionUpdateOne {
+// SetNillableOrgUnitID sets the "org_unit_id" field if the given value is not nil.
+func (_u *PositionUpdateOne) SetNillableOrgUnitID(v *uint32) *PositionUpdateOne {
 	if v != nil {
-		_u.SetOrganizationID(*v)
+		_u.SetOrgUnitID(*v)
 	}
 	return _u
 }
 
-// AddOrganizationID adds value to the "organization_id" field.
-func (_u *PositionUpdateOne) AddOrganizationID(v int32) *PositionUpdateOne {
-	_u.mutation.AddOrganizationID(v)
+// AddOrgUnitID adds value to the "org_unit_id" field.
+func (_u *PositionUpdateOne) AddOrgUnitID(v int32) *PositionUpdateOne {
+	_u.mutation.AddOrgUnitID(v)
 	return _u
 }
 
-// SetDepartmentID sets the "department_id" field.
-func (_u *PositionUpdateOne) SetDepartmentID(v uint32) *PositionUpdateOne {
-	_u.mutation.ResetDepartmentID()
-	_u.mutation.SetDepartmentID(v)
+// SetReportsToPositionID sets the "reports_to_position_id" field.
+func (_u *PositionUpdateOne) SetReportsToPositionID(v uint32) *PositionUpdateOne {
+	_u.mutation.ResetReportsToPositionID()
+	_u.mutation.SetReportsToPositionID(v)
 	return _u
 }
 
-// SetNillableDepartmentID sets the "department_id" field if the given value is not nil.
-func (_u *PositionUpdateOne) SetNillableDepartmentID(v *uint32) *PositionUpdateOne {
+// SetNillableReportsToPositionID sets the "reports_to_position_id" field if the given value is not nil.
+func (_u *PositionUpdateOne) SetNillableReportsToPositionID(v *uint32) *PositionUpdateOne {
 	if v != nil {
-		_u.SetDepartmentID(*v)
+		_u.SetReportsToPositionID(*v)
 	}
 	return _u
 }
 
-// AddDepartmentID adds value to the "department_id" field.
-func (_u *PositionUpdateOne) AddDepartmentID(v int32) *PositionUpdateOne {
-	_u.mutation.AddDepartmentID(v)
+// AddReportsToPositionID adds value to the "reports_to_position_id" field.
+func (_u *PositionUpdateOne) AddReportsToPositionID(v int32) *PositionUpdateOne {
+	_u.mutation.AddReportsToPositionID(v)
 	return _u
 }
 
-// SetStatus sets the "status" field.
-func (_u *PositionUpdateOne) SetStatus(v position.Status) *PositionUpdateOne {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *PositionUpdateOne) SetNillableStatus(v *position.Status) *PositionUpdateOne {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// ClearStatus clears the value of the "status" field.
-func (_u *PositionUpdateOne) ClearStatus() *PositionUpdateOne {
-	_u.mutation.ClearStatus()
+// ClearReportsToPositionID clears the value of the "reports_to_position_id" field.
+func (_u *PositionUpdateOne) ClearReportsToPositionID() *PositionUpdateOne {
+	_u.mutation.ClearReportsToPositionID()
 	return _u
 }
 
@@ -994,30 +1197,171 @@ func (_u *PositionUpdateOne) ClearDescription() *PositionUpdateOne {
 	return _u
 }
 
-// SetQuota sets the "quota" field.
-func (_u *PositionUpdateOne) SetQuota(v uint32) *PositionUpdateOne {
-	_u.mutation.ResetQuota()
-	_u.mutation.SetQuota(v)
+// SetJobFamily sets the "job_family" field.
+func (_u *PositionUpdateOne) SetJobFamily(v string) *PositionUpdateOne {
+	_u.mutation.SetJobFamily(v)
 	return _u
 }
 
-// SetNillableQuota sets the "quota" field if the given value is not nil.
-func (_u *PositionUpdateOne) SetNillableQuota(v *uint32) *PositionUpdateOne {
+// SetNillableJobFamily sets the "job_family" field if the given value is not nil.
+func (_u *PositionUpdateOne) SetNillableJobFamily(v *string) *PositionUpdateOne {
 	if v != nil {
-		_u.SetQuota(*v)
+		_u.SetJobFamily(*v)
 	}
 	return _u
 }
 
-// AddQuota adds value to the "quota" field.
-func (_u *PositionUpdateOne) AddQuota(v int32) *PositionUpdateOne {
-	_u.mutation.AddQuota(v)
+// ClearJobFamily clears the value of the "job_family" field.
+func (_u *PositionUpdateOne) ClearJobFamily() *PositionUpdateOne {
+	_u.mutation.ClearJobFamily()
 	return _u
 }
 
-// ClearQuota clears the value of the "quota" field.
-func (_u *PositionUpdateOne) ClearQuota() *PositionUpdateOne {
-	_u.mutation.ClearQuota()
+// SetJobGrade sets the "job_grade" field.
+func (_u *PositionUpdateOne) SetJobGrade(v string) *PositionUpdateOne {
+	_u.mutation.SetJobGrade(v)
+	return _u
+}
+
+// SetNillableJobGrade sets the "job_grade" field if the given value is not nil.
+func (_u *PositionUpdateOne) SetNillableJobGrade(v *string) *PositionUpdateOne {
+	if v != nil {
+		_u.SetJobGrade(*v)
+	}
+	return _u
+}
+
+// ClearJobGrade clears the value of the "job_grade" field.
+func (_u *PositionUpdateOne) ClearJobGrade() *PositionUpdateOne {
+	_u.mutation.ClearJobGrade()
+	return _u
+}
+
+// SetLevel sets the "level" field.
+func (_u *PositionUpdateOne) SetLevel(v int32) *PositionUpdateOne {
+	_u.mutation.ResetLevel()
+	_u.mutation.SetLevel(v)
+	return _u
+}
+
+// SetNillableLevel sets the "level" field if the given value is not nil.
+func (_u *PositionUpdateOne) SetNillableLevel(v *int32) *PositionUpdateOne {
+	if v != nil {
+		_u.SetLevel(*v)
+	}
+	return _u
+}
+
+// AddLevel adds value to the "level" field.
+func (_u *PositionUpdateOne) AddLevel(v int32) *PositionUpdateOne {
+	_u.mutation.AddLevel(v)
+	return _u
+}
+
+// ClearLevel clears the value of the "level" field.
+func (_u *PositionUpdateOne) ClearLevel() *PositionUpdateOne {
+	_u.mutation.ClearLevel()
+	return _u
+}
+
+// SetHeadcount sets the "headcount" field.
+func (_u *PositionUpdateOne) SetHeadcount(v uint32) *PositionUpdateOne {
+	_u.mutation.ResetHeadcount()
+	_u.mutation.SetHeadcount(v)
+	return _u
+}
+
+// SetNillableHeadcount sets the "headcount" field if the given value is not nil.
+func (_u *PositionUpdateOne) SetNillableHeadcount(v *uint32) *PositionUpdateOne {
+	if v != nil {
+		_u.SetHeadcount(*v)
+	}
+	return _u
+}
+
+// AddHeadcount adds value to the "headcount" field.
+func (_u *PositionUpdateOne) AddHeadcount(v int32) *PositionUpdateOne {
+	_u.mutation.AddHeadcount(v)
+	return _u
+}
+
+// ClearHeadcount clears the value of the "headcount" field.
+func (_u *PositionUpdateOne) ClearHeadcount() *PositionUpdateOne {
+	_u.mutation.ClearHeadcount()
+	return _u
+}
+
+// SetIsKeyPosition sets the "is_key_position" field.
+func (_u *PositionUpdateOne) SetIsKeyPosition(v bool) *PositionUpdateOne {
+	_u.mutation.SetIsKeyPosition(v)
+	return _u
+}
+
+// SetNillableIsKeyPosition sets the "is_key_position" field if the given value is not nil.
+func (_u *PositionUpdateOne) SetNillableIsKeyPosition(v *bool) *PositionUpdateOne {
+	if v != nil {
+		_u.SetIsKeyPosition(*v)
+	}
+	return _u
+}
+
+// ClearIsKeyPosition clears the value of the "is_key_position" field.
+func (_u *PositionUpdateOne) ClearIsKeyPosition() *PositionUpdateOne {
+	_u.mutation.ClearIsKeyPosition()
+	return _u
+}
+
+// SetType sets the "type" field.
+func (_u *PositionUpdateOne) SetType(v position.Type) *PositionUpdateOne {
+	_u.mutation.SetType(v)
+	return _u
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (_u *PositionUpdateOne) SetNillableType(v *position.Type) *PositionUpdateOne {
+	if v != nil {
+		_u.SetType(*v)
+	}
+	return _u
+}
+
+// SetStartAt sets the "start_at" field.
+func (_u *PositionUpdateOne) SetStartAt(v time.Time) *PositionUpdateOne {
+	_u.mutation.SetStartAt(v)
+	return _u
+}
+
+// SetNillableStartAt sets the "start_at" field if the given value is not nil.
+func (_u *PositionUpdateOne) SetNillableStartAt(v *time.Time) *PositionUpdateOne {
+	if v != nil {
+		_u.SetStartAt(*v)
+	}
+	return _u
+}
+
+// ClearStartAt clears the value of the "start_at" field.
+func (_u *PositionUpdateOne) ClearStartAt() *PositionUpdateOne {
+	_u.mutation.ClearStartAt()
+	return _u
+}
+
+// SetEndAt sets the "end_at" field.
+func (_u *PositionUpdateOne) SetEndAt(v time.Time) *PositionUpdateOne {
+	_u.mutation.SetEndAt(v)
+	return _u
+}
+
+// SetNillableEndAt sets the "end_at" field if the given value is not nil.
+func (_u *PositionUpdateOne) SetNillableEndAt(v *time.Time) *PositionUpdateOne {
+	if v != nil {
+		_u.SetEndAt(*v)
+	}
+	return _u
+}
+
+// ClearEndAt clears the value of the "end_at" field.
+func (_u *PositionUpdateOne) ClearEndAt() *PositionUpdateOne {
+	_u.mutation.ClearEndAt()
 	return _u
 }
 
@@ -1115,6 +1459,11 @@ func (_u *PositionUpdateOne) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *PositionUpdateOne) check() error {
+	if v, ok := _u.mutation.Status(); ok {
+		if err := position.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "Position.status": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Name(); ok {
 		if err := position.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Position.name": %w`, err)}
@@ -1125,9 +1474,9 @@ func (_u *PositionUpdateOne) check() error {
 			return &ValidationError{Name: "code", err: fmt.Errorf(`ent: validator failed for field "Position.code": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.Status(); ok {
-		if err := position.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "Position.status": %w`, err)}
+	if v, ok := _u.mutation.GetType(); ok {
+		if err := position.TypeValidator(v); err != nil {
+			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Position.type": %w`, err)}
 		}
 	}
 	return nil
@@ -1228,6 +1577,12 @@ func (_u *PositionUpdateOne) sqlSave(ctx context.Context) (_node *Position, err 
 	if _u.mutation.TenantIDCleared() {
 		_spec.ClearField(position.FieldTenantID, field.TypeUint32)
 	}
+	if value, ok := _u.mutation.Status(); ok {
+		_spec.SetField(position.FieldStatus, field.TypeEnum, value)
+	}
+	if _u.mutation.StatusCleared() {
+		_spec.ClearField(position.FieldStatus, field.TypeEnum)
+	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(position.FieldName, field.TypeString, value)
 	}
@@ -1240,23 +1595,20 @@ func (_u *PositionUpdateOne) sqlSave(ctx context.Context) (_node *Position, err 
 	if _u.mutation.CodeCleared() {
 		_spec.ClearField(position.FieldCode, field.TypeString)
 	}
-	if value, ok := _u.mutation.OrganizationID(); ok {
-		_spec.SetField(position.FieldOrganizationID, field.TypeUint32, value)
+	if value, ok := _u.mutation.OrgUnitID(); ok {
+		_spec.SetField(position.FieldOrgUnitID, field.TypeUint32, value)
 	}
-	if value, ok := _u.mutation.AddedOrganizationID(); ok {
-		_spec.AddField(position.FieldOrganizationID, field.TypeUint32, value)
+	if value, ok := _u.mutation.AddedOrgUnitID(); ok {
+		_spec.AddField(position.FieldOrgUnitID, field.TypeUint32, value)
 	}
-	if value, ok := _u.mutation.DepartmentID(); ok {
-		_spec.SetField(position.FieldDepartmentID, field.TypeUint32, value)
+	if value, ok := _u.mutation.ReportsToPositionID(); ok {
+		_spec.SetField(position.FieldReportsToPositionID, field.TypeUint32, value)
 	}
-	if value, ok := _u.mutation.AddedDepartmentID(); ok {
-		_spec.AddField(position.FieldDepartmentID, field.TypeUint32, value)
+	if value, ok := _u.mutation.AddedReportsToPositionID(); ok {
+		_spec.AddField(position.FieldReportsToPositionID, field.TypeUint32, value)
 	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(position.FieldStatus, field.TypeEnum, value)
-	}
-	if _u.mutation.StatusCleared() {
-		_spec.ClearField(position.FieldStatus, field.TypeEnum)
+	if _u.mutation.ReportsToPositionIDCleared() {
+		_spec.ClearField(position.FieldReportsToPositionID, field.TypeUint32)
 	}
 	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(position.FieldDescription, field.TypeString, value)
@@ -1264,14 +1616,56 @@ func (_u *PositionUpdateOne) sqlSave(ctx context.Context) (_node *Position, err 
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(position.FieldDescription, field.TypeString)
 	}
-	if value, ok := _u.mutation.Quota(); ok {
-		_spec.SetField(position.FieldQuota, field.TypeUint32, value)
+	if value, ok := _u.mutation.JobFamily(); ok {
+		_spec.SetField(position.FieldJobFamily, field.TypeString, value)
 	}
-	if value, ok := _u.mutation.AddedQuota(); ok {
-		_spec.AddField(position.FieldQuota, field.TypeUint32, value)
+	if _u.mutation.JobFamilyCleared() {
+		_spec.ClearField(position.FieldJobFamily, field.TypeString)
 	}
-	if _u.mutation.QuotaCleared() {
-		_spec.ClearField(position.FieldQuota, field.TypeUint32)
+	if value, ok := _u.mutation.JobGrade(); ok {
+		_spec.SetField(position.FieldJobGrade, field.TypeString, value)
+	}
+	if _u.mutation.JobGradeCleared() {
+		_spec.ClearField(position.FieldJobGrade, field.TypeString)
+	}
+	if value, ok := _u.mutation.Level(); ok {
+		_spec.SetField(position.FieldLevel, field.TypeInt32, value)
+	}
+	if value, ok := _u.mutation.AddedLevel(); ok {
+		_spec.AddField(position.FieldLevel, field.TypeInt32, value)
+	}
+	if _u.mutation.LevelCleared() {
+		_spec.ClearField(position.FieldLevel, field.TypeInt32)
+	}
+	if value, ok := _u.mutation.Headcount(); ok {
+		_spec.SetField(position.FieldHeadcount, field.TypeUint32, value)
+	}
+	if value, ok := _u.mutation.AddedHeadcount(); ok {
+		_spec.AddField(position.FieldHeadcount, field.TypeUint32, value)
+	}
+	if _u.mutation.HeadcountCleared() {
+		_spec.ClearField(position.FieldHeadcount, field.TypeUint32)
+	}
+	if value, ok := _u.mutation.IsKeyPosition(); ok {
+		_spec.SetField(position.FieldIsKeyPosition, field.TypeBool, value)
+	}
+	if _u.mutation.IsKeyPositionCleared() {
+		_spec.ClearField(position.FieldIsKeyPosition, field.TypeBool)
+	}
+	if value, ok := _u.mutation.GetType(); ok {
+		_spec.SetField(position.FieldType, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.StartAt(); ok {
+		_spec.SetField(position.FieldStartAt, field.TypeTime, value)
+	}
+	if _u.mutation.StartAtCleared() {
+		_spec.ClearField(position.FieldStartAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.EndAt(); ok {
+		_spec.SetField(position.FieldEndAt, field.TypeTime, value)
+	}
+	if _u.mutation.EndAtCleared() {
+		_spec.ClearField(position.FieldEndAt, field.TypeTime)
 	}
 	if _u.mutation.ParentCleared() {
 		edge := &sqlgraph.EdgeSpec{

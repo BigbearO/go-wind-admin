@@ -134,9 +134,9 @@ func ExpiredAt(v time.Time) predicate.Tenant {
 	return predicate.Tenant(sql.FieldEQ(FieldExpiredAt, v))
 }
 
-// LastLoginTime applies equality check predicate on the "last_login_time" field. It's identical to LastLoginTimeEQ.
-func LastLoginTime(v time.Time) predicate.Tenant {
-	return predicate.Tenant(sql.FieldEQ(FieldLastLoginTime, v))
+// LastLoginAt applies equality check predicate on the "last_login_at" field. It's identical to LastLoginAtEQ.
+func LastLoginAt(v time.Time) predicate.Tenant {
+	return predicate.Tenant(sql.FieldEQ(FieldLastLoginAt, v))
 }
 
 // LastLoginIP applies equality check predicate on the "last_login_ip" field. It's identical to LastLoginIPEQ.
@@ -1184,54 +1184,54 @@ func ExpiredAtNotNil() predicate.Tenant {
 	return predicate.Tenant(sql.FieldNotNull(FieldExpiredAt))
 }
 
-// LastLoginTimeEQ applies the EQ predicate on the "last_login_time" field.
-func LastLoginTimeEQ(v time.Time) predicate.Tenant {
-	return predicate.Tenant(sql.FieldEQ(FieldLastLoginTime, v))
+// LastLoginAtEQ applies the EQ predicate on the "last_login_at" field.
+func LastLoginAtEQ(v time.Time) predicate.Tenant {
+	return predicate.Tenant(sql.FieldEQ(FieldLastLoginAt, v))
 }
 
-// LastLoginTimeNEQ applies the NEQ predicate on the "last_login_time" field.
-func LastLoginTimeNEQ(v time.Time) predicate.Tenant {
-	return predicate.Tenant(sql.FieldNEQ(FieldLastLoginTime, v))
+// LastLoginAtNEQ applies the NEQ predicate on the "last_login_at" field.
+func LastLoginAtNEQ(v time.Time) predicate.Tenant {
+	return predicate.Tenant(sql.FieldNEQ(FieldLastLoginAt, v))
 }
 
-// LastLoginTimeIn applies the In predicate on the "last_login_time" field.
-func LastLoginTimeIn(vs ...time.Time) predicate.Tenant {
-	return predicate.Tenant(sql.FieldIn(FieldLastLoginTime, vs...))
+// LastLoginAtIn applies the In predicate on the "last_login_at" field.
+func LastLoginAtIn(vs ...time.Time) predicate.Tenant {
+	return predicate.Tenant(sql.FieldIn(FieldLastLoginAt, vs...))
 }
 
-// LastLoginTimeNotIn applies the NotIn predicate on the "last_login_time" field.
-func LastLoginTimeNotIn(vs ...time.Time) predicate.Tenant {
-	return predicate.Tenant(sql.FieldNotIn(FieldLastLoginTime, vs...))
+// LastLoginAtNotIn applies the NotIn predicate on the "last_login_at" field.
+func LastLoginAtNotIn(vs ...time.Time) predicate.Tenant {
+	return predicate.Tenant(sql.FieldNotIn(FieldLastLoginAt, vs...))
 }
 
-// LastLoginTimeGT applies the GT predicate on the "last_login_time" field.
-func LastLoginTimeGT(v time.Time) predicate.Tenant {
-	return predicate.Tenant(sql.FieldGT(FieldLastLoginTime, v))
+// LastLoginAtGT applies the GT predicate on the "last_login_at" field.
+func LastLoginAtGT(v time.Time) predicate.Tenant {
+	return predicate.Tenant(sql.FieldGT(FieldLastLoginAt, v))
 }
 
-// LastLoginTimeGTE applies the GTE predicate on the "last_login_time" field.
-func LastLoginTimeGTE(v time.Time) predicate.Tenant {
-	return predicate.Tenant(sql.FieldGTE(FieldLastLoginTime, v))
+// LastLoginAtGTE applies the GTE predicate on the "last_login_at" field.
+func LastLoginAtGTE(v time.Time) predicate.Tenant {
+	return predicate.Tenant(sql.FieldGTE(FieldLastLoginAt, v))
 }
 
-// LastLoginTimeLT applies the LT predicate on the "last_login_time" field.
-func LastLoginTimeLT(v time.Time) predicate.Tenant {
-	return predicate.Tenant(sql.FieldLT(FieldLastLoginTime, v))
+// LastLoginAtLT applies the LT predicate on the "last_login_at" field.
+func LastLoginAtLT(v time.Time) predicate.Tenant {
+	return predicate.Tenant(sql.FieldLT(FieldLastLoginAt, v))
 }
 
-// LastLoginTimeLTE applies the LTE predicate on the "last_login_time" field.
-func LastLoginTimeLTE(v time.Time) predicate.Tenant {
-	return predicate.Tenant(sql.FieldLTE(FieldLastLoginTime, v))
+// LastLoginAtLTE applies the LTE predicate on the "last_login_at" field.
+func LastLoginAtLTE(v time.Time) predicate.Tenant {
+	return predicate.Tenant(sql.FieldLTE(FieldLastLoginAt, v))
 }
 
-// LastLoginTimeIsNil applies the IsNil predicate on the "last_login_time" field.
-func LastLoginTimeIsNil() predicate.Tenant {
-	return predicate.Tenant(sql.FieldIsNull(FieldLastLoginTime))
+// LastLoginAtIsNil applies the IsNil predicate on the "last_login_at" field.
+func LastLoginAtIsNil() predicate.Tenant {
+	return predicate.Tenant(sql.FieldIsNull(FieldLastLoginAt))
 }
 
-// LastLoginTimeNotNil applies the NotNil predicate on the "last_login_time" field.
-func LastLoginTimeNotNil() predicate.Tenant {
-	return predicate.Tenant(sql.FieldNotNull(FieldLastLoginTime))
+// LastLoginAtNotNil applies the NotNil predicate on the "last_login_at" field.
+func LastLoginAtNotNil() predicate.Tenant {
+	return predicate.Tenant(sql.FieldNotNull(FieldLastLoginAt))
 }
 
 // LastLoginIPEQ applies the EQ predicate on the "last_login_ip" field.

@@ -51,8 +51,8 @@ const (
 	FieldSubscriptionPlan = "subscription_plan"
 	// FieldExpiredAt holds the string denoting the expired_at field in the database.
 	FieldExpiredAt = "expired_at"
-	// FieldLastLoginTime holds the string denoting the last_login_time field in the database.
-	FieldLastLoginTime = "last_login_time"
+	// FieldLastLoginAt holds the string denoting the last_login_at field in the database.
+	FieldLastLoginAt = "last_login_at"
 	// FieldLastLoginIP holds the string denoting the last_login_ip field in the database.
 	FieldLastLoginIP = "last_login_ip"
 	// Table holds the table name of the tenant in the database.
@@ -81,7 +81,7 @@ var Columns = []string{
 	FieldUnsubscribeAt,
 	FieldSubscriptionPlan,
 	FieldExpiredAt,
-	FieldLastLoginTime,
+	FieldLastLoginAt,
 	FieldLastLoginIP,
 }
 
@@ -288,9 +288,9 @@ func ByExpiredAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExpiredAt, opts...).ToFunc()
 }
 
-// ByLastLoginTime orders the results by the last_login_time field.
-func ByLastLoginTime(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldLastLoginTime, opts...).ToFunc()
+// ByLastLoginAt orders the results by the last_login_at field.
+func ByLastLoginAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLastLoginAt, opts...).ToFunc()
 }
 
 // ByLastLoginIP orders the results by the last_login_ip field.

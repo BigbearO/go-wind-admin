@@ -34,20 +34,34 @@ const (
 	FieldParentID = "parent_id"
 	// FieldTenantID holds the string denoting the tenant_id field in the database.
 	FieldTenantID = "tenant_id"
+	// FieldStatus holds the string denoting the status field in the database.
+	FieldStatus = "status"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldCode holds the string denoting the code field in the database.
 	FieldCode = "code"
-	// FieldOrganizationID holds the string denoting the organization_id field in the database.
-	FieldOrganizationID = "organization_id"
-	// FieldDepartmentID holds the string denoting the department_id field in the database.
-	FieldDepartmentID = "department_id"
-	// FieldStatus holds the string denoting the status field in the database.
-	FieldStatus = "status"
+	// FieldOrgUnitID holds the string denoting the org_unit_id field in the database.
+	FieldOrgUnitID = "org_unit_id"
+	// FieldReportsToPositionID holds the string denoting the reports_to_position_id field in the database.
+	FieldReportsToPositionID = "reports_to_position_id"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
-	// FieldQuota holds the string denoting the quota field in the database.
-	FieldQuota = "quota"
+	// FieldJobFamily holds the string denoting the job_family field in the database.
+	FieldJobFamily = "job_family"
+	// FieldJobGrade holds the string denoting the job_grade field in the database.
+	FieldJobGrade = "job_grade"
+	// FieldLevel holds the string denoting the level field in the database.
+	FieldLevel = "level"
+	// FieldHeadcount holds the string denoting the headcount field in the database.
+	FieldHeadcount = "headcount"
+	// FieldIsKeyPosition holds the string denoting the is_key_position field in the database.
+	FieldIsKeyPosition = "is_key_position"
+	// FieldType holds the string denoting the type field in the database.
+	FieldType = "type"
+	// FieldStartAt holds the string denoting the start_at field in the database.
+	FieldStartAt = "start_at"
+	// FieldEndAt holds the string denoting the end_at field in the database.
+	FieldEndAt = "end_at"
 	// EdgeParent holds the string denoting the parent edge name in mutations.
 	EdgeParent = "parent"
 	// EdgeChildren holds the string denoting the children edge name in mutations.
@@ -77,13 +91,20 @@ var Columns = []string{
 	FieldRemark,
 	FieldParentID,
 	FieldTenantID,
+	FieldStatus,
 	FieldName,
 	FieldCode,
-	FieldOrganizationID,
-	FieldDepartmentID,
-	FieldStatus,
+	FieldOrgUnitID,
+	FieldReportsToPositionID,
 	FieldDescription,
-	FieldQuota,
+	FieldJobFamily,
+	FieldJobGrade,
+	FieldLevel,
+	FieldHeadcount,
+	FieldIsKeyPosition,
+	FieldType,
+	FieldStartAt,
+	FieldEndAt,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -103,6 +124,10 @@ var (
 	NameValidator func(string) error
 	// CodeValidator is a validator for the "code" field. It is called by the builders before save.
 	CodeValidator func(string) error
+	// DefaultHeadcount holds the default value on creation for the "headcount" field.
+	DefaultHeadcount uint32
+	// DefaultIsKeyPosition holds the default value on creation for the "is_key_position" field.
+	DefaultIsKeyPosition bool
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.
 	IDValidator func(uint32) error
 )
@@ -115,8 +140,8 @@ const DefaultStatus = StatusOn
 
 // Status values.
 const (
-	StatusOn  Status = "ON"
 	StatusOff Status = "OFF"
+	StatusOn  Status = "ON"
 )
 
 func (s Status) String() string {
@@ -126,10 +151,40 @@ func (s Status) String() string {
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s Status) error {
 	switch s {
-	case StatusOn, StatusOff:
+	case StatusOff, StatusOn:
 		return nil
 	default:
 		return fmt.Errorf("position: invalid enum value for status field: %q", s)
+	}
+}
+
+// Type defines the type for the "type" enum field.
+type Type string
+
+// TypeRegular is the default value of the Type enum.
+const DefaultType = TypeRegular
+
+// Type values.
+const (
+	TypeRegular  Type = "REGULAR"
+	TypeManager  Type = "MANAGER"
+	TypeLead     Type = "LEAD"
+	TypeIntern   Type = "INTERN"
+	TypeContract Type = "CONTRACT"
+	TypeOther    Type = "OTHER"
+)
+
+func (_type Type) String() string {
+	return string(_type)
+}
+
+// TypeValidator is a validator for the "type" field enum values. It is called by the builders before save.
+func TypeValidator(_type Type) error {
+	switch _type {
+	case TypeRegular, TypeManager, TypeLead, TypeIntern, TypeContract, TypeOther:
+		return nil
+	default:
+		return fmt.Errorf("position: invalid enum value for type field: %q", _type)
 	}
 }
 
@@ -191,6 +246,11 @@ func ByTenantID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTenantID, opts...).ToFunc()
 }
 
+// ByStatus orders the results by the status field.
+func ByStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
@@ -201,19 +261,14 @@ func ByCode(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCode, opts...).ToFunc()
 }
 
-// ByOrganizationID orders the results by the organization_id field.
-func ByOrganizationID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldOrganizationID, opts...).ToFunc()
+// ByOrgUnitID orders the results by the org_unit_id field.
+func ByOrgUnitID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOrgUnitID, opts...).ToFunc()
 }
 
-// ByDepartmentID orders the results by the department_id field.
-func ByDepartmentID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDepartmentID, opts...).ToFunc()
-}
-
-// ByStatus orders the results by the status field.
-func ByStatus(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+// ByReportsToPositionID orders the results by the reports_to_position_id field.
+func ByReportsToPositionID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReportsToPositionID, opts...).ToFunc()
 }
 
 // ByDescription orders the results by the description field.
@@ -221,9 +276,44 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
 }
 
-// ByQuota orders the results by the quota field.
-func ByQuota(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldQuota, opts...).ToFunc()
+// ByJobFamily orders the results by the job_family field.
+func ByJobFamily(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldJobFamily, opts...).ToFunc()
+}
+
+// ByJobGrade orders the results by the job_grade field.
+func ByJobGrade(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldJobGrade, opts...).ToFunc()
+}
+
+// ByLevel orders the results by the level field.
+func ByLevel(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLevel, opts...).ToFunc()
+}
+
+// ByHeadcount orders the results by the headcount field.
+func ByHeadcount(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHeadcount, opts...).ToFunc()
+}
+
+// ByIsKeyPosition orders the results by the is_key_position field.
+func ByIsKeyPosition(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsKeyPosition, opts...).ToFunc()
+}
+
+// ByType orders the results by the type field.
+func ByType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldType, opts...).ToFunc()
+}
+
+// ByStartAt orders the results by the start_at field.
+func ByStartAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStartAt, opts...).ToFunc()
+}
+
+// ByEndAt orders the results by the end_at field.
+func ByEndAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEndAt, opts...).ToFunc()
 }
 
 // ByParentField orders the results by parent field.

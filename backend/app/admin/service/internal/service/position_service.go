@@ -23,22 +23,19 @@ type PositionService struct {
 
 	log *log.Helper
 
-	positionRepo     *data.PositionRepo
-	departmentRepo   *data.DepartmentRepo
-	organizationRepo *data.OrganizationRepo
+	positionRepo *data.PositionRepo
+	orgUnitRepo  *data.OrgUnitRepo
 }
 
 func NewPositionService(
 	ctx *bootstrap.Context,
 	positionRepo *data.PositionRepo,
-	departmentRepo *data.DepartmentRepo,
-	organizationRepo *data.OrganizationRepo,
+	orgUnitRepo *data.OrgUnitRepo,
 ) *PositionService {
 	return &PositionService{
-		log:              ctx.NewLoggerHelper("position/service/admin-service"),
-		positionRepo:     positionRepo,
-		departmentRepo:   departmentRepo,
-		organizationRepo: organizationRepo,
+		log:          ctx.NewLoggerHelper("position/service/admin-service"),
+		positionRepo: positionRepo,
+		orgUnitRepo:  orgUnitRepo,
 	}
 }
 
@@ -53,11 +50,9 @@ func (s *PositionService) List(ctx context.Context, req *pagination.PagingReques
 
 	InitPositionNameSetMap(resp.Items, &orgSet, &deptSet)
 
-	QueryOrganizationInfoFromRepo(ctx, s.organizationRepo, &orgSet)
-	QueryDepartmentInfoFromRepo(ctx, s.departmentRepo, &deptSet)
+	QueryOrgUnitInfoFromRepo(ctx, s.orgUnitRepo, &orgSet)
 
-	FillPositionOrganizationInfo(resp.Items, &orgSet)
-	FillPositionDepartmentInfo(resp.Items, &deptSet)
+	FillPositionOrgUnitInfo(resp.Items, &orgSet)
 
 	return resp, nil
 }
@@ -68,21 +63,12 @@ func (s *PositionService) Get(ctx context.Context, req *userV1.GetPositionReques
 		return nil, err
 	}
 
-	if resp.OrganizationId != nil {
-		organization, err := s.organizationRepo.Get(ctx, &userV1.GetOrganizationRequest{QueryBy: &userV1.GetOrganizationRequest_Id{Id: resp.GetOrganizationId()}})
+	if resp.OrgUnitId != nil {
+		organization, err := s.orgUnitRepo.Get(ctx, &userV1.GetOrgUnitRequest{QueryBy: &userV1.GetOrgUnitRequest_Id{Id: resp.GetOrgUnitId()}})
 		if err == nil && organization != nil {
-			resp.OrganizationName = organization.Name
+			resp.OrgUnitName = organization.Name
 		} else {
 			s.log.Warnf("Get position organization failed: %v", err)
-		}
-	}
-
-	if resp.DepartmentId != nil {
-		department, err := s.departmentRepo.Get(ctx, &userV1.GetDepartmentRequest{QueryBy: &userV1.GetDepartmentRequest_Id{Id: resp.GetDepartmentId()}})
-		if err == nil && department != nil {
-			resp.DepartmentName = department.Name
-		} else {
-			s.log.Warnf("Get position department failed: %v", err)
 		}
 	}
 

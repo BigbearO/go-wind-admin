@@ -81,15 +81,19 @@ func (r *RoleMenuRepo) AssignMenus(ctx context.Context, roleId uint32, menuIds [
 
 // ListMenuIdsByRoleId 获取角色分配的菜单ID列表
 func (r *RoleMenuRepo) ListMenuIdsByRoleId(ctx context.Context, roleId uint32) ([]uint32, error) {
-	menuIds, err := r.entClient.Client().RoleMenu.Query().
+	intIDs, err := r.entClient.Client().RoleMenu.Query().
 		Where(rolemenu.RoleIDEQ(roleId)).
 		Select(rolemenu.FieldMenuID).
-		IDs(ctx)
+		Ints(ctx)
 	if err != nil {
 		r.log.Errorf("query menu ids by role id failed: %s", err.Error())
 		return nil, userV1.ErrorInternalServerError("query menu ids by role id failed")
 	}
-	return menuIds, nil
+	ids := make([]uint32, len(intIDs))
+	for i, v := range intIDs {
+		ids[i] = uint32(v)
+	}
+	return ids, nil
 }
 
 // RemoveMenus 从角色移除菜单

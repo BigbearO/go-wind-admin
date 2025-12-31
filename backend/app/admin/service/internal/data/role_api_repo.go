@@ -81,15 +81,19 @@ func (r *RoleApiRepo) AssignApis(ctx context.Context, roleId uint32, apiIds []ui
 
 // ListApiIdsByRoleId 获取角色分配的API ID列表
 func (r *RoleApiRepo) ListApiIdsByRoleId(ctx context.Context, roleId uint32) ([]uint32, error) {
-	apiIds, err := r.entClient.Client().RoleApi.Query().
+	intIDs, err := r.entClient.Client().RoleApi.Query().
 		Where(roleapi.IDEQ(roleId)).
 		Select(roleapi.FieldAPIID).
-		IDs(ctx)
+		Ints(ctx)
 	if err != nil {
 		r.log.Errorf("query api ids by role id failed: %s", err.Error())
 		return nil, userV1.ErrorInternalServerError("query api ids by role id failed")
 	}
-	return apiIds, nil
+	ids := make([]uint32, len(intIDs))
+	for i, v := range intIDs {
+		ids[i] = uint32(v)
+	}
+	return ids, nil
 }
 
 // RemoveApis 从角色移除API

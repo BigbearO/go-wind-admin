@@ -30,8 +30,8 @@ const (
 type Position_Status int32
 
 const (
-	Position_OFF Position_Status = 0 // 禁用
-	Position_ON  Position_Status = 1 // 启用
+	Position_OFF Position_Status = 0 // 打开
+	Position_ON  Position_Status = 1 // 关闭
 )
 
 // Enum value maps for Position_Status.
@@ -73,32 +73,99 @@ func (Position_Status) EnumDescriptor() ([]byte, []int) {
 	return file_user_service_v1_position_proto_rawDescGZIP(), []int{0, 0}
 }
 
+// 职位类型
+type Position_Type int32
+
+const (
+	Position_REGULAR  Position_Type = 0   // 普通职位
+	Position_LEADER   Position_Type = 1   // 领导职位
+	Position_MANAGER  Position_Type = 2   // 管理职位
+	Position_INTERN   Position_Type = 3   // 实习职位
+	Position_CONTRACT Position_Type = 4   // 合同职位
+	Position_OTHER    Position_Type = 100 // 其他职位
+)
+
+// Enum value maps for Position_Type.
+var (
+	Position_Type_name = map[int32]string{
+		0:   "REGULAR",
+		1:   "LEADER",
+		2:   "MANAGER",
+		3:   "INTERN",
+		4:   "CONTRACT",
+		100: "OTHER",
+	}
+	Position_Type_value = map[string]int32{
+		"REGULAR":  0,
+		"LEADER":   1,
+		"MANAGER":  2,
+		"INTERN":   3,
+		"CONTRACT": 4,
+		"OTHER":    100,
+	}
+)
+
+func (x Position_Type) Enum() *Position_Type {
+	p := new(Position_Type)
+	*p = x
+	return p
+}
+
+func (x Position_Type) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (Position_Type) Descriptor() protoreflect.EnumDescriptor {
+	return file_user_service_v1_position_proto_enumTypes[1].Descriptor()
+}
+
+func (Position_Type) Type() protoreflect.EnumType {
+	return &file_user_service_v1_position_proto_enumTypes[1]
+}
+
+func (x Position_Type) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use Position_Type.Descriptor instead.
+func (Position_Type) EnumDescriptor() ([]byte, []int) {
+	return file_user_service_v1_position_proto_rawDescGZIP(), []int{0, 1}
+}
+
 // 职位
 type Position struct {
-	state            protoimpl.MessageState `protogen:"open.v1"`
-	Id               *uint32                `protobuf:"varint,1,opt,name=id,proto3,oneof" json:"id,omitempty"`                                                     // 职位ID
-	Name             *string                `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty"`                                                  // 职位名称
-	Code             *string                `protobuf:"bytes,3,opt,name=code,proto3,oneof" json:"code,omitempty"`                                                  // 唯一编码（建议规则：部门编码 + 职位类型 + 序号，如 “FIN-LEADER-001”），用于数据同步和快速识别
-	Quota            *uint32                `protobuf:"varint,4,opt,name=quota,proto3,oneof" json:"quota,omitempty"`                                               // 编制人数（该职位最多可容纳的员工数量，0表示无限制）
-	SortOrder        *int32                 `protobuf:"varint,5,opt,name=sort_order,json=sortOrder,proto3,oneof" json:"sort_order,omitempty"`                      // 排序顺序，值越小越靠前
-	Status           *Position_Status       `protobuf:"varint,6,opt,name=status,proto3,enum=user.service.v1.Position_Status,oneof" json:"status,omitempty"`        // 状态
-	Remark           *string                `protobuf:"bytes,7,opt,name=remark,proto3,oneof" json:"remark,omitempty"`                                              // 备注
-	Description      *string                `protobuf:"bytes,8,opt,name=description,proto3,oneof" json:"description,omitempty"`                                    // 职责描述
-	OrganizationId   *uint32                `protobuf:"varint,10,opt,name=organization_id,json=organizationId,proto3,oneof" json:"organization_id,omitempty"`      // 所属组织ID
-	OrganizationName *string                `protobuf:"bytes,11,opt,name=organization_name,json=organizationName,proto3,oneof" json:"organization_name,omitempty"` // 所属组织名称
-	DepartmentId     *uint32                `protobuf:"varint,12,opt,name=department_id,json=departmentId,proto3,oneof" json:"department_id,omitempty"`            // 所属部门ID
-	DepartmentName   *string                `protobuf:"bytes,13,opt,name=department_name,json=departmentName,proto3,oneof" json:"department_name,omitempty"`       // 所属部门名称
-	TenantId         *uint32                `protobuf:"varint,14,opt,name=tenant_id,json=tenantId,proto3,oneof" json:"tenant_id,omitempty"`                        // 租户ID
-	ParentId         *uint32                `protobuf:"varint,50,opt,name=parent_id,json=parentId,proto3,oneof" json:"parent_id,omitempty"`                        // 父节点ID
-	Children         []*Position            `protobuf:"bytes,51,rep,name=children,proto3" json:"children,omitempty"`                                               // 子节点树
-	CreatedBy        *uint32                `protobuf:"varint,100,opt,name=created_by,json=createdBy,proto3,oneof" json:"created_by,omitempty"`                    // 创建者ID
-	UpdatedBy        *uint32                `protobuf:"varint,101,opt,name=updated_by,json=updatedBy,proto3,oneof" json:"updated_by,omitempty"`                    // 更新者ID
-	DeletedBy        *uint32                `protobuf:"varint,102,opt,name=deleted_by,json=deletedBy,proto3,oneof" json:"deleted_by,omitempty"`                    // 删除者用户ID
-	CreatedAt        *timestamppb.Timestamp `protobuf:"bytes,200,opt,name=created_at,json=createdAt,proto3,oneof" json:"created_at,omitempty"`                     // 创建时间
-	UpdatedAt        *timestamppb.Timestamp `protobuf:"bytes,201,opt,name=updated_at,json=updatedAt,proto3,oneof" json:"updated_at,omitempty"`                     // 更新时间
-	DeletedAt        *timestamppb.Timestamp `protobuf:"bytes,202,opt,name=deleted_at,json=deletedAt,proto3,oneof" json:"deleted_at,omitempty"`                     // 删除时间
-	unknownFields    protoimpl.UnknownFields
-	sizeCache        protoimpl.SizeCache
+	state                 protoimpl.MessageState `protogen:"open.v1"`
+	Id                    *uint32                `protobuf:"varint,1,opt,name=id,proto3,oneof" json:"id,omitempty"`                                                                        // 职位ID
+	Name                  *string                `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty"`                                                                     // 职位名称
+	Code                  *string                `protobuf:"bytes,3,opt,name=code,proto3,oneof" json:"code,omitempty"`                                                                     // 唯一编码（建议规则：部门编码 + 职位类型 + 序号，如 “FIN-LEADER-001”），用于数据同步和快速识别
+	Headcount             *uint32                `protobuf:"varint,4,opt,name=headcount,proto3,oneof" json:"headcount,omitempty"`                                                          // 编制人数（该职位最多可容纳的员工数量，0表示无限制）
+	SortOrder             *int32                 `protobuf:"varint,5,opt,name=sort_order,json=sortOrder,proto3,oneof" json:"sort_order,omitempty"`                                         // 排序顺序，值越小越靠前
+	Status                *Position_Status       `protobuf:"varint,6,opt,name=status,proto3,enum=user.service.v1.Position_Status,oneof" json:"status,omitempty"`                           // 状态
+	Type                  *Position_Type         `protobuf:"varint,7,opt,name=type,proto3,enum=user.service.v1.Position_Type,oneof" json:"type,omitempty"`                                 // 职位类型
+	Remark                *string                `protobuf:"bytes,8,opt,name=remark,proto3,oneof" json:"remark,omitempty"`                                                                 // 备注
+	Description           *string                `protobuf:"bytes,9,opt,name=description,proto3,oneof" json:"description,omitempty"`                                                       // 职位描述
+	JobFamily             *string                `protobuf:"bytes,10,opt,name=job_family,json=jobFamily,proto3,oneof" json:"job_family,omitempty"`                                         // 职类/序列
+	JobGrade              *string                `protobuf:"bytes,11,opt,name=job_grade,json=jobGrade,proto3,oneof" json:"job_grade,omitempty"`                                            // 职级
+	Level                 *int32                 `protobuf:"varint,12,opt,name=level,proto3,oneof" json:"level,omitempty"`                                                                 // 数值化职级
+	IsKeyPosition         *bool                  `protobuf:"varint,13,opt,name=is_key_position,json=isKeyPosition,proto3,oneof" json:"is_key_position,omitempty"`                          // 是否关键岗位
+	TenantId              *uint32                `protobuf:"varint,20,opt,name=tenant_id,json=tenantId,proto3,oneof" json:"tenant_id,omitempty"`                                           // 租户ID
+	TenantName            *string                `protobuf:"bytes,21,opt,name=tenant_name,json=tenantName,proto3,oneof" json:"tenant_name,omitempty"`                                      // 租户名称
+	OrgUnitId             *uint32                `protobuf:"varint,22,opt,name=org_unit_id,json=orgUnitId,proto3,oneof" json:"org_unit_id,omitempty"`                                      // 所属组织单元ID
+	OrgUnitName           *string                `protobuf:"bytes,23,opt,name=org_unit_name,json=orgUnitName,proto3,oneof" json:"org_unit_name,omitempty"`                                 // 所属组织单元名称
+	ReportsToPositionId   *uint32                `protobuf:"varint,24,opt,name=reports_to_position_id,json=reportsToPositionId,proto3,oneof" json:"reports_to_position_id,omitempty"`      // 汇报关系用户ID
+	ReportsToPositionName *string                `protobuf:"bytes,25,opt,name=reports_to_position_name,json=reportsToPositionName,proto3,oneof" json:"reports_to_position_name,omitempty"` // 汇报关系用户名称
+	StartAt               *timestamppb.Timestamp `protobuf:"bytes,50,opt,name=start_at,json=startAt,proto3,oneof" json:"start_at,omitempty"`                                               // 生效时间
+	EndAt                 *timestamppb.Timestamp `protobuf:"bytes,51,opt,name=end_at,json=endAt,proto3,oneof" json:"end_at,omitempty"`                                                     // 失效时间
+	ParentId              *uint32                `protobuf:"varint,60,opt,name=parent_id,json=parentId,proto3,oneof" json:"parent_id,omitempty"`                                           // 父节点ID
+	Children              []*Position            `protobuf:"bytes,61,rep,name=children,proto3" json:"children,omitempty"`                                                                  // 子节点树
+	CreatedBy             *uint32                `protobuf:"varint,100,opt,name=created_by,json=createdBy,proto3,oneof" json:"created_by,omitempty"`                                       // 创建者ID
+	UpdatedBy             *uint32                `protobuf:"varint,101,opt,name=updated_by,json=updatedBy,proto3,oneof" json:"updated_by,omitempty"`                                       // 更新者ID
+	DeletedBy             *uint32                `protobuf:"varint,102,opt,name=deleted_by,json=deletedBy,proto3,oneof" json:"deleted_by,omitempty"`                                       // 删除者用户ID
+	CreatedAt             *timestamppb.Timestamp `protobuf:"bytes,200,opt,name=created_at,json=createdAt,proto3,oneof" json:"created_at,omitempty"`                                        // 创建时间
+	UpdatedAt             *timestamppb.Timestamp `protobuf:"bytes,201,opt,name=updated_at,json=updatedAt,proto3,oneof" json:"updated_at,omitempty"`                                        // 更新时间
+	DeletedAt             *timestamppb.Timestamp `protobuf:"bytes,202,opt,name=deleted_at,json=deletedAt,proto3,oneof" json:"deleted_at,omitempty"`                                        // 删除时间
+	unknownFields         protoimpl.UnknownFields
+	sizeCache             protoimpl.SizeCache
 }
 
 func (x *Position) Reset() {
@@ -152,9 +219,9 @@ func (x *Position) GetCode() string {
 	return ""
 }
 
-func (x *Position) GetQuota() uint32 {
-	if x != nil && x.Quota != nil {
-		return *x.Quota
+func (x *Position) GetHeadcount() uint32 {
+	if x != nil && x.Headcount != nil {
+		return *x.Headcount
 	}
 	return 0
 }
@@ -173,6 +240,13 @@ func (x *Position) GetStatus() Position_Status {
 	return Position_OFF
 }
 
+func (x *Position) GetType() Position_Type {
+	if x != nil && x.Type != nil {
+		return *x.Type
+	}
+	return Position_REGULAR
+}
+
 func (x *Position) GetRemark() string {
 	if x != nil && x.Remark != nil {
 		return *x.Remark
@@ -187,32 +261,32 @@ func (x *Position) GetDescription() string {
 	return ""
 }
 
-func (x *Position) GetOrganizationId() uint32 {
-	if x != nil && x.OrganizationId != nil {
-		return *x.OrganizationId
-	}
-	return 0
-}
-
-func (x *Position) GetOrganizationName() string {
-	if x != nil && x.OrganizationName != nil {
-		return *x.OrganizationName
+func (x *Position) GetJobFamily() string {
+	if x != nil && x.JobFamily != nil {
+		return *x.JobFamily
 	}
 	return ""
 }
 
-func (x *Position) GetDepartmentId() uint32 {
-	if x != nil && x.DepartmentId != nil {
-		return *x.DepartmentId
+func (x *Position) GetJobGrade() string {
+	if x != nil && x.JobGrade != nil {
+		return *x.JobGrade
+	}
+	return ""
+}
+
+func (x *Position) GetLevel() int32 {
+	if x != nil && x.Level != nil {
+		return *x.Level
 	}
 	return 0
 }
 
-func (x *Position) GetDepartmentName() string {
-	if x != nil && x.DepartmentName != nil {
-		return *x.DepartmentName
+func (x *Position) GetIsKeyPosition() bool {
+	if x != nil && x.IsKeyPosition != nil {
+		return *x.IsKeyPosition
 	}
-	return ""
+	return false
 }
 
 func (x *Position) GetTenantId() uint32 {
@@ -220,6 +294,55 @@ func (x *Position) GetTenantId() uint32 {
 		return *x.TenantId
 	}
 	return 0
+}
+
+func (x *Position) GetTenantName() string {
+	if x != nil && x.TenantName != nil {
+		return *x.TenantName
+	}
+	return ""
+}
+
+func (x *Position) GetOrgUnitId() uint32 {
+	if x != nil && x.OrgUnitId != nil {
+		return *x.OrgUnitId
+	}
+	return 0
+}
+
+func (x *Position) GetOrgUnitName() string {
+	if x != nil && x.OrgUnitName != nil {
+		return *x.OrgUnitName
+	}
+	return ""
+}
+
+func (x *Position) GetReportsToPositionId() uint32 {
+	if x != nil && x.ReportsToPositionId != nil {
+		return *x.ReportsToPositionId
+	}
+	return 0
+}
+
+func (x *Position) GetReportsToPositionName() string {
+	if x != nil && x.ReportsToPositionName != nil {
+		return *x.ReportsToPositionName
+	}
+	return ""
+}
+
+func (x *Position) GetStartAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.StartAt
+	}
+	return nil
+}
+
+func (x *Position) GetEndAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.EndAt
+	}
+	return nil
 }
 
 func (x *Position) GetParentId() uint32 {
@@ -657,55 +780,84 @@ var File_user_service_v1_position_proto protoreflect.FileDescriptor
 
 const file_user_service_v1_position_proto_rawDesc = "" +
 	"\n" +
-	"\x1euser/service/v1/position.proto\x12\x0fuser.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\"\xa1\x0e\n" +
+	"\x1euser/service/v1/position.proto\x12\x0fuser.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\"\xb3\x14\n" +
 	"\bPosition\x12#\n" +
 	"\x02id\x18\x01 \x01(\rB\x0e\xbaG\v\x92\x02\b职位IDH\x00R\x02id\x88\x01\x01\x12+\n" +
 	"\x04name\x18\x02 \x01(\tB\x12\xbaG\x0f\x92\x02\f职位名称H\x01R\x04name\x88\x01\x01\x12\xa6\x01\n" +
-	"\x04code\x18\x03 \x01(\tB\x8c\x01\xbaG\x88\x01\x92\x02\x84\x01唯一编码（建议规则：部门编码 + 职位类型 + 序号，如 “FIN-LEADER-001”），用于数据同步和快速识别H\x02R\x04code\x88\x01\x01\x12m\n" +
-	"\x05quota\x18\x04 \x01(\rBR\xbaGO\x92\x02L编制人数（该职位最多可容纳的员工数量，0表示无限制）H\x03R\x05quota\x88\x01\x01\x12K\n" +
+	"\x04code\x18\x03 \x01(\tB\x8c\x01\xbaG\x88\x01\x92\x02\x84\x01唯一编码（建议规则：部门编码 + 职位类型 + 序号，如 “FIN-LEADER-001”），用于数据同步和快速识别H\x02R\x04code\x88\x01\x01\x12u\n" +
+	"\theadcount\x18\x04 \x01(\rBR\xbaGO\x92\x02L编制人数（该职位最多可容纳的员工数量，0表示无限制）H\x03R\theadcount\x88\x01\x01\x12K\n" +
 	"\n" +
 	"sort_order\x18\x05 \x01(\x05B'\xbaG$\x92\x02!排序顺序，值越小越靠前H\x04R\tsortOrder\x88\x01\x01\x12K\n" +
-	"\x06status\x18\x06 \x01(\x0e2 .user.service.v1.Position.StatusB\f\xbaG\t\x92\x02\x06状态H\x05R\x06status\x88\x01\x01\x12)\n" +
-	"\x06remark\x18\a \x01(\tB\f\xbaG\t\x92\x02\x06备注H\x06R\x06remark\x88\x01\x01\x129\n" +
-	"\vdescription\x18\b \x01(\tB\x12\xbaG\x0f\x92\x02\f职责描述H\aR\vdescription\x88\x01\x01\x12B\n" +
-	"\x0forganization_id\x18\n" +
-	" \x01(\rB\x14\xbaG\x11\x92\x02\x0e所属组织IDH\bR\x0eorganizationId\x88\x01\x01\x12J\n" +
-	"\x11organization_name\x18\v \x01(\tB\x18\xbaG\x15\x92\x02\x12所属组织名称H\tR\x10organizationName\x88\x01\x01\x12>\n" +
-	"\rdepartment_id\x18\f \x01(\rB\x14\xbaG\x11\x92\x02\x0e所属部门IDH\n" +
-	"R\fdepartmentId\x88\x01\x01\x12F\n" +
-	"\x0fdepartment_name\x18\r \x01(\tB\x18\xbaG\x15\x92\x02\x12所属部门名称H\vR\x0edepartmentName\x88\x01\x01\x120\n" +
-	"\ttenant_id\x18\x0e \x01(\rB\x0e\xbaG\v\x92\x02\b租户IDH\fR\btenantId\x88\x01\x01\x123\n" +
-	"\tparent_id\x182 \x01(\rB\x11\xbaG\x0e\x92\x02\v父节点IDH\rR\bparentId\x88\x01\x01\x12I\n" +
-	"\bchildren\x183 \x03(\v2\x19.user.service.v1.PositionB\x12\xbaG\x0f\x92\x02\f子节点树R\bchildren\x125\n" +
+	"\x06status\x18\x06 \x01(\x0e2 .user.service.v1.Position.StatusB\f\xbaG\t\x92\x02\x06状态H\x05R\x06status\x88\x01\x01\x12K\n" +
+	"\x04type\x18\a \x01(\x0e2\x1e.user.service.v1.Position.TypeB\x12\xbaG\x0f\x92\x02\f职位类型H\x06R\x04type\x88\x01\x01\x12)\n" +
+	"\x06remark\x18\b \x01(\tB\f\xbaG\t\x92\x02\x06备注H\aR\x06remark\x88\x01\x01\x129\n" +
+	"\vdescription\x18\t \x01(\tB\x12\xbaG\x0f\x92\x02\f职位描述H\bR\vdescription\x88\x01\x01\x127\n" +
 	"\n" +
-	"created_by\x18d \x01(\rB\x11\xbaG\x0e\x92\x02\v创建者IDH\x0eR\tcreatedBy\x88\x01\x01\x125\n" +
+	"job_family\x18\n" +
+	" \x01(\tB\x13\xbaG\x10\x92\x02\r职类/序列H\tR\tjobFamily\x88\x01\x01\x12.\n" +
+	"\tjob_grade\x18\v \x01(\tB\f\xbaG\t\x92\x02\x06职级H\n" +
+	"R\bjobGrade\x88\x01\x01\x120\n" +
+	"\x05level\x18\f \x01(\x05B\x15\xbaG\x12\x92\x02\x0f数值化职级H\vR\x05level\x88\x01\x01\x12E\n" +
+	"\x0fis_key_position\x18\r \x01(\bB\x18\xbaG\x15\x92\x02\x12是否关键岗位H\fR\risKeyPosition\x88\x01\x01\x120\n" +
+	"\ttenant_id\x18\x14 \x01(\rB\x0e\xbaG\v\x92\x02\b租户IDH\rR\btenantId\x88\x01\x01\x128\n" +
+	"\vtenant_name\x18\x15 \x01(\tB\x12\xbaG\x0f\x92\x02\f租户名称H\x0eR\n" +
+	"tenantName\x88\x01\x01\x12?\n" +
+	"\vorg_unit_id\x18\x16 \x01(\rB\x1a\xbaG\x17\x92\x02\x14所属组织单元IDH\x0fR\torgUnitId\x88\x01\x01\x12G\n" +
+	"\rorg_unit_name\x18\x17 \x01(\tB\x1e\xbaG\x1b\x92\x02\x18所属组织单元名称H\x10R\vorgUnitName\x88\x01\x01\x12T\n" +
+	"\x16reports_to_position_id\x18\x18 \x01(\rB\x1a\xbaG\x17\x92\x02\x14汇报关系用户IDH\x11R\x13reportsToPositionId\x88\x01\x01\x12\\\n" +
+	"\x18reports_to_position_name\x18\x19 \x01(\tB\x1e\xbaG\x1b\x92\x02\x18汇报关系用户名称H\x12R\x15reportsToPositionName\x88\x01\x01\x12W\n" +
+	"\bstart_at\x182 \x01(\v2\x1a.google.protobuf.TimestampB\x1b\xbaG\x18\x92\x02\x15生效时间（UTC）H\x13R\astartAt\x88\x01\x01\x12S\n" +
+	"\x06end_at\x183 \x01(\v2\x1a.google.protobuf.TimestampB\x1b\xbaG\x18\x92\x02\x15失效时间（UTC）H\x14R\x05endAt\x88\x01\x01\x123\n" +
+	"\tparent_id\x18< \x01(\rB\x11\xbaG\x0e\x92\x02\v父节点IDH\x15R\bparentId\x88\x01\x01\x12I\n" +
+	"\bchildren\x18= \x03(\v2\x19.user.service.v1.PositionB\x12\xbaG\x0f\x92\x02\f子节点树R\bchildren\x125\n" +
 	"\n" +
-	"updated_by\x18e \x01(\rB\x11\xbaG\x0e\x92\x02\v更新者IDH\x0fR\tupdatedBy\x88\x01\x01\x12;\n" +
+	"created_by\x18d \x01(\rB\x11\xbaG\x0e\x92\x02\v创建者IDH\x16R\tcreatedBy\x88\x01\x01\x125\n" +
 	"\n" +
-	"deleted_by\x18f \x01(\rB\x17\xbaG\x14\x92\x02\x11删除者用户IDH\x10R\tdeletedBy\x88\x01\x01\x12S\n" +
+	"updated_by\x18e \x01(\rB\x11\xbaG\x0e\x92\x02\v更新者IDH\x17R\tupdatedBy\x88\x01\x01\x12;\n" +
 	"\n" +
-	"created_at\x18\xc8\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f创建时间H\x11R\tcreatedAt\x88\x01\x01\x12S\n" +
+	"deleted_by\x18f \x01(\rB\x17\xbaG\x14\x92\x02\x11删除者用户IDH\x18R\tdeletedBy\x88\x01\x01\x12S\n" +
 	"\n" +
-	"updated_at\x18\xc9\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f更新时间H\x12R\tupdatedAt\x88\x01\x01\x12S\n" +
+	"created_at\x18\xc8\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f创建时间H\x19R\tcreatedAt\x88\x01\x01\x12S\n" +
 	"\n" +
-	"deleted_at\x18\xca\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f删除时间H\x13R\tdeletedAt\x88\x01\x01\"\x19\n" +
+	"updated_at\x18\xc9\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f更新时间H\x1aR\tupdatedAt\x88\x01\x01\x12S\n" +
+	"\n" +
+	"deleted_at\x18\xca\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f删除时间H\x1bR\tdeletedAt\x88\x01\x01\"\x19\n" +
 	"\x06Status\x12\a\n" +
 	"\x03OFF\x10\x00\x12\x06\n" +
-	"\x02ON\x10\x01B\x05\n" +
+	"\x02ON\x10\x01\"Q\n" +
+	"\x04Type\x12\v\n" +
+	"\aREGULAR\x10\x00\x12\n" +
+	"\n" +
+	"\x06LEADER\x10\x01\x12\v\n" +
+	"\aMANAGER\x10\x02\x12\n" +
+	"\n" +
+	"\x06INTERN\x10\x03\x12\f\n" +
+	"\bCONTRACT\x10\x04\x12\t\n" +
+	"\x05OTHER\x10dB\x05\n" +
 	"\x03_idB\a\n" +
 	"\x05_nameB\a\n" +
-	"\x05_codeB\b\n" +
-	"\x06_quotaB\r\n" +
-	"\v_sort_orderB\t\n" +
-	"\a_statusB\t\n" +
-	"\a_remarkB\x0e\n" +
-	"\f_descriptionB\x12\n" +
-	"\x10_organization_idB\x14\n" +
-	"\x12_organization_nameB\x10\n" +
-	"\x0e_department_idB\x12\n" +
-	"\x10_department_nameB\f\n" +
+	"\x05_codeB\f\n" +
 	"\n" +
-	"_tenant_idB\f\n" +
+	"_headcountB\r\n" +
+	"\v_sort_orderB\t\n" +
+	"\a_statusB\a\n" +
+	"\x05_typeB\t\n" +
+	"\a_remarkB\x0e\n" +
+	"\f_descriptionB\r\n" +
+	"\v_job_familyB\f\n" +
+	"\n" +
+	"_job_gradeB\b\n" +
+	"\x06_levelB\x12\n" +
+	"\x10_is_key_positionB\f\n" +
+	"\n" +
+	"_tenant_idB\x0e\n" +
+	"\f_tenant_nameB\x0e\n" +
+	"\f_org_unit_idB\x10\n" +
+	"\x0e_org_unit_nameB\x19\n" +
+	"\x17_reports_to_position_idB\x1b\n" +
+	"\x19_reports_to_position_nameB\v\n" +
+	"\t_start_atB\t\n" +
+	"\a_end_atB\f\n" +
 	"\n" +
 	"_parent_idB\r\n" +
 	"\v_created_byB\r\n" +
@@ -762,52 +914,56 @@ func file_user_service_v1_position_proto_rawDescGZIP() []byte {
 	return file_user_service_v1_position_proto_rawDescData
 }
 
-var file_user_service_v1_position_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_user_service_v1_position_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
 var file_user_service_v1_position_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_user_service_v1_position_proto_goTypes = []any{
 	(Position_Status)(0),                 // 0: user.service.v1.Position.Status
-	(*Position)(nil),                     // 1: user.service.v1.Position
-	(*ListPositionResponse)(nil),         // 2: user.service.v1.ListPositionResponse
-	(*GetPositionRequest)(nil),           // 3: user.service.v1.GetPositionRequest
-	(*CreatePositionRequest)(nil),        // 4: user.service.v1.CreatePositionRequest
-	(*UpdatePositionRequest)(nil),        // 5: user.service.v1.UpdatePositionRequest
-	(*DeletePositionRequest)(nil),        // 6: user.service.v1.DeletePositionRequest
-	(*BatchCreatePositionsRequest)(nil),  // 7: user.service.v1.BatchCreatePositionsRequest
-	(*BatchCreatePositionsResponse)(nil), // 8: user.service.v1.BatchCreatePositionsResponse
-	(*timestamppb.Timestamp)(nil),        // 9: google.protobuf.Timestamp
-	(*fieldmaskpb.FieldMask)(nil),        // 10: google.protobuf.FieldMask
-	(*v1.PagingRequest)(nil),             // 11: pagination.PagingRequest
-	(*emptypb.Empty)(nil),                // 12: google.protobuf.Empty
+	(Position_Type)(0),                   // 1: user.service.v1.Position.Type
+	(*Position)(nil),                     // 2: user.service.v1.Position
+	(*ListPositionResponse)(nil),         // 3: user.service.v1.ListPositionResponse
+	(*GetPositionRequest)(nil),           // 4: user.service.v1.GetPositionRequest
+	(*CreatePositionRequest)(nil),        // 5: user.service.v1.CreatePositionRequest
+	(*UpdatePositionRequest)(nil),        // 6: user.service.v1.UpdatePositionRequest
+	(*DeletePositionRequest)(nil),        // 7: user.service.v1.DeletePositionRequest
+	(*BatchCreatePositionsRequest)(nil),  // 8: user.service.v1.BatchCreatePositionsRequest
+	(*BatchCreatePositionsResponse)(nil), // 9: user.service.v1.BatchCreatePositionsResponse
+	(*timestamppb.Timestamp)(nil),        // 10: google.protobuf.Timestamp
+	(*fieldmaskpb.FieldMask)(nil),        // 11: google.protobuf.FieldMask
+	(*v1.PagingRequest)(nil),             // 12: pagination.PagingRequest
+	(*emptypb.Empty)(nil),                // 13: google.protobuf.Empty
 }
 var file_user_service_v1_position_proto_depIdxs = []int32{
 	0,  // 0: user.service.v1.Position.status:type_name -> user.service.v1.Position.Status
-	1,  // 1: user.service.v1.Position.children:type_name -> user.service.v1.Position
-	9,  // 2: user.service.v1.Position.created_at:type_name -> google.protobuf.Timestamp
-	9,  // 3: user.service.v1.Position.updated_at:type_name -> google.protobuf.Timestamp
-	9,  // 4: user.service.v1.Position.deleted_at:type_name -> google.protobuf.Timestamp
-	1,  // 5: user.service.v1.ListPositionResponse.items:type_name -> user.service.v1.Position
-	10, // 6: user.service.v1.GetPositionRequest.view_mask:type_name -> google.protobuf.FieldMask
-	1,  // 7: user.service.v1.CreatePositionRequest.data:type_name -> user.service.v1.Position
-	1,  // 8: user.service.v1.UpdatePositionRequest.data:type_name -> user.service.v1.Position
-	10, // 9: user.service.v1.UpdatePositionRequest.update_mask:type_name -> google.protobuf.FieldMask
-	1,  // 10: user.service.v1.BatchCreatePositionsRequest.data:type_name -> user.service.v1.Position
-	11, // 11: user.service.v1.PositionService.List:input_type -> pagination.PagingRequest
-	3,  // 12: user.service.v1.PositionService.Get:input_type -> user.service.v1.GetPositionRequest
-	4,  // 13: user.service.v1.PositionService.Create:input_type -> user.service.v1.CreatePositionRequest
-	5,  // 14: user.service.v1.PositionService.Update:input_type -> user.service.v1.UpdatePositionRequest
-	6,  // 15: user.service.v1.PositionService.Delete:input_type -> user.service.v1.DeletePositionRequest
-	7,  // 16: user.service.v1.PositionService.BatchCreate:input_type -> user.service.v1.BatchCreatePositionsRequest
-	2,  // 17: user.service.v1.PositionService.List:output_type -> user.service.v1.ListPositionResponse
-	1,  // 18: user.service.v1.PositionService.Get:output_type -> user.service.v1.Position
-	12, // 19: user.service.v1.PositionService.Create:output_type -> google.protobuf.Empty
-	12, // 20: user.service.v1.PositionService.Update:output_type -> google.protobuf.Empty
-	12, // 21: user.service.v1.PositionService.Delete:output_type -> google.protobuf.Empty
-	8,  // 22: user.service.v1.PositionService.BatchCreate:output_type -> user.service.v1.BatchCreatePositionsResponse
-	17, // [17:23] is the sub-list for method output_type
-	11, // [11:17] is the sub-list for method input_type
-	11, // [11:11] is the sub-list for extension type_name
-	11, // [11:11] is the sub-list for extension extendee
-	0,  // [0:11] is the sub-list for field type_name
+	1,  // 1: user.service.v1.Position.type:type_name -> user.service.v1.Position.Type
+	10, // 2: user.service.v1.Position.start_at:type_name -> google.protobuf.Timestamp
+	10, // 3: user.service.v1.Position.end_at:type_name -> google.protobuf.Timestamp
+	2,  // 4: user.service.v1.Position.children:type_name -> user.service.v1.Position
+	10, // 5: user.service.v1.Position.created_at:type_name -> google.protobuf.Timestamp
+	10, // 6: user.service.v1.Position.updated_at:type_name -> google.protobuf.Timestamp
+	10, // 7: user.service.v1.Position.deleted_at:type_name -> google.protobuf.Timestamp
+	2,  // 8: user.service.v1.ListPositionResponse.items:type_name -> user.service.v1.Position
+	11, // 9: user.service.v1.GetPositionRequest.view_mask:type_name -> google.protobuf.FieldMask
+	2,  // 10: user.service.v1.CreatePositionRequest.data:type_name -> user.service.v1.Position
+	2,  // 11: user.service.v1.UpdatePositionRequest.data:type_name -> user.service.v1.Position
+	11, // 12: user.service.v1.UpdatePositionRequest.update_mask:type_name -> google.protobuf.FieldMask
+	2,  // 13: user.service.v1.BatchCreatePositionsRequest.data:type_name -> user.service.v1.Position
+	12, // 14: user.service.v1.PositionService.List:input_type -> pagination.PagingRequest
+	4,  // 15: user.service.v1.PositionService.Get:input_type -> user.service.v1.GetPositionRequest
+	5,  // 16: user.service.v1.PositionService.Create:input_type -> user.service.v1.CreatePositionRequest
+	6,  // 17: user.service.v1.PositionService.Update:input_type -> user.service.v1.UpdatePositionRequest
+	7,  // 18: user.service.v1.PositionService.Delete:input_type -> user.service.v1.DeletePositionRequest
+	8,  // 19: user.service.v1.PositionService.BatchCreate:input_type -> user.service.v1.BatchCreatePositionsRequest
+	3,  // 20: user.service.v1.PositionService.List:output_type -> user.service.v1.ListPositionResponse
+	2,  // 21: user.service.v1.PositionService.Get:output_type -> user.service.v1.Position
+	13, // 22: user.service.v1.PositionService.Create:output_type -> google.protobuf.Empty
+	13, // 23: user.service.v1.PositionService.Update:output_type -> google.protobuf.Empty
+	13, // 24: user.service.v1.PositionService.Delete:output_type -> google.protobuf.Empty
+	9,  // 25: user.service.v1.PositionService.BatchCreate:output_type -> user.service.v1.BatchCreatePositionsResponse
+	20, // [20:26] is the sub-list for method output_type
+	14, // [14:20] is the sub-list for method input_type
+	14, // [14:14] is the sub-list for extension type_name
+	14, // [14:14] is the sub-list for extension extendee
+	0,  // [0:14] is the sub-list for field type_name
 }
 
 func init() { file_user_service_v1_position_proto_init() }
@@ -825,7 +981,7 @@ func file_user_service_v1_position_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_service_v1_position_proto_rawDesc), len(file_user_service_v1_position_proto_rawDesc)),
-			NumEnums:      1,
+			NumEnums:      2,
 			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,

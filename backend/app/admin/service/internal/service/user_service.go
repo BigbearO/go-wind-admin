@@ -25,15 +25,17 @@ type UserService struct {
 	log *log.Helper
 
 	userRepo           data.UserRepo
-	roleRepo           *data.RoleRepo
 	userCredentialRepo *data.UserCredentialRepo
-	positionRepo       *data.PositionRepo
-	departmentRepo     *data.DepartmentRepo
-	organizationRepo   *data.OrganizationRepo
-	tenantRepo         *data.TenantRepo
 
-	userRoleRepo     *data.UserRoleRepo
-	userPositionRepo *data.UserPositionRepo
+	roleRepo     *data.RoleRepo
+	positionRepo *data.PositionRepo
+	orgUnitRepo  *data.OrgUnitRepo
+	tenantRepo   *data.TenantRepo
+
+	membershipRepo         *data.MembershipRepo
+	membershipRoleRepo     *data.MembershipRoleRepo
+	membershipPositionRepo *data.MembershipPositionRepo
+	membershipOrgUnitRepo  *data.MembershipOrgUnitRepo
 }
 
 func NewUserService(
@@ -42,23 +44,25 @@ func NewUserService(
 	roleRepo *data.RoleRepo,
 	userCredentialRepo *data.UserCredentialRepo,
 	positionRepo *data.PositionRepo,
-	departmentRepo *data.DepartmentRepo,
-	organizationRepo *data.OrganizationRepo,
+	orgUnitRepo *data.OrgUnitRepo,
 	tenantRepo *data.TenantRepo,
-	userRoleRepo *data.UserRoleRepo,
-	userPositionRepo *data.UserPositionRepo,
+	membershipRepo *data.MembershipRepo,
+	membershipRoleRepo *data.MembershipRoleRepo,
+	membershipPositionRepo *data.MembershipPositionRepo,
+	membershipOrgUnitRepo *data.MembershipOrgUnitRepo,
 ) *UserService {
 	svc := &UserService{
-		log:                ctx.NewLoggerHelper("user/service/admin-service"),
-		userRepo:           userRepo,
-		roleRepo:           roleRepo,
-		userCredentialRepo: userCredentialRepo,
-		positionRepo:       positionRepo,
-		departmentRepo:     departmentRepo,
-		organizationRepo:   organizationRepo,
-		tenantRepo:         tenantRepo,
-		userRoleRepo:       userRoleRepo,
-		userPositionRepo:   userPositionRepo,
+		log:                    ctx.NewLoggerHelper("user/service/admin-service"),
+		userRepo:               userRepo,
+		roleRepo:               roleRepo,
+		userCredentialRepo:     userCredentialRepo,
+		positionRepo:           positionRepo,
+		orgUnitRepo:            orgUnitRepo,
+		tenantRepo:             tenantRepo,
+		membershipRepo:         membershipRepo,
+		membershipRoleRepo:     membershipRoleRepo,
+		membershipPositionRepo: membershipPositionRepo,
+		membershipOrgUnitRepo:  membershipOrgUnitRepo,
 	}
 
 	svc.init()
@@ -76,8 +80,7 @@ func (s *UserService) init() {
 func (s *UserService) initUserNameSetMap(
 	users []*userV1.User,
 	tenantSet *name_set.UserNameSetMap,
-	orgSet *name_set.UserNameSetMap,
-	deptSet *name_set.UserNameSetMap,
+	orgUnitSet *name_set.UserNameSetMap,
 	posSet *name_set.UserNameSetMap,
 	roleSet *name_set.UserNameSetMap,
 ) {
@@ -85,11 +88,8 @@ func (s *UserService) initUserNameSetMap(
 		if v.TenantId != nil {
 			(*tenantSet)[v.GetTenantId()] = nil
 		}
-		if v.OrgId != nil {
-			(*orgSet)[v.GetOrgId()] = nil
-		}
-		if v.DepartmentId != nil {
-			(*deptSet)[v.GetDepartmentId()] = nil
+		if v.OrgUnitId != nil {
+			(*orgUnitSet)[v.GetOrgUnitId()] = nil
 		}
 		if v.PositionId != nil {
 			(*posSet)[v.GetPositionId()] = nil
@@ -108,15 +108,13 @@ func (s *UserService) List(ctx context.Context, req *pagination.PagingRequest) (
 
 	var roleSet = make(name_set.UserNameSetMap)
 	var tenantSet = make(name_set.UserNameSetMap)
-	var orgSet = make(name_set.UserNameSetMap)
-	var deptSet = make(name_set.UserNameSetMap)
+	var orgUnitSet = make(name_set.UserNameSetMap)
 	var posSet = make(name_set.UserNameSetMap)
 
-	s.initUserNameSetMap(resp.Items, &tenantSet, &orgSet, &deptSet, &posSet, &roleSet)
+	s.initUserNameSetMap(resp.Items, &tenantSet, &orgUnitSet, &posSet, &roleSet)
 
 	QueryTenantInfoFromRepo(ctx, s.tenantRepo, &tenantSet)
-	QueryOrganizationInfoFromRepo(ctx, s.organizationRepo, &orgSet)
-	QueryDepartmentInfoFromRepo(ctx, s.departmentRepo, &deptSet)
+	QueryOrgUnitInfoFromRepo(ctx, s.orgUnitRepo, &orgUnitSet)
 	QueryPositionInfoFromRepo(ctx, s.positionRepo, &posSet)
 	QueryRoleInfoFromRepo(ctx, s.roleRepo, &roleSet)
 
@@ -132,26 +130,14 @@ func (s *UserService) List(ctx context.Context, req *pagination.PagingRequest) (
 		}
 	}
 
-	for k, v := range orgSet {
+	for k, v := range orgUnitSet {
 		if v == nil {
 			continue
 		}
 
 		for i := 0; i < len(resp.Items); i++ {
-			if resp.Items[i].OrgId != nil && resp.Items[i].GetOrgId() == k {
-				resp.Items[i].OrgName = &v.UserName
-			}
-		}
-	}
-
-	for k, v := range deptSet {
-		if v == nil {
-			continue
-		}
-
-		for i := 0; i < len(resp.Items); i++ {
-			if resp.Items[i].DepartmentId != nil && resp.Items[i].GetDepartmentId() == k {
-				resp.Items[i].DepartmentName = &v.UserName
+			if resp.Items[i].OrgUnitId != nil && resp.Items[i].GetOrgUnitId() == k {
+				resp.Items[i].OrgUnitName = &v.UserName
 			}
 		}
 	}
@@ -196,21 +182,12 @@ func (s *UserService) fillUserInfo(ctx context.Context, user *userV1.User) error
 		}
 	}
 
-	if user.OrgId != nil {
-		organization, err := s.organizationRepo.Get(ctx, &userV1.GetOrganizationRequest{QueryBy: &userV1.GetOrganizationRequest_Id{Id: user.GetOrgId()}})
+	if user.OrgUnitId != nil {
+		organization, err := s.orgUnitRepo.Get(ctx, &userV1.GetOrgUnitRequest{QueryBy: &userV1.GetOrgUnitRequest_Id{Id: user.GetOrgUnitId()}})
 		if err == nil && organization != nil {
-			user.OrgName = organization.Name
+			user.OrgUnitName = organization.Name
 		} else {
-			s.log.Warnf("Get user organization failed: %v", err)
-		}
-	}
-
-	if user.DepartmentId != nil {
-		department, err := s.departmentRepo.Get(ctx, &userV1.GetDepartmentRequest{QueryBy: &userV1.GetDepartmentRequest_Id{Id: user.GetDepartmentId()}})
-		if err == nil && department != nil {
-			user.DepartmentName = department.Name
-		} else {
-			s.log.Warnf("Get user department failed: %v", err)
+			s.log.Warnf("Get user orgUnit failed: %v", err)
 		}
 	}
 
@@ -265,30 +242,13 @@ func (s *UserService) Create(ctx context.Context, req *userV1.CreateUserRequest)
 	}
 
 	// 获取操作者的用户信息
-	operatorUser, err := s.userRepo.Get(ctx, &userV1.GetUserRequest{
+	_, err = s.userRepo.Get(ctx, &userV1.GetUserRequest{
 		QueryBy: &userV1.GetUserRequest_Id{
 			Id: operator.UserId,
 		},
 	})
 	if err != nil {
 		return nil, err
-	}
-
-	// 校验操作者的权限
-	if operatorUser.GetAuthority() != userV1.User_SYS_ADMIN && operatorUser.GetAuthority() != userV1.User_TENANT_ADMIN {
-		s.log.Infof("operator authority: %v", operatorUser.GetAuthority())
-		return nil, adminV1.ErrorForbidden("权限不够")
-	}
-
-	if req.Data.Authority == nil {
-		req.Data.Authority = userV1.User_CUSTOMER_USER.Enum()
-	}
-
-	if req.Data.Authority != nil {
-		if operatorUser.GetAuthority() < req.Data.GetAuthority() {
-			s.log.Infof("operator authority: %v, create authority: %v", operatorUser.GetAuthority(), req.Data.GetAuthority())
-			return nil, adminV1.ErrorForbidden("不能够创建同级用户或者比自己权限高的用户")
-		}
 	}
 
 	req.Data.CreatedBy = trans.Ptr(operator.UserId)
@@ -340,24 +300,13 @@ func (s *UserService) Update(ctx context.Context, req *userV1.UpdateUserRequest)
 	}
 
 	// 获取操作者的用户信息
-	operatorUser, err := s.userRepo.Get(ctx, &userV1.GetUserRequest{
+	_, err = s.userRepo.Get(ctx, &userV1.GetUserRequest{
 		QueryBy: &userV1.GetUserRequest_Id{
 			Id: operator.UserId,
 		},
 	})
 	if err != nil {
 		return nil, err
-	}
-
-	// 校验操作者的权限
-	if operatorUser.GetAuthority() != userV1.User_SYS_ADMIN {
-		return nil, adminV1.ErrorForbidden("权限不够")
-	}
-
-	if req.Data.Authority != nil {
-		if operatorUser.GetAuthority() < req.Data.GetAuthority() {
-			return nil, adminV1.ErrorForbidden("不能够赋权同级用户或者比自己权限高的用户")
-		}
 	}
 
 	req.Data.UpdatedBy = trans.Ptr(operator.UserId)
@@ -389,7 +338,7 @@ func (s *UserService) Delete(ctx context.Context, req *userV1.DeleteUserRequest)
 	}
 
 	// 获取操作者的用户信息
-	operatorUser, err := s.userRepo.Get(ctx, &userV1.GetUserRequest{
+	_, err = s.userRepo.Get(ctx, &userV1.GetUserRequest{
 		QueryBy: &userV1.GetUserRequest_Id{
 			Id: operator.UserId,
 		},
@@ -398,28 +347,14 @@ func (s *UserService) Delete(ctx context.Context, req *userV1.DeleteUserRequest)
 		return nil, err
 	}
 
-	// 校验操作者的权限
-	if operatorUser.GetAuthority() != userV1.User_SYS_ADMIN {
-		return nil, adminV1.ErrorForbidden("权限不够")
-	}
-
 	// 获取将被删除的用户信息
-	user, err := s.userRepo.Get(ctx, &userV1.GetUserRequest{
+	_, err = s.userRepo.Get(ctx, &userV1.GetUserRequest{
 		QueryBy: &userV1.GetUserRequest_Id{
 			Id: req.GetId(),
 		},
 	})
 	if err != nil {
 		return nil, err
-	}
-
-	// 不能删除超级管理员
-	if user.GetAuthority() == userV1.User_SYS_ADMIN {
-		return nil, adminV1.ErrorForbidden("闹哪样？不能删除超级管理员！")
-	}
-
-	if operatorUser.GetAuthority() == user.GetAuthority() {
-		return nil, adminV1.ErrorForbidden("不能删除同级用户！")
 	}
 
 	// 删除用户
@@ -468,14 +403,12 @@ func (s *UserService) CreateDefaultUser(ctx context.Context) error {
 
 	if _, err = s.userRepo.Create(ctx, &userV1.CreateUserRequest{
 		Data: &userV1.User{
-			Id:        trans.Ptr(uint32(1)),
-			Username:  trans.Ptr(defaultUsername),
-			Realname:  trans.Ptr("喵个咪"),
-			Nickname:  trans.Ptr("鹳狸猿"),
-			Region:    trans.Ptr("中国"),
-			Email:     trans.Ptr("admin@gmail.com"),
-			Authority: userV1.User_SYS_ADMIN.Enum(),
-			RoleIds:   []uint32{1},
+			Id:       trans.Ptr(uint32(1)),
+			Username: trans.Ptr(defaultUsername),
+			Realname: trans.Ptr("喵个咪"),
+			Nickname: trans.Ptr("鹳狸猿"),
+			Region:   trans.Ptr("中国"),
+			Email:    trans.Ptr("admin@gmail.com"),
 		},
 	}); err != nil {
 		s.log.Errorf("create default user err: %v", err)
@@ -494,6 +427,27 @@ func (s *UserService) CreateDefaultUser(ctx context.Context) error {
 		},
 	}); err != nil {
 		s.log.Errorf("create default user credential err: %v", err)
+		return err
+	}
+
+	if err = s.membershipRepo.AssignTenantWithData(ctx, nil, &userV1.Membership{
+		UserId:    trans.Ptr(uint32(1)),
+		TenantId:  trans.Ptr(uint32(1)),
+		Status:    userV1.Membership_ACTIVE.Enum(),
+		IsPrimary: trans.Ptr(true),
+	}); err != nil {
+		s.log.Errorf("create default user membership err: %v", err)
+		return err
+	}
+
+	if err = s.membershipRoleRepo.AssignRoleWithData(ctx, nil, &userV1.MembershipRole{
+		MembershipId: trans.Ptr(uint32(1)),
+		TenantId:     trans.Ptr(uint32(1)),
+		RoleId:       trans.Ptr(uint32(1)),
+		Status:       userV1.MembershipRole_ACTIVE.Enum(),
+		IsPrimary:    trans.Ptr(true),
+	}); err != nil {
+		s.log.Errorf("create default user membership role err: %v", err)
 		return err
 	}
 

@@ -14,8 +14,7 @@
   },
   "opm": {
     "moduleName": "组织人员",
-    "org": "组织管理",
-    "dept": "部门管理",
+    "orgUnit": "组织管理",
     "position": "职位管理",
     "user": "用户管理",
     "userDetail": "用户详情"

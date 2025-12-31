@@ -45,29 +45,76 @@
     "TIME": "时间限制",
     "DEVICE": "设备限制"
   },
-  "organizationType": {
-    "GROUP": "集团",
-    "SUBSIDIARY": "子公司",
-    "FILIALE": "分公司",
-    "DIVISION": "事业部"
+  "orgUnit": {
+    "type": {
+      "DEPARTMENT": "部门",
+      "TEAM": "团队",
+      "COMPANY": "集团",
+      "DIVISION": "事业部",
+      "PROJECT": "项目组",
+      "COMMITTEE": "委员会",
+      "REGION": "区域中心",
+      "SUBSIDIARY": "子公司",
+      "BRANCH": "分公司",
+      "OTHER": "其他"
+    },
+    "status": {
+      "ON": "启用",
+      "OFF": "禁用"
+    }
   },
-  "tenantStatus": {
-    "ON": "启用",
-    "OFF": "禁用",
-    "EXPIRED": "过期",
-    "FREEZE": "冻结"
+  "tenant": {
+    "status": {
+      "ON": "启用",
+      "OFF": "禁用",
+      "EXPIRED": "过期",
+      "FREEZE": "冻结"
+    },
+    "type": {
+      "TRIAL": "试用",
+      "PAID": "付费",
+      "INTERNAL": "内部",
+      "PARTNER": "合作伙伴",
+      "CUSTOM": "定制"
+    },
+    "auditStatus": {
+      "PENDING": "待审核",
+      "APPROVED": "已通过",
+      "REJECTED": "已拒绝"
+    }
   },
-  "tenantType": {
-    "TRIAL": "试用",
-    "PAID": "付费",
-    "INTERNAL": "内部",
-    "PARTNER": "合作伙伴",
-    "CUSTOM": "定制"
+  "role": {
+    "type": {
+      "SYSTEM": "内置角色",
+      "CUSTOM": "自定义角色"
+    },
+    "dataScope": {
+      "ALL": "全部",
+      "SELECTED_UNITS": "自定义",
+      "UNIT_AND_CHILD": "本部门及以下",
+      "UNIT_ONLY": "本部门",
+      "SELF": "仅本人"
+    }
   },
-  "tenantAuditStatus": {
-    "PENDING": "待审核",
-    "APPROVED": "已通过",
-    "REJECTED": "已拒绝"
+  "memberPosition": {
+    "status": {
+      "PROBATION": "试用期",
+      "ACTIVE": "在职",
+      "LEAVE": "离职",
+      "RESIGNED": "辞职",
+      "TERMINATED": "解聘",
+      "EXPIRED": "已过期"
+    }
+  },
+  "position": {
+    "type": {
+      "REGULAR": "普通岗",
+      "LEADER": "领导岗",
+      "MANAGER": "管理岗",
+      "INTERN": "实习岗",
+      "CONTRACT": "合同岗",
+      "OTHER": "其他"
+    }
   },
   "internalMessageStatus" : {
     "DRAFT": "草稿",

@@ -8,13 +8,7 @@ import { formatDateTime } from '@vben/utils';
 import { Avatar, Descriptions, DescriptionsItem } from 'ant-design-vue';
 
 import { type userservicev1_User as User } from '#/generated/api/admin/service/v1';
-import {
-  authorityToColor,
-  authorityToName,
-  genderToColor,
-  genderToName,
-  useUserStore,
-} from '#/stores';
+import { genderToColor, genderToName, useUserStore } from '#/stores';
 import { getCharColor, getRandomColor } from '#/utils/color';
 
 const props = defineProps({
@@ -65,22 +59,6 @@ reload();
               {{ data?.username?.substring(0, 1) || '?' }}
             </span>
           </Avatar>
-          <a-tag
-            class="status-badge"
-            :color="authorityToColor(data?.authority)"
-          >
-            {{ authorityToName(data?.authority) }}
-          </a-tag>
-          <a-tag
-            class="status-badge"
-            :color="data?.status === 'ON' ? 'success' : 'error'"
-          >
-            {{
-              data?.status === 'ON'
-                ? $t('enum.status.ON')
-                : $t('enum.status.OFF')
-            }}
-          </a-tag>
         </div>
 
         <!-- 详细信息列表 -->
@@ -129,10 +107,7 @@ reload();
             {{ data?.tenantName }}
           </DescriptionsItem>
           <DescriptionsItem :label="$t('page.user.detail.desc.orgName')">
-            {{ data?.orgName }}
-          </DescriptionsItem>
-          <DescriptionsItem :label="$t('page.user.detail.desc.departmentName')">
-            {{ data?.departmentName }}
+            {{ data?.orgUnitName }}
           </DescriptionsItem>
           <DescriptionsItem :label="$t('page.user.detail.desc.positionName')">
             {{ data?.positionName }}
@@ -140,8 +115,8 @@ reload();
           <DescriptionsItem :label="$t('ui.table.createdAt')">
             {{ formatDateTime(data?.createdAt ?? '') }}
           </DescriptionsItem>
-          <DescriptionsItem :label="$t('page.user.detail.desc.lastLoginTime')">
-            {{ data?.lastLoginTime }}
+          <DescriptionsItem :label="$t('page.user.detail.desc.lastLoginAt')">
+            {{ data?.lastLoginAt }}
           </DescriptionsItem>
           <DescriptionsItem :label="$t('page.user.detail.desc.lastLoginIp')">
             {{ data?.lastLoginIp }}

@@ -157,12 +157,6 @@ const gridOptions: VxeGridProps<Tenant> = {
       width: 95,
     },
     {
-      title: $t('page.user.table.lastLoginTime'),
-      field: 'lastLoginTime',
-      formatter: 'formatDateTime',
-      width: 160,
-    },
-    {
       title: $t('ui.table.createdAt'),
       field: 'createdAt',
       formatter: 'formatDateTime',

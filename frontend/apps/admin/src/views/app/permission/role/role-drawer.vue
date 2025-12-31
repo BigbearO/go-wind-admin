@@ -9,7 +9,7 @@ import { notification } from 'ant-design-vue';
 import { useVbenForm } from '#/adapter/form';
 import {
   buildMenuTree,
-  convertApiToTree,
+  convertApiToTree, orgUnitStatusList, roleDataScopeList, roleTypeList,
   statusList,
   useApiResourceStore,
   useMenuStore,
@@ -60,6 +60,30 @@ const [BaseForm, baseFormApi] = useVbenForm({
         allowClear: true,
       },
       rules: 'required',
+    },
+    {
+      component: 'RadioGroup',
+      fieldName: 'type',
+      defaultValue: 'CUSTOM',
+      label: $t('page.role.type'),
+      rules: 'selectRequired',
+      componentProps: {
+        optionType: 'button',
+        buttonStyle: 'solid',
+        class: 'flex flex-wrap', // 如果选项过多，可以添加class来自动折叠
+        options: roleTypeList,
+      },
+    },
+    {
+      component: 'Select',
+      fieldName: 'dataScope',
+      defaultValue: 'UNIT_AND_CHILD',
+      label: $t('page.role.dataScope'),
+      rules: 'selectRequired',
+      componentProps: {
+        placeholder: $t('ui.placeholder.select'),
+        options: roleDataScopeList,
+      },
     },
     {
       component: 'InputNumber',

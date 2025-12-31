@@ -91,17 +91,23 @@ func Server(opts ...Option) middleware.Middleware {
 			}
 
 			if op.injectEnt {
-				ctx = viewer.NewContext(ctx, viewer.UserViewer{
-					Authority: tokenPayload.GetAuthority(),
-					TenantId:  tokenPayload.TenantId,
-				})
+				userViewer := viewer.NewUserViewer(
+					tokenPayload.GetUserId(),
+					tokenPayload.GetTenantId(),
+					tokenPayload.GetOrgUnitId(),
+					tokenPayload.GetIsPlatformAdmin(),
+					tokenPayload.GetDataScope(),
+				)
+				ctx = viewer.NewContext(ctx, userViewer)
 			}
 
 			if op.injectMetadata {
 				ctx = metadata.NewOperatorMetadataContext(ctx,
-					trans.Ptr(tokenPayload.UserId),
-					tokenPayload.TenantId,
-					trans.Ptr(tokenPayload.GetAuthority()),
+					tokenPayload.GetUserId(),
+					tokenPayload.GetTenantId(),
+					tokenPayload.GetOrgUnitId(),
+					tokenPayload.GetIsPlatformAdmin(),
+					tokenPayload.GetDataScope(),
 				)
 			}
 
@@ -177,7 +183,7 @@ func setRequestTenantId(req interface{}, payload *authenticationV1.UserTokenPayl
 	}
 
 	v := reflect.ValueOf(req).Elem()
-	field := v.FieldByName("TenantId")
+	field := v.FieldByName("tenantId")
 	if field.IsValid() && field.Kind() == reflect.Ptr {
 		field.Set(reflect.ValueOf(&payload.TenantId))
 	}

@@ -144,9 +144,9 @@ func Description(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldDescription, v))
 }
 
-// LastLoginTime applies equality check predicate on the "last_login_time" field. It's identical to LastLoginTimeEQ.
-func LastLoginTime(v time.Time) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldLastLoginTime, v))
+// LastLoginAt applies equality check predicate on the "last_login_at" field. It's identical to LastLoginAtEQ.
+func LastLoginAt(v time.Time) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldLastLoginAt, v))
 }
 
 // LastLoginIP applies equality check predicate on the "last_login_ip" field. It's identical to LastLoginIPEQ.
@@ -154,24 +154,9 @@ func LastLoginIP(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldLastLoginIP, v))
 }
 
-// OrgID applies equality check predicate on the "org_id" field. It's identical to OrgIDEQ.
-func OrgID(v uint32) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldOrgID, v))
-}
-
-// DepartmentID applies equality check predicate on the "department_id" field. It's identical to DepartmentIDEQ.
-func DepartmentID(v uint32) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldDepartmentID, v))
-}
-
-// PositionID applies equality check predicate on the "position_id" field. It's identical to PositionIDEQ.
-func PositionID(v uint32) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldPositionID, v))
-}
-
-// WorkID applies equality check predicate on the "work_id" field. It's identical to WorkIDEQ.
-func WorkID(v uint32) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldWorkID, v))
+// IsBanned applies equality check predicate on the "is_banned" field. It's identical to IsBannedEQ.
+func IsBanned(v bool) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldIsBanned, v))
 }
 
 // CreatedByEQ applies the EQ predicate on the "created_by" field.
@@ -1379,104 +1364,54 @@ func GenderNotNil() predicate.User {
 	return predicate.User(sql.FieldNotNull(FieldGender))
 }
 
-// AuthorityEQ applies the EQ predicate on the "authority" field.
-func AuthorityEQ(v Authority) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldAuthority, v))
+// LastLoginAtEQ applies the EQ predicate on the "last_login_at" field.
+func LastLoginAtEQ(v time.Time) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldLastLoginAt, v))
 }
 
-// AuthorityNEQ applies the NEQ predicate on the "authority" field.
-func AuthorityNEQ(v Authority) predicate.User {
-	return predicate.User(sql.FieldNEQ(FieldAuthority, v))
+// LastLoginAtNEQ applies the NEQ predicate on the "last_login_at" field.
+func LastLoginAtNEQ(v time.Time) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldLastLoginAt, v))
 }
 
-// AuthorityIn applies the In predicate on the "authority" field.
-func AuthorityIn(vs ...Authority) predicate.User {
-	return predicate.User(sql.FieldIn(FieldAuthority, vs...))
+// LastLoginAtIn applies the In predicate on the "last_login_at" field.
+func LastLoginAtIn(vs ...time.Time) predicate.User {
+	return predicate.User(sql.FieldIn(FieldLastLoginAt, vs...))
 }
 
-// AuthorityNotIn applies the NotIn predicate on the "authority" field.
-func AuthorityNotIn(vs ...Authority) predicate.User {
-	return predicate.User(sql.FieldNotIn(FieldAuthority, vs...))
+// LastLoginAtNotIn applies the NotIn predicate on the "last_login_at" field.
+func LastLoginAtNotIn(vs ...time.Time) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldLastLoginAt, vs...))
 }
 
-// StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v Status) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldStatus, v))
+// LastLoginAtGT applies the GT predicate on the "last_login_at" field.
+func LastLoginAtGT(v time.Time) predicate.User {
+	return predicate.User(sql.FieldGT(FieldLastLoginAt, v))
 }
 
-// StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v Status) predicate.User {
-	return predicate.User(sql.FieldNEQ(FieldStatus, v))
+// LastLoginAtGTE applies the GTE predicate on the "last_login_at" field.
+func LastLoginAtGTE(v time.Time) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldLastLoginAt, v))
 }
 
-// StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...Status) predicate.User {
-	return predicate.User(sql.FieldIn(FieldStatus, vs...))
+// LastLoginAtLT applies the LT predicate on the "last_login_at" field.
+func LastLoginAtLT(v time.Time) predicate.User {
+	return predicate.User(sql.FieldLT(FieldLastLoginAt, v))
 }
 
-// StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...Status) predicate.User {
-	return predicate.User(sql.FieldNotIn(FieldStatus, vs...))
+// LastLoginAtLTE applies the LTE predicate on the "last_login_at" field.
+func LastLoginAtLTE(v time.Time) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldLastLoginAt, v))
 }
 
-// StatusIsNil applies the IsNil predicate on the "status" field.
-func StatusIsNil() predicate.User {
-	return predicate.User(sql.FieldIsNull(FieldStatus))
+// LastLoginAtIsNil applies the IsNil predicate on the "last_login_at" field.
+func LastLoginAtIsNil() predicate.User {
+	return predicate.User(sql.FieldIsNull(FieldLastLoginAt))
 }
 
-// StatusNotNil applies the NotNil predicate on the "status" field.
-func StatusNotNil() predicate.User {
-	return predicate.User(sql.FieldNotNull(FieldStatus))
-}
-
-// LastLoginTimeEQ applies the EQ predicate on the "last_login_time" field.
-func LastLoginTimeEQ(v time.Time) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldLastLoginTime, v))
-}
-
-// LastLoginTimeNEQ applies the NEQ predicate on the "last_login_time" field.
-func LastLoginTimeNEQ(v time.Time) predicate.User {
-	return predicate.User(sql.FieldNEQ(FieldLastLoginTime, v))
-}
-
-// LastLoginTimeIn applies the In predicate on the "last_login_time" field.
-func LastLoginTimeIn(vs ...time.Time) predicate.User {
-	return predicate.User(sql.FieldIn(FieldLastLoginTime, vs...))
-}
-
-// LastLoginTimeNotIn applies the NotIn predicate on the "last_login_time" field.
-func LastLoginTimeNotIn(vs ...time.Time) predicate.User {
-	return predicate.User(sql.FieldNotIn(FieldLastLoginTime, vs...))
-}
-
-// LastLoginTimeGT applies the GT predicate on the "last_login_time" field.
-func LastLoginTimeGT(v time.Time) predicate.User {
-	return predicate.User(sql.FieldGT(FieldLastLoginTime, v))
-}
-
-// LastLoginTimeGTE applies the GTE predicate on the "last_login_time" field.
-func LastLoginTimeGTE(v time.Time) predicate.User {
-	return predicate.User(sql.FieldGTE(FieldLastLoginTime, v))
-}
-
-// LastLoginTimeLT applies the LT predicate on the "last_login_time" field.
-func LastLoginTimeLT(v time.Time) predicate.User {
-	return predicate.User(sql.FieldLT(FieldLastLoginTime, v))
-}
-
-// LastLoginTimeLTE applies the LTE predicate on the "last_login_time" field.
-func LastLoginTimeLTE(v time.Time) predicate.User {
-	return predicate.User(sql.FieldLTE(FieldLastLoginTime, v))
-}
-
-// LastLoginTimeIsNil applies the IsNil predicate on the "last_login_time" field.
-func LastLoginTimeIsNil() predicate.User {
-	return predicate.User(sql.FieldIsNull(FieldLastLoginTime))
-}
-
-// LastLoginTimeNotNil applies the NotNil predicate on the "last_login_time" field.
-func LastLoginTimeNotNil() predicate.User {
-	return predicate.User(sql.FieldNotNull(FieldLastLoginTime))
+// LastLoginAtNotNil applies the NotNil predicate on the "last_login_at" field.
+func LastLoginAtNotNil() predicate.User {
+	return predicate.User(sql.FieldNotNull(FieldLastLoginAt))
 }
 
 // LastLoginIPEQ applies the EQ predicate on the "last_login_ip" field.
@@ -1554,214 +1489,24 @@ func LastLoginIPContainsFold(v string) predicate.User {
 	return predicate.User(sql.FieldContainsFold(FieldLastLoginIP, v))
 }
 
-// OrgIDEQ applies the EQ predicate on the "org_id" field.
-func OrgIDEQ(v uint32) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldOrgID, v))
+// IsBannedEQ applies the EQ predicate on the "is_banned" field.
+func IsBannedEQ(v bool) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldIsBanned, v))
 }
 
-// OrgIDNEQ applies the NEQ predicate on the "org_id" field.
-func OrgIDNEQ(v uint32) predicate.User {
-	return predicate.User(sql.FieldNEQ(FieldOrgID, v))
+// IsBannedNEQ applies the NEQ predicate on the "is_banned" field.
+func IsBannedNEQ(v bool) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldIsBanned, v))
 }
 
-// OrgIDIn applies the In predicate on the "org_id" field.
-func OrgIDIn(vs ...uint32) predicate.User {
-	return predicate.User(sql.FieldIn(FieldOrgID, vs...))
+// IsBannedIsNil applies the IsNil predicate on the "is_banned" field.
+func IsBannedIsNil() predicate.User {
+	return predicate.User(sql.FieldIsNull(FieldIsBanned))
 }
 
-// OrgIDNotIn applies the NotIn predicate on the "org_id" field.
-func OrgIDNotIn(vs ...uint32) predicate.User {
-	return predicate.User(sql.FieldNotIn(FieldOrgID, vs...))
-}
-
-// OrgIDGT applies the GT predicate on the "org_id" field.
-func OrgIDGT(v uint32) predicate.User {
-	return predicate.User(sql.FieldGT(FieldOrgID, v))
-}
-
-// OrgIDGTE applies the GTE predicate on the "org_id" field.
-func OrgIDGTE(v uint32) predicate.User {
-	return predicate.User(sql.FieldGTE(FieldOrgID, v))
-}
-
-// OrgIDLT applies the LT predicate on the "org_id" field.
-func OrgIDLT(v uint32) predicate.User {
-	return predicate.User(sql.FieldLT(FieldOrgID, v))
-}
-
-// OrgIDLTE applies the LTE predicate on the "org_id" field.
-func OrgIDLTE(v uint32) predicate.User {
-	return predicate.User(sql.FieldLTE(FieldOrgID, v))
-}
-
-// OrgIDIsNil applies the IsNil predicate on the "org_id" field.
-func OrgIDIsNil() predicate.User {
-	return predicate.User(sql.FieldIsNull(FieldOrgID))
-}
-
-// OrgIDNotNil applies the NotNil predicate on the "org_id" field.
-func OrgIDNotNil() predicate.User {
-	return predicate.User(sql.FieldNotNull(FieldOrgID))
-}
-
-// DepartmentIDEQ applies the EQ predicate on the "department_id" field.
-func DepartmentIDEQ(v uint32) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldDepartmentID, v))
-}
-
-// DepartmentIDNEQ applies the NEQ predicate on the "department_id" field.
-func DepartmentIDNEQ(v uint32) predicate.User {
-	return predicate.User(sql.FieldNEQ(FieldDepartmentID, v))
-}
-
-// DepartmentIDIn applies the In predicate on the "department_id" field.
-func DepartmentIDIn(vs ...uint32) predicate.User {
-	return predicate.User(sql.FieldIn(FieldDepartmentID, vs...))
-}
-
-// DepartmentIDNotIn applies the NotIn predicate on the "department_id" field.
-func DepartmentIDNotIn(vs ...uint32) predicate.User {
-	return predicate.User(sql.FieldNotIn(FieldDepartmentID, vs...))
-}
-
-// DepartmentIDGT applies the GT predicate on the "department_id" field.
-func DepartmentIDGT(v uint32) predicate.User {
-	return predicate.User(sql.FieldGT(FieldDepartmentID, v))
-}
-
-// DepartmentIDGTE applies the GTE predicate on the "department_id" field.
-func DepartmentIDGTE(v uint32) predicate.User {
-	return predicate.User(sql.FieldGTE(FieldDepartmentID, v))
-}
-
-// DepartmentIDLT applies the LT predicate on the "department_id" field.
-func DepartmentIDLT(v uint32) predicate.User {
-	return predicate.User(sql.FieldLT(FieldDepartmentID, v))
-}
-
-// DepartmentIDLTE applies the LTE predicate on the "department_id" field.
-func DepartmentIDLTE(v uint32) predicate.User {
-	return predicate.User(sql.FieldLTE(FieldDepartmentID, v))
-}
-
-// DepartmentIDIsNil applies the IsNil predicate on the "department_id" field.
-func DepartmentIDIsNil() predicate.User {
-	return predicate.User(sql.FieldIsNull(FieldDepartmentID))
-}
-
-// DepartmentIDNotNil applies the NotNil predicate on the "department_id" field.
-func DepartmentIDNotNil() predicate.User {
-	return predicate.User(sql.FieldNotNull(FieldDepartmentID))
-}
-
-// PositionIDEQ applies the EQ predicate on the "position_id" field.
-func PositionIDEQ(v uint32) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldPositionID, v))
-}
-
-// PositionIDNEQ applies the NEQ predicate on the "position_id" field.
-func PositionIDNEQ(v uint32) predicate.User {
-	return predicate.User(sql.FieldNEQ(FieldPositionID, v))
-}
-
-// PositionIDIn applies the In predicate on the "position_id" field.
-func PositionIDIn(vs ...uint32) predicate.User {
-	return predicate.User(sql.FieldIn(FieldPositionID, vs...))
-}
-
-// PositionIDNotIn applies the NotIn predicate on the "position_id" field.
-func PositionIDNotIn(vs ...uint32) predicate.User {
-	return predicate.User(sql.FieldNotIn(FieldPositionID, vs...))
-}
-
-// PositionIDGT applies the GT predicate on the "position_id" field.
-func PositionIDGT(v uint32) predicate.User {
-	return predicate.User(sql.FieldGT(FieldPositionID, v))
-}
-
-// PositionIDGTE applies the GTE predicate on the "position_id" field.
-func PositionIDGTE(v uint32) predicate.User {
-	return predicate.User(sql.FieldGTE(FieldPositionID, v))
-}
-
-// PositionIDLT applies the LT predicate on the "position_id" field.
-func PositionIDLT(v uint32) predicate.User {
-	return predicate.User(sql.FieldLT(FieldPositionID, v))
-}
-
-// PositionIDLTE applies the LTE predicate on the "position_id" field.
-func PositionIDLTE(v uint32) predicate.User {
-	return predicate.User(sql.FieldLTE(FieldPositionID, v))
-}
-
-// PositionIDIsNil applies the IsNil predicate on the "position_id" field.
-func PositionIDIsNil() predicate.User {
-	return predicate.User(sql.FieldIsNull(FieldPositionID))
-}
-
-// PositionIDNotNil applies the NotNil predicate on the "position_id" field.
-func PositionIDNotNil() predicate.User {
-	return predicate.User(sql.FieldNotNull(FieldPositionID))
-}
-
-// WorkIDEQ applies the EQ predicate on the "work_id" field.
-func WorkIDEQ(v uint32) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldWorkID, v))
-}
-
-// WorkIDNEQ applies the NEQ predicate on the "work_id" field.
-func WorkIDNEQ(v uint32) predicate.User {
-	return predicate.User(sql.FieldNEQ(FieldWorkID, v))
-}
-
-// WorkIDIn applies the In predicate on the "work_id" field.
-func WorkIDIn(vs ...uint32) predicate.User {
-	return predicate.User(sql.FieldIn(FieldWorkID, vs...))
-}
-
-// WorkIDNotIn applies the NotIn predicate on the "work_id" field.
-func WorkIDNotIn(vs ...uint32) predicate.User {
-	return predicate.User(sql.FieldNotIn(FieldWorkID, vs...))
-}
-
-// WorkIDGT applies the GT predicate on the "work_id" field.
-func WorkIDGT(v uint32) predicate.User {
-	return predicate.User(sql.FieldGT(FieldWorkID, v))
-}
-
-// WorkIDGTE applies the GTE predicate on the "work_id" field.
-func WorkIDGTE(v uint32) predicate.User {
-	return predicate.User(sql.FieldGTE(FieldWorkID, v))
-}
-
-// WorkIDLT applies the LT predicate on the "work_id" field.
-func WorkIDLT(v uint32) predicate.User {
-	return predicate.User(sql.FieldLT(FieldWorkID, v))
-}
-
-// WorkIDLTE applies the LTE predicate on the "work_id" field.
-func WorkIDLTE(v uint32) predicate.User {
-	return predicate.User(sql.FieldLTE(FieldWorkID, v))
-}
-
-// WorkIDIsNil applies the IsNil predicate on the "work_id" field.
-func WorkIDIsNil() predicate.User {
-	return predicate.User(sql.FieldIsNull(FieldWorkID))
-}
-
-// WorkIDNotNil applies the NotNil predicate on the "work_id" field.
-func WorkIDNotNil() predicate.User {
-	return predicate.User(sql.FieldNotNull(FieldWorkID))
-}
-
-// RoleIdsIsNil applies the IsNil predicate on the "role_ids" field.
-func RoleIdsIsNil() predicate.User {
-	return predicate.User(sql.FieldIsNull(FieldRoleIds))
-}
-
-// RoleIdsNotNil applies the NotNil predicate on the "role_ids" field.
-func RoleIdsNotNil() predicate.User {
-	return predicate.User(sql.FieldNotNull(FieldRoleIds))
+// IsBannedNotNil applies the NotNil predicate on the "is_banned" field.
+func IsBannedNotNil() predicate.User {
+	return predicate.User(sql.FieldNotNull(FieldIsBanned))
 }
 
 // And groups predicates with the AND operator between them.

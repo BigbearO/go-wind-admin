@@ -202,6 +202,18 @@ func (_c *RoleCreate) SetApis(v []uint32) *RoleCreate {
 	return _c
 }
 
+// SetPermissions sets the "permissions" field.
+func (_c *RoleCreate) SetPermissions(v []uint32) *RoleCreate {
+	_c.mutation.SetPermissions(v)
+	return _c
+}
+
+// SetCustomOrgUnitIds sets the "custom_org_unit_ids" field.
+func (_c *RoleCreate) SetCustomOrgUnitIds(v []uint32) *RoleCreate {
+	_c.mutation.SetCustomOrgUnitIds(v)
+	return _c
+}
+
 // SetDataScope sets the "data_scope" field.
 func (_c *RoleCreate) SetDataScope(v role.DataScope) *RoleCreate {
 	_c.mutation.SetDataScope(v)
@@ -226,6 +238,20 @@ func (_c *RoleCreate) SetStatus(v role.Status) *RoleCreate {
 func (_c *RoleCreate) SetNillableStatus(v *role.Status) *RoleCreate {
 	if v != nil {
 		_c.SetStatus(*v)
+	}
+	return _c
+}
+
+// SetType sets the "type" field.
+func (_c *RoleCreate) SetType(v role.Type) *RoleCreate {
+	_c.mutation.SetType(v)
+	return _c
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (_c *RoleCreate) SetNillableType(v *role.Type) *RoleCreate {
+	if v != nil {
+		_c.SetType(*v)
 	}
 	return _c
 }
@@ -299,6 +325,10 @@ func (_c *RoleCreate) defaults() {
 		v := role.DefaultStatus
 		_c.mutation.SetStatus(v)
 	}
+	if _, ok := _c.mutation.GetType(); !ok {
+		v := role.DefaultType
+		_c.mutation.SetType(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -321,6 +351,11 @@ func (_c *RoleCreate) check() error {
 	if v, ok := _c.mutation.Status(); ok {
 		if err := role.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "Role.status": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.GetType(); ok {
+		if err := role.TypeValidator(v); err != nil {
+			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Role.type": %w`, err)}
 		}
 	}
 	if v, ok := _c.mutation.ID(); ok {
@@ -413,6 +448,14 @@ func (_c *RoleCreate) createSpec() (*Role, *sqlgraph.CreateSpec) {
 		_spec.SetField(role.FieldApis, field.TypeJSON, value)
 		_node.Apis = value
 	}
+	if value, ok := _c.mutation.Permissions(); ok {
+		_spec.SetField(role.FieldPermissions, field.TypeJSON, value)
+		_node.Permissions = value
+	}
+	if value, ok := _c.mutation.CustomOrgUnitIds(); ok {
+		_spec.SetField(role.FieldCustomOrgUnitIds, field.TypeJSON, value)
+		_node.CustomOrgUnitIds = value
+	}
 	if value, ok := _c.mutation.DataScope(); ok {
 		_spec.SetField(role.FieldDataScope, field.TypeEnum, value)
 		_node.DataScope = &value
@@ -420,6 +463,10 @@ func (_c *RoleCreate) createSpec() (*Role, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(role.FieldStatus, field.TypeEnum, value)
 		_node.Status = &value
+	}
+	if value, ok := _c.mutation.GetType(); ok {
+		_spec.SetField(role.FieldType, field.TypeEnum, value)
+		_node.Type = &value
 	}
 	if nodes := _c.mutation.ParentIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -746,6 +793,42 @@ func (u *RoleUpsert) ClearApis() *RoleUpsert {
 	return u
 }
 
+// SetPermissions sets the "permissions" field.
+func (u *RoleUpsert) SetPermissions(v []uint32) *RoleUpsert {
+	u.Set(role.FieldPermissions, v)
+	return u
+}
+
+// UpdatePermissions sets the "permissions" field to the value that was provided on create.
+func (u *RoleUpsert) UpdatePermissions() *RoleUpsert {
+	u.SetExcluded(role.FieldPermissions)
+	return u
+}
+
+// ClearPermissions clears the value of the "permissions" field.
+func (u *RoleUpsert) ClearPermissions() *RoleUpsert {
+	u.SetNull(role.FieldPermissions)
+	return u
+}
+
+// SetCustomOrgUnitIds sets the "custom_org_unit_ids" field.
+func (u *RoleUpsert) SetCustomOrgUnitIds(v []uint32) *RoleUpsert {
+	u.Set(role.FieldCustomOrgUnitIds, v)
+	return u
+}
+
+// UpdateCustomOrgUnitIds sets the "custom_org_unit_ids" field to the value that was provided on create.
+func (u *RoleUpsert) UpdateCustomOrgUnitIds() *RoleUpsert {
+	u.SetExcluded(role.FieldCustomOrgUnitIds)
+	return u
+}
+
+// ClearCustomOrgUnitIds clears the value of the "custom_org_unit_ids" field.
+func (u *RoleUpsert) ClearCustomOrgUnitIds() *RoleUpsert {
+	u.SetNull(role.FieldCustomOrgUnitIds)
+	return u
+}
+
 // SetDataScope sets the "data_scope" field.
 func (u *RoleUpsert) SetDataScope(v role.DataScope) *RoleUpsert {
 	u.Set(role.FieldDataScope, v)
@@ -779,6 +862,24 @@ func (u *RoleUpsert) UpdateStatus() *RoleUpsert {
 // ClearStatus clears the value of the "status" field.
 func (u *RoleUpsert) ClearStatus() *RoleUpsert {
 	u.SetNull(role.FieldStatus)
+	return u
+}
+
+// SetType sets the "type" field.
+func (u *RoleUpsert) SetType(v role.Type) *RoleUpsert {
+	u.Set(role.FieldType, v)
+	return u
+}
+
+// UpdateType sets the "type" field to the value that was provided on create.
+func (u *RoleUpsert) UpdateType() *RoleUpsert {
+	u.SetExcluded(role.FieldType)
+	return u
+}
+
+// ClearType clears the value of the "type" field.
+func (u *RoleUpsert) ClearType() *RoleUpsert {
+	u.SetNull(role.FieldType)
 	return u
 }
 
@@ -1116,6 +1217,48 @@ func (u *RoleUpsertOne) ClearApis() *RoleUpsertOne {
 	})
 }
 
+// SetPermissions sets the "permissions" field.
+func (u *RoleUpsertOne) SetPermissions(v []uint32) *RoleUpsertOne {
+	return u.Update(func(s *RoleUpsert) {
+		s.SetPermissions(v)
+	})
+}
+
+// UpdatePermissions sets the "permissions" field to the value that was provided on create.
+func (u *RoleUpsertOne) UpdatePermissions() *RoleUpsertOne {
+	return u.Update(func(s *RoleUpsert) {
+		s.UpdatePermissions()
+	})
+}
+
+// ClearPermissions clears the value of the "permissions" field.
+func (u *RoleUpsertOne) ClearPermissions() *RoleUpsertOne {
+	return u.Update(func(s *RoleUpsert) {
+		s.ClearPermissions()
+	})
+}
+
+// SetCustomOrgUnitIds sets the "custom_org_unit_ids" field.
+func (u *RoleUpsertOne) SetCustomOrgUnitIds(v []uint32) *RoleUpsertOne {
+	return u.Update(func(s *RoleUpsert) {
+		s.SetCustomOrgUnitIds(v)
+	})
+}
+
+// UpdateCustomOrgUnitIds sets the "custom_org_unit_ids" field to the value that was provided on create.
+func (u *RoleUpsertOne) UpdateCustomOrgUnitIds() *RoleUpsertOne {
+	return u.Update(func(s *RoleUpsert) {
+		s.UpdateCustomOrgUnitIds()
+	})
+}
+
+// ClearCustomOrgUnitIds clears the value of the "custom_org_unit_ids" field.
+func (u *RoleUpsertOne) ClearCustomOrgUnitIds() *RoleUpsertOne {
+	return u.Update(func(s *RoleUpsert) {
+		s.ClearCustomOrgUnitIds()
+	})
+}
+
 // SetDataScope sets the "data_scope" field.
 func (u *RoleUpsertOne) SetDataScope(v role.DataScope) *RoleUpsertOne {
 	return u.Update(func(s *RoleUpsert) {
@@ -1155,6 +1298,27 @@ func (u *RoleUpsertOne) UpdateStatus() *RoleUpsertOne {
 func (u *RoleUpsertOne) ClearStatus() *RoleUpsertOne {
 	return u.Update(func(s *RoleUpsert) {
 		s.ClearStatus()
+	})
+}
+
+// SetType sets the "type" field.
+func (u *RoleUpsertOne) SetType(v role.Type) *RoleUpsertOne {
+	return u.Update(func(s *RoleUpsert) {
+		s.SetType(v)
+	})
+}
+
+// UpdateType sets the "type" field to the value that was provided on create.
+func (u *RoleUpsertOne) UpdateType() *RoleUpsertOne {
+	return u.Update(func(s *RoleUpsert) {
+		s.UpdateType()
+	})
+}
+
+// ClearType clears the value of the "type" field.
+func (u *RoleUpsertOne) ClearType() *RoleUpsertOne {
+	return u.Update(func(s *RoleUpsert) {
+		s.ClearType()
 	})
 }
 
@@ -1658,6 +1822,48 @@ func (u *RoleUpsertBulk) ClearApis() *RoleUpsertBulk {
 	})
 }
 
+// SetPermissions sets the "permissions" field.
+func (u *RoleUpsertBulk) SetPermissions(v []uint32) *RoleUpsertBulk {
+	return u.Update(func(s *RoleUpsert) {
+		s.SetPermissions(v)
+	})
+}
+
+// UpdatePermissions sets the "permissions" field to the value that was provided on create.
+func (u *RoleUpsertBulk) UpdatePermissions() *RoleUpsertBulk {
+	return u.Update(func(s *RoleUpsert) {
+		s.UpdatePermissions()
+	})
+}
+
+// ClearPermissions clears the value of the "permissions" field.
+func (u *RoleUpsertBulk) ClearPermissions() *RoleUpsertBulk {
+	return u.Update(func(s *RoleUpsert) {
+		s.ClearPermissions()
+	})
+}
+
+// SetCustomOrgUnitIds sets the "custom_org_unit_ids" field.
+func (u *RoleUpsertBulk) SetCustomOrgUnitIds(v []uint32) *RoleUpsertBulk {
+	return u.Update(func(s *RoleUpsert) {
+		s.SetCustomOrgUnitIds(v)
+	})
+}
+
+// UpdateCustomOrgUnitIds sets the "custom_org_unit_ids" field to the value that was provided on create.
+func (u *RoleUpsertBulk) UpdateCustomOrgUnitIds() *RoleUpsertBulk {
+	return u.Update(func(s *RoleUpsert) {
+		s.UpdateCustomOrgUnitIds()
+	})
+}
+
+// ClearCustomOrgUnitIds clears the value of the "custom_org_unit_ids" field.
+func (u *RoleUpsertBulk) ClearCustomOrgUnitIds() *RoleUpsertBulk {
+	return u.Update(func(s *RoleUpsert) {
+		s.ClearCustomOrgUnitIds()
+	})
+}
+
 // SetDataScope sets the "data_scope" field.
 func (u *RoleUpsertBulk) SetDataScope(v role.DataScope) *RoleUpsertBulk {
 	return u.Update(func(s *RoleUpsert) {
@@ -1697,6 +1903,27 @@ func (u *RoleUpsertBulk) UpdateStatus() *RoleUpsertBulk {
 func (u *RoleUpsertBulk) ClearStatus() *RoleUpsertBulk {
 	return u.Update(func(s *RoleUpsert) {
 		s.ClearStatus()
+	})
+}
+
+// SetType sets the "type" field.
+func (u *RoleUpsertBulk) SetType(v role.Type) *RoleUpsertBulk {
+	return u.Update(func(s *RoleUpsert) {
+		s.SetType(v)
+	})
+}
+
+// UpdateType sets the "type" field to the value that was provided on create.
+func (u *RoleUpsertBulk) UpdateType() *RoleUpsertBulk {
+	return u.Update(func(s *RoleUpsert) {
+		s.UpdateType()
+	})
+}
+
+// ClearType clears the value of the "type" field.
+func (u *RoleUpsertBulk) ClearType() *RoleUpsertBulk {
+	return u.Update(func(s *RoleUpsert) {
+		s.ClearType()
 	})
 }
 

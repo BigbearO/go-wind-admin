@@ -13,15 +13,11 @@ import { type userservicev1_User as User } from '#/generated/api/admin/service/v
 import { $t } from '#/locales';
 import { router } from '#/router';
 import {
-  authorityList,
-  authorityToColor,
-  authorityToName,
   genderToColor,
   genderToName,
   statusToColor,
   statusToName,
-  useDepartmentStore,
-  useOrganizationStore,
+  useOrgUnitStore,
   usePositionStore,
   useRoleStore,
   useTenantStore,
@@ -34,8 +30,7 @@ import UserDrawer from './user-drawer.vue';
 const userStore = useUserStore();
 const tenantStore = useTenantStore();
 const roleStore = useRoleStore();
-const orgStore = useOrganizationStore();
-const deptStore = useDepartmentStore();
+const orgUnitStore = useOrgUnitStore();
 const positionStore = usePositionStore();
 
 const formOptions: VbenFormProps = {
@@ -71,19 +66,6 @@ const formOptions: VbenFormProps = {
       componentProps: {
         placeholder: $t('ui.placeholder.input'),
         allowClear: true,
-      },
-    },
-    {
-      component: 'Select',
-      fieldName: 'authority',
-      label: $t('page.user.form.authority'),
-      componentProps: {
-        placeholder: $t('ui.placeholder.input'),
-        options: authorityList,
-        filterOption: (input: string, option: any) =>
-          option.label.toLowerCase().includes(input.toLowerCase()),
-        allowClear: true,
-        showSearch: true,
       },
     },
     {
@@ -135,8 +117,8 @@ const formOptions: VbenFormProps = {
     },
     {
       component: 'ApiTreeSelect',
-      fieldName: 'organizationId',
-      label: $t('page.user.form.org'),
+      fieldName: 'orgUnitId',
+      label: $t('page.user.form.orgUnit'),
       componentProps: {
         placeholder: $t('ui.placeholder.select'),
         numberToString: true,
@@ -148,29 +130,7 @@ const formOptions: VbenFormProps = {
         valueField: 'id',
         treeNodeFilterProp: 'label',
         api: async () => {
-          const result = await orgStore.listOrganization(undefined, {
-            status: 'ON',
-          });
-          return result.items;
-        },
-      },
-    },
-    {
-      component: 'ApiTreeSelect',
-      fieldName: 'departmentId',
-      label: $t('page.user.form.department'),
-      componentProps: {
-        placeholder: $t('ui.placeholder.select'),
-        numberToString: true,
-        showSearch: true,
-        treeDefaultExpandAll: true,
-        allowClear: true,
-        childrenField: 'children',
-        labelField: 'name',
-        valueField: 'id',
-        treeNodeFilterProp: 'label',
-        api: async () => {
-          const result = await deptStore.listDepartment(undefined, {
+          const result = await orgUnitStore.listOrgUnit(undefined, {
             status: 'ON',
           });
           return result.items;
@@ -253,19 +213,12 @@ const gridOptions: VxeGridProps<User> = {
     { title: $t('page.user.table.username'), field: 'username', width: 120 },
     { title: $t('page.user.table.realname'), field: 'realname', width: 100 },
     { title: $t('page.user.table.nickname'), field: 'nickname', width: 100 },
-    {
-      title: $t('ui.table.status'),
-      field: 'status',
-      slots: { default: 'status' },
-      width: 100,
-    },
     { title: $t('page.user.table.email'), field: 'email', width: 160 },
     { title: $t('page.user.table.mobile'), field: 'mobile', width: 130 },
     { title: $t('page.user.table.tenantId'), field: 'tenantName', width: 130 },
-    { title: $t('page.user.table.orgId'), field: 'orgName', width: 130 },
     {
-      title: $t('page.user.table.deptId'),
-      field: 'departmentName',
+      title: $t('page.user.table.orgUnitId'),
+      field: 'orgUnitName',
       width: 130,
     },
     {
@@ -277,17 +230,12 @@ const gridOptions: VxeGridProps<User> = {
       title: $t('page.user.table.roleId'),
       field: 'roleNames',
       slots: { default: 'role' },
+      width: 130,
       showOverflow: 'tooltip',
     },
     {
-      title: $t('page.user.table.authority'),
-      field: 'authority',
-      slots: { default: 'authority' },
-      width: 110,
-    },
-    {
-      title: $t('page.user.table.lastLoginTime'),
-      field: 'lastLoginTime',
+      title: $t('page.user.table.lastLoginAt'),
+      field: 'lastLoginAt',
       formatter: 'formatDateTime',
       width: 160,
     },
@@ -297,7 +245,7 @@ const gridOptions: VxeGridProps<User> = {
       formatter: 'formatDateTime',
       width: 160,
     },
-    { title: $t('ui.table.remark'), field: 'remark' },
+    { title: $t('ui.table.remark'), field: 'remark', width: 250 },
 
     {
       title: $t('ui.table.action'),
@@ -392,11 +340,6 @@ function handleDetail(row: any) {
       <template #status="{ row }">
         <a-tag :color="statusToColor(row.status)">
           {{ statusToName(row.status) }}
-        </a-tag>
-      </template>
-      <template #authority="{ row }">
-        <a-tag :color="authorityToColor(row.authority)">
-          {{ authorityToName(row.authority) }}
         </a-tag>
       </template>
       <template #gender="{ row }">

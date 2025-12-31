@@ -21,11 +21,7 @@ import { notification } from 'ant-design-vue';
 
 import { type internal_messageservicev1_InternalMessageRecipient as InternalMessageRecipient } from '#/generated/api/admin/service/v1';
 import { $t } from '#/locales';
-import {
-  authorityToName,
-  useAuthStore,
-  useInternalMessageStore,
-} from '#/stores';
+import { useAuthStore, useInternalMessageStore } from '#/stores';
 import { SSEClient } from '#/transport/sse';
 import LoginForm from '#/views/_core/authentication/login.vue';
 
@@ -250,7 +246,6 @@ watch(
         :menus
         :text="userStore.userInfo?.realname"
         :description="userStore.userInfo?.email"
-        :tag-text="authorityToName(userStore.userInfo?.authority)"
         @logout="handleLogout"
       />
     </template>

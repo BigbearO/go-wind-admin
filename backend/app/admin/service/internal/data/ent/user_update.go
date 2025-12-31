@@ -12,7 +12,6 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 )
 
@@ -371,43 +370,23 @@ func (_u *UserUpdate) ClearGender() *UserUpdate {
 	return _u
 }
 
-// SetStatus sets the "status" field.
-func (_u *UserUpdate) SetStatus(v user.Status) *UserUpdate {
-	_u.mutation.SetStatus(v)
+// SetLastLoginAt sets the "last_login_at" field.
+func (_u *UserUpdate) SetLastLoginAt(v time.Time) *UserUpdate {
+	_u.mutation.SetLastLoginAt(v)
 	return _u
 }
 
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *UserUpdate) SetNillableStatus(v *user.Status) *UserUpdate {
+// SetNillableLastLoginAt sets the "last_login_at" field if the given value is not nil.
+func (_u *UserUpdate) SetNillableLastLoginAt(v *time.Time) *UserUpdate {
 	if v != nil {
-		_u.SetStatus(*v)
+		_u.SetLastLoginAt(*v)
 	}
 	return _u
 }
 
-// ClearStatus clears the value of the "status" field.
-func (_u *UserUpdate) ClearStatus() *UserUpdate {
-	_u.mutation.ClearStatus()
-	return _u
-}
-
-// SetLastLoginTime sets the "last_login_time" field.
-func (_u *UserUpdate) SetLastLoginTime(v time.Time) *UserUpdate {
-	_u.mutation.SetLastLoginTime(v)
-	return _u
-}
-
-// SetNillableLastLoginTime sets the "last_login_time" field if the given value is not nil.
-func (_u *UserUpdate) SetNillableLastLoginTime(v *time.Time) *UserUpdate {
-	if v != nil {
-		_u.SetLastLoginTime(*v)
-	}
-	return _u
-}
-
-// ClearLastLoginTime clears the value of the "last_login_time" field.
-func (_u *UserUpdate) ClearLastLoginTime() *UserUpdate {
-	_u.mutation.ClearLastLoginTime()
+// ClearLastLoginAt clears the value of the "last_login_at" field.
+func (_u *UserUpdate) ClearLastLoginAt() *UserUpdate {
+	_u.mutation.ClearLastLoginAt()
 	return _u
 }
 
@@ -431,129 +410,23 @@ func (_u *UserUpdate) ClearLastLoginIP() *UserUpdate {
 	return _u
 }
 
-// SetOrgID sets the "org_id" field.
-func (_u *UserUpdate) SetOrgID(v uint32) *UserUpdate {
-	_u.mutation.ResetOrgID()
-	_u.mutation.SetOrgID(v)
+// SetIsBanned sets the "is_banned" field.
+func (_u *UserUpdate) SetIsBanned(v bool) *UserUpdate {
+	_u.mutation.SetIsBanned(v)
 	return _u
 }
 
-// SetNillableOrgID sets the "org_id" field if the given value is not nil.
-func (_u *UserUpdate) SetNillableOrgID(v *uint32) *UserUpdate {
+// SetNillableIsBanned sets the "is_banned" field if the given value is not nil.
+func (_u *UserUpdate) SetNillableIsBanned(v *bool) *UserUpdate {
 	if v != nil {
-		_u.SetOrgID(*v)
+		_u.SetIsBanned(*v)
 	}
 	return _u
 }
 
-// AddOrgID adds value to the "org_id" field.
-func (_u *UserUpdate) AddOrgID(v int32) *UserUpdate {
-	_u.mutation.AddOrgID(v)
-	return _u
-}
-
-// ClearOrgID clears the value of the "org_id" field.
-func (_u *UserUpdate) ClearOrgID() *UserUpdate {
-	_u.mutation.ClearOrgID()
-	return _u
-}
-
-// SetDepartmentID sets the "department_id" field.
-func (_u *UserUpdate) SetDepartmentID(v uint32) *UserUpdate {
-	_u.mutation.ResetDepartmentID()
-	_u.mutation.SetDepartmentID(v)
-	return _u
-}
-
-// SetNillableDepartmentID sets the "department_id" field if the given value is not nil.
-func (_u *UserUpdate) SetNillableDepartmentID(v *uint32) *UserUpdate {
-	if v != nil {
-		_u.SetDepartmentID(*v)
-	}
-	return _u
-}
-
-// AddDepartmentID adds value to the "department_id" field.
-func (_u *UserUpdate) AddDepartmentID(v int32) *UserUpdate {
-	_u.mutation.AddDepartmentID(v)
-	return _u
-}
-
-// ClearDepartmentID clears the value of the "department_id" field.
-func (_u *UserUpdate) ClearDepartmentID() *UserUpdate {
-	_u.mutation.ClearDepartmentID()
-	return _u
-}
-
-// SetPositionID sets the "position_id" field.
-func (_u *UserUpdate) SetPositionID(v uint32) *UserUpdate {
-	_u.mutation.ResetPositionID()
-	_u.mutation.SetPositionID(v)
-	return _u
-}
-
-// SetNillablePositionID sets the "position_id" field if the given value is not nil.
-func (_u *UserUpdate) SetNillablePositionID(v *uint32) *UserUpdate {
-	if v != nil {
-		_u.SetPositionID(*v)
-	}
-	return _u
-}
-
-// AddPositionID adds value to the "position_id" field.
-func (_u *UserUpdate) AddPositionID(v int32) *UserUpdate {
-	_u.mutation.AddPositionID(v)
-	return _u
-}
-
-// ClearPositionID clears the value of the "position_id" field.
-func (_u *UserUpdate) ClearPositionID() *UserUpdate {
-	_u.mutation.ClearPositionID()
-	return _u
-}
-
-// SetWorkID sets the "work_id" field.
-func (_u *UserUpdate) SetWorkID(v uint32) *UserUpdate {
-	_u.mutation.ResetWorkID()
-	_u.mutation.SetWorkID(v)
-	return _u
-}
-
-// SetNillableWorkID sets the "work_id" field if the given value is not nil.
-func (_u *UserUpdate) SetNillableWorkID(v *uint32) *UserUpdate {
-	if v != nil {
-		_u.SetWorkID(*v)
-	}
-	return _u
-}
-
-// AddWorkID adds value to the "work_id" field.
-func (_u *UserUpdate) AddWorkID(v int32) *UserUpdate {
-	_u.mutation.AddWorkID(v)
-	return _u
-}
-
-// ClearWorkID clears the value of the "work_id" field.
-func (_u *UserUpdate) ClearWorkID() *UserUpdate {
-	_u.mutation.ClearWorkID()
-	return _u
-}
-
-// SetRoleIds sets the "role_ids" field.
-func (_u *UserUpdate) SetRoleIds(v []int) *UserUpdate {
-	_u.mutation.SetRoleIds(v)
-	return _u
-}
-
-// AppendRoleIds appends value to the "role_ids" field.
-func (_u *UserUpdate) AppendRoleIds(v []int) *UserUpdate {
-	_u.mutation.AppendRoleIds(v)
-	return _u
-}
-
-// ClearRoleIds clears the value of the "role_ids" field.
-func (_u *UserUpdate) ClearRoleIds() *UserUpdate {
-	_u.mutation.ClearRoleIds()
+// ClearIsBanned clears the value of the "is_banned" field.
+func (_u *UserUpdate) ClearIsBanned() *UserUpdate {
+	_u.mutation.ClearIsBanned()
 	return _u
 }
 
@@ -614,11 +487,6 @@ func (_u *UserUpdate) check() error {
 	if v, ok := _u.mutation.Gender(); ok {
 		if err := user.GenderValidator(v); err != nil {
 			return &ValidationError{Name: "gender", err: fmt.Errorf(`ent: validator failed for field "User.gender": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.Status(); ok {
-		if err := user.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "User.status": %w`, err)}
 		}
 	}
 	return nil
@@ -756,17 +624,11 @@ func (_u *UserUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.GenderCleared() {
 		_spec.ClearField(user.FieldGender, field.TypeEnum)
 	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(user.FieldStatus, field.TypeEnum, value)
+	if value, ok := _u.mutation.LastLoginAt(); ok {
+		_spec.SetField(user.FieldLastLoginAt, field.TypeTime, value)
 	}
-	if _u.mutation.StatusCleared() {
-		_spec.ClearField(user.FieldStatus, field.TypeEnum)
-	}
-	if value, ok := _u.mutation.LastLoginTime(); ok {
-		_spec.SetField(user.FieldLastLoginTime, field.TypeTime, value)
-	}
-	if _u.mutation.LastLoginTimeCleared() {
-		_spec.ClearField(user.FieldLastLoginTime, field.TypeTime)
+	if _u.mutation.LastLoginAtCleared() {
+		_spec.ClearField(user.FieldLastLoginAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.LastLoginIP(); ok {
 		_spec.SetField(user.FieldLastLoginIP, field.TypeString, value)
@@ -774,52 +636,11 @@ func (_u *UserUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.LastLoginIPCleared() {
 		_spec.ClearField(user.FieldLastLoginIP, field.TypeString)
 	}
-	if value, ok := _u.mutation.OrgID(); ok {
-		_spec.SetField(user.FieldOrgID, field.TypeUint32, value)
+	if value, ok := _u.mutation.IsBanned(); ok {
+		_spec.SetField(user.FieldIsBanned, field.TypeBool, value)
 	}
-	if value, ok := _u.mutation.AddedOrgID(); ok {
-		_spec.AddField(user.FieldOrgID, field.TypeUint32, value)
-	}
-	if _u.mutation.OrgIDCleared() {
-		_spec.ClearField(user.FieldOrgID, field.TypeUint32)
-	}
-	if value, ok := _u.mutation.DepartmentID(); ok {
-		_spec.SetField(user.FieldDepartmentID, field.TypeUint32, value)
-	}
-	if value, ok := _u.mutation.AddedDepartmentID(); ok {
-		_spec.AddField(user.FieldDepartmentID, field.TypeUint32, value)
-	}
-	if _u.mutation.DepartmentIDCleared() {
-		_spec.ClearField(user.FieldDepartmentID, field.TypeUint32)
-	}
-	if value, ok := _u.mutation.PositionID(); ok {
-		_spec.SetField(user.FieldPositionID, field.TypeUint32, value)
-	}
-	if value, ok := _u.mutation.AddedPositionID(); ok {
-		_spec.AddField(user.FieldPositionID, field.TypeUint32, value)
-	}
-	if _u.mutation.PositionIDCleared() {
-		_spec.ClearField(user.FieldPositionID, field.TypeUint32)
-	}
-	if value, ok := _u.mutation.WorkID(); ok {
-		_spec.SetField(user.FieldWorkID, field.TypeUint32, value)
-	}
-	if value, ok := _u.mutation.AddedWorkID(); ok {
-		_spec.AddField(user.FieldWorkID, field.TypeUint32, value)
-	}
-	if _u.mutation.WorkIDCleared() {
-		_spec.ClearField(user.FieldWorkID, field.TypeUint32)
-	}
-	if value, ok := _u.mutation.RoleIds(); ok {
-		_spec.SetField(user.FieldRoleIds, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedRoleIds(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, user.FieldRoleIds, value)
-		})
-	}
-	if _u.mutation.RoleIdsCleared() {
-		_spec.ClearField(user.FieldRoleIds, field.TypeJSON)
+	if _u.mutation.IsBannedCleared() {
+		_spec.ClearField(user.FieldIsBanned, field.TypeBool)
 	}
 	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
@@ -1184,43 +1005,23 @@ func (_u *UserUpdateOne) ClearGender() *UserUpdateOne {
 	return _u
 }
 
-// SetStatus sets the "status" field.
-func (_u *UserUpdateOne) SetStatus(v user.Status) *UserUpdateOne {
-	_u.mutation.SetStatus(v)
+// SetLastLoginAt sets the "last_login_at" field.
+func (_u *UserUpdateOne) SetLastLoginAt(v time.Time) *UserUpdateOne {
+	_u.mutation.SetLastLoginAt(v)
 	return _u
 }
 
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *UserUpdateOne) SetNillableStatus(v *user.Status) *UserUpdateOne {
+// SetNillableLastLoginAt sets the "last_login_at" field if the given value is not nil.
+func (_u *UserUpdateOne) SetNillableLastLoginAt(v *time.Time) *UserUpdateOne {
 	if v != nil {
-		_u.SetStatus(*v)
+		_u.SetLastLoginAt(*v)
 	}
 	return _u
 }
 
-// ClearStatus clears the value of the "status" field.
-func (_u *UserUpdateOne) ClearStatus() *UserUpdateOne {
-	_u.mutation.ClearStatus()
-	return _u
-}
-
-// SetLastLoginTime sets the "last_login_time" field.
-func (_u *UserUpdateOne) SetLastLoginTime(v time.Time) *UserUpdateOne {
-	_u.mutation.SetLastLoginTime(v)
-	return _u
-}
-
-// SetNillableLastLoginTime sets the "last_login_time" field if the given value is not nil.
-func (_u *UserUpdateOne) SetNillableLastLoginTime(v *time.Time) *UserUpdateOne {
-	if v != nil {
-		_u.SetLastLoginTime(*v)
-	}
-	return _u
-}
-
-// ClearLastLoginTime clears the value of the "last_login_time" field.
-func (_u *UserUpdateOne) ClearLastLoginTime() *UserUpdateOne {
-	_u.mutation.ClearLastLoginTime()
+// ClearLastLoginAt clears the value of the "last_login_at" field.
+func (_u *UserUpdateOne) ClearLastLoginAt() *UserUpdateOne {
+	_u.mutation.ClearLastLoginAt()
 	return _u
 }
 
@@ -1244,129 +1045,23 @@ func (_u *UserUpdateOne) ClearLastLoginIP() *UserUpdateOne {
 	return _u
 }
 
-// SetOrgID sets the "org_id" field.
-func (_u *UserUpdateOne) SetOrgID(v uint32) *UserUpdateOne {
-	_u.mutation.ResetOrgID()
-	_u.mutation.SetOrgID(v)
+// SetIsBanned sets the "is_banned" field.
+func (_u *UserUpdateOne) SetIsBanned(v bool) *UserUpdateOne {
+	_u.mutation.SetIsBanned(v)
 	return _u
 }
 
-// SetNillableOrgID sets the "org_id" field if the given value is not nil.
-func (_u *UserUpdateOne) SetNillableOrgID(v *uint32) *UserUpdateOne {
+// SetNillableIsBanned sets the "is_banned" field if the given value is not nil.
+func (_u *UserUpdateOne) SetNillableIsBanned(v *bool) *UserUpdateOne {
 	if v != nil {
-		_u.SetOrgID(*v)
+		_u.SetIsBanned(*v)
 	}
 	return _u
 }
 
-// AddOrgID adds value to the "org_id" field.
-func (_u *UserUpdateOne) AddOrgID(v int32) *UserUpdateOne {
-	_u.mutation.AddOrgID(v)
-	return _u
-}
-
-// ClearOrgID clears the value of the "org_id" field.
-func (_u *UserUpdateOne) ClearOrgID() *UserUpdateOne {
-	_u.mutation.ClearOrgID()
-	return _u
-}
-
-// SetDepartmentID sets the "department_id" field.
-func (_u *UserUpdateOne) SetDepartmentID(v uint32) *UserUpdateOne {
-	_u.mutation.ResetDepartmentID()
-	_u.mutation.SetDepartmentID(v)
-	return _u
-}
-
-// SetNillableDepartmentID sets the "department_id" field if the given value is not nil.
-func (_u *UserUpdateOne) SetNillableDepartmentID(v *uint32) *UserUpdateOne {
-	if v != nil {
-		_u.SetDepartmentID(*v)
-	}
-	return _u
-}
-
-// AddDepartmentID adds value to the "department_id" field.
-func (_u *UserUpdateOne) AddDepartmentID(v int32) *UserUpdateOne {
-	_u.mutation.AddDepartmentID(v)
-	return _u
-}
-
-// ClearDepartmentID clears the value of the "department_id" field.
-func (_u *UserUpdateOne) ClearDepartmentID() *UserUpdateOne {
-	_u.mutation.ClearDepartmentID()
-	return _u
-}
-
-// SetPositionID sets the "position_id" field.
-func (_u *UserUpdateOne) SetPositionID(v uint32) *UserUpdateOne {
-	_u.mutation.ResetPositionID()
-	_u.mutation.SetPositionID(v)
-	return _u
-}
-
-// SetNillablePositionID sets the "position_id" field if the given value is not nil.
-func (_u *UserUpdateOne) SetNillablePositionID(v *uint32) *UserUpdateOne {
-	if v != nil {
-		_u.SetPositionID(*v)
-	}
-	return _u
-}
-
-// AddPositionID adds value to the "position_id" field.
-func (_u *UserUpdateOne) AddPositionID(v int32) *UserUpdateOne {
-	_u.mutation.AddPositionID(v)
-	return _u
-}
-
-// ClearPositionID clears the value of the "position_id" field.
-func (_u *UserUpdateOne) ClearPositionID() *UserUpdateOne {
-	_u.mutation.ClearPositionID()
-	return _u
-}
-
-// SetWorkID sets the "work_id" field.
-func (_u *UserUpdateOne) SetWorkID(v uint32) *UserUpdateOne {
-	_u.mutation.ResetWorkID()
-	_u.mutation.SetWorkID(v)
-	return _u
-}
-
-// SetNillableWorkID sets the "work_id" field if the given value is not nil.
-func (_u *UserUpdateOne) SetNillableWorkID(v *uint32) *UserUpdateOne {
-	if v != nil {
-		_u.SetWorkID(*v)
-	}
-	return _u
-}
-
-// AddWorkID adds value to the "work_id" field.
-func (_u *UserUpdateOne) AddWorkID(v int32) *UserUpdateOne {
-	_u.mutation.AddWorkID(v)
-	return _u
-}
-
-// ClearWorkID clears the value of the "work_id" field.
-func (_u *UserUpdateOne) ClearWorkID() *UserUpdateOne {
-	_u.mutation.ClearWorkID()
-	return _u
-}
-
-// SetRoleIds sets the "role_ids" field.
-func (_u *UserUpdateOne) SetRoleIds(v []int) *UserUpdateOne {
-	_u.mutation.SetRoleIds(v)
-	return _u
-}
-
-// AppendRoleIds appends value to the "role_ids" field.
-func (_u *UserUpdateOne) AppendRoleIds(v []int) *UserUpdateOne {
-	_u.mutation.AppendRoleIds(v)
-	return _u
-}
-
-// ClearRoleIds clears the value of the "role_ids" field.
-func (_u *UserUpdateOne) ClearRoleIds() *UserUpdateOne {
-	_u.mutation.ClearRoleIds()
+// ClearIsBanned clears the value of the "is_banned" field.
+func (_u *UserUpdateOne) ClearIsBanned() *UserUpdateOne {
+	_u.mutation.ClearIsBanned()
 	return _u
 }
 
@@ -1440,11 +1135,6 @@ func (_u *UserUpdateOne) check() error {
 	if v, ok := _u.mutation.Gender(); ok {
 		if err := user.GenderValidator(v); err != nil {
 			return &ValidationError{Name: "gender", err: fmt.Errorf(`ent: validator failed for field "User.gender": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.Status(); ok {
-		if err := user.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "User.status": %w`, err)}
 		}
 	}
 	return nil
@@ -1599,17 +1289,11 @@ func (_u *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
 	if _u.mutation.GenderCleared() {
 		_spec.ClearField(user.FieldGender, field.TypeEnum)
 	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(user.FieldStatus, field.TypeEnum, value)
+	if value, ok := _u.mutation.LastLoginAt(); ok {
+		_spec.SetField(user.FieldLastLoginAt, field.TypeTime, value)
 	}
-	if _u.mutation.StatusCleared() {
-		_spec.ClearField(user.FieldStatus, field.TypeEnum)
-	}
-	if value, ok := _u.mutation.LastLoginTime(); ok {
-		_spec.SetField(user.FieldLastLoginTime, field.TypeTime, value)
-	}
-	if _u.mutation.LastLoginTimeCleared() {
-		_spec.ClearField(user.FieldLastLoginTime, field.TypeTime)
+	if _u.mutation.LastLoginAtCleared() {
+		_spec.ClearField(user.FieldLastLoginAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.LastLoginIP(); ok {
 		_spec.SetField(user.FieldLastLoginIP, field.TypeString, value)
@@ -1617,52 +1301,11 @@ func (_u *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
 	if _u.mutation.LastLoginIPCleared() {
 		_spec.ClearField(user.FieldLastLoginIP, field.TypeString)
 	}
-	if value, ok := _u.mutation.OrgID(); ok {
-		_spec.SetField(user.FieldOrgID, field.TypeUint32, value)
+	if value, ok := _u.mutation.IsBanned(); ok {
+		_spec.SetField(user.FieldIsBanned, field.TypeBool, value)
 	}
-	if value, ok := _u.mutation.AddedOrgID(); ok {
-		_spec.AddField(user.FieldOrgID, field.TypeUint32, value)
-	}
-	if _u.mutation.OrgIDCleared() {
-		_spec.ClearField(user.FieldOrgID, field.TypeUint32)
-	}
-	if value, ok := _u.mutation.DepartmentID(); ok {
-		_spec.SetField(user.FieldDepartmentID, field.TypeUint32, value)
-	}
-	if value, ok := _u.mutation.AddedDepartmentID(); ok {
-		_spec.AddField(user.FieldDepartmentID, field.TypeUint32, value)
-	}
-	if _u.mutation.DepartmentIDCleared() {
-		_spec.ClearField(user.FieldDepartmentID, field.TypeUint32)
-	}
-	if value, ok := _u.mutation.PositionID(); ok {
-		_spec.SetField(user.FieldPositionID, field.TypeUint32, value)
-	}
-	if value, ok := _u.mutation.AddedPositionID(); ok {
-		_spec.AddField(user.FieldPositionID, field.TypeUint32, value)
-	}
-	if _u.mutation.PositionIDCleared() {
-		_spec.ClearField(user.FieldPositionID, field.TypeUint32)
-	}
-	if value, ok := _u.mutation.WorkID(); ok {
-		_spec.SetField(user.FieldWorkID, field.TypeUint32, value)
-	}
-	if value, ok := _u.mutation.AddedWorkID(); ok {
-		_spec.AddField(user.FieldWorkID, field.TypeUint32, value)
-	}
-	if _u.mutation.WorkIDCleared() {
-		_spec.ClearField(user.FieldWorkID, field.TypeUint32)
-	}
-	if value, ok := _u.mutation.RoleIds(); ok {
-		_spec.SetField(user.FieldRoleIds, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedRoleIds(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, user.FieldRoleIds, value)
-		})
-	}
-	if _u.mutation.RoleIdsCleared() {
-		_spec.ClearField(user.FieldRoleIds, field.TypeJSON)
+	if _u.mutation.IsBannedCleared() {
+		_spec.ClearField(user.FieldIsBanned, field.TypeBool)
 	}
 	_spec.AddModifiers(_u.modifiers...)
 	_node = &User{config: _u.config}

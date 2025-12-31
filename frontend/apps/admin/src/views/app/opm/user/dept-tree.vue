@@ -9,13 +9,12 @@ import { VbenDropdownMenu, VbenIconButton } from '@vben-core/shadcn-ui';
 import { mapTree } from '@vben-core/shared/utils';
 
 import { TreeActionEnum } from '#/constants/tree';
-import { type userservicev1_Department as Department } from '#/generated/api/admin/service/v1';
-import { useDepartmentStore } from '#/stores';
+import { type userservicev1_OrgUnit as OrgUnit } from '#/generated/api/admin/service/v1';
+import { useOrgUnitStore } from '#/stores';
 
 const emit = defineEmits(['select']);
 
-// const orgStore = useOrganizationStore();
-const deptStore = useDepartmentStore();
+const orgUnitStore = useOrgUnitStore();
 
 const toolbarList = [
   {
@@ -38,9 +37,9 @@ const treeData = ref<TreeProps['treeData']>([]);
 
 async function fetch() {
   try {
-    const response = await deptStore.listDepartment();
+    const response = await orgUnitStore.listOrgUnit();
 
-    const newTree = mapTree(response.items ?? [], (node: Department) => ({
+    const newTree = mapTree(response.items ?? [], (node: OrgUnit) => ({
       ...node,
       key: `${node.parentId}-${node.id}`,
       title: node.name,

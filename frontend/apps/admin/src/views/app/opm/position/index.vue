@@ -12,19 +12,17 @@ import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { type userservicev1_Position as Position } from '#/generated/api/admin/service/v1';
 import { $t } from '#/locales';
 import {
-  positionStatusToColor,
-  positionStatusToName,
   statusList,
-  useDepartmentStore,
-  useOrganizationStore,
+  statusToColor,
+  statusToName,
+  useOrgUnitStore,
   usePositionStore,
 } from '#/stores';
 
 import PositionDrawer from './position-drawer.vue';
 
 const positionStore = usePositionStore();
-const deptStore = useDepartmentStore();
-const orgStore = useOrganizationStore();
+const orgUnitStore = useOrgUnitStore();
 
 const formOptions: VbenFormProps = {
   // 默认展开
@@ -67,8 +65,8 @@ const formOptions: VbenFormProps = {
     },
     {
       component: 'ApiTreeSelect',
-      fieldName: 'organizationId',
-      label: $t('page.position.organization'),
+      fieldName: 'orgUnitId',
+      label: $t('page.position.orgUnit'),
       componentProps: {
         placeholder: $t('ui.placeholder.select'),
         numberToString: true,
@@ -80,30 +78,7 @@ const formOptions: VbenFormProps = {
         valueField: 'id',
         treeNodeFilterProp: 'label',
         api: async () => {
-          const result = await orgStore.listOrganization(undefined, {
-            // parent_id: 0,
-            status: 'ON',
-          });
-          return result.items;
-        },
-      },
-    },
-    {
-      component: 'ApiTreeSelect',
-      fieldName: 'departmentId',
-      label: $t('page.position.department'),
-      componentProps: {
-        placeholder: $t('ui.placeholder.select'),
-        numberToString: true,
-        showSearch: true,
-        treeDefaultExpandAll: true,
-        allowClear: true,
-        childrenField: 'children',
-        labelField: 'name',
-        valueField: 'id',
-        treeNodeFilterProp: 'label',
-        api: async () => {
-          const result = await deptStore.listDepartment(undefined, {
+          const result = await orgUnitStore.listOrgUnit(undefined, {
             // parent_id: 0,
             status: 'ON',
           });
@@ -156,13 +131,8 @@ const gridOptions: VxeGridProps<Position> = {
     { title: $t('page.position.code'), field: 'code' },
     { title: $t('page.position.description'), field: 'description' },
     {
-      title: $t('page.position.organizationName'),
-      field: 'organizationName',
-      width: 150,
-    },
-    {
-      title: $t('page.position.departmentName'),
-      field: 'departmentName',
+      title: $t('page.position.orgUnitName'),
+      field: 'orgUnitName',
       width: 150,
     },
     { title: $t('page.position.quota'), field: 'quota', width: 80 },
@@ -268,8 +238,8 @@ const collapseAll = () => {
         </a-button>
       </template>
       <template #status="{ row }">
-        <a-tag :color="positionStatusToColor(row.status)">
-          {{ positionStatusToName(row.status) }}
+        <a-tag :color="statusToColor(row.status)">
+          {{ statusToName(row.status) }}
         </a-tag>
       </template>
       <template #action="{ row }">

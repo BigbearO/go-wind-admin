@@ -164,7 +164,7 @@ func (r *TenantRepo) Create(ctx context.Context, data *userV1.Tenant) (*userV1.T
 		SetNillableStatus(r.statusConverter.ToEntity(data.Status)).
 		SetNillableType(r.typeConverter.ToEntity(data.Type)).
 		SetNillableAuditStatus(r.auditStatusConverter.ToEntity(data.AuditStatus)).
-		SetNillableLastLoginTime(timeutil.TimestamppbToTime(data.LastLoginTime)).
+		SetNillableLastLoginAt(timeutil.TimestamppbToTime(data.LastLoginAt)).
 		SetNillableLastLoginIP(data.LastLoginIp).
 		SetNillableSubscriptionPlan(data.SubscriptionPlan).
 		SetNillableExpiredAt(timeutil.TimestamppbToTime(data.ExpiredAt)).
@@ -224,7 +224,7 @@ func (r *TenantRepo) Update(ctx context.Context, req *userV1.UpdateTenantRequest
 				SetNillableStatus(r.statusConverter.ToEntity(req.Data.Status)).
 				SetNillableType(r.typeConverter.ToEntity(req.Data.Type)).
 				SetNillableAuditStatus(r.auditStatusConverter.ToEntity(req.Data.AuditStatus)).
-				SetNillableLastLoginTime(timeutil.TimestamppbToTime(req.Data.LastLoginTime)).
+				SetNillableLastLoginAt(timeutil.TimestamppbToTime(req.Data.LastLoginAt)).
 				SetNillableLastLoginIP(req.Data.LastLoginIp).
 				SetNillableSubscriptionPlan(req.Data.SubscriptionPlan).
 				SetNillableExpiredAt(timeutil.TimestamppbToTime(req.Data.ExpiredAt)).

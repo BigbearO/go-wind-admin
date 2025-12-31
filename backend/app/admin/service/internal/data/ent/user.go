@@ -3,7 +3,6 @@
 package ent
 
 import (
-	"encoding/json"
 	"fmt"
 	"go-wind-admin/app/admin/service/internal/data/ent/user"
 	"strings"
@@ -57,24 +56,12 @@ type User struct {
 	Description *string `json:"description,omitempty"`
 	// 性别
 	Gender *user.Gender `json:"gender,omitempty"`
-	// 授权
-	Authority *user.Authority `json:"authority,omitempty"`
-	// 用户状态
-	Status *user.Status `json:"status,omitempty"`
 	// 最后一次登录的时间
-	LastLoginTime *time.Time `json:"last_login_time,omitempty"`
+	LastLoginAt *time.Time `json:"last_login_at,omitempty"`
 	// 最后一次登录的IP
 	LastLoginIP *string `json:"last_login_ip,omitempty"`
-	// 组织ID
-	OrgID *uint32 `json:"org_id,omitempty"`
-	// 部门ID
-	DepartmentID *uint32 `json:"department_id,omitempty"`
-	// 职位ID
-	PositionID *uint32 `json:"position_id,omitempty"`
-	// 员工工号
-	WorkID *uint32 `json:"work_id,omitempty"`
-	// 角色ID列表
-	RoleIds      []int `json:"role_ids,omitempty"`
+	// 是否被禁用
+	IsBanned     bool `json:"is_banned,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -83,13 +70,13 @@ func (*User) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case user.FieldRoleIds:
-			values[i] = new([]byte)
-		case user.FieldID, user.FieldCreatedBy, user.FieldUpdatedBy, user.FieldDeletedBy, user.FieldTenantID, user.FieldOrgID, user.FieldDepartmentID, user.FieldPositionID, user.FieldWorkID:
+		case user.FieldIsBanned:
+			values[i] = new(sql.NullBool)
+		case user.FieldID, user.FieldCreatedBy, user.FieldUpdatedBy, user.FieldDeletedBy, user.FieldTenantID:
 			values[i] = new(sql.NullInt64)
-		case user.FieldRemark, user.FieldUsername, user.FieldNickname, user.FieldRealname, user.FieldEmail, user.FieldMobile, user.FieldTelephone, user.FieldAvatar, user.FieldAddress, user.FieldRegion, user.FieldDescription, user.FieldGender, user.FieldAuthority, user.FieldStatus, user.FieldLastLoginIP:
+		case user.FieldRemark, user.FieldUsername, user.FieldNickname, user.FieldRealname, user.FieldEmail, user.FieldMobile, user.FieldTelephone, user.FieldAvatar, user.FieldAddress, user.FieldRegion, user.FieldDescription, user.FieldGender, user.FieldLastLoginIP:
 			values[i] = new(sql.NullString)
-		case user.FieldCreatedAt, user.FieldUpdatedAt, user.FieldDeletedAt, user.FieldLastLoginTime:
+		case user.FieldCreatedAt, user.FieldUpdatedAt, user.FieldDeletedAt, user.FieldLastLoginAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -245,26 +232,12 @@ func (_m *User) assignValues(columns []string, values []any) error {
 				_m.Gender = new(user.Gender)
 				*_m.Gender = user.Gender(value.String)
 			}
-		case user.FieldAuthority:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field authority", values[i])
-			} else if value.Valid {
-				_m.Authority = new(user.Authority)
-				*_m.Authority = user.Authority(value.String)
-			}
-		case user.FieldStatus:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field status", values[i])
-			} else if value.Valid {
-				_m.Status = new(user.Status)
-				*_m.Status = user.Status(value.String)
-			}
-		case user.FieldLastLoginTime:
+		case user.FieldLastLoginAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field last_login_time", values[i])
+				return fmt.Errorf("unexpected type %T for field last_login_at", values[i])
 			} else if value.Valid {
-				_m.LastLoginTime = new(time.Time)
-				*_m.LastLoginTime = value.Time
+				_m.LastLoginAt = new(time.Time)
+				*_m.LastLoginAt = value.Time
 			}
 		case user.FieldLastLoginIP:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -273,41 +246,11 @@ func (_m *User) assignValues(columns []string, values []any) error {
 				_m.LastLoginIP = new(string)
 				*_m.LastLoginIP = value.String
 			}
-		case user.FieldOrgID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field org_id", values[i])
+		case user.FieldIsBanned:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_banned", values[i])
 			} else if value.Valid {
-				_m.OrgID = new(uint32)
-				*_m.OrgID = uint32(value.Int64)
-			}
-		case user.FieldDepartmentID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field department_id", values[i])
-			} else if value.Valid {
-				_m.DepartmentID = new(uint32)
-				*_m.DepartmentID = uint32(value.Int64)
-			}
-		case user.FieldPositionID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field position_id", values[i])
-			} else if value.Valid {
-				_m.PositionID = new(uint32)
-				*_m.PositionID = uint32(value.Int64)
-			}
-		case user.FieldWorkID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field work_id", values[i])
-			} else if value.Valid {
-				_m.WorkID = new(uint32)
-				*_m.WorkID = uint32(value.Int64)
-			}
-		case user.FieldRoleIds:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field role_ids", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &_m.RoleIds); err != nil {
-					return fmt.Errorf("unmarshal field role_ids: %w", err)
-				}
+				_m.IsBanned = value.Bool
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -440,18 +383,8 @@ func (_m *User) String() string {
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
-	if v := _m.Authority; v != nil {
-		builder.WriteString("authority=")
-		builder.WriteString(fmt.Sprintf("%v", *v))
-	}
-	builder.WriteString(", ")
-	if v := _m.Status; v != nil {
-		builder.WriteString("status=")
-		builder.WriteString(fmt.Sprintf("%v", *v))
-	}
-	builder.WriteString(", ")
-	if v := _m.LastLoginTime; v != nil {
-		builder.WriteString("last_login_time=")
+	if v := _m.LastLoginAt; v != nil {
+		builder.WriteString("last_login_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
@@ -460,28 +393,8 @@ func (_m *User) String() string {
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	if v := _m.OrgID; v != nil {
-		builder.WriteString("org_id=")
-		builder.WriteString(fmt.Sprintf("%v", *v))
-	}
-	builder.WriteString(", ")
-	if v := _m.DepartmentID; v != nil {
-		builder.WriteString("department_id=")
-		builder.WriteString(fmt.Sprintf("%v", *v))
-	}
-	builder.WriteString(", ")
-	if v := _m.PositionID; v != nil {
-		builder.WriteString("position_id=")
-		builder.WriteString(fmt.Sprintf("%v", *v))
-	}
-	builder.WriteString(", ")
-	if v := _m.WorkID; v != nil {
-		builder.WriteString("work_id=")
-		builder.WriteString(fmt.Sprintf("%v", *v))
-	}
-	builder.WriteString(", ")
-	builder.WriteString("role_ids=")
-	builder.WriteString(fmt.Sprintf("%v", _m.RoleIds))
+	builder.WriteString("is_banned=")
+	builder.WriteString(fmt.Sprintf("%v", _m.IsBanned))
 	builder.WriteByte(')')
 	return builder.String()
 }

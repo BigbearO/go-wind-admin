@@ -24,8 +24,7 @@ var ProviderSet = wire.NewSet(
 	service.NewRouterService,
 	service.NewTaskService,
 	service.NewRoleService,
-	service.NewOrganizationService,
-	service.NewDepartmentService,
+	service.NewOrgUnitService,
 	service.NewPositionService,
 	service.NewDictService,
 	service.NewAdminLoginLogService,
@@ -41,4 +40,5 @@ var ProviderSet = wire.NewSet(
 	service.NewUserProfileService,
 	service.NewUserCredentialService,
 	service.NewApiResourceService,
+	service.NewPermissionService,
 )

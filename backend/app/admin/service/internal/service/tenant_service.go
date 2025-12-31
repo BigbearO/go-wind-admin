@@ -183,7 +183,6 @@ func (s *TenantService) CreateTenantWithAdminUser(ctx context.Context, req *admi
 		return nil, err
 	}
 
-	req.User.Authority = userV1.User_TENANT_ADMIN.Enum()
 	req.User.TenantId = tenant.Id
 
 	// Create tenant admin user

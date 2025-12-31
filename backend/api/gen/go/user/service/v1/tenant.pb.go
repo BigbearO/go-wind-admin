@@ -210,7 +210,7 @@ type Tenant struct {
 	ExpiredAt        *timestamppb.Timestamp `protobuf:"bytes,22,opt,name=expired_at,json=expiredAt,proto3,oneof" json:"expired_at,omitempty"`                                               // 租户有效期（NULL表示永久，过期后状态自动改为“过期”）
 	SubscriptionPlan *string                `protobuf:"bytes,23,opt,name=subscription_plan,json=subscriptionPlan,proto3,oneof" json:"subscription_plan,omitempty"`                          // 订阅套餐（如“企业版1年”“基础版3个月”）
 	MemberCount      *int32                 `protobuf:"varint,30,opt,name=member_count,json=memberCount,proto3,oneof" json:"member_count,omitempty"`                                        // 成员数量
-	LastLoginTime    *timestamppb.Timestamp `protobuf:"bytes,31,opt,name=last_login_time,json=lastLoginTime,proto3,oneof" json:"last_login_time,omitempty"`                                 // 最后登录时间
+	LastLoginAt      *timestamppb.Timestamp `protobuf:"bytes,31,opt,name=last_login_at,json=lastLoginAt,proto3,oneof" json:"last_login_at,omitempty"`                                       // 最后登录时间
 	LastLoginIp      *string                `protobuf:"bytes,32,opt,name=last_login_ip,json=lastLoginIp,proto3,oneof" json:"last_login_ip,omitempty"`                                       // 最后登录IP
 	ParentId         *uint32                `protobuf:"varint,50,opt,name=parent_id,json=parentId,proto3,oneof" json:"parent_id,omitempty"`                                                 // 父节点ID
 	Children         []*Tenant              `protobuf:"bytes,51,rep,name=children,proto3" json:"children,omitempty"`                                                                        // 子节点树
@@ -366,9 +366,9 @@ func (x *Tenant) GetMemberCount() int32 {
 	return 0
 }
 
-func (x *Tenant) GetLastLoginTime() *timestamppb.Timestamp {
+func (x *Tenant) GetLastLoginAt() *timestamppb.Timestamp {
 	if x != nil {
-		return x.LastLoginTime
+		return x.LastLoginAt
 	}
 	return nil
 }
@@ -937,7 +937,7 @@ var File_user_service_v1_tenant_proto protoreflect.FileDescriptor
 
 const file_user_service_v1_tenant_proto_rawDesc = "" +
 	"\n" +
-	"\x1cuser/service/v1/tenant.proto\x12\x0fuser.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a google/protobuf/field_mask.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1epagination/v1/pagination.proto\"\xc7\x14\n" +
+	"\x1cuser/service/v1/tenant.proto\x12\x0fuser.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a google/protobuf/field_mask.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1epagination/v1/pagination.proto\"\xc1\x14\n" +
 	"\x06Tenant\x12#\n" +
 	"\x02id\x18\x01 \x01(\rB\x0e\xbaG\v\x92\x02\b租户IDH\x00R\x02id\x88\x01\x01\x12+\n" +
 	"\x04name\x18\x02 \x01(\tB\x12\xbaG\x0f\x92\x02\f租户名称H\x01R\x04name\x88\x01\x01\x12+\n" +
@@ -957,8 +957,8 @@ const file_user_service_v1_tenant_proto_rawDesc = "" +
 	"\n" +
 	"expired_at\x18\x16 \x01(\v2\x1a.google.protobuf.TimestampBU\xbaGR\x92\x02O租户有效期（NULL表示永久，过期后状态自动改为“过期”）H\rR\texpiredAt\x88\x01\x01\x12v\n" +
 	"\x11subscription_plan\x18\x17 \x01(\tBD\xbaGA\x92\x02>订阅套餐（如“企业版1年”“基础版3个月”）H\x0eR\x10subscriptionPlan\x88\x01\x01\x12:\n" +
-	"\fmember_count\x18\x1e \x01(\x05B\x12\xbaG\x0f\x92\x02\f成员数量H\x0fR\vmemberCount\x88\x01\x01\x12a\n" +
-	"\x0flast_login_time\x18\x1f \x01(\v2\x1a.google.protobuf.TimestampB\x18\xbaG\x15\x92\x02\x12最后登录时间H\x10R\rlastLoginTime\x88\x01\x01\x12=\n" +
+	"\fmember_count\x18\x1e \x01(\x05B\x12\xbaG\x0f\x92\x02\f成员数量H\x0fR\vmemberCount\x88\x01\x01\x12]\n" +
+	"\rlast_login_at\x18\x1f \x01(\v2\x1a.google.protobuf.TimestampB\x18\xbaG\x15\x92\x02\x12最后登录时间H\x10R\vlastLoginAt\x88\x01\x01\x12=\n" +
 	"\rlast_login_ip\x18  \x01(\tB\x14\xbaG\x11\x92\x02\x0e最后登录IPH\x11R\vlastLoginIp\x88\x01\x01\x123\n" +
 	"\tparent_id\x182 \x01(\rB\x11\xbaG\x0e\x92\x02\v父节点IDH\x12R\bparentId\x88\x01\x01\x12G\n" +
 	"\bchildren\x183 \x03(\v2\x17.user.service.v1.TenantB\x12\xbaG\x0f\x92\x02\f子节点树R\bchildren\x125\n" +
@@ -1008,8 +1008,8 @@ const file_user_service_v1_tenant_proto_rawDesc = "" +
 	"\x0f_unsubscribe_atB\r\n" +
 	"\v_expired_atB\x14\n" +
 	"\x12_subscription_planB\x0f\n" +
-	"\r_member_countB\x12\n" +
-	"\x10_last_login_timeB\x10\n" +
+	"\r_member_countB\x10\n" +
+	"\x0e_last_login_atB\x10\n" +
 	"\x0e_last_login_ipB\f\n" +
 	"\n" +
 	"_parent_idB\r\n" +
@@ -1102,7 +1102,7 @@ var file_user_service_v1_tenant_proto_depIdxs = []int32{
 	13, // 3: user.service.v1.Tenant.subscription_at:type_name -> google.protobuf.Timestamp
 	13, // 4: user.service.v1.Tenant.unsubscribe_at:type_name -> google.protobuf.Timestamp
 	13, // 5: user.service.v1.Tenant.expired_at:type_name -> google.protobuf.Timestamp
-	13, // 6: user.service.v1.Tenant.last_login_time:type_name -> google.protobuf.Timestamp
+	13, // 6: user.service.v1.Tenant.last_login_at:type_name -> google.protobuf.Timestamp
 	3,  // 7: user.service.v1.Tenant.children:type_name -> user.service.v1.Tenant
 	13, // 8: user.service.v1.Tenant.created_at:type_name -> google.protobuf.Timestamp
 	13, // 9: user.service.v1.Tenant.updated_at:type_name -> google.protobuf.Timestamp

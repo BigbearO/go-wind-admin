@@ -114,7 +114,7 @@ func (Tenant) Fields() []ent.Field {
 			Optional().
 			Nillable(),
 
-		field.Time("last_login_time").
+		field.Time("last_login_at").
 			Comment("最后一次登录的时间").
 			Optional().
 			Nillable(),

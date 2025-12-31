@@ -68,20 +68,12 @@ func (m *User) validate(all bool) error {
 		// no validation rules for TenantName
 	}
 
-	if m.OrgId != nil {
-		// no validation rules for OrgId
+	if m.OrgUnitId != nil {
+		// no validation rules for OrgUnitId
 	}
 
-	if m.OrgName != nil {
-		// no validation rules for OrgName
-	}
-
-	if m.DepartmentId != nil {
-		// no validation rules for DepartmentId
-	}
-
-	if m.DepartmentName != nil {
-		// no validation rules for DepartmentName
+	if m.OrgUnitName != nil {
+		// no validation rules for OrgUnitName
 	}
 
 	if m.PositionId != nil {
@@ -92,8 +84,8 @@ func (m *User) validate(all bool) error {
 		// no validation rules for PositionName
 	}
 
-	if m.WorkId != nil {
-		// no validation rules for WorkId
+	if m.RoleId != nil {
+		// no validation rules for RoleId
 	}
 
 	if m.Username != nil {
@@ -144,14 +136,14 @@ func (m *User) validate(all bool) error {
 		// no validation rules for Remark
 	}
 
-	if m.LastLoginTime != nil {
+	if m.LastLoginAt != nil {
 
 		if all {
-			switch v := interface{}(m.GetLastLoginTime()).(type) {
+			switch v := interface{}(m.GetLastLoginAt()).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
 					errors = append(errors, UserValidationError{
-						field:  "LastLoginTime",
+						field:  "LastLoginAt",
 						reason: "embedded message failed validation",
 						cause:  err,
 					})
@@ -159,16 +151,16 @@ func (m *User) validate(all bool) error {
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
 					errors = append(errors, UserValidationError{
-						field:  "LastLoginTime",
+						field:  "LastLoginAt",
 						reason: "embedded message failed validation",
 						cause:  err,
 					})
 				}
 			}
-		} else if v, ok := interface{}(m.GetLastLoginTime()).(interface{ Validate() error }); ok {
+		} else if v, ok := interface{}(m.GetLastLoginAt()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return UserValidationError{
-					field:  "LastLoginTime",
+					field:  "LastLoginAt",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
@@ -179,14 +171,6 @@ func (m *User) validate(all bool) error {
 
 	if m.LastLoginIp != nil {
 		// no validation rules for LastLoginIp
-	}
-
-	if m.Status != nil {
-		// no validation rules for Status
-	}
-
-	if m.Authority != nil {
-		// no validation rules for Authority
 	}
 
 	if m.CreatedBy != nil {

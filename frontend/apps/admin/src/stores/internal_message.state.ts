@@ -229,39 +229,28 @@ export function internalMessageStatusLabel(
   return matchedItem ? matchedItem.label : '';
 }
 
+const INTERNAL_MESSAGE_STATUS_COLOR_MAP = {
+  ARCHIVED: '#86909C', // 归档：中深灰（已存档，弱化但可识别）
+  DELETED: '#C9CDD4', // 已删除：浅灰（极弱化，接近背景）
+  DRAFT: '#9CA3AF', // 草稿：中灰（未完成，中性状态）
+  PUBLISHED: '#00B42A', // 已发布：企业绿（成功、正向状态）
+  REVOKED: '#F53F3F', // 已撤回：企业红（异常、高危状态）
+  SCHEDULED: '#165DFF', // 计划发送：企业蓝（待执行、流程中）
+  DEFAULT: '#E5E7EB', // 默认：浅中性灰（兜底，避免空值）
+} as const satisfies Record<'DEFAULT' | InternalMessage_Status, string>;
+
+/**
+ * 内部消息状态映射对应颜色
+ * @param status 内部消息状态（ARCHIVED/DELETED/DRAFT/PUBLISHED/REVOKED/SCHEDULED）
+ * @returns 标准化十六进制颜色值（兜底中性灰，避免样式异常）
+ */
 export function internalMessageStatusColor(
-  value: InternalMessage_Status,
+  status: InternalMessage_Status,
 ): string {
-  switch (value) {
-    case 'ARCHIVED': {
-      // 归档：已存档，用深灰色
-      return '#6B7280';
-    }
-    case 'DELETED': {
-      // 已删除：弱化显示，用浅灰色
-      return '#E5E7EB';
-    }
-    case 'DRAFT': {
-      // 草稿：未完成，用中灰色
-      return '#9CA3AF';
-    }
-    case 'PUBLISHED': {
-      // 已发布：成功状态，用绿色
-      return '#10B981';
-    }
-    case 'REVOKED': {
-      // 已撤回：异常状态，用红色
-      return '#EF4444';
-    }
-    case 'SCHEDULED': {
-      // 计划发送：待执行，用蓝色
-      return '#3B82F6';
-    }
-    default: {
-      // 新增未定义状态时，默认返回空（避免样式错误）
-      return '';
-    }
-  }
+  return (
+    INTERNAL_MESSAGE_STATUS_COLOR_MAP[status] ||
+    INTERNAL_MESSAGE_STATUS_COLOR_MAP.DEFAULT
+  );
 }
 
 export function internalMessageTypeLabel(value: InternalMessage_Type): string {
@@ -270,25 +259,23 @@ export function internalMessageTypeLabel(value: InternalMessage_Type): string {
   return matchedItem ? matchedItem.label : '';
 }
 
-export function internalMessageTypeColor(value: InternalMessage_Type): string {
-  switch (value) {
-    case 'GROUP': {
-      // 群聊：多人互动，用活力感的颜色
-      return '#10B981';
-    } // 绿色（代表协作、活跃）
-    case 'NOTIFICATION': {
-      // 通知：系统/平台推送，用正式感的颜色
-      return '#3B82F6';
-    } // 蓝色（代表官方、提醒）
-    case 'PRIVATE': {
-      // 私信：一对一沟通，用私密感的颜色
-      return '#8B5CF6';
-    } // 紫色（代表个人、私密）
-    default: {
-      // 应对未定义类型，避免样式异常
-      return '';
-    }
-  }
+const INTERNAL_MESSAGE_TYPE_COLOR_MAP = {
+  GROUP: '#00B42A', // 群聊：企业绿（协作、活跃、多人互动）
+  NOTIFICATION: '#165DFF', // 通知：企业蓝（官方、提醒、系统推送）
+  PRIVATE: '#722ED1', // 私信：企业紫（私密、一对一、个人沟通）
+  DEFAULT: '#C9CDD4', // 默认：中性浅灰（兜底，避免样式异常）
+} as const satisfies Record<'DEFAULT' | InternalMessage_Type, string>;
+
+/**
+ * 内部消息类型映射对应颜色
+ * @param type 内部消息类型（GROUP/NOTIFICATION/PRIVATE）
+ * @returns 标准化十六进制颜色值（兜底中性灰，避免样式错乱）
+ */
+export function internalMessageTypeColor(type: InternalMessage_Type): string {
+  return (
+    INTERNAL_MESSAGE_TYPE_COLOR_MAP[type] ||
+    INTERNAL_MESSAGE_TYPE_COLOR_MAP.DEFAULT
+  );
 }
 
 export function internalMessageRecipientStatusLabel(
@@ -299,33 +286,35 @@ export function internalMessageRecipientStatusLabel(
   return matchedItem ? matchedItem.label : '';
 }
 
+const INTERNAL_MESSAGE_RECIPIENT_COLOR_THEME = {
+  light: {
+    DELETED: '#C9CDD4',
+    READ: '#86909C',
+    RECEIVED: '#165DFF',
+    REVOKED: '#F53F3F',
+    SENT: '#4096FF',
+    DEFAULT: '#E5E7EB',
+  },
+  dark: {
+    DELETED: '#6E7681', // 深色模式下的浅灰
+    READ: '#4E5969', // 深色模式下的中深灰
+    RECEIVED: '#2F77FF', // 深色模式下更亮的蓝
+    REVOKED: '#F87171', // 深色模式下更柔和的红
+    SENT: '#69B1FF', // 深色模式下更柔和的浅蓝
+    DEFAULT: '#4B5563', // 深色模式下的中性灰
+  },
+} as const;
+
+/**
+ * 支持主题的内部消息接收状态颜色映射
+ * @param status 内部消息接收状态
+ * @param theme 主题模式（light/dark），默认浅色
+ * @returns 对应主题的十六进制颜色值
+ */
 export function internalMessageRecipientStatusColor(
-  value: InternalMessageRecipient_Status,
+  status: InternalMessageRecipient_Status,
+  theme: 'dark' | 'light' = 'light',
 ): string {
-  switch (value) {
-    case 'DELETED': {
-      // 已删除：用户主动删除，视觉上弱化显示
-      return '#E5E7EB';
-    } // 浅灰色
-    case 'READ': {
-      // 已读：用户已查看，常规状态
-      return '#6B7280';
-    } // 深灰色
-    case 'RECEIVED': {
-      // 已接收（未读）：用户收到但未查看，需突出提醒
-      return '#3B82F6';
-    } // 蓝色（醒目，提示未读）
-    case 'REVOKED': {
-      // 已撤回：消息失效，带有异常含义
-      return '#EF4444';
-    } // 红色（警示，表明消息已失效）
-    case 'SENT': {
-      // 已发送（未接收）：消息发出但对方未确认接收，过渡状态
-      return '#93C5FD';
-    } // 浅蓝色（柔和，表示待接收）
-    default: {
-      // 应对未定义的状态，避免样式异常
-      return '';
-    }
-  }
+  const colorMap = INTERNAL_MESSAGE_RECIPIENT_COLOR_THEME[theme];
+  return colorMap[status] || colorMap.DEFAULT;
 }

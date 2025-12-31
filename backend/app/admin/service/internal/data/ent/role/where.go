@@ -790,6 +790,26 @@ func ApisNotNil() predicate.Role {
 	return predicate.Role(sql.FieldNotNull(FieldApis))
 }
 
+// PermissionsIsNil applies the IsNil predicate on the "permissions" field.
+func PermissionsIsNil() predicate.Role {
+	return predicate.Role(sql.FieldIsNull(FieldPermissions))
+}
+
+// PermissionsNotNil applies the NotNil predicate on the "permissions" field.
+func PermissionsNotNil() predicate.Role {
+	return predicate.Role(sql.FieldNotNull(FieldPermissions))
+}
+
+// CustomOrgUnitIdsIsNil applies the IsNil predicate on the "custom_org_unit_ids" field.
+func CustomOrgUnitIdsIsNil() predicate.Role {
+	return predicate.Role(sql.FieldIsNull(FieldCustomOrgUnitIds))
+}
+
+// CustomOrgUnitIdsNotNil applies the NotNil predicate on the "custom_org_unit_ids" field.
+func CustomOrgUnitIdsNotNil() predicate.Role {
+	return predicate.Role(sql.FieldNotNull(FieldCustomOrgUnitIds))
+}
+
 // DataScopeEQ applies the EQ predicate on the "data_scope" field.
 func DataScopeEQ(v DataScope) predicate.Role {
 	return predicate.Role(sql.FieldEQ(FieldDataScope, v))
@@ -848,6 +868,36 @@ func StatusIsNil() predicate.Role {
 // StatusNotNil applies the NotNil predicate on the "status" field.
 func StatusNotNil() predicate.Role {
 	return predicate.Role(sql.FieldNotNull(FieldStatus))
+}
+
+// TypeEQ applies the EQ predicate on the "type" field.
+func TypeEQ(v Type) predicate.Role {
+	return predicate.Role(sql.FieldEQ(FieldType, v))
+}
+
+// TypeNEQ applies the NEQ predicate on the "type" field.
+func TypeNEQ(v Type) predicate.Role {
+	return predicate.Role(sql.FieldNEQ(FieldType, v))
+}
+
+// TypeIn applies the In predicate on the "type" field.
+func TypeIn(vs ...Type) predicate.Role {
+	return predicate.Role(sql.FieldIn(FieldType, vs...))
+}
+
+// TypeNotIn applies the NotIn predicate on the "type" field.
+func TypeNotIn(vs ...Type) predicate.Role {
+	return predicate.Role(sql.FieldNotIn(FieldType, vs...))
+}
+
+// TypeIsNil applies the IsNil predicate on the "type" field.
+func TypeIsNil() predicate.Role {
+	return predicate.Role(sql.FieldIsNull(FieldType))
+}
+
+// TypeNotNil applies the NotNil predicate on the "type" field.
+func TypeNotNil() predicate.Role {
+	return predicate.Role(sql.FieldNotNull(FieldType))
 }
 
 // HasParent applies the HasEdge predicate on the "parent" edge.

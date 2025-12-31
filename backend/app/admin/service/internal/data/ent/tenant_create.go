@@ -288,16 +288,16 @@ func (_c *TenantCreate) SetNillableExpiredAt(v *time.Time) *TenantCreate {
 	return _c
 }
 
-// SetLastLoginTime sets the "last_login_time" field.
-func (_c *TenantCreate) SetLastLoginTime(v time.Time) *TenantCreate {
-	_c.mutation.SetLastLoginTime(v)
+// SetLastLoginAt sets the "last_login_at" field.
+func (_c *TenantCreate) SetLastLoginAt(v time.Time) *TenantCreate {
+	_c.mutation.SetLastLoginAt(v)
 	return _c
 }
 
-// SetNillableLastLoginTime sets the "last_login_time" field if the given value is not nil.
-func (_c *TenantCreate) SetNillableLastLoginTime(v *time.Time) *TenantCreate {
+// SetNillableLastLoginAt sets the "last_login_at" field if the given value is not nil.
+func (_c *TenantCreate) SetNillableLastLoginAt(v *time.Time) *TenantCreate {
 	if v != nil {
-		_c.SetLastLoginTime(*v)
+		_c.SetLastLoginAt(*v)
 	}
 	return _c
 }
@@ -508,9 +508,9 @@ func (_c *TenantCreate) createSpec() (*Tenant, *sqlgraph.CreateSpec) {
 		_spec.SetField(tenant.FieldExpiredAt, field.TypeTime, value)
 		_node.ExpiredAt = &value
 	}
-	if value, ok := _c.mutation.LastLoginTime(); ok {
-		_spec.SetField(tenant.FieldLastLoginTime, field.TypeTime, value)
-		_node.LastLoginTime = &value
+	if value, ok := _c.mutation.LastLoginAt(); ok {
+		_spec.SetField(tenant.FieldLastLoginAt, field.TypeTime, value)
+		_node.LastLoginAt = &value
 	}
 	if value, ok := _c.mutation.LastLoginIP(); ok {
 		_spec.SetField(tenant.FieldLastLoginIP, field.TypeString, value)
@@ -916,21 +916,21 @@ func (u *TenantUpsert) ClearExpiredAt() *TenantUpsert {
 	return u
 }
 
-// SetLastLoginTime sets the "last_login_time" field.
-func (u *TenantUpsert) SetLastLoginTime(v time.Time) *TenantUpsert {
-	u.Set(tenant.FieldLastLoginTime, v)
+// SetLastLoginAt sets the "last_login_at" field.
+func (u *TenantUpsert) SetLastLoginAt(v time.Time) *TenantUpsert {
+	u.Set(tenant.FieldLastLoginAt, v)
 	return u
 }
 
-// UpdateLastLoginTime sets the "last_login_time" field to the value that was provided on create.
-func (u *TenantUpsert) UpdateLastLoginTime() *TenantUpsert {
-	u.SetExcluded(tenant.FieldLastLoginTime)
+// UpdateLastLoginAt sets the "last_login_at" field to the value that was provided on create.
+func (u *TenantUpsert) UpdateLastLoginAt() *TenantUpsert {
+	u.SetExcluded(tenant.FieldLastLoginAt)
 	return u
 }
 
-// ClearLastLoginTime clears the value of the "last_login_time" field.
-func (u *TenantUpsert) ClearLastLoginTime() *TenantUpsert {
-	u.SetNull(tenant.FieldLastLoginTime)
+// ClearLastLoginAt clears the value of the "last_login_at" field.
+func (u *TenantUpsert) ClearLastLoginAt() *TenantUpsert {
+	u.SetNull(tenant.FieldLastLoginAt)
 	return u
 }
 
@@ -1409,24 +1409,24 @@ func (u *TenantUpsertOne) ClearExpiredAt() *TenantUpsertOne {
 	})
 }
 
-// SetLastLoginTime sets the "last_login_time" field.
-func (u *TenantUpsertOne) SetLastLoginTime(v time.Time) *TenantUpsertOne {
+// SetLastLoginAt sets the "last_login_at" field.
+func (u *TenantUpsertOne) SetLastLoginAt(v time.Time) *TenantUpsertOne {
 	return u.Update(func(s *TenantUpsert) {
-		s.SetLastLoginTime(v)
+		s.SetLastLoginAt(v)
 	})
 }
 
-// UpdateLastLoginTime sets the "last_login_time" field to the value that was provided on create.
-func (u *TenantUpsertOne) UpdateLastLoginTime() *TenantUpsertOne {
+// UpdateLastLoginAt sets the "last_login_at" field to the value that was provided on create.
+func (u *TenantUpsertOne) UpdateLastLoginAt() *TenantUpsertOne {
 	return u.Update(func(s *TenantUpsert) {
-		s.UpdateLastLoginTime()
+		s.UpdateLastLoginAt()
 	})
 }
 
-// ClearLastLoginTime clears the value of the "last_login_time" field.
-func (u *TenantUpsertOne) ClearLastLoginTime() *TenantUpsertOne {
+// ClearLastLoginAt clears the value of the "last_login_at" field.
+func (u *TenantUpsertOne) ClearLastLoginAt() *TenantUpsertOne {
 	return u.Update(func(s *TenantUpsert) {
-		s.ClearLastLoginTime()
+		s.ClearLastLoginAt()
 	})
 }
 
@@ -2074,24 +2074,24 @@ func (u *TenantUpsertBulk) ClearExpiredAt() *TenantUpsertBulk {
 	})
 }
 
-// SetLastLoginTime sets the "last_login_time" field.
-func (u *TenantUpsertBulk) SetLastLoginTime(v time.Time) *TenantUpsertBulk {
+// SetLastLoginAt sets the "last_login_at" field.
+func (u *TenantUpsertBulk) SetLastLoginAt(v time.Time) *TenantUpsertBulk {
 	return u.Update(func(s *TenantUpsert) {
-		s.SetLastLoginTime(v)
+		s.SetLastLoginAt(v)
 	})
 }
 
-// UpdateLastLoginTime sets the "last_login_time" field to the value that was provided on create.
-func (u *TenantUpsertBulk) UpdateLastLoginTime() *TenantUpsertBulk {
+// UpdateLastLoginAt sets the "last_login_at" field to the value that was provided on create.
+func (u *TenantUpsertBulk) UpdateLastLoginAt() *TenantUpsertBulk {
 	return u.Update(func(s *TenantUpsert) {
-		s.UpdateLastLoginTime()
+		s.UpdateLastLoginAt()
 	})
 }
 
-// ClearLastLoginTime clears the value of the "last_login_time" field.
-func (u *TenantUpsertBulk) ClearLastLoginTime() *TenantUpsertBulk {
+// ClearLastLoginAt clears the value of the "last_login_at" field.
+func (u *TenantUpsertBulk) ClearLastLoginAt() *TenantUpsertBulk {
 	return u.Update(func(s *TenantUpsert) {
-		s.ClearLastLoginTime()
+		s.ClearLastLoginAt()
 	})
 }
 

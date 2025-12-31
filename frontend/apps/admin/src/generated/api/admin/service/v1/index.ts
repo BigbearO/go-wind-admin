@@ -1170,6 +1170,7 @@ export type authenticationservicev1_LoginRequest = {
   refresh_token?: string;
   code?: string;
   client_type?: authenticationservicev1_ClientType;
+  device_id?: string;
 };
 
 // 授权类型
@@ -1196,235 +1197,6 @@ export type authenticationservicev1_LoginResponse = {
 export type authenticationservicev1_TokenType =
   | "bearer"
   | "mac";
-// 部门管理服务
-export interface DepartmentService {
-  // 查询部门列表
-  List(request: pagination_PagingRequest): Promise<userservicev1_ListDepartmentResponse>;
-  // 查询部门详情
-  Get(request: userservicev1_GetDepartmentRequest): Promise<userservicev1_Department>;
-  // 创建部门
-  Create(request: userservicev1_CreateDepartmentRequest): Promise<wellKnownEmpty>;
-  // 更新部门
-  Update(request: userservicev1_UpdateDepartmentRequest): Promise<wellKnownEmpty>;
-  // 删除部门
-  Delete(request: userservicev1_DeleteDepartmentRequest): Promise<wellKnownEmpty>;
-}
-
-export function createDepartmentServiceClient(
-  handler: RequestHandler
-): DepartmentService {
-  return {
-    List(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
-      const path = `admin/v1/departments`; // eslint-disable-line quotes
-      const body = null;
-      const queryParams: string[] = [];
-      if (request.page) {
-        queryParams.push(`page=${encodeURIComponent(request.page.toString())}`)
-      }
-      if (request.pageSize) {
-        queryParams.push(`pageSize=${encodeURIComponent(request.pageSize.toString())}`)
-      }
-      if (request.offset) {
-        queryParams.push(`offset=${encodeURIComponent(request.offset.toString())}`)
-      }
-      if (request.limit) {
-        queryParams.push(`limit=${encodeURIComponent(request.limit.toString())}`)
-      }
-      if (request.token) {
-        queryParams.push(`token=${encodeURIComponent(request.token.toString())}`)
-      }
-      if (request.noPaging) {
-        queryParams.push(`noPaging=${encodeURIComponent(request.noPaging.toString())}`)
-      }
-      if (request.orderBy) {
-        request.orderBy.forEach((x) => {
-          queryParams.push(`orderBy=${encodeURIComponent(x.toString())}`)
-        })
-      }
-      if (request.sorting?.field) {
-        queryParams.push(`sorting.field=${encodeURIComponent(request.sorting.field.toString())}`)
-      }
-      if (request.sorting?.order) {
-        queryParams.push(`sorting.order=${encodeURIComponent(request.sorting.order.toString())}`)
-      }
-      if (request.query) {
-        queryParams.push(`query=${encodeURIComponent(request.query.toString())}`)
-      }
-      if (request.or) {
-        queryParams.push(`or=${encodeURIComponent(request.or.toString())}`)
-      }
-      if (request.filterExpr?.type) {
-        queryParams.push(`filterExpr.type=${encodeURIComponent(request.filterExpr.type.toString())}`)
-      }
-      if (request.filterExpr?.conditions?.field) {
-        queryParams.push(`filterExpr.conditions.field=${encodeURIComponent(request.filterExpr.conditions.field.toString())}`)
-      }
-      if (request.filterExpr?.conditions?.op) {
-        queryParams.push(`filterExpr.conditions.op=${encodeURIComponent(request.filterExpr.conditions.op.toString())}`)
-      }
-      if (request.filterExpr?.conditions?.value) {
-        queryParams.push(`filterExpr.conditions.value=${encodeURIComponent(request.filterExpr.conditions.value.toString())}`)
-      }
-      if (request.filterExpr?.conditions?.values) {
-        request.filterExpr.conditions.values.forEach((x) => {
-          queryParams.push(`filterExpr.conditions.values=${encodeURIComponent(x.toString())}`)
-        })
-      }
-      if (request.fieldMask) {
-        queryParams.push(`fieldMask=${encodeURIComponent(request.fieldMask.toString())}`)
-      }
-      let uri = path;
-      if (queryParams.length > 0) {
-        uri += `?${queryParams.join("&")}`
-      }
-      return handler({
-        path: uri,
-        method: "GET",
-        body,
-      }, {
-        service: "DepartmentService",
-        method: "List",
-      }) as Promise<userservicev1_ListDepartmentResponse>;
-    },
-    Get(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
-      if (!request.id) {
-        throw new Error("missing required field request.id");
-      }
-      const path = `admin/v1/departments/${request.id}`; // eslint-disable-line quotes
-      const body = null;
-      const queryParams: string[] = [];
-      if (request.viewMask) {
-        queryParams.push(`viewMask=${encodeURIComponent(request.viewMask.toString())}`)
-      }
-      let uri = path;
-      if (queryParams.length > 0) {
-        uri += `?${queryParams.join("&")}`
-      }
-      return handler({
-        path: uri,
-        method: "GET",
-        body,
-      }, {
-        service: "DepartmentService",
-        method: "Get",
-      }) as Promise<userservicev1_Department>;
-    },
-    Create(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
-      const path = `admin/v1/departments`; // eslint-disable-line quotes
-      const body = JSON.stringify(request);
-      const queryParams: string[] = [];
-      let uri = path;
-      if (queryParams.length > 0) {
-        uri += `?${queryParams.join("&")}`
-      }
-      return handler({
-        path: uri,
-        method: "POST",
-        body,
-      }, {
-        service: "DepartmentService",
-        method: "Create",
-      }) as Promise<wellKnownEmpty>;
-    },
-    Update(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
-      if (!request.id) {
-        throw new Error("missing required field request.id");
-      }
-      const path = `admin/v1/departments/${request.id}`; // eslint-disable-line quotes
-      const body = JSON.stringify(request);
-      const queryParams: string[] = [];
-      let uri = path;
-      if (queryParams.length > 0) {
-        uri += `?${queryParams.join("&")}`
-      }
-      return handler({
-        path: uri,
-        method: "PUT",
-        body,
-      }, {
-        service: "DepartmentService",
-        method: "Update",
-      }) as Promise<wellKnownEmpty>;
-    },
-    Delete(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
-      if (!request.id) {
-        throw new Error("missing required field request.id");
-      }
-      const path = `admin/v1/departments/${request.id}`; // eslint-disable-line quotes
-      const body = null;
-      const queryParams: string[] = [];
-      let uri = path;
-      if (queryParams.length > 0) {
-        uri += `?${queryParams.join("&")}`
-      }
-      return handler({
-        path: uri,
-        method: "DELETE",
-        body,
-      }, {
-        service: "DepartmentService",
-        method: "Delete",
-      }) as Promise<wellKnownEmpty>;
-    },
-  };
-}
-// 部门列表 - 答复
-export type userservicev1_ListDepartmentResponse = {
-  items: userservicev1_Department[] | undefined;
-  total: number | undefined;
-};
-
-// 部门
-export type userservicev1_Department = {
-  id?: number;
-  name?: string;
-  description?: string;
-  organizationId?: number;
-  organizationName?: string;
-  managerId?: number;
-  managerName?: string;
-  tenantId?: number;
-  sortOrder?: number;
-  status?: userservicev1_Department_Status;
-  remark?: string;
-  parentId?: number;
-  children: userservicev1_Department[] | undefined;
-  createdBy?: number;
-  updatedBy?: number;
-  deletedBy?: number;
-  createdAt?: wellKnownTimestamp;
-  updatedAt?: wellKnownTimestamp;
-  deletedAt?: wellKnownTimestamp;
-};
-
-// 部门状态
-export type userservicev1_Department_Status =
-  | "OFF"
-  | "ON";
-// 部门数据 - 请求
-export type userservicev1_GetDepartmentRequest = {
-  id?: number;
-  viewMask?: wellKnownFieldMask;
-};
-
-// 创建部门 - 请求
-export type userservicev1_CreateDepartmentRequest = {
-  data: userservicev1_Department | undefined;
-};
-
-// 更新部门 - 请求
-export type userservicev1_UpdateDepartmentRequest = {
-  id: number | undefined;
-  data: userservicev1_Department | undefined;
-  updateMask: wellKnownFieldMask | undefined;
-  allowMissing?: boolean;
-};
-
-// 删除部门 - 请求
-export type userservicev1_DeleteDepartmentRequest = {
-  id: number | undefined;
-};
-
 // 数据字典管理服务
 export interface DictService {
   // 分页查询字典类型列表
@@ -3129,26 +2901,26 @@ export function createMenuServiceClient(
     },
   };
 }
-// 组织管理服务
-export interface OrganizationService {
-  // 查询组织列表
-  List(request: pagination_PagingRequest): Promise<userservicev1_ListOrganizationResponse>;
-  // 查询组织详情
-  Get(request: userservicev1_GetOrganizationRequest): Promise<userservicev1_Organization>;
-  // 创建组织
-  Create(request: userservicev1_CreateOrganizationRequest): Promise<wellKnownEmpty>;
-  // 更新组织
-  Update(request: userservicev1_UpdateOrganizationRequest): Promise<wellKnownEmpty>;
-  // 删除组织
-  Delete(request: userservicev1_DeleteOrganizationRequest): Promise<wellKnownEmpty>;
+// 组织单元服务
+export interface OrgUnitService {
+  // 查询组织单元列表
+  List(request: pagination_PagingRequest): Promise<userservicev1_ListOrgUnitResponse>;
+  // 查询组织单元详情
+  Get(request: userservicev1_GetOrgUnitRequest): Promise<userservicev1_OrgUnit>;
+  // 创建组织单元
+  Create(request: userservicev1_CreateOrgUnitRequest): Promise<wellKnownEmpty>;
+  // 更新组织单元
+  Update(request: userservicev1_UpdateOrgUnitRequest): Promise<wellKnownEmpty>;
+  // 删除组织单元
+  Delete(request: userservicev1_DeleteOrgUnitRequest): Promise<wellKnownEmpty>;
 }
 
-export function createOrganizationServiceClient(
+export function createOrgUnitServiceClient(
   handler: RequestHandler
-): OrganizationService {
+): OrgUnitService {
   return {
     List(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
-      const path = `admin/v1/organizations`; // eslint-disable-line quotes
+      const path = `admin/v1/org_units`; // eslint-disable-line quotes
       const body = null;
       const queryParams: string[] = [];
       if (request.page) {
@@ -3215,15 +2987,15 @@ export function createOrganizationServiceClient(
         method: "GET",
         body,
       }, {
-        service: "OrganizationService",
+        service: "OrgUnitService",
         method: "List",
-      }) as Promise<userservicev1_ListOrganizationResponse>;
+      }) as Promise<userservicev1_ListOrgUnitResponse>;
     },
     Get(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
       if (!request.id) {
         throw new Error("missing required field request.id");
       }
-      const path = `admin/v1/organizations/${request.id}`; // eslint-disable-line quotes
+      const path = `admin/v1/org_units/${request.id}`; // eslint-disable-line quotes
       const body = null;
       const queryParams: string[] = [];
       if (request.viewMask) {
@@ -3238,12 +3010,12 @@ export function createOrganizationServiceClient(
         method: "GET",
         body,
       }, {
-        service: "OrganizationService",
+        service: "OrgUnitService",
         method: "Get",
-      }) as Promise<userservicev1_Organization>;
+      }) as Promise<userservicev1_OrgUnit>;
     },
     Create(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
-      const path = `admin/v1/organizations`; // eslint-disable-line quotes
+      const path = `admin/v1/org_units`; // eslint-disable-line quotes
       const body = JSON.stringify(request);
       const queryParams: string[] = [];
       let uri = path;
@@ -3255,7 +3027,7 @@ export function createOrganizationServiceClient(
         method: "POST",
         body,
       }, {
-        service: "OrganizationService",
+        service: "OrgUnitService",
         method: "Create",
       }) as Promise<wellKnownEmpty>;
     },
@@ -3263,7 +3035,7 @@ export function createOrganizationServiceClient(
       if (!request.id) {
         throw new Error("missing required field request.id");
       }
-      const path = `admin/v1/organizations/${request.id}`; // eslint-disable-line quotes
+      const path = `admin/v1/org_units/${request.id}`; // eslint-disable-line quotes
       const body = JSON.stringify(request);
       const queryParams: string[] = [];
       let uri = path;
@@ -3275,7 +3047,7 @@ export function createOrganizationServiceClient(
         method: "PUT",
         body,
       }, {
-        service: "OrganizationService",
+        service: "OrgUnitService",
         method: "Update",
       }) as Promise<wellKnownEmpty>;
     },
@@ -3283,7 +3055,7 @@ export function createOrganizationServiceClient(
       if (!request.id) {
         throw new Error("missing required field request.id");
       }
-      const path = `admin/v1/organizations/${request.id}`; // eslint-disable-line quotes
+      const path = `admin/v1/org_units/${request.id}`; // eslint-disable-line quotes
       const body = null;
       const queryParams: string[] = [];
       let uri = path;
@@ -3295,35 +3067,54 @@ export function createOrganizationServiceClient(
         method: "DELETE",
         body,
       }, {
-        service: "OrganizationService",
+        service: "OrgUnitService",
         method: "Delete",
       }) as Promise<wellKnownEmpty>;
     },
   };
 }
-// 组织列表 - 答复
-export type userservicev1_ListOrganizationResponse = {
-  items: userservicev1_Organization[] | undefined;
+// 获取组织单元列表 - 答复
+export type userservicev1_ListOrgUnitResponse = {
+  items: userservicev1_OrgUnit[] | undefined;
   total: number | undefined;
 };
 
-// 组织
-export type userservicev1_Organization = {
+// 组织单元
+export type userservicev1_OrgUnit = {
   id?: number;
   name?: string;
-  organizationType?: userservicev1_Organization_Type;
-  isLegalEntity?: boolean;
-  businessScope?: string;
-  creditCode?: string;
-  address?: string;
+  code?: string;
+  type?: userservicev1_OrgUnit_Type;
+  path?: string;
+  status?: userservicev1_OrgUnit_Status;
   sortOrder?: number;
-  status?: userservicev1_Organization_Status;
-  remark?: string;
+  leaderId?: number;
+  leaderName?: string;
   tenantId?: number;
-  managerId?: number;
-  managerName?: string;
+  tenantName?: string;
+  remark?: string;
+  description?: string;
+  businessScopes: string[] | undefined;
+  externalId?: string;
+  isLegalEntity?: boolean;
+  registrationNumber?: string;
+  taxId?: string;
+  legalEntityOrgId?: number;
+  address?: string;
+  phone?: string;
+  email?: string;
+  timezone?: string;
+  country?: string;
+  latitude?: number;
+  longitude?: number;
+  startAt?: wellKnownTimestamp;
+  endAt?: wellKnownTimestamp;
+  attributes: { [key: string]: string } | undefined;
+  permissionTags: string[] | undefined;
+  contactUserId?: number;
+  contactUserName?: string;
   parentId?: number;
-  children: userservicev1_Organization[] | undefined;
+  children: userservicev1_OrgUnit[] | undefined;
   createdBy?: number;
   updatedBy?: number;
   deletedBy?: number;
@@ -3332,38 +3123,43 @@ export type userservicev1_Organization = {
   deletedAt?: wellKnownTimestamp;
 };
 
-// 组织类型
-export type userservicev1_Organization_Type =
-  | "ORGANIZATION_TYPE_UNSPECIFIED"
-  | "GROUP"
+// 组织单元类型
+export type userservicev1_OrgUnit_Type =
+  | "COMPANY"
+  | "DIVISION"
+  | "DEPARTMENT"
+  | "TEAM"
+  | "PROJECT"
+  | "COMMITTEE"
+  | "REGION"
   | "SUBSIDIARY"
-  | "FILIALE"
-  | "DIVISION";
-// 组织状态
-export type userservicev1_Organization_Status =
+  | "BRANCH"
+  | "OTHER";
+// 组织单元状态
+export type userservicev1_OrgUnit_Status =
   | "OFF"
   | "ON";
-// 组织数据 - 请求
-export type userservicev1_GetOrganizationRequest = {
+// 获取组织单元数据 - 请求
+export type userservicev1_GetOrgUnitRequest = {
   id?: number;
   viewMask?: wellKnownFieldMask;
 };
 
-// 创建组织 - 请求
-export type userservicev1_CreateOrganizationRequest = {
-  data: userservicev1_Organization | undefined;
+// 创建组织单元 - 请求
+export type userservicev1_CreateOrgUnitRequest = {
+  data: userservicev1_OrgUnit | undefined;
 };
 
-// 更新组织 - 请求
-export type userservicev1_UpdateOrganizationRequest = {
+// 更新组织单元 - 请求
+export type userservicev1_UpdateOrgUnitRequest = {
   id: number | undefined;
-  data: userservicev1_Organization | undefined;
+  data: userservicev1_OrgUnit | undefined;
   updateMask: wellKnownFieldMask | undefined;
   allowMissing?: boolean;
 };
 
-// 删除组织 - 请求
-export type userservicev1_DeleteOrganizationRequest = {
+// 删除组织单元 - 请求
+export type userservicev1_DeleteOrgUnitRequest = {
   id: number | undefined;
 };
 
@@ -3464,6 +3260,243 @@ export type fileservicev1_UploadOssFileResponse = {
   url: string | undefined;
 };
 
+// 权限
+export type Permission = {
+  id?: number;
+  code?: string;
+  name?: string;
+  path?: string;
+  resource?: string;
+  method?: string;
+  sortOrder?: number;
+  type?: Permission_Type;
+  remark?: string;
+  status?: Permission_Status;
+  tenantId?: number;
+  parentId?: number;
+  children: Permission[] | undefined;
+  createdBy?: number;
+  updatedBy?: number;
+  deletedBy?: number;
+  createdAt?: wellKnownTimestamp;
+  updatedAt?: wellKnownTimestamp;
+  deletedAt?: wellKnownTimestamp;
+};
+
+// 权限类型
+export type Permission_Type =
+  | "API"
+  | "DATA"
+  | "MENU"
+  | "BUTTON"
+  | "PAGE"
+  | "OTHER";
+// 权限状态
+export type Permission_Status =
+  | "OFF"
+  | "ON";
+// 查询列表 - 回应
+export type ListPermissionResponse = {
+  items: Permission[] | undefined;
+  total: number | undefined;
+};
+
+// 查询 - 请求
+export type GetPermissionRequest = {
+  id?: number;
+  viewMask?: wellKnownFieldMask;
+};
+
+// 创建 - 请求
+export type CreatePermissionRequest = {
+  data: Permission | undefined;
+};
+
+// 更新 - 请求
+export type UpdatePermissionRequest = {
+  id: number | undefined;
+  data: Permission | undefined;
+  updateMask: wellKnownFieldMask | undefined;
+  allowMissing?: boolean;
+};
+
+// 删除 - 请求
+export type DeletePermissionRequest = {
+  id: number | undefined;
+};
+
+// 权限管理服务
+export interface PermissionService {
+  // 查询权限列表
+  List(request: pagination_PagingRequest): Promise<ListPermissionResponse>;
+  // 查询权限详情
+  Get(request: GetPermissionRequest): Promise<Permission>;
+  // 创建权限
+  Create(request: CreatePermissionRequest): Promise<wellKnownEmpty>;
+  // 更新权限
+  Update(request: UpdatePermissionRequest): Promise<wellKnownEmpty>;
+  // 删除权限
+  Delete(request: DeletePermissionRequest): Promise<wellKnownEmpty>;
+}
+
+export function createPermissionServiceClient(
+  handler: RequestHandler
+): PermissionService {
+  return {
+    List(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      const path = `admin/v1/permissions`; // eslint-disable-line quotes
+      const body = null;
+      const queryParams: string[] = [];
+      if (request.page) {
+        queryParams.push(`page=${encodeURIComponent(request.page.toString())}`)
+      }
+      if (request.pageSize) {
+        queryParams.push(`pageSize=${encodeURIComponent(request.pageSize.toString())}`)
+      }
+      if (request.offset) {
+        queryParams.push(`offset=${encodeURIComponent(request.offset.toString())}`)
+      }
+      if (request.limit) {
+        queryParams.push(`limit=${encodeURIComponent(request.limit.toString())}`)
+      }
+      if (request.token) {
+        queryParams.push(`token=${encodeURIComponent(request.token.toString())}`)
+      }
+      if (request.noPaging) {
+        queryParams.push(`noPaging=${encodeURIComponent(request.noPaging.toString())}`)
+      }
+      if (request.orderBy) {
+        request.orderBy.forEach((x) => {
+          queryParams.push(`orderBy=${encodeURIComponent(x.toString())}`)
+        })
+      }
+      if (request.sorting?.field) {
+        queryParams.push(`sorting.field=${encodeURIComponent(request.sorting.field.toString())}`)
+      }
+      if (request.sorting?.order) {
+        queryParams.push(`sorting.order=${encodeURIComponent(request.sorting.order.toString())}`)
+      }
+      if (request.query) {
+        queryParams.push(`query=${encodeURIComponent(request.query.toString())}`)
+      }
+      if (request.or) {
+        queryParams.push(`or=${encodeURIComponent(request.or.toString())}`)
+      }
+      if (request.filterExpr?.type) {
+        queryParams.push(`filterExpr.type=${encodeURIComponent(request.filterExpr.type.toString())}`)
+      }
+      if (request.filterExpr?.conditions?.field) {
+        queryParams.push(`filterExpr.conditions.field=${encodeURIComponent(request.filterExpr.conditions.field.toString())}`)
+      }
+      if (request.filterExpr?.conditions?.op) {
+        queryParams.push(`filterExpr.conditions.op=${encodeURIComponent(request.filterExpr.conditions.op.toString())}`)
+      }
+      if (request.filterExpr?.conditions?.value) {
+        queryParams.push(`filterExpr.conditions.value=${encodeURIComponent(request.filterExpr.conditions.value.toString())}`)
+      }
+      if (request.filterExpr?.conditions?.values) {
+        request.filterExpr.conditions.values.forEach((x) => {
+          queryParams.push(`filterExpr.conditions.values=${encodeURIComponent(x.toString())}`)
+        })
+      }
+      if (request.fieldMask) {
+        queryParams.push(`fieldMask=${encodeURIComponent(request.fieldMask.toString())}`)
+      }
+      let uri = path;
+      if (queryParams.length > 0) {
+        uri += `?${queryParams.join("&")}`
+      }
+      return handler({
+        path: uri,
+        method: "GET",
+        body,
+      }, {
+        service: "PermissionService",
+        method: "List",
+      }) as Promise<ListPermissionResponse>;
+    },
+    Get(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      if (!request.id) {
+        throw new Error("missing required field request.id");
+      }
+      const path = `admin/v1/permissions/${request.id}`; // eslint-disable-line quotes
+      const body = null;
+      const queryParams: string[] = [];
+      if (request.viewMask) {
+        queryParams.push(`viewMask=${encodeURIComponent(request.viewMask.toString())}`)
+      }
+      let uri = path;
+      if (queryParams.length > 0) {
+        uri += `?${queryParams.join("&")}`
+      }
+      return handler({
+        path: uri,
+        method: "GET",
+        body,
+      }, {
+        service: "PermissionService",
+        method: "Get",
+      }) as Promise<Permission>;
+    },
+    Create(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      const path = `admin/v1/permissions`; // eslint-disable-line quotes
+      const body = JSON.stringify(request);
+      const queryParams: string[] = [];
+      let uri = path;
+      if (queryParams.length > 0) {
+        uri += `?${queryParams.join("&")}`
+      }
+      return handler({
+        path: uri,
+        method: "POST",
+        body,
+      }, {
+        service: "PermissionService",
+        method: "Create",
+      }) as Promise<wellKnownEmpty>;
+    },
+    Update(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      if (!request.id) {
+        throw new Error("missing required field request.id");
+      }
+      const path = `admin/v1/permissions/${request.id}`; // eslint-disable-line quotes
+      const body = JSON.stringify(request);
+      const queryParams: string[] = [];
+      let uri = path;
+      if (queryParams.length > 0) {
+        uri += `?${queryParams.join("&")}`
+      }
+      return handler({
+        path: uri,
+        method: "PUT",
+        body,
+      }, {
+        service: "PermissionService",
+        method: "Update",
+      }) as Promise<wellKnownEmpty>;
+    },
+    Delete(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      if (!request.id) {
+        throw new Error("missing required field request.id");
+      }
+      const path = `admin/v1/permissions/${request.id}`; // eslint-disable-line quotes
+      const body = null;
+      const queryParams: string[] = [];
+      let uri = path;
+      if (queryParams.length > 0) {
+        uri += `?${queryParams.join("&")}`
+      }
+      return handler({
+        path: uri,
+        method: "DELETE",
+        body,
+      }, {
+        service: "PermissionService",
+        method: "Delete",
+      }) as Promise<wellKnownEmpty>;
+    },
+  };
+}
 // 职位管理服务
 export interface PositionService {
   // 查询职位列表
@@ -3647,16 +3680,24 @@ export type userservicev1_Position = {
   id?: number;
   name?: string;
   code?: string;
-  quota?: number;
+  headcount?: number;
   sortOrder?: number;
   status?: userservicev1_Position_Status;
+  type?: userservicev1_Position_Type;
   remark?: string;
   description?: string;
-  organizationId?: number;
-  organizationName?: string;
-  departmentId?: number;
-  departmentName?: string;
+  jobFamily?: string;
+  jobGrade?: string;
+  level?: number;
+  isKeyPosition?: boolean;
   tenantId?: number;
+  tenantName?: string;
+  orgUnitId?: number;
+  orgUnitName?: string;
+  reportsToPositionId?: number;
+  reportsToPositionName?: string;
+  startAt?: wellKnownTimestamp;
+  endAt?: wellKnownTimestamp;
   parentId?: number;
   children: userservicev1_Position[] | undefined;
   createdBy?: number;
@@ -3671,6 +3712,14 @@ export type userservicev1_Position = {
 export type userservicev1_Position_Status =
   | "OFF"
   | "ON";
+// 职位类型
+export type userservicev1_Position_Type =
+  | "REGULAR"
+  | "LEADER"
+  | "MANAGER"
+  | "INTERN"
+  | "CONTRACT"
+  | "OTHER";
 // 获取职位数据 - 请求
 export type userservicev1_GetPositionRequest = {
   id?: number;
@@ -3877,13 +3926,16 @@ export type userservicev1_ListRoleResponse = {
 export type userservicev1_Role = {
   id?: number;
   name?: string;
-  sortOrder?: number;
   code?: string;
+  sortOrder?: number;
   status?: userservicev1_Role_Status;
+  type?: userservicev1_Role_Type;
+  dataScope?: userservicev1_Role_DataScope;
   remark?: string;
+  customOrgUnitIds: number[] | undefined;
+  permissions: string[] | undefined;
   menus: number[] | undefined;
   apis: number[] | undefined;
-  dataScope?: userservicev1_Role_DataScope;
   tenantId?: number;
   tenantName?: string;
   parentId?: number;
@@ -3900,16 +3952,18 @@ export type userservicev1_Role = {
 export type userservicev1_Role_Status =
   | "OFF"
   | "ON";
+// 角色类型
+export type userservicev1_Role_Type =
+  | "SYSTEM"
+  | "CUSTOM";
 // 数据权限范围
 export type userservicev1_Role_DataScope =
   | "DATA_SCOPE_UNSPECIFIED"
   | "ALL"
-  | "CUSTOM"
   | "SELF"
-  | "ORG"
-  | "ORG_AND_CHILD"
-  | "DEPT"
-  | "DEPT_AND_CHILD";
+  | "UNIT_ONLY"
+  | "UNIT_AND_CHILD"
+  | "SELECTED_UNITS";
 // 角色数据 - 请求
 export type userservicev1_GetRoleRequest = {
   id?: number;
@@ -4351,7 +4405,7 @@ export type userservicev1_Tenant = {
   expiredAt?: wellKnownTimestamp;
   subscriptionPlan?: string;
   memberCount?: number;
-  lastLoginTime?: wellKnownTimestamp;
+  lastLoginAt?: wellKnownTimestamp;
   lastLoginIp?: string;
   parentId?: number;
   children: userservicev1_Tenant[] | undefined;
@@ -4388,14 +4442,13 @@ export type userservicev1_User = {
   id?: number;
   tenantId?: number;
   tenantName?: string;
-  orgId?: number;
-  orgName?: string;
-  departmentId?: number;
-  departmentName?: string;
+  orgUnitId?: number;
+  orgUnitIds: number[] | undefined;
+  orgUnitName?: string;
   positionId?: number;
+  positionIds: number[] | undefined;
   positionName?: string;
-  workId?: number;
-  // optional uint32 role_id = 11 [json_name = "roleId", (gnostic.openapi.v3.property) = {description: "角色ID"}];  // 角色ID
+  roleId?: number;
   roleIds: number[] | undefined;
   roles: string[] | undefined;
   roleNames: string[] | undefined;
@@ -4411,10 +4464,8 @@ export type userservicev1_User = {
   region?: string;
   description?: string;
   remark?: string;
-  lastLoginTime?: wellKnownTimestamp;
+  lastLoginAt?: wellKnownTimestamp;
   lastLoginIp?: string;
-  status?: userservicev1_User_Status;
-  authority?: userservicev1_User_Authority;
   createdBy?: number;
   updatedBy?: number;
   deletedBy?: number;
@@ -4428,16 +4479,6 @@ export type userservicev1_User_Gender =
   | "SECRET"
   | "MALE"
   | "FEMALE";
-// 用户状态
-export type userservicev1_User_Status =
-  | "OFF"
-  | "ON";
-// 用户权限
-export type userservicev1_User_Authority =
-  | "GUEST"
-  | "CUSTOMER_USER"
-  | "TENANT_ADMIN"
-  | "SYS_ADMIN";
 // 租户管理服务
 export interface TenantService {
   // 获取租户列表

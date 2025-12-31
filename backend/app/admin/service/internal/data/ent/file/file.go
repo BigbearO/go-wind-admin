@@ -97,6 +97,9 @@ var (
 // Provider defines the type for the "provider" enum field.
 type Provider string
 
+// ProviderMinIO is the default value of the Provider enum.
+const DefaultProvider = ProviderMinIO
+
 // Provider values.
 const (
 	ProviderUnknown Provider = "UNKNOWN"

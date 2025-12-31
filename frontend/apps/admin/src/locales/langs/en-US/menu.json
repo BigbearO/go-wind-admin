@@ -17,8 +17,7 @@
     "position": "Position Management",
     "user": "User Management",
     "userDetail": "User Detail",
-    "org": "Organization Management",
-    "dept": "Department Management"
+    "orgUnit": "Organization Unit Management"
   },
   "tenant": {
     "moduleName": "Tenant Management",

@@ -27,11 +27,11 @@ type RoleService struct {
 
 	roleRepo *data.RoleRepo
 
-	roleApiRepo      *data.RoleApiRepo
-	roleMenuRepo     *data.RoleMenuRepo
-	roleOrgRepo      *data.RoleOrgRepo
-	roleDeptRepo     *data.RoleDeptRepo
-	rolePositionRepo *data.RolePositionRepo
+	roleApiRepo  *data.RoleApiRepo
+	roleMenuRepo *data.RoleMenuRepo
+
+	membershipOrgUnitRepo *data.MembershipOrgUnitRepo
+	membershipRepo        *data.MembershipRepo
 }
 
 func NewRoleService(
@@ -40,19 +40,17 @@ func NewRoleService(
 	roleRepo *data.RoleRepo,
 	roleApiRepo *data.RoleApiRepo,
 	roleMenuRepo *data.RoleMenuRepo,
-	roleOrgRepo *data.RoleOrgRepo,
-	roleDeptRepo *data.RoleDeptRepo,
-	rolePositionRepo *data.RolePositionRepo,
+	membershipOrgUnitRepo *data.MembershipOrgUnitRepo,
+	membershipRepo *data.MembershipRepo,
 ) *RoleService {
 	svc := &RoleService{
-		log:              ctx.NewLoggerHelper("role/service/admin-service"),
-		authorizer:       authorizer,
-		roleRepo:         roleRepo,
-		roleApiRepo:      roleApiRepo,
-		roleMenuRepo:     roleMenuRepo,
-		roleOrgRepo:      roleOrgRepo,
-		roleDeptRepo:     roleDeptRepo,
-		rolePositionRepo: rolePositionRepo,
+		log:                   ctx.NewLoggerHelper("role/service/admin-service"),
+		authorizer:            authorizer,
+		roleRepo:              roleRepo,
+		roleApiRepo:           roleApiRepo,
+		roleMenuRepo:          roleMenuRepo,
+		membershipOrgUnitRepo: membershipOrgUnitRepo,
+		membershipRepo:        membershipRepo,
 	}
 
 	svc.init()

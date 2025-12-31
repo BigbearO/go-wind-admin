@@ -101,29 +101,7 @@ func (User) Fields() []ent.Field {
 			Optional().
 			Nillable(),
 
-		field.Enum("authority").
-			Comment("授权").
-			Nillable().
-			Immutable().
-			NamedValues(
-				"SysAdmin", "SYS_ADMIN",
-				"TenantAdmin", "TENANT_ADMIN",
-				"CustomerUser", "CUSTOMER_USER",
-				"Guest", "GUEST",
-			).
-			Default("CUSTOMER_USER"),
-
-		field.Enum("status").
-			Comment("用户状态").
-			NamedValues(
-				"On", "ON",
-				"Off", "OFF",
-			).
-			Default("ON").
-			Optional().
-			Nillable(),
-
-		field.Time("last_login_time").
+		field.Time("last_login_at").
 			Comment("最后一次登录的时间").
 			Optional().
 			Nillable(),
@@ -133,33 +111,9 @@ func (User) Fields() []ent.Field {
 			Optional().
 			Nillable(),
 
-		field.Uint32("org_id").
-			Comment("组织ID").
-			Optional().
-			Nillable(),
-
-		field.Uint32("department_id").
-			Comment("部门ID").
-			Optional().
-			Nillable(),
-
-		field.Uint32("position_id").
-			Comment("职位ID").
-			Optional().
-			Nillable(),
-
-		field.Uint32("work_id").
-			Comment("员工工号").
-			Optional().
-			Nillable(),
-
-		//field.Uint32("role_id").
-		//	Comment("角色ID").
-		//	Optional().
-		//	Nillable(),
-
-		field.Ints("role_ids").
-			Comment("角色ID列表").
+		field.Bool("is_banned").
+			Comment("是否被禁用").
+			Default(false).
 			Optional(),
 	}
 }

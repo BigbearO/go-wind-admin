@@ -161,7 +161,7 @@ func (x *Tenant) Redact() string {
 
 	// Safe field: MemberCount
 
-	// Safe field: LastLoginTime
+	// Safe field: LastLoginAt
 
 	// Safe field: LastLoginIp
 

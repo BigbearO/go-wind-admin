@@ -38,20 +38,34 @@ type Position struct {
 	ParentID *uint32 `json:"parent_id,omitempty"`
 	// 租户ID
 	TenantID *uint32 `json:"tenant_id,omitempty"`
+	// 状态
+	Status *position.Status `json:"status,omitempty"`
 	// 职位名称
 	Name *string `json:"name,omitempty"`
 	// 唯一编码
 	Code *string `json:"code,omitempty"`
-	// 所属组织ID
-	OrganizationID *uint32 `json:"organization_id,omitempty"`
-	// 所属部门ID
-	DepartmentID *uint32 `json:"department_id,omitempty"`
-	// 职位状态
-	Status *position.Status `json:"status,omitempty"`
-	// 职能描述
+	// 所属组织单元ID
+	OrgUnitID *uint32 `json:"org_unit_id,omitempty"`
+	// 汇报关系
+	ReportsToPositionID *uint32 `json:"reports_to_position_id,omitempty"`
+	// 职位描述
 	Description *string `json:"description,omitempty"`
+	// 职类/序列
+	JobFamily *string `json:"job_family,omitempty"`
+	// 职级
+	JobGrade *string `json:"job_grade,omitempty"`
+	// 数值化职级
+	Level *int32 `json:"level,omitempty"`
 	// 编制人数
-	Quota *uint32 `json:"quota,omitempty"`
+	Headcount *uint32 `json:"headcount,omitempty"`
+	// 是否关键岗位
+	IsKeyPosition *bool `json:"is_key_position,omitempty"`
+	// 岗位类型
+	Type position.Type `json:"type,omitempty"`
+	// 生效时间（UTC）
+	StartAt *time.Time `json:"start_at,omitempty"`
+	// 结束有效期（UTC）
+	EndAt *time.Time `json:"end_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PositionQuery when eager-loading is set.
 	Edges        PositionEdges `json:"edges"`
@@ -94,11 +108,13 @@ func (*Position) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case position.FieldID, position.FieldCreatedBy, position.FieldUpdatedBy, position.FieldDeletedBy, position.FieldSortOrder, position.FieldParentID, position.FieldTenantID, position.FieldOrganizationID, position.FieldDepartmentID, position.FieldQuota:
+		case position.FieldIsKeyPosition:
+			values[i] = new(sql.NullBool)
+		case position.FieldID, position.FieldCreatedBy, position.FieldUpdatedBy, position.FieldDeletedBy, position.FieldSortOrder, position.FieldParentID, position.FieldTenantID, position.FieldOrgUnitID, position.FieldReportsToPositionID, position.FieldLevel, position.FieldHeadcount:
 			values[i] = new(sql.NullInt64)
-		case position.FieldRemark, position.FieldName, position.FieldCode, position.FieldStatus, position.FieldDescription:
+		case position.FieldRemark, position.FieldStatus, position.FieldName, position.FieldCode, position.FieldDescription, position.FieldJobFamily, position.FieldJobGrade, position.FieldType:
 			values[i] = new(sql.NullString)
-		case position.FieldCreatedAt, position.FieldUpdatedAt, position.FieldDeletedAt:
+		case position.FieldCreatedAt, position.FieldUpdatedAt, position.FieldDeletedAt, position.FieldStartAt, position.FieldEndAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -191,6 +207,13 @@ func (_m *Position) assignValues(columns []string, values []any) error {
 				_m.TenantID = new(uint32)
 				*_m.TenantID = uint32(value.Int64)
 			}
+		case position.FieldStatus:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field status", values[i])
+			} else if value.Valid {
+				_m.Status = new(position.Status)
+				*_m.Status = position.Status(value.String)
+			}
 		case position.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
@@ -205,26 +228,19 @@ func (_m *Position) assignValues(columns []string, values []any) error {
 				_m.Code = new(string)
 				*_m.Code = value.String
 			}
-		case position.FieldOrganizationID:
+		case position.FieldOrgUnitID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field organization_id", values[i])
+				return fmt.Errorf("unexpected type %T for field org_unit_id", values[i])
 			} else if value.Valid {
-				_m.OrganizationID = new(uint32)
-				*_m.OrganizationID = uint32(value.Int64)
+				_m.OrgUnitID = new(uint32)
+				*_m.OrgUnitID = uint32(value.Int64)
 			}
-		case position.FieldDepartmentID:
+		case position.FieldReportsToPositionID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field department_id", values[i])
+				return fmt.Errorf("unexpected type %T for field reports_to_position_id", values[i])
 			} else if value.Valid {
-				_m.DepartmentID = new(uint32)
-				*_m.DepartmentID = uint32(value.Int64)
-			}
-		case position.FieldStatus:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field status", values[i])
-			} else if value.Valid {
-				_m.Status = new(position.Status)
-				*_m.Status = position.Status(value.String)
+				_m.ReportsToPositionID = new(uint32)
+				*_m.ReportsToPositionID = uint32(value.Int64)
 			}
 		case position.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -233,12 +249,60 @@ func (_m *Position) assignValues(columns []string, values []any) error {
 				_m.Description = new(string)
 				*_m.Description = value.String
 			}
-		case position.FieldQuota:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field quota", values[i])
+		case position.FieldJobFamily:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field job_family", values[i])
 			} else if value.Valid {
-				_m.Quota = new(uint32)
-				*_m.Quota = uint32(value.Int64)
+				_m.JobFamily = new(string)
+				*_m.JobFamily = value.String
+			}
+		case position.FieldJobGrade:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field job_grade", values[i])
+			} else if value.Valid {
+				_m.JobGrade = new(string)
+				*_m.JobGrade = value.String
+			}
+		case position.FieldLevel:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field level", values[i])
+			} else if value.Valid {
+				_m.Level = new(int32)
+				*_m.Level = int32(value.Int64)
+			}
+		case position.FieldHeadcount:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field headcount", values[i])
+			} else if value.Valid {
+				_m.Headcount = new(uint32)
+				*_m.Headcount = uint32(value.Int64)
+			}
+		case position.FieldIsKeyPosition:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_key_position", values[i])
+			} else if value.Valid {
+				_m.IsKeyPosition = new(bool)
+				*_m.IsKeyPosition = value.Bool
+			}
+		case position.FieldType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field type", values[i])
+			} else if value.Valid {
+				_m.Type = position.Type(value.String)
+			}
+		case position.FieldStartAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field start_at", values[i])
+			} else if value.Valid {
+				_m.StartAt = new(time.Time)
+				*_m.StartAt = value.Time
+			}
+		case position.FieldEndAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field end_at", values[i])
+			} else if value.Valid {
+				_m.EndAt = new(time.Time)
+				*_m.EndAt = value.Time
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -336,6 +400,11 @@ func (_m *Position) String() string {
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
+	if v := _m.Status; v != nil {
+		builder.WriteString("status=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
 	if v := _m.Name; v != nil {
 		builder.WriteString("name=")
 		builder.WriteString(*v)
@@ -346,18 +415,13 @@ func (_m *Position) String() string {
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	if v := _m.OrganizationID; v != nil {
-		builder.WriteString("organization_id=")
+	if v := _m.OrgUnitID; v != nil {
+		builder.WriteString("org_unit_id=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
-	if v := _m.DepartmentID; v != nil {
-		builder.WriteString("department_id=")
-		builder.WriteString(fmt.Sprintf("%v", *v))
-	}
-	builder.WriteString(", ")
-	if v := _m.Status; v != nil {
-		builder.WriteString("status=")
+	if v := _m.ReportsToPositionID; v != nil {
+		builder.WriteString("reports_to_position_id=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
@@ -366,9 +430,42 @@ func (_m *Position) String() string {
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	if v := _m.Quota; v != nil {
-		builder.WriteString("quota=")
+	if v := _m.JobFamily; v != nil {
+		builder.WriteString("job_family=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.JobGrade; v != nil {
+		builder.WriteString("job_grade=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.Level; v != nil {
+		builder.WriteString("level=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	if v := _m.Headcount; v != nil {
+		builder.WriteString("headcount=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	if v := _m.IsKeyPosition; v != nil {
+		builder.WriteString("is_key_position=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	builder.WriteString("type=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Type))
+	builder.WriteString(", ")
+	if v := _m.StartAt; v != nil {
+		builder.WriteString("start_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	if v := _m.EndAt; v != nil {
+		builder.WriteString("end_at=")
+		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteByte(')')
 	return builder.String()

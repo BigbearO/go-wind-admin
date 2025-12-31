@@ -20,8 +20,6 @@ type Tx struct {
 	AdminOperationLog *AdminOperationLogClient
 	// ApiResource is the client for interacting with the ApiResource builders.
 	ApiResource *ApiResourceClient
-	// Department is the client for interacting with the Department builders.
-	Department *DepartmentClient
 	// DictEntry is the client for interacting with the DictEntry builders.
 	DictEntry *DictEntryClient
 	// DictType is the client for interacting with the DictType builders.
@@ -36,24 +34,28 @@ type Tx struct {
 	InternalMessageRecipient *InternalMessageRecipientClient
 	// Language is the client for interacting with the Language builders.
 	Language *LanguageClient
+	// Membership is the client for interacting with the Membership builders.
+	Membership *MembershipClient
+	// MembershipOrgUnit is the client for interacting with the MembershipOrgUnit builders.
+	MembershipOrgUnit *MembershipOrgUnitClient
+	// MembershipPosition is the client for interacting with the MembershipPosition builders.
+	MembershipPosition *MembershipPositionClient
+	// MembershipRole is the client for interacting with the MembershipRole builders.
+	MembershipRole *MembershipRoleClient
 	// Menu is the client for interacting with the Menu builders.
 	Menu *MenuClient
-	// Organization is the client for interacting with the Organization builders.
-	Organization *OrganizationClient
+	// OrgUnit is the client for interacting with the OrgUnit builders.
+	OrgUnit *OrgUnitClient
+	// Permission is the client for interacting with the Permission builders.
+	Permission *PermissionClient
 	// Position is the client for interacting with the Position builders.
 	Position *PositionClient
 	// Role is the client for interacting with the Role builders.
 	Role *RoleClient
 	// RoleApi is the client for interacting with the RoleApi builders.
 	RoleApi *RoleApiClient
-	// RoleDept is the client for interacting with the RoleDept builders.
-	RoleDept *RoleDeptClient
 	// RoleMenu is the client for interacting with the RoleMenu builders.
 	RoleMenu *RoleMenuClient
-	// RoleOrg is the client for interacting with the RoleOrg builders.
-	RoleOrg *RoleOrgClient
-	// RolePosition is the client for interacting with the RolePosition builders.
-	RolePosition *RolePositionClient
 	// Task is the client for interacting with the Task builders.
 	Task *TaskClient
 	// Tenant is the client for interacting with the Tenant builders.
@@ -62,10 +64,6 @@ type Tx struct {
 	User *UserClient
 	// UserCredential is the client for interacting with the UserCredential builders.
 	UserCredential *UserCredentialClient
-	// UserPosition is the client for interacting with the UserPosition builders.
-	UserPosition *UserPositionClient
-	// UserRole is the client for interacting with the UserRole builders.
-	UserRole *UserRoleClient
 
 	// lazily loaded.
 	client     *Client
@@ -201,7 +199,6 @@ func (tx *Tx) init() {
 	tx.AdminLoginRestriction = NewAdminLoginRestrictionClient(tx.config)
 	tx.AdminOperationLog = NewAdminOperationLogClient(tx.config)
 	tx.ApiResource = NewApiResourceClient(tx.config)
-	tx.Department = NewDepartmentClient(tx.config)
 	tx.DictEntry = NewDictEntryClient(tx.config)
 	tx.DictType = NewDictTypeClient(tx.config)
 	tx.File = NewFileClient(tx.config)
@@ -209,21 +206,21 @@ func (tx *Tx) init() {
 	tx.InternalMessageCategory = NewInternalMessageCategoryClient(tx.config)
 	tx.InternalMessageRecipient = NewInternalMessageRecipientClient(tx.config)
 	tx.Language = NewLanguageClient(tx.config)
+	tx.Membership = NewMembershipClient(tx.config)
+	tx.MembershipOrgUnit = NewMembershipOrgUnitClient(tx.config)
+	tx.MembershipPosition = NewMembershipPositionClient(tx.config)
+	tx.MembershipRole = NewMembershipRoleClient(tx.config)
 	tx.Menu = NewMenuClient(tx.config)
-	tx.Organization = NewOrganizationClient(tx.config)
+	tx.OrgUnit = NewOrgUnitClient(tx.config)
+	tx.Permission = NewPermissionClient(tx.config)
 	tx.Position = NewPositionClient(tx.config)
 	tx.Role = NewRoleClient(tx.config)
 	tx.RoleApi = NewRoleApiClient(tx.config)
-	tx.RoleDept = NewRoleDeptClient(tx.config)
 	tx.RoleMenu = NewRoleMenuClient(tx.config)
-	tx.RoleOrg = NewRoleOrgClient(tx.config)
-	tx.RolePosition = NewRolePositionClient(tx.config)
 	tx.Task = NewTaskClient(tx.config)
 	tx.Tenant = NewTenantClient(tx.config)
 	tx.User = NewUserClient(tx.config)
 	tx.UserCredential = NewUserCredentialClient(tx.config)
-	tx.UserPosition = NewUserPositionClient(tx.config)
-	tx.UserRole = NewUserRoleClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.

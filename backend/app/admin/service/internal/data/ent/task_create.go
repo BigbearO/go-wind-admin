@@ -256,6 +256,10 @@ func (_c *TaskCreate) defaults() {
 		v := task.DefaultType
 		_c.mutation.SetType(v)
 	}
+	if _, ok := _c.mutation.Enable(); !ok {
+		v := task.DefaultEnable
+		_c.mutation.SetEnable(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.

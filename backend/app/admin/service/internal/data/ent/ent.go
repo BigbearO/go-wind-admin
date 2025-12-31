@@ -10,7 +10,6 @@ import (
 	"go-wind-admin/app/admin/service/internal/data/ent/adminloginrestriction"
 	"go-wind-admin/app/admin/service/internal/data/ent/adminoperationlog"
 	"go-wind-admin/app/admin/service/internal/data/ent/apiresource"
-	"go-wind-admin/app/admin/service/internal/data/ent/department"
 	"go-wind-admin/app/admin/service/internal/data/ent/dictentry"
 	"go-wind-admin/app/admin/service/internal/data/ent/dicttype"
 	"go-wind-admin/app/admin/service/internal/data/ent/file"
@@ -18,21 +17,21 @@ import (
 	"go-wind-admin/app/admin/service/internal/data/ent/internalmessagecategory"
 	"go-wind-admin/app/admin/service/internal/data/ent/internalmessagerecipient"
 	"go-wind-admin/app/admin/service/internal/data/ent/language"
+	"go-wind-admin/app/admin/service/internal/data/ent/membership"
+	"go-wind-admin/app/admin/service/internal/data/ent/membershiporgunit"
+	"go-wind-admin/app/admin/service/internal/data/ent/membershipposition"
+	"go-wind-admin/app/admin/service/internal/data/ent/membershiprole"
 	"go-wind-admin/app/admin/service/internal/data/ent/menu"
-	"go-wind-admin/app/admin/service/internal/data/ent/organization"
+	"go-wind-admin/app/admin/service/internal/data/ent/orgunit"
+	"go-wind-admin/app/admin/service/internal/data/ent/permission"
 	"go-wind-admin/app/admin/service/internal/data/ent/position"
 	"go-wind-admin/app/admin/service/internal/data/ent/role"
 	"go-wind-admin/app/admin/service/internal/data/ent/roleapi"
-	"go-wind-admin/app/admin/service/internal/data/ent/roledept"
 	"go-wind-admin/app/admin/service/internal/data/ent/rolemenu"
-	"go-wind-admin/app/admin/service/internal/data/ent/roleorg"
-	"go-wind-admin/app/admin/service/internal/data/ent/roleposition"
 	"go-wind-admin/app/admin/service/internal/data/ent/task"
 	"go-wind-admin/app/admin/service/internal/data/ent/tenant"
 	"go-wind-admin/app/admin/service/internal/data/ent/user"
 	"go-wind-admin/app/admin/service/internal/data/ent/usercredential"
-	"go-wind-admin/app/admin/service/internal/data/ent/userposition"
-	"go-wind-admin/app/admin/service/internal/data/ent/userrole"
 	"reflect"
 	"sync"
 
@@ -103,7 +102,6 @@ func checkColumn(t, c string) error {
 			adminloginrestriction.Table:    adminloginrestriction.ValidColumn,
 			adminoperationlog.Table:        adminoperationlog.ValidColumn,
 			apiresource.Table:              apiresource.ValidColumn,
-			department.Table:               department.ValidColumn,
 			dictentry.Table:                dictentry.ValidColumn,
 			dicttype.Table:                 dicttype.ValidColumn,
 			file.Table:                     file.ValidColumn,
@@ -111,21 +109,21 @@ func checkColumn(t, c string) error {
 			internalmessagecategory.Table:  internalmessagecategory.ValidColumn,
 			internalmessagerecipient.Table: internalmessagerecipient.ValidColumn,
 			language.Table:                 language.ValidColumn,
+			membership.Table:               membership.ValidColumn,
+			membershiporgunit.Table:        membershiporgunit.ValidColumn,
+			membershipposition.Table:       membershipposition.ValidColumn,
+			membershiprole.Table:           membershiprole.ValidColumn,
 			menu.Table:                     menu.ValidColumn,
-			organization.Table:             organization.ValidColumn,
+			orgunit.Table:                  orgunit.ValidColumn,
+			permission.Table:               permission.ValidColumn,
 			position.Table:                 position.ValidColumn,
 			role.Table:                     role.ValidColumn,
 			roleapi.Table:                  roleapi.ValidColumn,
-			roledept.Table:                 roledept.ValidColumn,
 			rolemenu.Table:                 rolemenu.ValidColumn,
-			roleorg.Table:                  roleorg.ValidColumn,
-			roleposition.Table:             roleposition.ValidColumn,
 			task.Table:                     task.ValidColumn,
 			tenant.Table:                   tenant.ValidColumn,
 			user.Table:                     user.ValidColumn,
 			usercredential.Table:           usercredential.ValidColumn,
-			userposition.Table:             userposition.ValidColumn,
-			userrole.Table:                 userrole.ValidColumn,
 		})
 	})
 	return columnCheck(t, c)

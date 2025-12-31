@@ -56,18 +56,6 @@ func (f ApiResourceFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value,
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ApiResourceMutation", m)
 }
 
-// The DepartmentFunc type is an adapter to allow the use of ordinary
-// function as Department mutator.
-type DepartmentFunc func(context.Context, *ent.DepartmentMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f DepartmentFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.DepartmentMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.DepartmentMutation", m)
-}
-
 // The DictEntryFunc type is an adapter to allow the use of ordinary
 // function as DictEntry mutator.
 type DictEntryFunc func(context.Context, *ent.DictEntryMutation) (ent.Value, error)
@@ -152,6 +140,54 @@ func (f LanguageFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, er
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.LanguageMutation", m)
 }
 
+// The MembershipFunc type is an adapter to allow the use of ordinary
+// function as Membership mutator.
+type MembershipFunc func(context.Context, *ent.MembershipMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f MembershipFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.MembershipMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MembershipMutation", m)
+}
+
+// The MembershipOrgUnitFunc type is an adapter to allow the use of ordinary
+// function as MembershipOrgUnit mutator.
+type MembershipOrgUnitFunc func(context.Context, *ent.MembershipOrgUnitMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f MembershipOrgUnitFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.MembershipOrgUnitMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MembershipOrgUnitMutation", m)
+}
+
+// The MembershipPositionFunc type is an adapter to allow the use of ordinary
+// function as MembershipPosition mutator.
+type MembershipPositionFunc func(context.Context, *ent.MembershipPositionMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f MembershipPositionFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.MembershipPositionMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MembershipPositionMutation", m)
+}
+
+// The MembershipRoleFunc type is an adapter to allow the use of ordinary
+// function as MembershipRole mutator.
+type MembershipRoleFunc func(context.Context, *ent.MembershipRoleMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f MembershipRoleFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.MembershipRoleMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MembershipRoleMutation", m)
+}
+
 // The MenuFunc type is an adapter to allow the use of ordinary
 // function as Menu mutator.
 type MenuFunc func(context.Context, *ent.MenuMutation) (ent.Value, error)
@@ -164,16 +200,28 @@ func (f MenuFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error)
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MenuMutation", m)
 }
 
-// The OrganizationFunc type is an adapter to allow the use of ordinary
-// function as Organization mutator.
-type OrganizationFunc func(context.Context, *ent.OrganizationMutation) (ent.Value, error)
+// The OrgUnitFunc type is an adapter to allow the use of ordinary
+// function as OrgUnit mutator.
+type OrgUnitFunc func(context.Context, *ent.OrgUnitMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f OrganizationFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.OrganizationMutation); ok {
+func (f OrgUnitFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.OrgUnitMutation); ok {
 		return f(ctx, mv)
 	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.OrganizationMutation", m)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.OrgUnitMutation", m)
+}
+
+// The PermissionFunc type is an adapter to allow the use of ordinary
+// function as Permission mutator.
+type PermissionFunc func(context.Context, *ent.PermissionMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f PermissionFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.PermissionMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PermissionMutation", m)
 }
 
 // The PositionFunc type is an adapter to allow the use of ordinary
@@ -212,18 +260,6 @@ func (f RoleApiFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, err
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.RoleApiMutation", m)
 }
 
-// The RoleDeptFunc type is an adapter to allow the use of ordinary
-// function as RoleDept mutator.
-type RoleDeptFunc func(context.Context, *ent.RoleDeptMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f RoleDeptFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.RoleDeptMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.RoleDeptMutation", m)
-}
-
 // The RoleMenuFunc type is an adapter to allow the use of ordinary
 // function as RoleMenu mutator.
 type RoleMenuFunc func(context.Context, *ent.RoleMenuMutation) (ent.Value, error)
@@ -234,30 +270,6 @@ func (f RoleMenuFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, er
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.RoleMenuMutation", m)
-}
-
-// The RoleOrgFunc type is an adapter to allow the use of ordinary
-// function as RoleOrg mutator.
-type RoleOrgFunc func(context.Context, *ent.RoleOrgMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f RoleOrgFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.RoleOrgMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.RoleOrgMutation", m)
-}
-
-// The RolePositionFunc type is an adapter to allow the use of ordinary
-// function as RolePosition mutator.
-type RolePositionFunc func(context.Context, *ent.RolePositionMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f RolePositionFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.RolePositionMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.RolePositionMutation", m)
 }
 
 // The TaskFunc type is an adapter to allow the use of ordinary
@@ -306,30 +318,6 @@ func (f UserCredentialFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Val
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.UserCredentialMutation", m)
-}
-
-// The UserPositionFunc type is an adapter to allow the use of ordinary
-// function as UserPosition mutator.
-type UserPositionFunc func(context.Context, *ent.UserPositionMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f UserPositionFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.UserPositionMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.UserPositionMutation", m)
-}
-
-// The UserRoleFunc type is an adapter to allow the use of ordinary
-// function as UserRole mutator.
-type UserRoleFunc func(context.Context, *ent.UserRoleMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f UserRoleFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.UserRoleMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.UserRoleMutation", m)
 }
 
 // Condition is a hook condition function.

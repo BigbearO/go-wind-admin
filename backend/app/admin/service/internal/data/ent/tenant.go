@@ -57,7 +57,7 @@ type Tenant struct {
 	// 租户有效期
 	ExpiredAt *time.Time `json:"expired_at,omitempty"`
 	// 最后一次登录的时间
-	LastLoginTime *time.Time `json:"last_login_time,omitempty"`
+	LastLoginAt *time.Time `json:"last_login_at,omitempty"`
 	// 最后一次登录的IP
 	LastLoginIP  *string `json:"last_login_ip,omitempty"`
 	selectValues sql.SelectValues
@@ -72,7 +72,7 @@ func (*Tenant) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case tenant.FieldRemark, tenant.FieldName, tenant.FieldCode, tenant.FieldLogoURL, tenant.FieldIndustry, tenant.FieldStatus, tenant.FieldType, tenant.FieldAuditStatus, tenant.FieldSubscriptionPlan, tenant.FieldLastLoginIP:
 			values[i] = new(sql.NullString)
-		case tenant.FieldCreatedAt, tenant.FieldUpdatedAt, tenant.FieldDeletedAt, tenant.FieldSubscriptionAt, tenant.FieldUnsubscribeAt, tenant.FieldExpiredAt, tenant.FieldLastLoginTime:
+		case tenant.FieldCreatedAt, tenant.FieldUpdatedAt, tenant.FieldDeletedAt, tenant.FieldSubscriptionAt, tenant.FieldUnsubscribeAt, tenant.FieldExpiredAt, tenant.FieldLastLoginAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -228,12 +228,12 @@ func (_m *Tenant) assignValues(columns []string, values []any) error {
 				_m.ExpiredAt = new(time.Time)
 				*_m.ExpiredAt = value.Time
 			}
-		case tenant.FieldLastLoginTime:
+		case tenant.FieldLastLoginAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field last_login_time", values[i])
+				return fmt.Errorf("unexpected type %T for field last_login_at", values[i])
 			} else if value.Valid {
-				_m.LastLoginTime = new(time.Time)
-				*_m.LastLoginTime = value.Time
+				_m.LastLoginAt = new(time.Time)
+				*_m.LastLoginAt = value.Time
 			}
 		case tenant.FieldLastLoginIP:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -373,8 +373,8 @@ func (_m *Tenant) String() string {
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
-	if v := _m.LastLoginTime; v != nil {
-		builder.WriteString("last_login_time=")
+	if v := _m.LastLoginAt; v != nil {
+		builder.WriteString("last_login_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")

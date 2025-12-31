@@ -103,8 +103,8 @@ func (m *Position) validate(all bool) error {
 		// no validation rules for Code
 	}
 
-	if m.Quota != nil {
-		// no validation rules for Quota
+	if m.Headcount != nil {
+		// no validation rules for Headcount
 	}
 
 	if m.SortOrder != nil {
@@ -115,6 +115,10 @@ func (m *Position) validate(all bool) error {
 		// no validation rules for Status
 	}
 
+	if m.Type != nil {
+		// no validation rules for Type
+	}
+
 	if m.Remark != nil {
 		// no validation rules for Remark
 	}
@@ -123,24 +127,110 @@ func (m *Position) validate(all bool) error {
 		// no validation rules for Description
 	}
 
-	if m.OrganizationId != nil {
-		// no validation rules for OrganizationId
+	if m.JobFamily != nil {
+		// no validation rules for JobFamily
 	}
 
-	if m.OrganizationName != nil {
-		// no validation rules for OrganizationName
+	if m.JobGrade != nil {
+		// no validation rules for JobGrade
 	}
 
-	if m.DepartmentId != nil {
-		// no validation rules for DepartmentId
+	if m.Level != nil {
+		// no validation rules for Level
 	}
 
-	if m.DepartmentName != nil {
-		// no validation rules for DepartmentName
+	if m.IsKeyPosition != nil {
+		// no validation rules for IsKeyPosition
 	}
 
 	if m.TenantId != nil {
 		// no validation rules for TenantId
+	}
+
+	if m.TenantName != nil {
+		// no validation rules for TenantName
+	}
+
+	if m.OrgUnitId != nil {
+		// no validation rules for OrgUnitId
+	}
+
+	if m.OrgUnitName != nil {
+		// no validation rules for OrgUnitName
+	}
+
+	if m.ReportsToPositionId != nil {
+		// no validation rules for ReportsToPositionId
+	}
+
+	if m.ReportsToPositionName != nil {
+		// no validation rules for ReportsToPositionName
+	}
+
+	if m.StartAt != nil {
+
+		if all {
+			switch v := interface{}(m.GetStartAt()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, PositionValidationError{
+						field:  "StartAt",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, PositionValidationError{
+						field:  "StartAt",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetStartAt()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return PositionValidationError{
+					field:  "StartAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if m.EndAt != nil {
+
+		if all {
+			switch v := interface{}(m.GetEndAt()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, PositionValidationError{
+						field:  "EndAt",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, PositionValidationError{
+						field:  "EndAt",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetEndAt()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return PositionValidationError{
+					field:  "EndAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
 	}
 
 	if m.ParentId != nil {

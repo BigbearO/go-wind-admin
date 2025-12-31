@@ -7,16 +7,10 @@ import { $t } from '@vben/locales';
 import { notification } from 'ant-design-vue';
 
 import { useVbenForm } from '#/adapter/form';
-import {
-  positionStatusList,
-  useDepartmentStore,
-  useOrganizationStore,
-  usePositionStore,
-} from '#/stores';
+import { statusList, useOrgUnitStore, usePositionStore } from '#/stores';
 
 const positionStore = usePositionStore();
-const deptStore = useDepartmentStore();
-const orgStore = useOrganizationStore();
+const orgUnitStore = useOrgUnitStore();
 
 const data = ref();
 
@@ -82,8 +76,8 @@ const [BaseForm, baseFormApi] = useVbenForm({
     },
     {
       component: 'ApiTreeSelect',
-      fieldName: 'organizationId',
-      label: $t('page.position.organization'),
+      fieldName: 'orgUnitId',
+      label: $t('page.position.orgUnit'),
       rules: 'selectRequired',
       componentProps: {
         placeholder: $t('ui.placeholder.select'),
@@ -96,31 +90,7 @@ const [BaseForm, baseFormApi] = useVbenForm({
         valueField: 'id',
         treeNodeFilterProp: 'label',
         api: async () => {
-          const result = await orgStore.listOrganization(undefined, {
-            // parent_id: 0,
-            status: 'ON',
-          });
-          return result.items;
-        },
-      },
-    },
-    {
-      component: 'ApiTreeSelect',
-      fieldName: 'departmentId',
-      label: $t('page.position.department'),
-      rules: 'selectRequired',
-      componentProps: {
-        placeholder: $t('ui.placeholder.select'),
-        numberToString: true,
-        showSearch: true,
-        treeDefaultExpandAll: true,
-        allowClear: true,
-        childrenField: 'children',
-        labelField: 'name',
-        valueField: 'id',
-        treeNodeFilterProp: 'label',
-        api: async () => {
-          const result = await deptStore.listDepartment(undefined, {
+          const result = await orgUnitStore.listOrgUnit(undefined, {
             // parent_id: 0,
             status: 'ON',
           });
@@ -159,7 +129,7 @@ const [BaseForm, baseFormApi] = useVbenForm({
         optionType: 'button',
         buttonStyle: 'solid',
         class: 'flex flex-wrap', // 如果选项过多，可以添加class来自动折叠
-        options: positionStatusList,
+        options: statusList,
       },
     },
     {

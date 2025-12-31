@@ -17,12 +17,10 @@ import (
 	"github.com/tx7do/go-utils/timeutil"
 	"github.com/tx7do/go-utils/trans"
 
-	"go-wind-admin/app/admin/service/internal/data/ent"
-	"go-wind-admin/app/admin/service/internal/data/ent/department"
-	"go-wind-admin/app/admin/service/internal/data/ent/user"
-
 	authenticationV1 "go-wind-admin/api/gen/go/authentication/service/v1"
 	userV1 "go-wind-admin/api/gen/go/user/service/v1"
+
+	"go-wind-admin/app/admin/service/internal/data/ent"
 )
 
 var reSpaces = regexp.MustCompile(`\s+`)
@@ -159,7 +157,6 @@ func TestCopier(t *testing.T) {
 		entMsg.Realname = trans.Ptr("RealName")
 		entMsg.Email = trans.Ptr("test@gmail.com")
 		entMsg.TenantID = trans.Ptr(uint32(2))
-		entMsg.Status = trans.Ptr(user.StatusOn)
 
 		_ = copier.Copy(&protoMsg, entMsg)
 		assert.Equal(t, protoMsg.GetUsername(), *entMsg.Username)
@@ -175,16 +172,6 @@ func TestCopier(t *testing.T) {
 		var protoMsg userV1.User
 
 		_ = copier.Copy(&entMsg, &protoMsg)
-	}
-
-	{
-		var in ent.Department
-		var out userV1.Department
-		in.Status = trans.Ptr(department.StatusOn)
-
-		_ = copier.Copy(&out, &in)
-
-		fmt.Println(out.GetStatus())
 	}
 
 	{

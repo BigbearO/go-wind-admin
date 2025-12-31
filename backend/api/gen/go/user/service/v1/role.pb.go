@@ -73,18 +73,63 @@ func (Role_Status) EnumDescriptor() ([]byte, []int) {
 	return file_user_service_v1_role_proto_rawDescGZIP(), []int{0, 0}
 }
 
+// 角色类型
+type Role_Type int32
+
+const (
+	Role_SYSTEM Role_Type = 0 // 内置角色（不可删除、不可修改 code）
+	Role_CUSTOM Role_Type = 1 // 自定义角色
+)
+
+// Enum value maps for Role_Type.
+var (
+	Role_Type_name = map[int32]string{
+		0: "SYSTEM",
+		1: "CUSTOM",
+	}
+	Role_Type_value = map[string]int32{
+		"SYSTEM": 0,
+		"CUSTOM": 1,
+	}
+)
+
+func (x Role_Type) Enum() *Role_Type {
+	p := new(Role_Type)
+	*p = x
+	return p
+}
+
+func (x Role_Type) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (Role_Type) Descriptor() protoreflect.EnumDescriptor {
+	return file_user_service_v1_role_proto_enumTypes[1].Descriptor()
+}
+
+func (Role_Type) Type() protoreflect.EnumType {
+	return &file_user_service_v1_role_proto_enumTypes[1]
+}
+
+func (x Role_Type) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use Role_Type.Descriptor instead.
+func (Role_Type) EnumDescriptor() ([]byte, []int) {
+	return file_user_service_v1_role_proto_rawDescGZIP(), []int{0, 1}
+}
+
 // 数据权限范围
 type Role_DataScope int32
 
 const (
 	Role_DATA_SCOPE_UNSPECIFIED Role_DataScope = 0
-	Role_ALL                    Role_DataScope = 1 // 全部数据权限
-	Role_CUSTOM                 Role_DataScope = 2 // 自定义数据权限
-	Role_SELF                   Role_DataScope = 3 // 仅本人数据权限
-	Role_ORG                    Role_DataScope = 4 // 本机构数据权限
-	Role_ORG_AND_CHILD          Role_DataScope = 5 // 本机构及以下数据权限
-	Role_DEPT                   Role_DataScope = 6 // 本部门数据权限
-	Role_DEPT_AND_CHILD         Role_DataScope = 7 // 本部门及以下数据权限
+	Role_ALL                    Role_DataScope = 1 // 全部数据：可跨租户或租户内所有 Unit (取决于 tenant_id)
+	Role_SELF                   Role_DataScope = 2 // 仅限本人：只能看到 owner_id 等于自己的数据
+	Role_UNIT_ONLY              Role_DataScope = 3 // 仅限当前所属 OrgUnit：不含子节点
+	Role_UNIT_AND_CHILD         Role_DataScope = 4 // 当前所属 OrgUnit 及所有递归子节点
+	Role_SELECTED_UNITS         Role_DataScope = 5 // 自定义组织单元列表
 )
 
 // Enum value maps for Role_DataScope.
@@ -92,22 +137,18 @@ var (
 	Role_DataScope_name = map[int32]string{
 		0: "DATA_SCOPE_UNSPECIFIED",
 		1: "ALL",
-		2: "CUSTOM",
-		3: "SELF",
-		4: "ORG",
-		5: "ORG_AND_CHILD",
-		6: "DEPT",
-		7: "DEPT_AND_CHILD",
+		2: "SELF",
+		3: "UNIT_ONLY",
+		4: "UNIT_AND_CHILD",
+		5: "SELECTED_UNITS",
 	}
 	Role_DataScope_value = map[string]int32{
 		"DATA_SCOPE_UNSPECIFIED": 0,
 		"ALL":                    1,
-		"CUSTOM":                 2,
-		"SELF":                   3,
-		"ORG":                    4,
-		"ORG_AND_CHILD":          5,
-		"DEPT":                   6,
-		"DEPT_AND_CHILD":         7,
+		"SELF":                   2,
+		"UNIT_ONLY":              3,
+		"UNIT_AND_CHILD":         4,
+		"SELECTED_UNITS":         5,
 	}
 )
 
@@ -122,11 +163,11 @@ func (x Role_DataScope) String() string {
 }
 
 func (Role_DataScope) Descriptor() protoreflect.EnumDescriptor {
-	return file_user_service_v1_role_proto_enumTypes[1].Descriptor()
+	return file_user_service_v1_role_proto_enumTypes[2].Descriptor()
 }
 
 func (Role_DataScope) Type() protoreflect.EnumType {
-	return &file_user_service_v1_role_proto_enumTypes[1]
+	return &file_user_service_v1_role_proto_enumTypes[2]
 }
 
 func (x Role_DataScope) Number() protoreflect.EnumNumber {
@@ -135,33 +176,36 @@ func (x Role_DataScope) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use Role_DataScope.Descriptor instead.
 func (Role_DataScope) EnumDescriptor() ([]byte, []int) {
-	return file_user_service_v1_role_proto_rawDescGZIP(), []int{0, 1}
+	return file_user_service_v1_role_proto_rawDescGZIP(), []int{0, 2}
 }
 
 // 角色
 type Role struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            *uint32                `protobuf:"varint,1,opt,name=id,proto3,oneof" json:"id,omitempty"`                                                                    // 角色ID
-	Name          *string                `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty"`                                                                 // 角色名称
-	SortOrder     *int32                 `protobuf:"varint,3,opt,name=sort_order,json=sortOrder,proto3,oneof" json:"sort_order,omitempty"`                                     // 排序顺序，值越小越靠前
-	Code          *string                `protobuf:"bytes,4,opt,name=code,proto3,oneof" json:"code,omitempty"`                                                                 // 角色值
-	Status        *Role_Status           `protobuf:"varint,5,opt,name=status,proto3,enum=user.service.v1.Role_Status,oneof" json:"status,omitempty"`                           // 状态
-	Remark        *string                `protobuf:"bytes,6,opt,name=remark,proto3,oneof" json:"remark,omitempty"`                                                             // 备注
-	Menus         []uint32               `protobuf:"varint,7,rep,packed,name=menus,proto3" json:"menus,omitempty"`                                                             // 分配的菜单列表
-	Apis          []uint32               `protobuf:"varint,8,rep,packed,name=apis,proto3" json:"apis,omitempty"`                                                               // 分配的API列表
-	DataScope     *Role_DataScope        `protobuf:"varint,9,opt,name=data_scope,json=dataScope,proto3,enum=user.service.v1.Role_DataScope,oneof" json:"data_scope,omitempty"` // 数据权限范围
-	TenantId      *uint32                `protobuf:"varint,40,opt,name=tenant_id,json=tenantId,proto3,oneof" json:"tenant_id,omitempty"`                                       // 租户ID
-	TenantName    *string                `protobuf:"bytes,41,opt,name=tenant_name,json=tenantName,proto3,oneof" json:"tenant_name,omitempty"`                                  // 租户名称
-	ParentId      *uint32                `protobuf:"varint,50,opt,name=parent_id,json=parentId,proto3,oneof" json:"parent_id,omitempty"`                                       // 父节点ID
-	Children      []*Role                `protobuf:"bytes,51,rep,name=children,proto3" json:"children,omitempty"`                                                              // 子节点树
-	CreatedBy     *uint32                `protobuf:"varint,100,opt,name=created_by,json=createdBy,proto3,oneof" json:"created_by,omitempty"`                                   // 创建者ID
-	UpdatedBy     *uint32                `protobuf:"varint,101,opt,name=updated_by,json=updatedBy,proto3,oneof" json:"updated_by,omitempty"`                                   // 更新者ID
-	DeletedBy     *uint32                `protobuf:"varint,102,opt,name=deleted_by,json=deletedBy,proto3,oneof" json:"deleted_by,omitempty"`                                   // 删除者用户ID
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,200,opt,name=created_at,json=createdAt,proto3,oneof" json:"created_at,omitempty"`                                    // 创建时间
-	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,201,opt,name=updated_at,json=updatedAt,proto3,oneof" json:"updated_at,omitempty"`                                    // 更新时间
-	DeletedAt     *timestamppb.Timestamp `protobuf:"bytes,202,opt,name=deleted_at,json=deletedAt,proto3,oneof" json:"deleted_at,omitempty"`                                    // 删除时间
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state            protoimpl.MessageState `protogen:"open.v1"`
+	Id               *uint32                `protobuf:"varint,1,opt,name=id,proto3,oneof" json:"id,omitempty"`                                                                    // 角色ID
+	Name             *string                `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty"`                                                                 // 角色名称
+	Code             *string                `protobuf:"bytes,3,opt,name=code,proto3,oneof" json:"code,omitempty"`                                                                 // 角色标识码（如：ADMIN, VIEWER）
+	SortOrder        *int32                 `protobuf:"varint,4,opt,name=sort_order,json=sortOrder,proto3,oneof" json:"sort_order,omitempty"`                                     // 排序顺序，值越小越靠前
+	Status           *Role_Status           `protobuf:"varint,5,opt,name=status,proto3,enum=user.service.v1.Role_Status,oneof" json:"status,omitempty"`                           // 状态
+	Type             *Role_Type             `protobuf:"varint,6,opt,name=type,proto3,enum=user.service.v1.Role_Type,oneof" json:"type,omitempty"`                                 // 角色类型
+	DataScope        *Role_DataScope        `protobuf:"varint,7,opt,name=data_scope,json=dataScope,proto3,enum=user.service.v1.Role_DataScope,oneof" json:"data_scope,omitempty"` // 数据权限范围
+	Remark           *string                `protobuf:"bytes,8,opt,name=remark,proto3,oneof" json:"remark,omitempty"`                                                             // 备注
+	CustomOrgUnitIds []uint32               `protobuf:"varint,10,rep,packed,name=custom_org_unit_ids,json=customOrgUnitIds,proto3" json:"custom_org_unit_ids,omitempty"`          // 当 DataScope 为 SELECTED_UNITS 时关联的组织单元列表
+	Permissions      []string               `protobuf:"bytes,11,rep,name=permissions,proto3" json:"permissions,omitempty"`                                                        // 权限点列表（如：user:add, file:delete）
+	Menus            []uint32               `protobuf:"varint,12,rep,packed,name=menus,proto3" json:"menus,omitempty"`                                                            // 绑定的菜单ID列表
+	Apis             []uint32               `protobuf:"varint,13,rep,packed,name=apis,proto3" json:"apis,omitempty"`                                                              // 分配的API列表
+	TenantId         *uint32                `protobuf:"varint,40,opt,name=tenant_id,json=tenantId,proto3,oneof" json:"tenant_id,omitempty"`                                       // 租户ID，0代表系统全局角色
+	TenantName       *string                `protobuf:"bytes,41,opt,name=tenant_name,json=tenantName,proto3,oneof" json:"tenant_name,omitempty"`                                  // 租户名称
+	ParentId         *uint32                `protobuf:"varint,50,opt,name=parent_id,json=parentId,proto3,oneof" json:"parent_id,omitempty"`                                       // 父节点ID
+	Children         []*Role                `protobuf:"bytes,51,rep,name=children,proto3" json:"children,omitempty"`                                                              // 子节点树
+	CreatedBy        *uint32                `protobuf:"varint,100,opt,name=created_by,json=createdBy,proto3,oneof" json:"created_by,omitempty"`                                   // 创建者ID
+	UpdatedBy        *uint32                `protobuf:"varint,101,opt,name=updated_by,json=updatedBy,proto3,oneof" json:"updated_by,omitempty"`                                   // 更新者ID
+	DeletedBy        *uint32                `protobuf:"varint,102,opt,name=deleted_by,json=deletedBy,proto3,oneof" json:"deleted_by,omitempty"`                                   // 删除者用户ID
+	CreatedAt        *timestamppb.Timestamp `protobuf:"bytes,200,opt,name=created_at,json=createdAt,proto3,oneof" json:"created_at,omitempty"`                                    // 创建时间
+	UpdatedAt        *timestamppb.Timestamp `protobuf:"bytes,201,opt,name=updated_at,json=updatedAt,proto3,oneof" json:"updated_at,omitempty"`                                    // 更新时间
+	DeletedAt        *timestamppb.Timestamp `protobuf:"bytes,202,opt,name=deleted_at,json=deletedAt,proto3,oneof" json:"deleted_at,omitempty"`                                    // 删除时间
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
 }
 
 func (x *Role) Reset() {
@@ -208,18 +252,18 @@ func (x *Role) GetName() string {
 	return ""
 }
 
-func (x *Role) GetSortOrder() int32 {
-	if x != nil && x.SortOrder != nil {
-		return *x.SortOrder
-	}
-	return 0
-}
-
 func (x *Role) GetCode() string {
 	if x != nil && x.Code != nil {
 		return *x.Code
 	}
 	return ""
+}
+
+func (x *Role) GetSortOrder() int32 {
+	if x != nil && x.SortOrder != nil {
+		return *x.SortOrder
+	}
+	return 0
 }
 
 func (x *Role) GetStatus() Role_Status {
@@ -229,11 +273,39 @@ func (x *Role) GetStatus() Role_Status {
 	return Role_OFF
 }
 
+func (x *Role) GetType() Role_Type {
+	if x != nil && x.Type != nil {
+		return *x.Type
+	}
+	return Role_SYSTEM
+}
+
+func (x *Role) GetDataScope() Role_DataScope {
+	if x != nil && x.DataScope != nil {
+		return *x.DataScope
+	}
+	return Role_DATA_SCOPE_UNSPECIFIED
+}
+
 func (x *Role) GetRemark() string {
 	if x != nil && x.Remark != nil {
 		return *x.Remark
 	}
 	return ""
+}
+
+func (x *Role) GetCustomOrgUnitIds() []uint32 {
+	if x != nil {
+		return x.CustomOrgUnitIds
+	}
+	return nil
+}
+
+func (x *Role) GetPermissions() []string {
+	if x != nil {
+		return x.Permissions
+	}
+	return nil
 }
 
 func (x *Role) GetMenus() []uint32 {
@@ -248,13 +320,6 @@ func (x *Role) GetApis() []uint32 {
 		return x.Apis
 	}
 	return nil
-}
-
-func (x *Role) GetDataScope() Role_DataScope {
-	if x != nil && x.DataScope != nil {
-		return *x.DataScope
-	}
-	return Role_DATA_SCOPE_UNSPECIFIED
 }
 
 func (x *Role) GetTenantId() uint32 {
@@ -898,57 +963,64 @@ var File_user_service_v1_role_proto protoreflect.FileDescriptor
 
 const file_user_service_v1_role_proto_rawDesc = "" +
 	"\n" +
-	"\x1auser/service/v1/role.proto\x12\x0fuser.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\"\x86\f\n" +
+	"\x1auser/service/v1/role.proto\x12\x0fuser.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\"\xf5\x0e\n" +
 	"\x04Role\x12#\n" +
 	"\x02id\x18\x01 \x01(\rB\x0e\xbaG\v\x92\x02\b角色IDH\x00R\x02id\x88\x01\x01\x12+\n" +
-	"\x04name\x18\x02 \x01(\tB\x12\xbaG\x0f\x92\x02\f角色名称H\x01R\x04name\x88\x01\x01\x12K\n" +
+	"\x04name\x18\x02 \x01(\tB\x12\xbaG\x0f\x92\x02\f角色名称H\x01R\x04name\x88\x01\x01\x12G\n" +
+	"\x04code\x18\x03 \x01(\tB.\xbaG+\x92\x02(角色标识码（如：ADMIN, VIEWER）H\x02R\x04code\x88\x01\x01\x12K\n" +
 	"\n" +
-	"sort_order\x18\x03 \x01(\x05B'\xbaG$\x92\x02!排序顺序，值越小越靠前H\x02R\tsortOrder\x88\x01\x01\x12(\n" +
-	"\x04code\x18\x04 \x01(\tB\x0f\xbaG\f\x92\x02\t角色值H\x03R\x04code\x88\x01\x01\x12G\n" +
-	"\x06status\x18\x05 \x01(\x0e2\x1c.user.service.v1.Role.StatusB\f\xbaG\t\x92\x02\x06状态H\x04R\x06status\x88\x01\x01\x12)\n" +
-	"\x06remark\x18\x06 \x01(\tB\f\xbaG\t\x92\x02\x06备注H\x05R\x06remark\x88\x01\x01\x121\n" +
-	"\x05menus\x18\a \x03(\rB\x1b\xbaG\x18\x92\x02\x15分配的菜单列表R\x05menus\x12,\n" +
-	"\x04apis\x18\b \x03(\rB\x18\xbaG\x15\x92\x02\x12分配的API列表R\x04apis\x12]\n" +
+	"sort_order\x18\x04 \x01(\x05B'\xbaG$\x92\x02!排序顺序，值越小越靠前H\x03R\tsortOrder\x88\x01\x01\x12G\n" +
+	"\x06status\x18\x05 \x01(\x0e2\x1c.user.service.v1.Role.StatusB\f\xbaG\t\x92\x02\x06状态H\x04R\x06status\x88\x01\x01\x12G\n" +
+	"\x04type\x18\x06 \x01(\x0e2\x1a.user.service.v1.Role.TypeB\x12\xbaG\x0f\x92\x02\f角色类型H\x05R\x04type\x88\x01\x01\x12]\n" +
 	"\n" +
-	"data_scope\x18\t \x01(\x0e2\x1f.user.service.v1.Role.DataScopeB\x18\xbaG\x15\x92\x02\x12数据权限范围H\x06R\tdataScope\x88\x01\x01\x120\n" +
-	"\ttenant_id\x18( \x01(\rB\x0e\xbaG\v\x92\x02\b租户IDH\aR\btenantId\x88\x01\x01\x128\n" +
-	"\vtenant_name\x18) \x01(\tB\x12\xbaG\x0f\x92\x02\f租户名称H\bR\n" +
+	"data_scope\x18\a \x01(\x0e2\x1f.user.service.v1.Role.DataScopeB\x18\xbaG\x15\x92\x02\x12数据权限范围H\x06R\tdataScope\x88\x01\x01\x12)\n" +
+	"\x06remark\x18\b \x01(\tB\f\xbaG\t\x92\x02\x06备注H\aR\x06remark\x88\x01\x01\x12t\n" +
+	"\x13custom_org_unit_ids\x18\n" +
+	" \x03(\rBE\xbaGB\x92\x02?当 DataScope 为 SELECTED_UNITS 时关联的组织单元列表R\x10customOrgUnitIds\x12X\n" +
+	"\vpermissions\x18\v \x03(\tB6\xbaG3\x92\x020权限点列表（如：user:add, file:delete）R\vpermissions\x123\n" +
+	"\x05menus\x18\f \x03(\rB\x1d\xbaG\x1a\x92\x02\x17绑定的菜单ID列表R\x05menus\x12,\n" +
+	"\x04apis\x18\r \x03(\rB\x18\xbaG\x15\x92\x02\x12分配的API列表R\x04apis\x12L\n" +
+	"\ttenant_id\x18( \x01(\rB*\xbaG'\x92\x02$租户ID，0代表系统全局角色H\bR\btenantId\x88\x01\x01\x128\n" +
+	"\vtenant_name\x18) \x01(\tB\x12\xbaG\x0f\x92\x02\f租户名称H\tR\n" +
 	"tenantName\x88\x01\x01\x123\n" +
-	"\tparent_id\x182 \x01(\rB\x11\xbaG\x0e\x92\x02\v父节点IDH\tR\bparentId\x88\x01\x01\x12E\n" +
+	"\tparent_id\x182 \x01(\rB\x11\xbaG\x0e\x92\x02\v父节点IDH\n" +
+	"R\bparentId\x88\x01\x01\x12E\n" +
 	"\bchildren\x183 \x03(\v2\x15.user.service.v1.RoleB\x12\xbaG\x0f\x92\x02\f子节点树R\bchildren\x125\n" +
 	"\n" +
-	"created_by\x18d \x01(\rB\x11\xbaG\x0e\x92\x02\v创建者IDH\n" +
-	"R\tcreatedBy\x88\x01\x01\x125\n" +
+	"created_by\x18d \x01(\rB\x11\xbaG\x0e\x92\x02\v创建者IDH\vR\tcreatedBy\x88\x01\x01\x125\n" +
 	"\n" +
-	"updated_by\x18e \x01(\rB\x11\xbaG\x0e\x92\x02\v更新者IDH\vR\tupdatedBy\x88\x01\x01\x12;\n" +
+	"updated_by\x18e \x01(\rB\x11\xbaG\x0e\x92\x02\v更新者IDH\fR\tupdatedBy\x88\x01\x01\x12;\n" +
 	"\n" +
-	"deleted_by\x18f \x01(\rB\x17\xbaG\x14\x92\x02\x11删除者用户IDH\fR\tdeletedBy\x88\x01\x01\x12S\n" +
+	"deleted_by\x18f \x01(\rB\x17\xbaG\x14\x92\x02\x11删除者用户IDH\rR\tdeletedBy\x88\x01\x01\x12S\n" +
 	"\n" +
-	"created_at\x18\xc8\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f创建时间H\rR\tcreatedAt\x88\x01\x01\x12S\n" +
+	"created_at\x18\xc8\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f创建时间H\x0eR\tcreatedAt\x88\x01\x01\x12S\n" +
 	"\n" +
-	"updated_at\x18\xc9\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f更新时间H\x0eR\tupdatedAt\x88\x01\x01\x12S\n" +
+	"updated_at\x18\xc9\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f更新时间H\x0fR\tupdatedAt\x88\x01\x01\x12S\n" +
 	"\n" +
-	"deleted_at\x18\xca\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f删除时间H\x0fR\tdeletedAt\x88\x01\x01\"\x19\n" +
+	"deleted_at\x18\xca\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f删除时间H\x10R\tdeletedAt\x88\x01\x01\"\x19\n" +
 	"\x06Status\x12\a\n" +
 	"\x03OFF\x10\x00\x12\x06\n" +
-	"\x02ON\x10\x01\"\x80\x01\n" +
+	"\x02ON\x10\x01\"\x1e\n" +
+	"\x04Type\x12\n" +
+	"\n" +
+	"\x06SYSTEM\x10\x00\x12\n" +
+	"\n" +
+	"\x06CUSTOM\x10\x01\"q\n" +
 	"\tDataScope\x12\x1a\n" +
 	"\x16DATA_SCOPE_UNSPECIFIED\x10\x00\x12\a\n" +
-	"\x03ALL\x10\x01\x12\n" +
-	"\n" +
-	"\x06CUSTOM\x10\x02\x12\b\n" +
-	"\x04SELF\x10\x03\x12\a\n" +
-	"\x03ORG\x10\x04\x12\x11\n" +
-	"\rORG_AND_CHILD\x10\x05\x12\b\n" +
-	"\x04DEPT\x10\x06\x12\x12\n" +
-	"\x0eDEPT_AND_CHILD\x10\aB\x05\n" +
+	"\x03ALL\x10\x01\x12\b\n" +
+	"\x04SELF\x10\x02\x12\r\n" +
+	"\tUNIT_ONLY\x10\x03\x12\x12\n" +
+	"\x0eUNIT_AND_CHILD\x10\x04\x12\x12\n" +
+	"\x0eSELECTED_UNITS\x10\x05B\x05\n" +
 	"\x03_idB\a\n" +
-	"\x05_nameB\r\n" +
-	"\v_sort_orderB\a\n" +
-	"\x05_codeB\t\n" +
-	"\a_statusB\t\n" +
-	"\a_remarkB\r\n" +
-	"\v_data_scopeB\f\n" +
+	"\x05_nameB\a\n" +
+	"\x05_codeB\r\n" +
+	"\v_sort_orderB\t\n" +
+	"\a_statusB\a\n" +
+	"\x05_typeB\r\n" +
+	"\v_data_scopeB\t\n" +
+	"\a_remarkB\f\n" +
 	"\n" +
 	"_tenant_idB\x0e\n" +
 	"\f_tenant_nameB\f\n" +
@@ -1027,66 +1099,68 @@ func file_user_service_v1_role_proto_rawDescGZIP() []byte {
 	return file_user_service_v1_role_proto_rawDescData
 }
 
-var file_user_service_v1_role_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
+var file_user_service_v1_role_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
 var file_user_service_v1_role_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_user_service_v1_role_proto_goTypes = []any{
 	(Role_Status)(0),                      // 0: user.service.v1.Role.Status
-	(Role_DataScope)(0),                   // 1: user.service.v1.Role.DataScope
-	(*Role)(nil),                          // 2: user.service.v1.Role
-	(*ListRoleResponse)(nil),              // 3: user.service.v1.ListRoleResponse
-	(*GetRoleRequest)(nil),                // 4: user.service.v1.GetRoleRequest
-	(*CreateRoleRequest)(nil),             // 5: user.service.v1.CreateRoleRequest
-	(*UpdateRoleRequest)(nil),             // 6: user.service.v1.UpdateRoleRequest
-	(*DeleteRoleRequest)(nil),             // 7: user.service.v1.DeleteRoleRequest
-	(*BatchCreateRolesRequest)(nil),       // 8: user.service.v1.BatchCreateRolesRequest
-	(*BatchCreateRolesResponse)(nil),      // 9: user.service.v1.BatchCreateRolesResponse
-	(*GetRoleCodesByRoleIdsRequest)(nil),  // 10: user.service.v1.GetRoleCodesByRoleIdsRequest
-	(*GetRoleCodesByRoleIdsResponse)(nil), // 11: user.service.v1.GetRoleCodesByRoleIdsResponse
-	(*GetRolesByRoleCodesRequest)(nil),    // 12: user.service.v1.GetRolesByRoleCodesRequest
-	(*GetRolesByRoleIdsRequest)(nil),      // 13: user.service.v1.GetRolesByRoleIdsRequest
-	(*timestamppb.Timestamp)(nil),         // 14: google.protobuf.Timestamp
-	(*fieldmaskpb.FieldMask)(nil),         // 15: google.protobuf.FieldMask
-	(*v1.PagingRequest)(nil),              // 16: pagination.PagingRequest
-	(*emptypb.Empty)(nil),                 // 17: google.protobuf.Empty
+	(Role_Type)(0),                        // 1: user.service.v1.Role.Type
+	(Role_DataScope)(0),                   // 2: user.service.v1.Role.DataScope
+	(*Role)(nil),                          // 3: user.service.v1.Role
+	(*ListRoleResponse)(nil),              // 4: user.service.v1.ListRoleResponse
+	(*GetRoleRequest)(nil),                // 5: user.service.v1.GetRoleRequest
+	(*CreateRoleRequest)(nil),             // 6: user.service.v1.CreateRoleRequest
+	(*UpdateRoleRequest)(nil),             // 7: user.service.v1.UpdateRoleRequest
+	(*DeleteRoleRequest)(nil),             // 8: user.service.v1.DeleteRoleRequest
+	(*BatchCreateRolesRequest)(nil),       // 9: user.service.v1.BatchCreateRolesRequest
+	(*BatchCreateRolesResponse)(nil),      // 10: user.service.v1.BatchCreateRolesResponse
+	(*GetRoleCodesByRoleIdsRequest)(nil),  // 11: user.service.v1.GetRoleCodesByRoleIdsRequest
+	(*GetRoleCodesByRoleIdsResponse)(nil), // 12: user.service.v1.GetRoleCodesByRoleIdsResponse
+	(*GetRolesByRoleCodesRequest)(nil),    // 13: user.service.v1.GetRolesByRoleCodesRequest
+	(*GetRolesByRoleIdsRequest)(nil),      // 14: user.service.v1.GetRolesByRoleIdsRequest
+	(*timestamppb.Timestamp)(nil),         // 15: google.protobuf.Timestamp
+	(*fieldmaskpb.FieldMask)(nil),         // 16: google.protobuf.FieldMask
+	(*v1.PagingRequest)(nil),              // 17: pagination.PagingRequest
+	(*emptypb.Empty)(nil),                 // 18: google.protobuf.Empty
 }
 var file_user_service_v1_role_proto_depIdxs = []int32{
 	0,  // 0: user.service.v1.Role.status:type_name -> user.service.v1.Role.Status
-	1,  // 1: user.service.v1.Role.data_scope:type_name -> user.service.v1.Role.DataScope
-	2,  // 2: user.service.v1.Role.children:type_name -> user.service.v1.Role
-	14, // 3: user.service.v1.Role.created_at:type_name -> google.protobuf.Timestamp
-	14, // 4: user.service.v1.Role.updated_at:type_name -> google.protobuf.Timestamp
-	14, // 5: user.service.v1.Role.deleted_at:type_name -> google.protobuf.Timestamp
-	2,  // 6: user.service.v1.ListRoleResponse.items:type_name -> user.service.v1.Role
-	15, // 7: user.service.v1.GetRoleRequest.view_mask:type_name -> google.protobuf.FieldMask
-	2,  // 8: user.service.v1.CreateRoleRequest.data:type_name -> user.service.v1.Role
-	2,  // 9: user.service.v1.UpdateRoleRequest.data:type_name -> user.service.v1.Role
-	15, // 10: user.service.v1.UpdateRoleRequest.update_mask:type_name -> google.protobuf.FieldMask
-	2,  // 11: user.service.v1.BatchCreateRolesRequest.data:type_name -> user.service.v1.Role
-	15, // 12: user.service.v1.GetRolesByRoleCodesRequest.view_mask:type_name -> google.protobuf.FieldMask
-	15, // 13: user.service.v1.GetRolesByRoleIdsRequest.view_mask:type_name -> google.protobuf.FieldMask
-	16, // 14: user.service.v1.RoleService.List:input_type -> pagination.PagingRequest
-	4,  // 15: user.service.v1.RoleService.Get:input_type -> user.service.v1.GetRoleRequest
-	5,  // 16: user.service.v1.RoleService.Create:input_type -> user.service.v1.CreateRoleRequest
-	6,  // 17: user.service.v1.RoleService.Update:input_type -> user.service.v1.UpdateRoleRequest
-	7,  // 18: user.service.v1.RoleService.Delete:input_type -> user.service.v1.DeleteRoleRequest
-	8,  // 19: user.service.v1.RoleService.BatchCreate:input_type -> user.service.v1.BatchCreateRolesRequest
-	10, // 20: user.service.v1.RoleService.GetRoleCodesByRoleIds:input_type -> user.service.v1.GetRoleCodesByRoleIdsRequest
-	12, // 21: user.service.v1.RoleService.GetRolesByRoleCodes:input_type -> user.service.v1.GetRolesByRoleCodesRequest
-	13, // 22: user.service.v1.RoleService.GetRolesByRoleIds:input_type -> user.service.v1.GetRolesByRoleIdsRequest
-	3,  // 23: user.service.v1.RoleService.List:output_type -> user.service.v1.ListRoleResponse
-	2,  // 24: user.service.v1.RoleService.Get:output_type -> user.service.v1.Role
-	17, // 25: user.service.v1.RoleService.Create:output_type -> google.protobuf.Empty
-	17, // 26: user.service.v1.RoleService.Update:output_type -> google.protobuf.Empty
-	17, // 27: user.service.v1.RoleService.Delete:output_type -> google.protobuf.Empty
-	9,  // 28: user.service.v1.RoleService.BatchCreate:output_type -> user.service.v1.BatchCreateRolesResponse
-	11, // 29: user.service.v1.RoleService.GetRoleCodesByRoleIds:output_type -> user.service.v1.GetRoleCodesByRoleIdsResponse
-	3,  // 30: user.service.v1.RoleService.GetRolesByRoleCodes:output_type -> user.service.v1.ListRoleResponse
-	3,  // 31: user.service.v1.RoleService.GetRolesByRoleIds:output_type -> user.service.v1.ListRoleResponse
-	23, // [23:32] is the sub-list for method output_type
-	14, // [14:23] is the sub-list for method input_type
-	14, // [14:14] is the sub-list for extension type_name
-	14, // [14:14] is the sub-list for extension extendee
-	0,  // [0:14] is the sub-list for field type_name
+	1,  // 1: user.service.v1.Role.type:type_name -> user.service.v1.Role.Type
+	2,  // 2: user.service.v1.Role.data_scope:type_name -> user.service.v1.Role.DataScope
+	3,  // 3: user.service.v1.Role.children:type_name -> user.service.v1.Role
+	15, // 4: user.service.v1.Role.created_at:type_name -> google.protobuf.Timestamp
+	15, // 5: user.service.v1.Role.updated_at:type_name -> google.protobuf.Timestamp
+	15, // 6: user.service.v1.Role.deleted_at:type_name -> google.protobuf.Timestamp
+	3,  // 7: user.service.v1.ListRoleResponse.items:type_name -> user.service.v1.Role
+	16, // 8: user.service.v1.GetRoleRequest.view_mask:type_name -> google.protobuf.FieldMask
+	3,  // 9: user.service.v1.CreateRoleRequest.data:type_name -> user.service.v1.Role
+	3,  // 10: user.service.v1.UpdateRoleRequest.data:type_name -> user.service.v1.Role
+	16, // 11: user.service.v1.UpdateRoleRequest.update_mask:type_name -> google.protobuf.FieldMask
+	3,  // 12: user.service.v1.BatchCreateRolesRequest.data:type_name -> user.service.v1.Role
+	16, // 13: user.service.v1.GetRolesByRoleCodesRequest.view_mask:type_name -> google.protobuf.FieldMask
+	16, // 14: user.service.v1.GetRolesByRoleIdsRequest.view_mask:type_name -> google.protobuf.FieldMask
+	17, // 15: user.service.v1.RoleService.List:input_type -> pagination.PagingRequest
+	5,  // 16: user.service.v1.RoleService.Get:input_type -> user.service.v1.GetRoleRequest
+	6,  // 17: user.service.v1.RoleService.Create:input_type -> user.service.v1.CreateRoleRequest
+	7,  // 18: user.service.v1.RoleService.Update:input_type -> user.service.v1.UpdateRoleRequest
+	8,  // 19: user.service.v1.RoleService.Delete:input_type -> user.service.v1.DeleteRoleRequest
+	9,  // 20: user.service.v1.RoleService.BatchCreate:input_type -> user.service.v1.BatchCreateRolesRequest
+	11, // 21: user.service.v1.RoleService.GetRoleCodesByRoleIds:input_type -> user.service.v1.GetRoleCodesByRoleIdsRequest
+	13, // 22: user.service.v1.RoleService.GetRolesByRoleCodes:input_type -> user.service.v1.GetRolesByRoleCodesRequest
+	14, // 23: user.service.v1.RoleService.GetRolesByRoleIds:input_type -> user.service.v1.GetRolesByRoleIdsRequest
+	4,  // 24: user.service.v1.RoleService.List:output_type -> user.service.v1.ListRoleResponse
+	3,  // 25: user.service.v1.RoleService.Get:output_type -> user.service.v1.Role
+	18, // 26: user.service.v1.RoleService.Create:output_type -> google.protobuf.Empty
+	18, // 27: user.service.v1.RoleService.Update:output_type -> google.protobuf.Empty
+	18, // 28: user.service.v1.RoleService.Delete:output_type -> google.protobuf.Empty
+	10, // 29: user.service.v1.RoleService.BatchCreate:output_type -> user.service.v1.BatchCreateRolesResponse
+	12, // 30: user.service.v1.RoleService.GetRoleCodesByRoleIds:output_type -> user.service.v1.GetRoleCodesByRoleIdsResponse
+	4,  // 31: user.service.v1.RoleService.GetRolesByRoleCodes:output_type -> user.service.v1.ListRoleResponse
+	4,  // 32: user.service.v1.RoleService.GetRolesByRoleIds:output_type -> user.service.v1.ListRoleResponse
+	24, // [24:33] is the sub-list for method output_type
+	15, // [15:24] is the sub-list for method input_type
+	15, // [15:15] is the sub-list for extension type_name
+	15, // [15:15] is the sub-list for extension extendee
+	0,  // [0:15] is the sub-list for field type_name
 }
 
 func init() { file_user_service_v1_role_proto_init() }
@@ -1106,7 +1180,7 @@ func file_user_service_v1_role_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_service_v1_role_proto_rawDesc), len(file_user_service_v1_role_proto_rawDesc)),
-			NumEnums:      2,
+			NumEnums:      3,
 			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   1,

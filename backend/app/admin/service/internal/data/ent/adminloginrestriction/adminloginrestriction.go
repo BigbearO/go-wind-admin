@@ -78,8 +78,8 @@ const DefaultType = TypeBlacklist
 
 // Type values.
 const (
-	TypeBlacklist Type = "BLACKLIST"
-	TypeWhitelist Type = "WHITELIST"
+	TypeBlacklist Type = "BLACK_LIST"
+	TypeWhitelist Type = "WHITE_LIST"
 )
 
 func (_type Type) String() string {

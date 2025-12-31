@@ -12,18 +12,6 @@ import (
 	"go-wind-admin/pkg/utils/name_set"
 )
 
-// InitOrganizationNameSetMap initializes the organization manager IDs into the userSet map.
-func InitOrganizationNameSetMap(organizations []*userV1.Organization, userSet *name_set.UserNameSetMap) {
-	for _, v := range organizations {
-		if v.ManagerId != nil {
-			(*userSet)[v.GetManagerId()] = nil
-		}
-		for _, c := range v.Children {
-			InitOrganizationNameSetMap(c.Children, userSet)
-		}
-	}
-}
-
 // QueryUserInfoFromRepo queries user information from user repository and fills the nameSetMap.
 func QueryUserInfoFromRepo(ctx context.Context, userRepo data.UserRepo, nameSetMap *name_set.UserNameSetMap) {
 	userIds := make([]uint32, 0, len(*nameSetMap))
@@ -42,38 +30,6 @@ func QueryUserInfoFromRepo(ctx context.Context, userRepo data.UserRepo, nameSetM
 			UserName: user.GetUsername(),
 			RealName: user.GetRealname(),
 			NickName: user.GetNickname(),
-		}
-	}
-}
-
-func FileOrganizationInfo(organizations []*userV1.Organization, userSet *name_set.UserNameSetMap) {
-	for k, v := range *userSet {
-		if v == nil {
-			continue
-		}
-
-		for i := 0; i < len(organizations); i++ {
-			if organizations[i].ManagerId != nil && organizations[i].GetManagerId() == k {
-				organizations[i].ManagerName = &v.NickName
-			}
-
-			FileOrganizationInfo(organizations[i].Children, userSet)
-		}
-	}
-}
-
-// InitDepartmentNameSetMap initializes the department manager IDs into the userSet map.
-func InitDepartmentNameSetMap(departments []*userV1.Department, userSet *name_set.UserNameSetMap, orgSet *name_set.UserNameSetMap) {
-	for _, v := range departments {
-		if v.ManagerId != nil {
-			(*userSet)[v.GetManagerId()] = nil
-		}
-		if v.OrganizationId != nil {
-			(*orgSet)[v.GetOrganizationId()] = nil
-		}
-
-		for _, c := range v.Children {
-			InitDepartmentNameSetMap(c.Children, userSet, orgSet)
 		}
 	}
 }
@@ -97,15 +53,15 @@ func QueryTenantInfoFromRepo(ctx context.Context, tenantRepo *data.TenantRepo, n
 	}
 }
 
-func QueryOrganizationInfoFromRepo(ctx context.Context, organizationRepo *data.OrganizationRepo, nameSetMap *name_set.UserNameSetMap) {
+func QueryOrgUnitInfoFromRepo(ctx context.Context, orgUnitRepo *data.OrgUnitRepo, nameSetMap *name_set.UserNameSetMap) {
 	var ids []uint32
 	for id := range *nameSetMap {
 		ids = append(ids, id)
 	}
 
-	orgs, err := organizationRepo.ListOrganizationsByIds(ctx, ids)
+	orgs, err := orgUnitRepo.ListOrgUnitsByIds(ctx, ids)
 	if err != nil {
-		log.Errorf("query organizations err: %v", err)
+		log.Errorf("query orgUnits err: %v", err)
 		return
 	}
 
@@ -116,100 +72,41 @@ func QueryOrganizationInfoFromRepo(ctx context.Context, organizationRepo *data.O
 	}
 }
 
-func QueryDepartmentInfoFromRepo(ctx context.Context, departmentRepo *data.DepartmentRepo, nameSetMap *name_set.UserNameSetMap) {
-	var ids []uint32
-	for id := range *nameSetMap {
-		ids = append(ids, id)
-	}
+func InitOrgUnitNameSetMap(depts []*userV1.OrgUnit, orgUnitSet *name_set.UserNameSetMap) {
+	for _, v := range depts {
+		(*orgUnitSet)[v.GetLeaderId()] = nil
+		(*orgUnitSet)[v.GetContactUserId()] = nil
 
-	depts, err := departmentRepo.ListDepartmentsByIds(ctx, ids)
-	if err != nil {
-		log.Errorf("query departments err: %v", err)
-		return
-	}
-
-	for _, dept := range depts {
-		(*nameSetMap)[dept.GetId()] = &name_set.UserNameSet{
-			UserName: dept.GetName(),
+		for _, c := range v.Children {
+			InitOrgUnitNameSetMap(c.Children, orgUnitSet)
 		}
 	}
 }
 
-func FillDepartmentUserInfo(departments []*userV1.Department, userSet *name_set.UserNameSetMap) {
-	for k, v := range *userSet {
-		if v == nil {
-			continue
-		}
-
-		for i := 0; i < len(departments); i++ {
-			if departments[i].ManagerId != nil && departments[i].GetManagerId() == k {
-				departments[i].ManagerName = &v.NickName
-			}
-
-			FillDepartmentUserInfo(departments[i].Children, userSet)
-		}
-	}
-}
-
-func FillDepartmentOrganizationInfo(departments []*userV1.Department, orgSet *name_set.UserNameSetMap) {
-	for k, v := range *orgSet {
-		if v == nil {
-			continue
-		}
-
-		for i := 0; i < len(departments); i++ {
-			if departments[i].OrganizationId != nil && departments[i].GetOrganizationId() == k {
-				departments[i].OrganizationName = &v.UserName
-			}
-
-			FillDepartmentOrganizationInfo(departments[i].Children, orgSet)
-		}
-	}
-}
-
-func InitPositionNameSetMap(positions []*userV1.Position, orgSet *name_set.UserNameSetMap, deptSet *name_set.UserNameSetMap) {
+func InitPositionNameSetMap(positions []*userV1.Position, orgUnitSet *name_set.UserNameSetMap, deptSet *name_set.UserNameSetMap) {
 	for _, v := range positions {
-		if v.OrganizationId != nil {
-			(*orgSet)[v.GetOrganizationId()] = nil
-		}
-		if v.DepartmentId != nil {
-			(*deptSet)[v.GetDepartmentId()] = nil
+		if v.OrgUnitId != nil {
+			(*orgUnitSet)[v.GetOrgUnitId()] = nil
 		}
 
 		for _, c := range v.Children {
-			InitPositionNameSetMap(c.Children, orgSet, deptSet)
+			InitPositionNameSetMap(c.Children, orgUnitSet, deptSet)
 		}
 	}
 }
 
-func FillPositionOrganizationInfo(positions []*userV1.Position, orgSet *name_set.UserNameSetMap) {
+func FillPositionOrgUnitInfo(positions []*userV1.Position, orgSet *name_set.UserNameSetMap) {
 	for k, v := range *orgSet {
 		if v == nil {
 			continue
 		}
 
 		for i := 0; i < len(positions); i++ {
-			if positions[i].OrganizationId != nil && positions[i].GetOrganizationId() == k {
-				positions[i].OrganizationName = &v.UserName
+			if positions[i].OrgUnitId != nil && positions[i].GetOrgUnitId() == k {
+				positions[i].OrgUnitName = &v.UserName
 			}
 
-			FillPositionOrganizationInfo(positions[i].Children, orgSet)
-		}
-	}
-}
-
-func FillPositionDepartmentInfo(positions []*userV1.Position, deptSet *name_set.UserNameSetMap) {
-	for k, v := range *deptSet {
-		if v == nil {
-			continue
-		}
-
-		for i := 0; i < len(positions); i++ {
-			if positions[i].DepartmentId != nil && positions[i].GetDepartmentId() == k {
-				positions[i].DepartmentName = &v.UserName
-			}
-
-			FillPositionDepartmentInfo(positions[i].Children, deptSet)
+			FillPositionOrgUnitInfo(positions[i].Children, orgSet)
 		}
 	}
 }
@@ -249,6 +146,25 @@ func QueryRoleInfoFromRepo(ctx context.Context, roleRepo *data.RoleRepo, nameSet
 		(*nameSetMap)[role.GetId()] = &name_set.UserNameSet{
 			UserName: role.GetName(),
 			Code:     role.GetCode(),
+		}
+	}
+}
+
+func FillOrgUnitInfo(orgUnits []*userV1.OrgUnit, orgSet *name_set.UserNameSetMap) {
+	for k, v := range *orgSet {
+		if v == nil {
+			continue
+		}
+
+		for i := 0; i < len(orgUnits); i++ {
+			if orgUnits[i].GetLeaderId() == k {
+				orgUnits[i].LeaderName = &v.UserName
+			}
+			if orgUnits[i].GetContactUserId() == k {
+				orgUnits[i].ContactUserName = &v.UserName
+			}
+
+			FillOrgUnitInfo(orgUnits[i].Children, orgSet)
 		}
 	}
 }

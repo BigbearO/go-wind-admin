@@ -26,8 +26,10 @@ type RoleRepo struct {
 	entClient *entCrud.EntClient[*ent.Client]
 	log       *log.Helper
 
-	mapper          *mapper.CopierMapper[userV1.Role, ent.Role]
-	statusConverter *mapper.EnumTypeConverter[userV1.Role_Status, role.Status]
+	mapper             *mapper.CopierMapper[userV1.Role, ent.Role]
+	statusConverter    *mapper.EnumTypeConverter[userV1.Role_Status, role.Status]
+	typeConverter      *mapper.EnumTypeConverter[userV1.Role_Type, role.Type]
+	dataScopeConverter *mapper.EnumTypeConverter[userV1.Role_DataScope, role.DataScope]
 
 	repository *entCrud.Repository[
 		ent.RoleQuery, ent.RoleSelect,
@@ -41,10 +43,21 @@ type RoleRepo struct {
 
 func NewRoleRepo(ctx *bootstrap.Context, entClient *entCrud.EntClient[*ent.Client]) *RoleRepo {
 	repo := &RoleRepo{
-		log:             ctx.NewLoggerHelper("role/repo/admin-service"),
-		entClient:       entClient,
-		mapper:          mapper.NewCopierMapper[userV1.Role, ent.Role](),
-		statusConverter: mapper.NewEnumTypeConverter[userV1.Role_Status, role.Status](userV1.Role_Status_name, userV1.Role_Status_value),
+		log:       ctx.NewLoggerHelper("role/repo/admin-service"),
+		entClient: entClient,
+		mapper:    mapper.NewCopierMapper[userV1.Role, ent.Role](),
+		statusConverter: mapper.NewEnumTypeConverter[userV1.Role_Status, role.Status](
+			userV1.Role_Status_name,
+			userV1.Role_Status_value,
+		),
+		typeConverter: mapper.NewEnumTypeConverter[userV1.Role_Type, role.Type](
+			userV1.Role_Type_name,
+			userV1.Role_Type_value,
+		),
+		dataScopeConverter: mapper.NewEnumTypeConverter[userV1.Role_DataScope, role.DataScope](
+			userV1.Role_DataScope_name,
+			userV1.Role_DataScope_value,
+		),
 	}
 
 	repo.init()
@@ -66,6 +79,8 @@ func (r *RoleRepo) init() {
 	r.mapper.AppendConverters(copierutil.NewTimeTimestamppbConverterPair())
 
 	r.mapper.AppendConverters(r.statusConverter.NewConverterPair())
+	r.mapper.AppendConverters(r.typeConverter.NewConverterPair())
+	r.mapper.AppendConverters(r.dataScopeConverter.NewConverterPair())
 }
 
 func (r *RoleRepo) Count(ctx context.Context, whereCond []func(s *sql.Selector)) (int, error) {
@@ -214,10 +229,13 @@ func (r *RoleRepo) Create(ctx context.Context, req *userV1.CreateRoleRequest) er
 
 	builder := r.entClient.Client().Role.Create().
 		SetNillableName(req.Data.Name).
-		SetNillableParentID(req.Data.ParentId).
-		SetNillableSortOrder(req.Data.SortOrder).
 		SetNillableCode(req.Data.Code).
+		SetNillableParentID(req.Data.ParentId).
+		SetNillableTenantID(req.Data.TenantId).
+		SetNillableSortOrder(req.Data.SortOrder).
 		SetNillableStatus(r.statusConverter.ToEntity(req.Data.Status)).
+		SetNillableType(r.typeConverter.ToEntity(req.Data.Type)).
+		SetNillableDataScope(r.dataScopeConverter.ToEntity(req.Data.DataScope)).
 		SetNillableRemark(req.Data.Remark).
 		SetNillableCreatedBy(req.Data.CreatedBy).
 		SetNillableCreatedAt(timeutil.TimestamppbToTime(req.Data.CreatedAt))
@@ -272,11 +290,13 @@ func (r *RoleRepo) Update(ctx context.Context, req *userV1.UpdateRoleRequest) er
 		func(dto *userV1.Role) {
 			builder.
 				SetNillableName(req.Data.Name).
+				SetNillableCode(req.Data.Code).
 				SetNillableParentID(req.Data.ParentId).
 				SetNillableSortOrder(req.Data.SortOrder).
-				SetNillableCode(req.Data.Code).
-				SetNillableRemark(req.Data.Remark).
 				SetNillableStatus(r.statusConverter.ToEntity(req.Data.Status)).
+				SetNillableType(r.typeConverter.ToEntity(req.Data.Type)).
+				SetNillableDataScope(r.dataScopeConverter.ToEntity(req.Data.DataScope)).
+				SetNillableRemark(req.Data.Remark).
 				SetNillableUpdatedBy(req.Data.UpdatedBy).
 				SetNillableUpdatedAt(timeutil.TimestamppbToTime(req.Data.UpdatedAt))
 

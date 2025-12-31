@@ -417,23 +417,23 @@ func (_u *TenantUpdate) ClearExpiredAt() *TenantUpdate {
 	return _u
 }
 
-// SetLastLoginTime sets the "last_login_time" field.
-func (_u *TenantUpdate) SetLastLoginTime(v time.Time) *TenantUpdate {
-	_u.mutation.SetLastLoginTime(v)
+// SetLastLoginAt sets the "last_login_at" field.
+func (_u *TenantUpdate) SetLastLoginAt(v time.Time) *TenantUpdate {
+	_u.mutation.SetLastLoginAt(v)
 	return _u
 }
 
-// SetNillableLastLoginTime sets the "last_login_time" field if the given value is not nil.
-func (_u *TenantUpdate) SetNillableLastLoginTime(v *time.Time) *TenantUpdate {
+// SetNillableLastLoginAt sets the "last_login_at" field if the given value is not nil.
+func (_u *TenantUpdate) SetNillableLastLoginAt(v *time.Time) *TenantUpdate {
 	if v != nil {
-		_u.SetLastLoginTime(*v)
+		_u.SetLastLoginAt(*v)
 	}
 	return _u
 }
 
-// ClearLastLoginTime clears the value of the "last_login_time" field.
-func (_u *TenantUpdate) ClearLastLoginTime() *TenantUpdate {
-	_u.mutation.ClearLastLoginTime()
+// ClearLastLoginAt clears the value of the "last_login_at" field.
+func (_u *TenantUpdate) ClearLastLoginAt() *TenantUpdate {
+	_u.mutation.ClearLastLoginAt()
 	return _u
 }
 
@@ -660,11 +660,11 @@ func (_u *TenantUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.ExpiredAtCleared() {
 		_spec.ClearField(tenant.FieldExpiredAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.LastLoginTime(); ok {
-		_spec.SetField(tenant.FieldLastLoginTime, field.TypeTime, value)
+	if value, ok := _u.mutation.LastLoginAt(); ok {
+		_spec.SetField(tenant.FieldLastLoginAt, field.TypeTime, value)
 	}
-	if _u.mutation.LastLoginTimeCleared() {
-		_spec.ClearField(tenant.FieldLastLoginTime, field.TypeTime)
+	if _u.mutation.LastLoginAtCleared() {
+		_spec.ClearField(tenant.FieldLastLoginAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.LastLoginIP(); ok {
 		_spec.SetField(tenant.FieldLastLoginIP, field.TypeString, value)
@@ -1082,23 +1082,23 @@ func (_u *TenantUpdateOne) ClearExpiredAt() *TenantUpdateOne {
 	return _u
 }
 
-// SetLastLoginTime sets the "last_login_time" field.
-func (_u *TenantUpdateOne) SetLastLoginTime(v time.Time) *TenantUpdateOne {
-	_u.mutation.SetLastLoginTime(v)
+// SetLastLoginAt sets the "last_login_at" field.
+func (_u *TenantUpdateOne) SetLastLoginAt(v time.Time) *TenantUpdateOne {
+	_u.mutation.SetLastLoginAt(v)
 	return _u
 }
 
-// SetNillableLastLoginTime sets the "last_login_time" field if the given value is not nil.
-func (_u *TenantUpdateOne) SetNillableLastLoginTime(v *time.Time) *TenantUpdateOne {
+// SetNillableLastLoginAt sets the "last_login_at" field if the given value is not nil.
+func (_u *TenantUpdateOne) SetNillableLastLoginAt(v *time.Time) *TenantUpdateOne {
 	if v != nil {
-		_u.SetLastLoginTime(*v)
+		_u.SetLastLoginAt(*v)
 	}
 	return _u
 }
 
-// ClearLastLoginTime clears the value of the "last_login_time" field.
-func (_u *TenantUpdateOne) ClearLastLoginTime() *TenantUpdateOne {
-	_u.mutation.ClearLastLoginTime()
+// ClearLastLoginAt clears the value of the "last_login_at" field.
+func (_u *TenantUpdateOne) ClearLastLoginAt() *TenantUpdateOne {
+	_u.mutation.ClearLastLoginAt()
 	return _u
 }
 
@@ -1355,11 +1355,11 @@ func (_u *TenantUpdateOne) sqlSave(ctx context.Context) (_node *Tenant, err erro
 	if _u.mutation.ExpiredAtCleared() {
 		_spec.ClearField(tenant.FieldExpiredAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.LastLoginTime(); ok {
-		_spec.SetField(tenant.FieldLastLoginTime, field.TypeTime, value)
+	if value, ok := _u.mutation.LastLoginAt(); ok {
+		_spec.SetField(tenant.FieldLastLoginAt, field.TypeTime, value)
 	}
-	if _u.mutation.LastLoginTimeCleared() {
-		_spec.ClearField(tenant.FieldLastLoginTime, field.TypeTime)
+	if _u.mutation.LastLoginAtCleared() {
+		_spec.ClearField(tenant.FieldLastLoginAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.LastLoginIP(); ok {
 		_spec.SetField(tenant.FieldLastLoginIP, field.TypeString, value)

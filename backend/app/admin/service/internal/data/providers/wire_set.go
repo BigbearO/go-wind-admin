@@ -34,9 +34,9 @@ var ProviderSet = wire.NewSet(
 	data.NewTaskRepo,
 	data.NewAdminLoginRestrictionRepo,
 	data.NewApiResourceRepo,
+	data.NewPermissionRepo,
 
-	data.NewOrganizationRepo,
-	data.NewDepartmentRepo,
+	data.NewOrgUnitRepo,
 	data.NewPositionRepo,
 	data.NewRoleRepo,
 	data.NewUserRepo,
@@ -44,12 +44,12 @@ var ProviderSet = wire.NewSet(
 	data.NewUserCredentialRepo,
 
 	data.NewRoleApiRepo,
-	data.NewRoleDeptRepo,
 	data.NewRoleMenuRepo,
-	data.NewRoleOrgRepo,
-	data.NewRolePositionRepo,
-	data.NewUserRoleRepo,
-	data.NewUserPositionRepo,
+
+	data.NewMembershipRepo,
+	data.NewMembershipOrgUnitRepo,
+	data.NewMembershipPositionRepo,
+	data.NewMembershipRoleRepo,
 
 	data.NewAdminLoginLogRepo,
 	data.NewAdminOperationLogRepo,

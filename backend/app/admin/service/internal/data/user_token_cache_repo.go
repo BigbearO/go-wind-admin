@@ -53,9 +53,27 @@ func NewUserTokenCacheRepo(
 }
 
 // GenerateToken 创建令牌
-func (r *UserTokenCacheRepo) GenerateToken(ctx context.Context, user *userV1.User, clientId string) (accessToken string, refreshToken string, err error) {
+func (r *UserTokenCacheRepo) GenerateToken(
+	ctx context.Context,
+	user *userV1.User,
+	dataScope *userV1.Role_DataScope,
+	orgUnitID *uint32,
+	clientID *string,
+	deviceID *string,
+	isPlatformAdmin *bool,
+	isTenantAdmin *bool,
+) (accessToken string, refreshToken string, err error) {
 	// 创建访问令牌
-	if accessToken, err = r.GenerateAccessToken(ctx, user, clientId); accessToken == "" {
+	if accessToken, err = r.GenerateAccessToken(
+		ctx,
+		user,
+		dataScope,
+		orgUnitID,
+		clientID,
+		deviceID,
+		isPlatformAdmin,
+		isTenantAdmin,
+	); accessToken == "" {
 		err = errors.New("create access token failed")
 		return
 	}
@@ -70,8 +88,25 @@ func (r *UserTokenCacheRepo) GenerateToken(ctx context.Context, user *userV1.Use
 }
 
 // GenerateAccessToken 创建访问令牌
-func (r *UserTokenCacheRepo) GenerateAccessToken(ctx context.Context, user *userV1.User, clientId string) (accessToken string, err error) {
-	if accessToken = r.createAccessJwtToken(user, clientId); accessToken == "" {
+func (r *UserTokenCacheRepo) GenerateAccessToken(
+	ctx context.Context,
+	user *userV1.User,
+	dataScope *userV1.Role_DataScope,
+	orgUnitID *uint32,
+	clientID *string,
+	deviceID *string,
+	isPlatformAdmin *bool,
+	isTenantAdmin *bool,
+) (accessToken string, err error) {
+	if accessToken = r.createAccessJwtToken(
+		user,
+		dataScope,
+		orgUnitID,
+		clientID,
+		deviceID,
+		isPlatformAdmin,
+		isTenantAdmin,
+	); accessToken == "" {
 		err = errors.New("create access token failed")
 		return
 	}
@@ -217,8 +252,16 @@ func (r *UserTokenCacheRepo) deleteRefreshTokenFromRedis(ctx context.Context, us
 }
 
 // createAccessJwtToken 生成JWT访问令牌
-func (r *UserTokenCacheRepo) createAccessJwtToken(user *userV1.User, clientId string) string {
-	authClaims := jwt.NewUserTokenAuthClaims(user, clientId)
+func (r *UserTokenCacheRepo) createAccessJwtToken(
+	user *userV1.User,
+	dataScope *userV1.Role_DataScope,
+	orgUnitID *uint32,
+	clientID *string,
+	deviceID *string,
+	isPlatformAdmin *bool,
+	isTenantAdmin *bool,
+) string {
+	authClaims := jwt.NewUserTokenAuthClaims(user, dataScope, orgUnitID, clientID, deviceID, isPlatformAdmin, isTenantAdmin)
 
 	signedToken, err := r.authenticator.CreateIdentity(*authClaims)
 	if err != nil {

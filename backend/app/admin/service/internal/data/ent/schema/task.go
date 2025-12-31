@@ -69,6 +69,7 @@ func (Task) Fields() []ent.Field {
 
 		field.Bool("enable").
 			Comment("启用/禁用任务").
+			Default(false).
 			Optional().
 			Nillable(),
 	}

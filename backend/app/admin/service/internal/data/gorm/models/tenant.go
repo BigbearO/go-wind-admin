@@ -22,7 +22,7 @@ type Tenant struct {
 	UnsubscribeAt    *time.Time `gorm:"column:unsubscribe_at;type:datetime;comment:取消订阅时间"`
 	SubscriptionPlan *string    `gorm:"column:subscription_plan;type:varchar(255);comment:订阅套餐"`
 	ExpiredAt        *time.Time `gorm:"column:expired_at;type:datetime;comment:租户有效期;index:idx_sys_tenant_expired_at"`
-	LastLoginTime    *time.Time `gorm:"column:last_login_time;type:datetime;comment:最后一次登录的时间"`
+	LastLoginAt      *time.Time `gorm:"column:last_login_at;type:datetime;comment:最后一次登录的时间"`
 	LastLoginIP      *string    `gorm:"column:last_login_ip;type:varchar(45);comment:最后一次登录的IP"`
 
 	mixin.TimeAt

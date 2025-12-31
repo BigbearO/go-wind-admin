@@ -35,13 +35,11 @@
       "address": "Address",
       "region": "Region",
       "description": "Description",
-      "lastLoginTime": "Last Login Time",
+      "lastLoginAt": "Last Login Time",
       "lastLoginIp": "Last Login IP",
-      "authority": "Authority",
       "roleId": "Role",
       "tenantId": "Tenant",
-      "orgId": "Organization",
-      "deptId": "Department",
+      "orgUnitId": "Organization",
       "positionId": "Position",
       "workId": "Work ID"
     },
@@ -64,10 +62,9 @@
         "gender" : "Gender",
         "mobile" : "Mobile",
         "email" : "Email",
-        "orgName" : "Organization",
-        "departmentName" : "Department",
+        "orgUnitName" : "Organization",
         "positionName" : "Position",
-        "lastLoginTime" : "Last Login Time",
+        "lastLoginAt" : "Last Login Time",
         "lastLoginIp" : "Last Login IP"
       }
     }
@@ -120,7 +117,7 @@
       "create": "Create"
     }
   },
-  "org": {
+  "orgUnit": {
     "moduleName": "Organization",
     "name": "Organization Name",
     "parentId": "Parent Organization",
@@ -135,30 +132,13 @@
       "create": "Create"
     }
   },
-  "dept": {
-    "moduleName": "Department",
-    "name": "Department Name",
-    "parentId": "Parent Department",
-    "managerId": "Manager ID",
-    "managerName": "Manager Name",
-    "description": "Description",
-    "organization": "Organization",
-    "organizationId": "Organization ID",
-    "organizationName": "Organization Name",
-    "button": {
-      "create": "Create"
-    }
-  },
   "position": {
     "moduleName": "Position",
     "name": "Position Name",
     "parentId": "Parent Position",
-    "organization": "Organization",
-    "organizationId": "Organization ID",
-    "organizationName": "Organization Name",
-    "department": "Department",
-    "departmentId": "Department ID",
-    "departmentName": "Department Name",
+    "orgUnit": "Organization",
+    "orgUnitId": "Organization ID",
+    "orgUnitName": "Organization Name",
     "description": "Description",
     "code": "Code",
     "quota": "Quota",
@@ -173,7 +153,7 @@
     "type": "Tenant Type",
     "auditStatus": "Audit Status",
     "adminSetting": "Tenant Admin Setting",
-    "lastLoginTime" : "Last Login Time",
+    "lastLoginAt" : "Last Login Time",
     "lastLoginIp" : "Last Login IP",
     "logoUrl": "Logo URL",
     "industry": "Industry",

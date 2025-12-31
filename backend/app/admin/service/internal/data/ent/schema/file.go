@@ -44,6 +44,7 @@ func (File) Fields() []ent.Field {
 				"QCloud", "QCLOUD",
 				"Local", "LOCAL",
 			).
+			Default("MINIO").
 			Optional().
 			Nillable(),
 

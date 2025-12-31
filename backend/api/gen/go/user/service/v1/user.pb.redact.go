@@ -138,19 +138,19 @@ func (x *User) Redact() string {
 
 	// Safe field: TenantName
 
-	// Safe field: OrgId
+	// Safe field: OrgUnitId
 
-	// Safe field: OrgName
+	// Safe field: OrgUnitIds
 
-	// Safe field: DepartmentId
-
-	// Safe field: DepartmentName
+	// Safe field: OrgUnitName
 
 	// Safe field: PositionId
 
+	// Safe field: PositionIds
+
 	// Safe field: PositionName
 
-	// Safe field: WorkId
+	// Safe field: RoleId
 
 	// Safe field: RoleIds
 
@@ -184,13 +184,9 @@ func (x *User) Redact() string {
 
 	// Safe field: Remark
 
-	// Safe field: LastLoginTime
+	// Safe field: LastLoginAt
 
 	// Safe field: LastLoginIp
-
-	// Safe field: Status
-
-	// Safe field: Authority
 
 	// Safe field: CreatedBy
 

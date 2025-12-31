@@ -155,19 +155,25 @@ func (x *Role) Redact() string {
 
 	// Safe field: Name
 
-	// Safe field: SortOrder
-
 	// Safe field: Code
+
+	// Safe field: SortOrder
 
 	// Safe field: Status
 
+	// Safe field: Type
+
+	// Safe field: DataScope
+
 	// Safe field: Remark
+
+	// Safe field: CustomOrgUnitIds
+
+	// Safe field: Permissions
 
 	// Safe field: Menus
 
 	// Safe field: Apis
-
-	// Safe field: DataScope
 
 	// Safe field: TenantId
 

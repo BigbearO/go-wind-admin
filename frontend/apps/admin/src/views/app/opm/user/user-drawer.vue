@@ -8,18 +8,14 @@ import { notification } from 'ant-design-vue';
 
 import { useVbenForm, z } from '#/adapter/form';
 import {
-  type userservicev1_Department as Department,
-  type userservicev1_Organization as Organization,
+  type userservicev1_OrgUnit as OrgUnit,
   type userservicev1_Position as Position,
 } from '#/generated/api/admin/service/v1';
 import {
-  authorityList,
-  findDepartment,
   findPosition,
   genderList,
   statusList,
-  useDepartmentStore,
-  useOrganizationStore,
+  useOrgUnitStore,
   usePositionStore,
   useRoleStore,
   useUserStore,
@@ -27,14 +23,12 @@ import {
 
 const userStore = useUserStore();
 const roleStore = useRoleStore();
-const orgStore = useOrganizationStore();
+const orgUnitStore = useOrgUnitStore();
 const positionStore = usePositionStore();
-const deptStore = useDepartmentStore();
 
 const data = ref();
 
-const orgList = ref<Organization[]>([]);
-const deptList = ref<Department[]>([]);
+const orgUnitList = ref<OrgUnit[]>([]);
 const positionList = ref<Position[]>([]);
 
 const getTitle = computed(() =>
@@ -79,25 +73,6 @@ const [BaseForm, baseFormApi] = useVbenForm({
       // rules: 'required',
     },
     {
-      component: 'Select',
-      fieldName: 'authority',
-      label: $t('page.user.table.authority'),
-      defaultValue: 'CUSTOMER_USER',
-      componentProps: {
-        placeholder: $t('ui.placeholder.select'),
-        options: authorityList,
-        filterOption: (input: string, option: any) =>
-          option.label.toLowerCase().includes(input.toLowerCase()),
-        allowClear: true,
-        showSearch: true,
-      },
-      rules: 'selectRequired',
-      dependencies: {
-        disabled: () => !data.value?.create,
-        triggerFields: ['authority'],
-      },
-    },
-    {
       component: 'ApiTreeSelect',
       fieldName: 'roleIds',
       label: $t('page.user.form.role'),
@@ -125,7 +100,7 @@ const [BaseForm, baseFormApi] = useVbenForm({
     {
       component: 'ApiTreeSelect',
       fieldName: 'orgId',
-      label: $t('page.user.form.org'),
+      label: $t('page.user.form.orgUnit'),
       componentProps: {
         placeholder: $t('ui.placeholder.select'),
         numberToString: true,
@@ -137,10 +112,10 @@ const [BaseForm, baseFormApi] = useVbenForm({
         valueField: 'id',
         treeNodeFilterProp: 'label',
         api: async () => {
-          const result = await orgStore.listOrganization(undefined, {
+          const result = await orgUnitStore.listOrgUnit(undefined, {
             status: 'ON',
           });
-          orgList.value = result.items ?? [];
+          orgUnitList.value = result.items ?? [];
           return result.items;
         },
         onChange: async (orgId: any) => {
@@ -149,59 +124,7 @@ const [BaseForm, baseFormApi] = useVbenForm({
           if (!orgId) {
             await baseFormApi.setValues(
               {
-                orgId: undefined,
-                departmentId: undefined,
-                positionId: undefined,
-              },
-              false,
-            );
-          }
-        },
-      },
-    },
-    {
-      component: 'ApiTreeSelect',
-      fieldName: 'departmentId',
-      label: $t('page.user.form.department'),
-      componentProps: {
-        placeholder: $t('ui.placeholder.select'),
-        numberToString: true,
-        showSearch: true,
-        treeDefaultExpandAll: true,
-        allowClear: true,
-        childrenField: 'children',
-        labelField: 'name',
-        valueField: 'id',
-        treeNodeFilterProp: 'label',
-        api: async () => {
-          const values = await baseFormApi.getValues();
-          // console.log('values', values);
-
-          const result = await deptStore.listDepartment(undefined, {
-            status: 'ON',
-            organizationId: values.orgId,
-          });
-          deptList.value = result.items ?? [];
-          return result.items;
-        },
-        onChange: async (deptId: any) => {
-          // console.log('department onChange:', deptId);
-
-          if (!deptId) {
-            await baseFormApi.setValues(
-              {
-                positionId: undefined,
-              },
-              false,
-            );
-          }
-
-          const selectedDept = findDepartment(deptList.value, deptId);
-          console.log('selectedDept:', selectedDept);
-          if (selectedDept) {
-            await baseFormApi.setValues(
-              {
-                orgId: selectedDept.organizationId || undefined,
+                orgUnitId: undefined,
                 positionId: undefined,
               },
               false,
@@ -237,8 +160,7 @@ const [BaseForm, baseFormApi] = useVbenForm({
           if (!positionId) {
             await baseFormApi.setValues(
               {
-                orgId: undefined,
-                departmentId: undefined,
+                orgUnitId: undefined,
               },
               false,
             );
@@ -249,8 +171,7 @@ const [BaseForm, baseFormApi] = useVbenForm({
           if (selectedPosition) {
             await baseFormApi.setValues(
               {
-                orgId: selectedPosition.organizationId || undefined,
-                departmentId: selectedPosition.departmentId || undefined,
+                orgUnitId: selectedPosition.orgUnitId || undefined,
               },
               false,
             );

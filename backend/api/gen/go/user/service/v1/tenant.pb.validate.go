@@ -241,14 +241,14 @@ func (m *Tenant) validate(all bool) error {
 		// no validation rules for MemberCount
 	}
 
-	if m.LastLoginTime != nil {
+	if m.LastLoginAt != nil {
 
 		if all {
-			switch v := interface{}(m.GetLastLoginTime()).(type) {
+			switch v := interface{}(m.GetLastLoginAt()).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
 					errors = append(errors, TenantValidationError{
-						field:  "LastLoginTime",
+						field:  "LastLoginAt",
 						reason: "embedded message failed validation",
 						cause:  err,
 					})
@@ -256,16 +256,16 @@ func (m *Tenant) validate(all bool) error {
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
 					errors = append(errors, TenantValidationError{
-						field:  "LastLoginTime",
+						field:  "LastLoginAt",
 						reason: "embedded message failed validation",
 						cause:  err,
 					})
 				}
 			}
-		} else if v, ok := interface{}(m.GetLastLoginTime()).(interface{ Validate() error }); ok {
+		} else if v, ok := interface{}(m.GetLastLoginAt()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return TenantValidationError{
-					field:  "LastLoginTime",
+					field:  "LastLoginAt",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}

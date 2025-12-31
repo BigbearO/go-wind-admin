@@ -14,37 +14,103 @@ import (
 )
 
 const (
-	ClaimFieldUserName  = authn.ClaimFieldSubject // 用户名
-	ClaimFieldUserID    = "uid"                   // 用户ID
-	ClaimFieldTenantID  = "tid"                   // 租户ID
-	ClaimFieldClientID  = "cid"                   // 客户端ID
-	ClaimFieldDeviceID  = "did"                   // 设备ID
-	ClaimFieldAuthority = "aut"                   // 用户权限
-	//ClaimFieldRoleIds   = "rid"                   // 角色ID列表
-	ClaimFieldRoleCodes = "roc" // 角色码列表
+	ClaimFieldUserName        = authn.ClaimFieldSubject // 用户名
+	ClaimFieldUserID          = "uid"                   // 用户 ID
+	ClaimFieldTenantID        = "tid"                   // 租户 ID
+	ClaimFieldClientID        = "cid"                   // 客户端 ID
+	ClaimFieldDeviceID        = "did"                   // 设备 ID
+	ClaimFieldRoleCodes       = "roc"                   // 角色码列表
+	ClaimFieldIsPlatformAdmin = "pad"                   // 是否平台管理员
+	ClaimFieldIsTenantAdmin   = "tad"                   // 是否为租户管理员
+	ClaimFieldDataScope       = "ds"                    // 数据范围
+	ClaimFieldOrgUnitID       = "ouid"                  // 组织单元 ID
 )
 
 // NewUserTokenPayload 创建用户令牌
-func NewUserTokenPayload(user *userV1.User, clientId string) *authenticationV1.UserTokenPayload {
+func NewUserTokenPayload(
+	user *userV1.User,
+	dataScope *userV1.Role_DataScope,
+	orgUnitID *uint32,
+	clientID *string,
+	deviceID *string,
+	isPlatformAdmin *bool,
+	isTenantAdmin *bool,
+) *authenticationV1.UserTokenPayload {
+	if user == nil {
+		return &authenticationV1.UserTokenPayload{}
+	}
+
+	if isTenantAdmin != nil && *isTenantAdmin == true {
+		if user.TenantId == nil || *user.TenantId == 0 {
+			*isTenantAdmin = false
+		}
+	}
+
 	return &authenticationV1.UserTokenPayload{
-		UserId:    user.GetId(),
-		TenantId:  user.TenantId,
-		Username:  user.Username,
-		ClientId:  trans.Ptr(clientId),
-		Authority: user.GetAuthority(),
-		Roles:     user.Roles,
+		Username:        user.Username,
+		UserId:          user.GetId(),
+		TenantId:        user.TenantId,
+		ClientId:        clientID,
+		DeviceId:        deviceID,
+		Roles:           user.Roles,
+		IsPlatformAdmin: isPlatformAdmin,
+		IsTenantAdmin:   isTenantAdmin,
+		DataScope:       dataScope,
+		OrgUnitId:       orgUnitID,
 	}
 }
 
-func NewUserTokenAuthClaims(user *userV1.User, clientId string) *authn.AuthClaims {
-	return &authn.AuthClaims{
+func NewUserTokenAuthClaims(
+	user *userV1.User,
+	dataScope *userV1.Role_DataScope,
+	orgUnitID *uint32,
+	clientID *string,
+	deviceID *string,
+	isPlatformAdmin *bool,
+	isTenantAdmin *bool,
+) *authn.AuthClaims {
+	if user == nil {
+		return &authn.AuthClaims{}
+	}
+
+	authClaims := authn.AuthClaims{
 		ClaimFieldUserName:  user.GetUsername(),
 		ClaimFieldUserID:    user.GetId(),
 		ClaimFieldTenantID:  user.GetTenantId(),
-		ClaimFieldClientID:  clientId,
-		ClaimFieldAuthority: user.Authority.String(),
 		ClaimFieldRoleCodes: user.Roles,
 	}
+
+	if deviceID != nil {
+		authClaims[ClaimFieldDeviceID] = *deviceID
+	}
+	if clientID != nil {
+		authClaims[ClaimFieldClientID] = *clientID
+	}
+
+	if dataScope != nil {
+		authClaims[ClaimFieldDataScope] = dataScope.String()
+	}
+	if orgUnitID != nil {
+		authClaims[ClaimFieldOrgUnitID] = *orgUnitID
+	}
+
+	if isPlatformAdmin != nil {
+		intValue := 0
+		if *isPlatformAdmin {
+			intValue = 1
+		}
+		authClaims[ClaimFieldIsPlatformAdmin] = intValue
+	}
+
+	if isTenantAdmin != nil {
+		intValue := 0
+		if *isTenantAdmin {
+			intValue = 1
+		}
+		authClaims[ClaimFieldIsTenantAdmin] = intValue
+	}
+
+	return &authClaims
 }
 
 func NewUserTokenPayloadWithClaims(claims *authn.AuthClaims) (*authenticationV1.UserTokenPayload, error) {
@@ -82,15 +148,12 @@ func NewUserTokenPayloadWithClaims(claims *authn.AuthClaims) (*authenticationV1.
 		payload.ClientId = trans.Ptr(clientId)
 	}
 
-	authority, err := claims.GetString(ClaimFieldAuthority)
+	deviceId, err := claims.GetString(ClaimFieldDeviceID)
 	if err != nil {
-		log.Errorf("GetString ClaimFieldAuthority failed: %v", err)
+		log.Errorf("GetString ClaimFieldDeviceID failed: %v", err)
 	}
-	if authority != "" {
-		v, ok := userV1.User_Authority_value[authority]
-		if ok {
-			payload.Authority = userV1.User_Authority(v)
-		}
+	if deviceId != "" {
+		payload.DeviceId = trans.Ptr(deviceId)
 	}
 
 	roleCodes, err := claims.GetStrings(ClaimFieldRoleCodes)
@@ -100,6 +163,39 @@ func NewUserTokenPayloadWithClaims(claims *authn.AuthClaims) (*authenticationV1.
 	if roleCodes != nil {
 		payload.Roles = roleCodes
 	}
+
+	dataScope, err := claims.GetString(ClaimFieldDataScope)
+	if err != nil {
+		log.Errorf("GetString ClaimFieldDataScope failed: %v", err)
+	}
+	if dataScope != "" {
+		v, ok := userV1.Role_DataScope_value[dataScope]
+		if ok {
+			payload.DataScope = trans.Ptr(userV1.Role_DataScope(v))
+		}
+	}
+
+	orgUnitID, err := claims.GetUint32(ClaimFieldOrgUnitID)
+	if err != nil {
+		log.Errorf("GetUint32 ClaimFieldOrgUnitID failed: %v", err)
+	}
+	if orgUnitID != 0 {
+		payload.OrgUnitId = trans.Ptr(orgUnitID)
+	}
+
+	isPlatformAdmin, err := claims.GetInt(ClaimFieldIsPlatformAdmin)
+	if err != nil {
+		log.Errorf("GetBool ClaimFieldIsPlatformAdmin failed: %v", err)
+	}
+	b := isPlatformAdmin != 0
+	payload.IsPlatformAdmin = trans.Ptr(b)
+
+	isTenantAdmin, err := claims.GetInt(ClaimFieldIsTenantAdmin)
+	if err != nil {
+		log.Errorf("GetBool ClaimFieldIsTenantAdmin failed: %v", err)
+	}
+	b = isTenantAdmin != 0
+	payload.IsTenantAdmin = trans.Ptr(b)
 
 	return payload, nil
 }
@@ -130,12 +226,22 @@ func NewUserTokenPayloadWithJwtMapClaims(claims jwt.MapClaims) (*authenticationV
 		payload.ClientId = trans.Ptr(clientId.(string))
 	}
 
-	authority, _ := claims[ClaimFieldAuthority]
-	if authority != nil {
-		v, ok := userV1.User_Authority_value[authority.(string)]
+	deviceId, _ := claims[ClaimFieldDeviceID]
+	if deviceId != nil {
+		payload.DeviceId = trans.Ptr(deviceId.(string))
+	}
+
+	dataScope, _ := claims[ClaimFieldDataScope]
+	if dataScope != nil {
+		v, ok := userV1.Role_DataScope_value[dataScope.(string)]
 		if ok {
-			payload.Authority = userV1.User_Authority(v)
+			payload.DataScope = trans.Ptr(userV1.Role_DataScope(v))
 		}
+	}
+
+	orgUnitID, _ := claims[ClaimFieldOrgUnitID]
+	if orgUnitID != nil {
+		payload.OrgUnitId = trans.Ptr(uint32(orgUnitID.(float64)))
 	}
 
 	roleCodes, _ := claims[ClaimFieldRoleCodes]
@@ -152,6 +258,26 @@ func NewUserTokenPayloadWithJwtMapClaims(claims jwt.MapClaims) (*authenticationV
 		default:
 			return nil, errors.New("invalid roleCodes type")
 		}
+	}
+
+	isPlatformAdmin, _ := claims[ClaimFieldIsPlatformAdmin]
+	if isPlatformAdmin != nil {
+		intValue := isPlatformAdmin.(float64)
+		b := false
+		if intValue != 0 {
+			b = true
+		}
+		payload.IsPlatformAdmin = trans.Ptr(b)
+	}
+
+	isTenantAdmin, _ := claims[ClaimFieldIsTenantAdmin]
+	if isTenantAdmin != nil {
+		intValue := isTenantAdmin.(float64)
+		b := false
+		if intValue != 0 {
+			b = true
+		}
+		payload.IsTenantAdmin = trans.Ptr(b)
 	}
 
 	return payload, nil

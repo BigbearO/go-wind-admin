@@ -18,9 +18,6 @@ type AdminOperationLog func(*sql.Selector)
 // ApiResource is the predicate function for apiresource builders.
 type ApiResource func(*sql.Selector)
 
-// Department is the predicate function for department builders.
-type Department func(*sql.Selector)
-
 // DictEntry is the predicate function for dictentry builders.
 type DictEntry func(*sql.Selector)
 
@@ -42,11 +39,26 @@ type InternalMessageRecipient func(*sql.Selector)
 // Language is the predicate function for language builders.
 type Language func(*sql.Selector)
 
+// Membership is the predicate function for membership builders.
+type Membership func(*sql.Selector)
+
+// MembershipOrgUnit is the predicate function for membershiporgunit builders.
+type MembershipOrgUnit func(*sql.Selector)
+
+// MembershipPosition is the predicate function for membershipposition builders.
+type MembershipPosition func(*sql.Selector)
+
+// MembershipRole is the predicate function for membershiprole builders.
+type MembershipRole func(*sql.Selector)
+
 // Menu is the predicate function for menu builders.
 type Menu func(*sql.Selector)
 
-// Organization is the predicate function for organization builders.
-type Organization func(*sql.Selector)
+// OrgUnit is the predicate function for orgunit builders.
+type OrgUnit func(*sql.Selector)
+
+// Permission is the predicate function for permission builders.
+type Permission func(*sql.Selector)
 
 // Position is the predicate function for position builders.
 type Position func(*sql.Selector)
@@ -57,17 +69,8 @@ type Role func(*sql.Selector)
 // RoleApi is the predicate function for roleapi builders.
 type RoleApi func(*sql.Selector)
 
-// RoleDept is the predicate function for roledept builders.
-type RoleDept func(*sql.Selector)
-
 // RoleMenu is the predicate function for rolemenu builders.
 type RoleMenu func(*sql.Selector)
-
-// RoleOrg is the predicate function for roleorg builders.
-type RoleOrg func(*sql.Selector)
-
-// RolePosition is the predicate function for roleposition builders.
-type RolePosition func(*sql.Selector)
 
 // Task is the predicate function for task builders.
 type Task func(*sql.Selector)
@@ -80,9 +83,3 @@ type User func(*sql.Selector)
 
 // UserCredential is the predicate function for usercredential builders.
 type UserCredential func(*sql.Selector)
-
-// UserPosition is the predicate function for userposition builders.
-type UserPosition func(*sql.Selector)
-
-// UserRole is the predicate function for userrole builders.
-type UserRole func(*sql.Selector)

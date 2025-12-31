@@ -409,164 +409,6 @@ paths:
                 "200":
                     description: OK
                     content: {}
-    /admin/v1/departments:
-        get:
-            tags:
-                - DepartmentService
-            description: 查询部门列表
-            operationId: DepartmentService_List
-            parameters:
-                - name: page
-                  in: query
-                  description: 当前页码（从1开始，默认1）
-                  schema:
-                    type: integer
-                    format: uint32
-                - name: pageSize
-                  in: query
-                  description: 每页条数（默认10，建议设置上限如100）
-                  schema:
-                    type: integer
-                    format: uint32
-                - name: offset
-                  in: query
-                  description: 跳过的记录数（从0开始，默认0）
-                  schema:
-                    type: string
-                - name: limit
-                  in: query
-                  description: 最多返回的记录数（默认10，建议设置上限如100）
-                  schema:
-                    type: integer
-                    format: uint32
-                - name: token
-                  in: query
-                  description: 上一页最后一条记录的游标（如ID/时间戳+ID，首次请求为空）
-                  schema:
-                    type: string
-                - name: noPaging
-                  in: query
-                  description: 是否不分页，如果为true，则page和pageSize参数无效。
-                  schema:
-                    type: boolean
-                - name: orderBy
-                  in: query
-                  description: 排序条件，其语法为JSON字符串，例如：{"val1", "-val2"}。字段名前加'-'为降序，否则为升序。
-                  schema:
-                    type: array
-                    items:
-                        type: string
-                - name: query
-                  in: query
-                  description: AND过滤参数，其语法为json格式的字符串，如：{"key1":"val1","key2":"val2"}，具体请参见：https://github.com/tx7do/go-utils/tree/main/entgo/query/README.md
-                  schema:
-                    type: string
-                - name: or
-                  in: query
-                  description: OR过滤参数，语法同AND过滤参数。
-                  schema:
-                    type: string
-                - name: filterExpr.type
-                  in: query
-                  description: 过滤表达式类型
-                  schema:
-                    enum:
-                        - EXPR_TYPE_UNSPECIFIED
-                        - AND
-                        - OR
-                    type: string
-                    format: enum
-                - name: fieldMask
-                  in: query
-                  description: 字段掩码，其作用为SELECT中的字段，其语法为使用逗号分隔字段名，例如：id,realName,userName。如果为空则选中所有字段，即SELECT *。
-                  schema:
-                    type: string
-                    format: field-mask
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/ListDepartmentResponse'
-        post:
-            tags:
-                - DepartmentService
-            description: 创建部门
-            operationId: DepartmentService_Create
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/CreateDepartmentRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content: {}
-    /admin/v1/departments/{id}:
-        get:
-            tags:
-                - DepartmentService
-            description: 查询部门详情
-            operationId: DepartmentService_Get
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: integer
-                    format: uint32
-                - name: viewMask
-                  in: query
-                  schema:
-                    type: string
-                    format: field-mask
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Department'
-        put:
-            tags:
-                - DepartmentService
-            description: 更新部门
-            operationId: DepartmentService_Update
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: integer
-                    format: uint32
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/UpdateDepartmentRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content: {}
-        delete:
-            tags:
-                - DepartmentService
-            description: 删除部门
-            operationId: DepartmentService_Delete
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: integer
-                    format: uint32
-            responses:
-                "200":
-                    description: OK
-                    content: {}
     /admin/v1/dict-entries:
         get:
             tags:
@@ -2016,12 +1858,12 @@ paths:
                 "200":
                     description: OK
                     content: {}
-    /admin/v1/organizations:
+    /admin/v1/org_units:
         get:
             tags:
-                - OrganizationService
-            description: 查询组织列表
-            operationId: OrganizationService_List
+                - OrgUnitService
+            description: 查询组织单元列表
+            operationId: OrgUnitService_List
             parameters:
                 - name: page
                   in: query
@@ -2095,28 +1937,28 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/ListOrganizationResponse'
+                                $ref: '#/components/schemas/ListOrgUnitResponse'
         post:
             tags:
-                - OrganizationService
-            description: 创建组织
-            operationId: OrganizationService_Create
+                - OrgUnitService
+            description: 创建组织单元
+            operationId: OrgUnitService_Create
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/CreateOrganizationRequest'
+                            $ref: '#/components/schemas/CreateOrgUnitRequest'
                 required: true
             responses:
                 "200":
                     description: OK
                     content: {}
-    /admin/v1/organizations/{id}:
+    /admin/v1/org_units/{id}:
         get:
             tags:
-                - OrganizationService
-            description: 查询组织详情
-            operationId: OrganizationService_Get
+                - OrgUnitService
+            description: 查询组织单元详情
+            operationId: OrgUnitService_Get
             parameters:
                 - name: id
                   in: path
@@ -2135,12 +1977,12 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Organization'
+                                $ref: '#/components/schemas/OrgUnit'
         put:
             tags:
-                - OrganizationService
-            description: 更新组织
-            operationId: OrganizationService_Update
+                - OrgUnitService
+            description: 更新组织单元
+            operationId: OrgUnitService_Update
             parameters:
                 - name: id
                   in: path
@@ -2152,7 +1994,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/UpdateOrganizationRequest'
+                            $ref: '#/components/schemas/UpdateOrgUnitRequest'
                 required: true
             responses:
                 "200":
@@ -2160,9 +2002,9 @@ paths:
                     content: {}
         delete:
             tags:
-                - OrganizationService
-            description: 删除组织
-            operationId: OrganizationService_Delete
+                - OrgUnitService
+            description: 删除组织单元
+            operationId: OrgUnitService_Delete
             parameters:
                 - name: id
                   in: path
@@ -2187,6 +2029,164 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ListPermissionCodeResponse'
+    /admin/v1/permissions:
+        get:
+            tags:
+                - PermissionService
+            description: 查询权限列表
+            operationId: PermissionService_List
+            parameters:
+                - name: page
+                  in: query
+                  description: 当前页码（从1开始，默认1）
+                  schema:
+                    type: integer
+                    format: uint32
+                - name: pageSize
+                  in: query
+                  description: 每页条数（默认10，建议设置上限如100）
+                  schema:
+                    type: integer
+                    format: uint32
+                - name: offset
+                  in: query
+                  description: 跳过的记录数（从0开始，默认0）
+                  schema:
+                    type: string
+                - name: limit
+                  in: query
+                  description: 最多返回的记录数（默认10，建议设置上限如100）
+                  schema:
+                    type: integer
+                    format: uint32
+                - name: token
+                  in: query
+                  description: 上一页最后一条记录的游标（如ID/时间戳+ID，首次请求为空）
+                  schema:
+                    type: string
+                - name: noPaging
+                  in: query
+                  description: 是否不分页，如果为true，则page和pageSize参数无效。
+                  schema:
+                    type: boolean
+                - name: orderBy
+                  in: query
+                  description: 排序条件，其语法为JSON字符串，例如：{"val1", "-val2"}。字段名前加'-'为降序，否则为升序。
+                  schema:
+                    type: array
+                    items:
+                        type: string
+                - name: query
+                  in: query
+                  description: AND过滤参数，其语法为json格式的字符串，如：{"key1":"val1","key2":"val2"}，具体请参见：https://github.com/tx7do/go-utils/tree/main/entgo/query/README.md
+                  schema:
+                    type: string
+                - name: or
+                  in: query
+                  description: OR过滤参数，语法同AND过滤参数。
+                  schema:
+                    type: string
+                - name: filterExpr.type
+                  in: query
+                  description: 过滤表达式类型
+                  schema:
+                    enum:
+                        - EXPR_TYPE_UNSPECIFIED
+                        - AND
+                        - OR
+                    type: string
+                    format: enum
+                - name: fieldMask
+                  in: query
+                  description: 字段掩码，其作用为SELECT中的字段，其语法为使用逗号分隔字段名，例如：id,realName,userName。如果为空则选中所有字段，即SELECT *。
+                  schema:
+                    type: string
+                    format: field-mask
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListPermissionResponse'
+        post:
+            tags:
+                - PermissionService
+            description: 创建权限
+            operationId: PermissionService_Create
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreatePermissionRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content: {}
+    /admin/v1/permissions/{id}:
+        get:
+            tags:
+                - PermissionService
+            description: 查询权限详情
+            operationId: PermissionService_Get
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: uint32
+                - name: viewMask
+                  in: query
+                  schema:
+                    type: string
+                    format: field-mask
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Permission'
+        put:
+            tags:
+                - PermissionService
+            description: 更新权限
+            operationId: PermissionService_Update
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: uint32
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UpdatePermissionRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content: {}
+        delete:
+            tags:
+                - PermissionService
+            description: 删除权限
+            operationId: PermissionService_Delete
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: uint32
+            responses:
+                "200":
+                    description: OK
+                    content: {}
     /admin/v1/positions:
         get:
             tags:
@@ -3650,12 +3650,6 @@ components:
                 data:
                     $ref: '#/components/schemas/ApiResource'
             description: 创建 - 请求
-        CreateDepartmentRequest:
-            type: object
-            properties:
-                data:
-                    $ref: '#/components/schemas/Department'
-            description: 创建部门 - 请求
         CreateDictEntryRequest:
             type: object
             properties:
@@ -3686,12 +3680,18 @@ components:
                 data:
                     $ref: '#/components/schemas/Menu'
             description: 创建菜单 - 请求
-        CreateOrganizationRequest:
+        CreateOrgUnitRequest:
             type: object
             properties:
                 data:
-                    $ref: '#/components/schemas/Organization'
-            description: 创建组织 - 请求
+                    $ref: '#/components/schemas/OrgUnit'
+            description: 创建组织单元 - 请求
+        CreatePermissionRequest:
+            type: object
+            properties:
+                data:
+                    $ref: '#/components/schemas/Permission'
+            description: 创建 - 请求
         CreatePositionRequest:
             type: object
             properties:
@@ -3749,85 +3749,6 @@ components:
                         type: integer
                         format: uint32
                     description: 收件箱记录ID列表
-        Department:
-            type: object
-            properties:
-                id:
-                    type: integer
-                    description: 部门ID
-                    format: uint32
-                name:
-                    type: string
-                    description: 部门名称
-                description:
-                    type: string
-                    description: 职能描述
-                organizationId:
-                    type: integer
-                    description: 所属组织ID
-                    format: uint32
-                organizationName:
-                    type: string
-                    description: 所属组织名称
-                managerId:
-                    type: integer
-                    description: 负责人ID
-                    format: uint32
-                managerName:
-                    type: string
-                    description: 负责人名称
-                tenantId:
-                    type: integer
-                    description: 租户ID
-                    format: uint32
-                sortOrder:
-                    type: integer
-                    description: 排序顺序，值越小越靠前
-                    format: int32
-                status:
-                    enum:
-                        - OFF
-                        - ON
-                    type: string
-                    description: 状态
-                    format: enum
-                remark:
-                    type: string
-                    description: 备注
-                parentId:
-                    type: integer
-                    description: 父节点ID
-                    format: uint32
-                children:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/Department'
-                    description: 子节点树
-                createdBy:
-                    type: integer
-                    description: 创建者ID
-                    format: uint32
-                updatedBy:
-                    type: integer
-                    description: 更新者ID
-                    format: uint32
-                deletedBy:
-                    type: integer
-                    description: 删除者用户ID
-                    format: uint32
-                createdAt:
-                    type: string
-                    description: 创建时间
-                    format: date-time
-                updatedAt:
-                    type: string
-                    description: 更新时间
-                    format: date-time
-                deletedAt:
-                    type: string
-                    description: 删除时间
-                    format: date-time
-            description: 部门
         DictEntry:
             type: object
             properties:
@@ -4285,16 +4206,6 @@ components:
                 total:
                     type: string
             description: 查询列表 - 回应
-        ListDepartmentResponse:
-            type: object
-            properties:
-                items:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/Department'
-                total:
-                    type: string
-            description: 部门列表 - 答复
         ListDictEntryResponse:
             type: object
             properties:
@@ -4355,16 +4266,16 @@ components:
                 total:
                     type: string
             description: 查询菜单列表 - 回应
-        ListOrganizationResponse:
+        ListOrgUnitResponse:
             type: object
             properties:
                 items:
                     type: array
                     items:
-                        $ref: '#/components/schemas/Organization'
+                        $ref: '#/components/schemas/OrgUnit'
                 total:
                     type: string
-            description: 组织列表 - 答复
+            description: 获取组织单元列表 - 答复
         ListPermissionCodeResponse:
             type: object
             properties:
@@ -4373,6 +4284,16 @@ components:
                     items:
                         type: string
             description: 查询权限码列表 - 回应
+        ListPermissionResponse:
+            type: object
+            properties:
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Permission'
+                total:
+                    type: string
+            description: 查询列表 - 回应
         ListPositionResponse:
             type: object
             properties:
@@ -4500,6 +4421,9 @@ components:
                     type: string
                     description: 客户端类型
                     format: enum
+                device_id:
+                    type: string
+                    description: 设备唯一标识（可选），用于设备绑定、推送、风控等
             description: 用户后台登录 - 请求
         LoginResponse:
             type: object
@@ -4613,42 +4537,37 @@ components:
                     description: 删除时间
                     format: date-time
             description: 菜单
-        Organization:
+        OrgUnit:
             type: object
             properties:
                 id:
                     type: integer
-                    description: 组织ID
+                    description: 组织单元ID
                     format: uint32
                 name:
                     type: string
-                    description: 组织名称
-                organizationType:
+                    description: 组织单元名称
+                code:
+                    type: string
+                    description: 唯一编码（建议规则：部门编码 + 组织单元类型 + 序号，如 “FIN-LEADER-001”），用于数据同步和快速识别
+                type:
                     enum:
-                        - ORGANIZATION_TYPE_UNSPECIFIED
-                        - GROUP
-                        - SUBSIDIARY
-                        - FILIALE
+                        - COMPANY
                         - DIVISION
+                        - DEPARTMENT
+                        - TEAM
+                        - PROJECT
+                        - COMMITTEE
+                        - REGION
+                        - SUBSIDIARY
+                        - BRANCH
+                        - OTHER
                     type: string
                     description: 组织类型
                     format: enum
-                isLegalEntity:
-                    type: boolean
-                    description: 是否法人实体：1=是（集团/子公司），0=否（分公司/事业部）
-                businessScope:
+                path:
                     type: string
-                    description: 核心业务范围（如“新能源汽车研发与生产”）
-                creditCode:
-                    type: string
-                    description: 统一社会信用代码
-                address:
-                    type: string
-                    description: 注册地址
-                sortOrder:
-                    type: integer
-                    description: 排序顺序，值越小越靠前
-                    format: int32
+                    description: 树路径
                 status:
                     enum:
                         - OFF
@@ -4656,20 +4575,99 @@ components:
                     type: string
                     description: 状态
                     format: enum
-                remark:
+                sortOrder:
+                    type: integer
+                    description: 排序顺序，值越小越靠前
+                    format: int32
+                leaderId:
+                    type: integer
+                    description: 负责人用户ID
+                    format: uint32
+                leaderName:
                     type: string
-                    description: 备注
+                    description: 负责人用户名称
                 tenantId:
                     type: integer
                     description: 租户ID
                     format: uint32
-                managerId:
-                    type: integer
-                    description: 负责人ID
-                    format: uint32
-                managerName:
+                tenantName:
                     type: string
-                    description: 负责人名称
+                    description: 租户名称
+                remark:
+                    type: string
+                    description: 备注
+                description:
+                    type: string
+                    description: 描述信息
+                businessScopes:
+                    type: array
+                    items:
+                        type: string
+                    description: 组织的业务范围/服务条线，支持多值，便于过滤、权限映射和同步
+                externalId:
+                    type: string
+                    description: 外部系统ID
+                isLegalEntity:
+                    type: boolean
+                    description: 是否为法定主体
+                registrationNumber:
+                    type: string
+                    description: 注册号/统一社会信用代码
+                taxId:
+                    type: string
+                    description: 税号
+                legalEntityOrgId:
+                    type: integer
+                    description: 关联的法定主体组织ID（若有）
+                    format: uint32
+                address:
+                    type: string
+                    description: 详细地址
+                phone:
+                    type: string
+                    description: 联系电话
+                email:
+                    type: string
+                    description: 联系邮箱
+                timezone:
+                    type: string
+                    description: 时区，例如：Asia/Shanghai
+                country:
+                    type: string
+                    description: 国家/地区代码
+                latitude:
+                    type: number
+                    description: 纬度
+                    format: double
+                longitude:
+                    type: number
+                    description: 经度
+                    format: double
+                startAt:
+                    type: string
+                    description: 生效开始时间（UTC）
+                    format: date-time
+                endAt:
+                    type: string
+                    description: 生效结束时间（UTC）
+                    format: date-time
+                attributes:
+                    type: object
+                    additionalProperties:
+                        type: string
+                    description: 自定义扩展属性
+                permissionTags:
+                    type: array
+                    items:
+                        type: string
+                    description: 与权限/角色映射的标签
+                contactUserId:
+                    type: integer
+                    description: 业务联系人用户ID
+                    format: uint32
+                contactUserName:
+                    type: string
+                    description: 业务联系人用户名称
                 parentId:
                     type: integer
                     description: 父节点ID
@@ -4677,7 +4675,7 @@ components:
                 children:
                     type: array
                     items:
-                        $ref: '#/components/schemas/Organization'
+                        $ref: '#/components/schemas/OrgUnit'
                     description: 子节点树
                 createdBy:
                     type: integer
@@ -4703,7 +4701,7 @@ components:
                     type: string
                     description: 删除时间
                     format: date-time
-            description: 组织
+            description: 组织单元
         OssUploadUrlRequest:
             type: object
             properties:
@@ -4748,6 +4746,91 @@ components:
                         type: string
                     description: 表单数据，使用POST方法时填写
             description: 获取对象存储上传链接 - 回应
+        Permission:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    description: 权限ID
+                    format: uint32
+                code:
+                    type: string
+                    description: 唯一编码
+                name:
+                    type: string
+                    description: 名称
+                path:
+                    type: string
+                    description: 路径/路由
+                resource:
+                    type: string
+                    description: 资源标识（如 API 资源名）
+                method:
+                    type: string
+                    description: HTTP 方法/动作，如 GET/POST（可选）
+                sortOrder:
+                    type: integer
+                    description: 排序序号
+                    format: int32
+                type:
+                    enum:
+                        - API
+                        - DATA
+                        - MENU
+                        - BUTTON
+                        - PAGE
+                        - OTHER
+                    type: string
+                    description: 权限类型
+                    format: enum
+                remark:
+                    type: string
+                    description: 备注
+                status:
+                    enum:
+                        - OFF
+                        - ON
+                    type: string
+                    description: 状态
+                    format: enum
+                tenantId:
+                    type: integer
+                    description: 租户ID
+                    format: uint32
+                parentId:
+                    type: integer
+                    description: 父节点ID
+                    format: uint32
+                children:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Permission'
+                    description: 子节点树
+                createdBy:
+                    type: integer
+                    description: 创建者ID
+                    format: uint32
+                updatedBy:
+                    type: integer
+                    description: 更新者ID
+                    format: uint32
+                deletedBy:
+                    type: integer
+                    description: 删除者用户ID
+                    format: uint32
+                createdAt:
+                    type: string
+                    description: 创建时间
+                    format: date-time
+                updatedAt:
+                    type: string
+                    description: 更新时间
+                    format: date-time
+                deletedAt:
+                    type: string
+                    description: 删除时间
+                    format: date-time
+            description: 权限
         PhoneVerification:
             required:
                 - code
@@ -4773,7 +4856,7 @@ components:
                 code:
                     type: string
                     description: 唯一编码（建议规则：部门编码 + 职位类型 + 序号，如 “FIN-LEADER-001”），用于数据同步和快速识别
-                quota:
+                headcount:
                     type: integer
                     description: 编制人数（该职位最多可容纳的员工数量，0表示无限制）
                     format: uint32
@@ -4788,30 +4871,65 @@ components:
                     type: string
                     description: 状态
                     format: enum
+                type:
+                    enum:
+                        - REGULAR
+                        - LEADER
+                        - MANAGER
+                        - INTERN
+                        - CONTRACT
+                        - OTHER
+                    type: string
+                    description: 职位类型
+                    format: enum
                 remark:
                     type: string
                     description: 备注
                 description:
                     type: string
-                    description: 职责描述
-                organizationId:
-                    type: integer
-                    description: 所属组织ID
-                    format: uint32
-                organizationName:
+                    description: 职位描述
+                jobFamily:
                     type: string
-                    description: 所属组织名称
-                departmentId:
-                    type: integer
-                    description: 所属部门ID
-                    format: uint32
-                departmentName:
+                    description: 职类/序列
+                jobGrade:
                     type: string
-                    description: 所属部门名称
+                    description: 职级
+                level:
+                    type: integer
+                    description: 数值化职级
+                    format: int32
+                isKeyPosition:
+                    type: boolean
+                    description: 是否关键岗位
                 tenantId:
                     type: integer
                     description: 租户ID
                     format: uint32
+                tenantName:
+                    type: string
+                    description: 租户名称
+                orgUnitId:
+                    type: integer
+                    description: 所属组织单元ID
+                    format: uint32
+                orgUnitName:
+                    type: string
+                    description: 所属组织单元名称
+                reportsToPositionId:
+                    type: integer
+                    description: 汇报关系用户ID
+                    format: uint32
+                reportsToPositionName:
+                    type: string
+                    description: 汇报关系用户名称
+                startAt:
+                    type: string
+                    description: 生效时间（UTC）
+                    format: date-time
+                endAt:
+                    type: string
+                    description: 失效时间（UTC）
+                    format: date-time
                 parentId:
                     type: integer
                     description: 父节点ID
@@ -4874,13 +4992,13 @@ components:
                 name:
                     type: string
                     description: 角色名称
+                code:
+                    type: string
+                    description: 角色标识码（如：ADMIN, VIEWER）
                 sortOrder:
                     type: integer
                     description: 排序顺序，值越小越靠前
                     format: int32
-                code:
-                    type: string
-                    description: 角色值
                 status:
                     enum:
                         - OFF
@@ -4888,37 +5006,53 @@ components:
                     type: string
                     description: 状态
                     format: enum
+                type:
+                    enum:
+                        - SYSTEM
+                        - CUSTOM
+                    type: string
+                    description: 角色类型
+                    format: enum
+                dataScope:
+                    enum:
+                        - DATA_SCOPE_UNSPECIFIED
+                        - ALL
+                        - SELF
+                        - UNIT_ONLY
+                        - UNIT_AND_CHILD
+                        - SELECTED_UNITS
+                    type: string
+                    description: 数据权限范围
+                    format: enum
                 remark:
                     type: string
                     description: 备注
+                customOrgUnitIds:
+                    type: array
+                    items:
+                        type: integer
+                        format: uint32
+                    description: 当 DataScope 为 SELECTED_UNITS 时关联的组织单元列表
+                permissions:
+                    type: array
+                    items:
+                        type: string
+                    description: 权限点列表（如：user:add, file:delete）
                 menus:
                     type: array
                     items:
                         type: integer
                         format: uint32
-                    description: 分配的菜单列表
+                    description: 绑定的菜单ID列表
                 apis:
                     type: array
                     items:
                         type: integer
                         format: uint32
                     description: 分配的API列表
-                dataScope:
-                    enum:
-                        - DATA_SCOPE_UNSPECIFIED
-                        - ALL
-                        - CUSTOM
-                        - SELF
-                        - ORG
-                        - ORG_AND_CHILD
-                        - DEPT
-                        - DEPT_AND_CHILD
-                    type: string
-                    description: 数据权限范围
-                    format: enum
                 tenantId:
                     type: integer
-                    description: 租户ID
+                    description: 租户ID，0代表系统全局角色
                     format: uint32
                 tenantName:
                     type: string
@@ -5287,7 +5421,7 @@ components:
                     type: integer
                     description: 成员数量
                     format: int32
-                lastLoginTime:
+                lastLoginAt:
                     type: string
                     description: 最后登录时间
                     format: date-time
@@ -5561,23 +5695,6 @@ components:
                     type: boolean
                     description: 如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。
             description: 更新 - 请求
-        UpdateDepartmentRequest:
-            type: object
-            properties:
-                id:
-                    type: integer
-                    format: uint32
-                data:
-                    $ref: '#/components/schemas/Department'
-                updateMask:
-                    example: id,realname,username
-                    type: string
-                    description: 要更新的字段列表
-                    format: field-mask
-                allowMissing:
-                    type: boolean
-                    description: 如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。
-            description: 更新部门 - 请求
         UpdateDictEntryRequest:
             type: object
             properties:
@@ -5680,14 +5797,14 @@ components:
                     type: boolean
                     description: 如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。
             description: 更新菜单 - 请求
-        UpdateOrganizationRequest:
+        UpdateOrgUnitRequest:
             type: object
             properties:
                 id:
                     type: integer
                     format: uint32
                 data:
-                    $ref: '#/components/schemas/Organization'
+                    $ref: '#/components/schemas/OrgUnit'
                 updateMask:
                     example: id,realname,username
                     type: string
@@ -5696,7 +5813,24 @@ components:
                 allowMissing:
                     type: boolean
                     description: 如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。
-            description: 更新组织 - 请求
+            description: 更新组织单元 - 请求
+        UpdatePermissionRequest:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: uint32
+                data:
+                    $ref: '#/components/schemas/Permission'
+                updateMask:
+                    example: id,realname,username
+                    type: string
+                    description: 要更新的字段列表
+                    format: field-mask
+                allowMissing:
+                    type: boolean
+                    description: 如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。
+            description: 更新 - 请求
         UpdatePositionRequest:
             type: object
             properties:
@@ -5838,30 +5972,34 @@ components:
                 tenantName:
                     type: string
                     description: 租户名称
-                orgId:
+                orgUnitId:
                     type: integer
                     description: 组织ID
                     format: uint32
-                orgName:
+                orgUnitIds:
+                    type: array
+                    items:
+                        type: integer
+                        format: uint32
+                orgUnitName:
                     type: string
                     description: 组织名称
-                departmentId:
-                    type: integer
-                    description: 部门ID
-                    format: uint32
-                departmentName:
-                    type: string
-                    description: 部门名称
                 positionId:
                     type: integer
                     description: 职位ID
                     format: uint32
+                positionIds:
+                    type: array
+                    items:
+                        type: integer
+                        format: uint32
+                    description: 职位列表
                 positionName:
                     type: string
                     description: 职位名称
-                workId:
+                roleId:
                     type: integer
-                    description: 工号
+                    description: 角色ID
                     format: uint32
                 roleIds:
                     type: array
@@ -5920,30 +6058,13 @@ components:
                 remark:
                     type: string
                     description: 备注
-                lastLoginTime:
+                lastLoginAt:
                     type: string
                     description: 最后登录时间
                     format: date-time
                 lastLoginIp:
                     type: string
                     description: 最后登录IP
-                status:
-                    enum:
-                        - OFF
-                        - ON
-                    type: string
-                    description: 用户状态
-                    format: enum
-                authority:
-                    enum:
-                        - GUEST
-                        - CUSTOMER_USER
-                        - TENANT_ADMIN
-                        - SYS_ADMIN
-                    type: string
-                    default: CUSTOMER_USER
-                    description: 权限
-                    format: enum
                 createdBy:
                     type: integer
                     description: 创建者ID
@@ -6013,8 +6134,6 @@ tags:
       description: API资源管理服务
     - name: AuthenticationService
       description: 用户后台登录认证服务
-    - name: DepartmentService
-      description: 部门管理服务
     - name: DictService
       description: 数据字典管理服务
     - name: FileService
@@ -6027,10 +6146,12 @@ tags:
       description: 站内信消息管理服务
     - name: MenuService
       description: 后台菜单管理服务
-    - name: OrganizationService
-      description: 组织管理服务
+    - name: OrgUnitService
+      description: 组织单元服务
     - name: OssService
       description: OSS服务
+    - name: PermissionService
+      description: 权限管理服务
     - name: PositionService
       description: 职位管理服务
     - name: RoleService

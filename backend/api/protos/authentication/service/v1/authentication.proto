@@ -9,6 +9,8 @@ import "google/api/field_behavior.proto";
 import "redact/v3/redact.proto";
 
 import "user/service/v1/user.proto";
+import "user/service/v1/role.proto";
+import "authentication/service/v1/user_token.proto";
 
 // 用户登录认证服务
 service AuthenticationService {
@@ -128,6 +130,13 @@ message LoginRequest {
       description: "客户端类型"
     }
   ]; // 客户端类型
+
+  optional string device_id = 50 [
+    json_name = "device_id",
+    (gnostic.openapi.v3.property) = {
+      description: "设备唯一标识（可选），用于设备绑定、推送、风控等"
+    }
+  ];
 }
 
 // 用户后台登录 - 回应
@@ -253,65 +262,6 @@ message RegisterUserResponse {
   uint32 user_id = 1;
 }
 
-// 用户令牌载体
-message UserTokenPayload {
-  uint32 user_id = 1 [
-    json_name = "uid",
-    (gnostic.openapi.v3.property) = {
-      description: "用户ID"
-    }
-  ]; // 用户ID
-
-  optional uint32 tenant_id = 2 [
-    json_name = "tid",
-    (gnostic.openapi.v3.property) = {
-      description: "租户ID"
-    }
-  ]; // 租户ID
-
-  optional string username = 3 [
-    json_name = "sub",
-    (gnostic.openapi.v3.property) = {
-      description: "用户名"
-    }
-  ]; // 用户名
-
-  optional string client_id = 4 [
-    json_name = "cid",
-    (gnostic.openapi.v3.property) = {
-      description: "客户端ID"
-    }
-  ]; // 客户端ID
-
-  user.service.v1.User.Authority authority = 5 [
-    json_name = "aut",
-    (gnostic.openapi.v3.property) = {
-      description: "用户权限"
-    }
-  ]; // 用户权限
-
-  repeated string roles = 6 [
-    json_name = "roc",
-    (gnostic.openapi.v3.property) = {
-      description: "用户角色码列表"
-    }
-  ]; // 用户角色码列表
-
-  //  repeated uint32 role_ids = 7 [
-  //    json_name = "rid",
-  //    (gnostic.openapi.v3.property) = {
-  //      description: "角色ID列表"
-  //    }
-  //  ]; // 角色ID列表
-
-  optional string device_id = 8 [
-    json_name = "did",
-    (gnostic.openapi.v3.property) = {
-      description: "设备ID"
-    }
-  ]; // 设备ID
-}
-
 // 获取当前用户身份信息 - 响应
 message WhoAmIResponse {
   uint32 user_id = 1 [
@@ -327,11 +277,4 @@ message WhoAmIResponse {
       description: "当前用户的用户名"
     }
   ]; // 当前用户的用户名
-
-  user.service.v1.User.Authority authority = 3 [
-    json_name = "authority",
-    (gnostic.openapi.v3.property) = {
-      description: "用户权限"
-    }
-  ]; // 用户权限
 }

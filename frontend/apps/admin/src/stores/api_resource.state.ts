@@ -93,13 +93,6 @@ export const useApiResourceStore = defineStore('api-resource', () => {
   };
 });
 
-export const methodList = [
-  { value: 'GET', label: 'GET' },
-  { value: 'POST', label: 'POST' },
-  { value: 'PUT', label: 'PUT' },
-  { value: 'DELETE', label: 'DELETE' },
-];
-
 interface ApiResourceTreeDataNode {
   key: number | string; // 节点唯一标识（父节点用module，子节点用api.id）
   title: string; // 节点显示文本（父节点用module，子节点用api.name）

@@ -294,6 +294,42 @@ func (_u *RoleUpdate) ClearApis() *RoleUpdate {
 	return _u
 }
 
+// SetPermissions sets the "permissions" field.
+func (_u *RoleUpdate) SetPermissions(v []uint32) *RoleUpdate {
+	_u.mutation.SetPermissions(v)
+	return _u
+}
+
+// AppendPermissions appends value to the "permissions" field.
+func (_u *RoleUpdate) AppendPermissions(v []uint32) *RoleUpdate {
+	_u.mutation.AppendPermissions(v)
+	return _u
+}
+
+// ClearPermissions clears the value of the "permissions" field.
+func (_u *RoleUpdate) ClearPermissions() *RoleUpdate {
+	_u.mutation.ClearPermissions()
+	return _u
+}
+
+// SetCustomOrgUnitIds sets the "custom_org_unit_ids" field.
+func (_u *RoleUpdate) SetCustomOrgUnitIds(v []uint32) *RoleUpdate {
+	_u.mutation.SetCustomOrgUnitIds(v)
+	return _u
+}
+
+// AppendCustomOrgUnitIds appends value to the "custom_org_unit_ids" field.
+func (_u *RoleUpdate) AppendCustomOrgUnitIds(v []uint32) *RoleUpdate {
+	_u.mutation.AppendCustomOrgUnitIds(v)
+	return _u
+}
+
+// ClearCustomOrgUnitIds clears the value of the "custom_org_unit_ids" field.
+func (_u *RoleUpdate) ClearCustomOrgUnitIds() *RoleUpdate {
+	_u.mutation.ClearCustomOrgUnitIds()
+	return _u
+}
+
 // SetDataScope sets the "data_scope" field.
 func (_u *RoleUpdate) SetDataScope(v role.DataScope) *RoleUpdate {
 	_u.mutation.SetDataScope(v)
@@ -331,6 +367,26 @@ func (_u *RoleUpdate) SetNillableStatus(v *role.Status) *RoleUpdate {
 // ClearStatus clears the value of the "status" field.
 func (_u *RoleUpdate) ClearStatus() *RoleUpdate {
 	_u.mutation.ClearStatus()
+	return _u
+}
+
+// SetType sets the "type" field.
+func (_u *RoleUpdate) SetType(v role.Type) *RoleUpdate {
+	_u.mutation.SetType(v)
+	return _u
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (_u *RoleUpdate) SetNillableType(v *role.Type) *RoleUpdate {
+	if v != nil {
+		_u.SetType(*v)
+	}
+	return _u
+}
+
+// ClearType clears the value of the "type" field.
+func (_u *RoleUpdate) ClearType() *RoleUpdate {
+	_u.mutation.ClearType()
 	return _u
 }
 
@@ -433,6 +489,11 @@ func (_u *RoleUpdate) check() error {
 	if v, ok := _u.mutation.Status(); ok {
 		if err := role.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "Role.status": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.GetType(); ok {
+		if err := role.TypeValidator(v); err != nil {
+			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Role.type": %w`, err)}
 		}
 	}
 	return nil
@@ -550,6 +611,28 @@ func (_u *RoleUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.ApisCleared() {
 		_spec.ClearField(role.FieldApis, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.Permissions(); ok {
+		_spec.SetField(role.FieldPermissions, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedPermissions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, role.FieldPermissions, value)
+		})
+	}
+	if _u.mutation.PermissionsCleared() {
+		_spec.ClearField(role.FieldPermissions, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.CustomOrgUnitIds(); ok {
+		_spec.SetField(role.FieldCustomOrgUnitIds, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedCustomOrgUnitIds(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, role.FieldCustomOrgUnitIds, value)
+		})
+	}
+	if _u.mutation.CustomOrgUnitIdsCleared() {
+		_spec.ClearField(role.FieldCustomOrgUnitIds, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.DataScope(); ok {
 		_spec.SetField(role.FieldDataScope, field.TypeEnum, value)
 	}
@@ -561,6 +644,12 @@ func (_u *RoleUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(role.FieldStatus, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.GetType(); ok {
+		_spec.SetField(role.FieldType, field.TypeEnum, value)
+	}
+	if _u.mutation.TypeCleared() {
+		_spec.ClearField(role.FieldType, field.TypeEnum)
 	}
 	if _u.mutation.ParentCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -922,6 +1011,42 @@ func (_u *RoleUpdateOne) ClearApis() *RoleUpdateOne {
 	return _u
 }
 
+// SetPermissions sets the "permissions" field.
+func (_u *RoleUpdateOne) SetPermissions(v []uint32) *RoleUpdateOne {
+	_u.mutation.SetPermissions(v)
+	return _u
+}
+
+// AppendPermissions appends value to the "permissions" field.
+func (_u *RoleUpdateOne) AppendPermissions(v []uint32) *RoleUpdateOne {
+	_u.mutation.AppendPermissions(v)
+	return _u
+}
+
+// ClearPermissions clears the value of the "permissions" field.
+func (_u *RoleUpdateOne) ClearPermissions() *RoleUpdateOne {
+	_u.mutation.ClearPermissions()
+	return _u
+}
+
+// SetCustomOrgUnitIds sets the "custom_org_unit_ids" field.
+func (_u *RoleUpdateOne) SetCustomOrgUnitIds(v []uint32) *RoleUpdateOne {
+	_u.mutation.SetCustomOrgUnitIds(v)
+	return _u
+}
+
+// AppendCustomOrgUnitIds appends value to the "custom_org_unit_ids" field.
+func (_u *RoleUpdateOne) AppendCustomOrgUnitIds(v []uint32) *RoleUpdateOne {
+	_u.mutation.AppendCustomOrgUnitIds(v)
+	return _u
+}
+
+// ClearCustomOrgUnitIds clears the value of the "custom_org_unit_ids" field.
+func (_u *RoleUpdateOne) ClearCustomOrgUnitIds() *RoleUpdateOne {
+	_u.mutation.ClearCustomOrgUnitIds()
+	return _u
+}
+
 // SetDataScope sets the "data_scope" field.
 func (_u *RoleUpdateOne) SetDataScope(v role.DataScope) *RoleUpdateOne {
 	_u.mutation.SetDataScope(v)
@@ -959,6 +1084,26 @@ func (_u *RoleUpdateOne) SetNillableStatus(v *role.Status) *RoleUpdateOne {
 // ClearStatus clears the value of the "status" field.
 func (_u *RoleUpdateOne) ClearStatus() *RoleUpdateOne {
 	_u.mutation.ClearStatus()
+	return _u
+}
+
+// SetType sets the "type" field.
+func (_u *RoleUpdateOne) SetType(v role.Type) *RoleUpdateOne {
+	_u.mutation.SetType(v)
+	return _u
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (_u *RoleUpdateOne) SetNillableType(v *role.Type) *RoleUpdateOne {
+	if v != nil {
+		_u.SetType(*v)
+	}
+	return _u
+}
+
+// ClearType clears the value of the "type" field.
+func (_u *RoleUpdateOne) ClearType() *RoleUpdateOne {
+	_u.mutation.ClearType()
 	return _u
 }
 
@@ -1074,6 +1219,11 @@ func (_u *RoleUpdateOne) check() error {
 	if v, ok := _u.mutation.Status(); ok {
 		if err := role.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "Role.status": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.GetType(); ok {
+		if err := role.TypeValidator(v); err != nil {
+			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Role.type": %w`, err)}
 		}
 	}
 	return nil
@@ -1208,6 +1358,28 @@ func (_u *RoleUpdateOne) sqlSave(ctx context.Context) (_node *Role, err error) {
 	if _u.mutation.ApisCleared() {
 		_spec.ClearField(role.FieldApis, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.Permissions(); ok {
+		_spec.SetField(role.FieldPermissions, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedPermissions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, role.FieldPermissions, value)
+		})
+	}
+	if _u.mutation.PermissionsCleared() {
+		_spec.ClearField(role.FieldPermissions, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.CustomOrgUnitIds(); ok {
+		_spec.SetField(role.FieldCustomOrgUnitIds, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedCustomOrgUnitIds(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, role.FieldCustomOrgUnitIds, value)
+		})
+	}
+	if _u.mutation.CustomOrgUnitIdsCleared() {
+		_spec.ClearField(role.FieldCustomOrgUnitIds, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.DataScope(); ok {
 		_spec.SetField(role.FieldDataScope, field.TypeEnum, value)
 	}
@@ -1219,6 +1391,12 @@ func (_u *RoleUpdateOne) sqlSave(ctx context.Context) (_node *Role, err error) {
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(role.FieldStatus, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.GetType(); ok {
+		_spec.SetField(role.FieldType, field.TypeEnum, value)
+	}
+	if _u.mutation.TypeCleared() {
+		_spec.ClearField(role.FieldType, field.TypeEnum)
 	}
 	if _u.mutation.ParentCleared() {
 		edge := &sqlgraph.EdgeSpec{

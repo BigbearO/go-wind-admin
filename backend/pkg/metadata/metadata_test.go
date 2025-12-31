@@ -2,7 +2,7 @@ package metadata
 
 import (
 	"context"
-	"strconv"
+	"encoding/json"
 	"testing"
 
 	"github.com/go-kratos/kratos/v2/metadata"
@@ -11,44 +11,86 @@ import (
 	userV1 "go-wind-admin/api/gen/go/user/service/v1"
 )
 
-func TestFromMetadata(t *testing.T) {
+func ptrUint32(v uint32) *uint32 { return &v }
+func ptrBool(b bool) *bool       { return &b }
+
+func TestFromOperatorMetadata_JSON(t *testing.T) {
 	ctx := context.Background()
 
-	userId := "123"
-	tenantId := "456"
-	authority := userV1.User_SYS_ADMIN.String()
+	ds := userV1.Role_DataScope(1)
+	src := OperatorInfo{
+		UserID:          ptrUint32(123),
+		TenantID:        ptrUint32(456),
+		OrgUnitID:       ptrUint32(789),
+		IsPlatformAdmin: ptrBool(true),
+		DataScope:       &ds,
+	}
+	b, err := json.Marshal(src)
+	assert.NoError(t, err)
 
 	ctx = metadata.NewServerContext(ctx, metadata.Metadata{
-		mdOperatorId: []string{userId},
-		mdTenantId:   []string{tenantId},
-		mdAuthority:  []string{authority},
+		mdOperator: []string{string(b)},
 	})
 
-	tUserId, tTenantId, tAuthority := FromOperatorMetadata(ctx)
+	got := FromOperatorMetadata(ctx)
+	if assert.NotNil(t, got) {
+		assert.NotNil(t, got.UserID)
+		assert.Equal(t, uint32(123), *got.UserID)
 
-	assert.NotNil(t, userId)
-	assert.Equal(t, uint32(123), *tUserId)
+		assert.NotNil(t, got.TenantID)
+		assert.Equal(t, uint32(456), *got.TenantID)
 
-	assert.NotNil(t, tenantId)
-	assert.Equal(t, uint32(456), *tTenantId)
+		assert.NotNil(t, got.OrgUnitID)
+		assert.Equal(t, uint32(789), *got.OrgUnitID)
 
-	assert.NotNil(t, authority)
-	assert.Equal(t, authority, tAuthority.String())
+		assert.NotNil(t, got.IsPlatformAdmin)
+		assert.Equal(t, true, *got.IsPlatformAdmin)
+
+		assert.NotNil(t, got.DataScope)
+		assert.Equal(t, ds, *got.DataScope)
+	}
 }
 
-func TestNewOperatorMetadataContext(t *testing.T) {
-	userId := uint32(123)
-	tenantId := uint32(456)
-	authority := userV1.User_SYS_ADMIN
+func TestFromOperatorMetadata_NoHeaderOrInvalid(t *testing.T) {
+	// no header -> nil
+	ctx := context.Background()
+	assert.Nil(t, FromOperatorMetadata(ctx))
 
+	// invalid json -> nil
+	ctx = metadata.NewServerContext(context.Background(), metadata.Metadata{
+		mdOperator: []string{"not-a-json"},
+	})
+	assert.Nil(t, FromOperatorMetadata(ctx))
+}
+
+func TestNewOperatorMetadataContext_WriteAndRead(t *testing.T) {
 	ctx := context.Background()
 
-	ctx = NewOperatorMetadataContext(ctx, &userId, &tenantId, &authority)
+	ds := userV1.Role_DataScope(2)
+	ctx = NewOperatorMetadataContext(ctx, 321, 654, 987, false, ds)
 
 	md, ok := metadata.FromClientContext(ctx)
 	assert.True(t, ok)
 
-	assert.Equal(t, strconv.Itoa(int(userId)), md.Get(mdOperatorId))
-	assert.Equal(t, strconv.Itoa(int(tenantId)), md.Get(mdTenantId))
-	assert.Equal(t, authority.String(), md.Get(mdAuthority))
+	op := md.Get(mdOperator)
+	assert.NotEmpty(t, op)
+
+	var got OperatorInfo
+	assert.NoError(t, json.Unmarshal([]byte(op), &got))
+
+	if assert.NotNil(t, got.UserID) {
+		assert.Equal(t, uint32(321), *got.UserID)
+	}
+	if assert.NotNil(t, got.TenantID) {
+		assert.Equal(t, uint32(654), *got.TenantID)
+	}
+	if assert.NotNil(t, got.OrgUnitID) {
+		assert.Equal(t, uint32(987), *got.OrgUnitID)
+	}
+	if assert.NotNil(t, got.IsPlatformAdmin) {
+		assert.Equal(t, false, *got.IsPlatformAdmin)
+	}
+	if assert.NotNil(t, got.DataScope) {
+		assert.Equal(t, ds, *got.DataScope)
+	}
 }

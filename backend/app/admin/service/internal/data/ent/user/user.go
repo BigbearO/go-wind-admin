@@ -51,24 +51,12 @@ const (
 	FieldDescription = "description"
 	// FieldGender holds the string denoting the gender field in the database.
 	FieldGender = "gender"
-	// FieldAuthority holds the string denoting the authority field in the database.
-	FieldAuthority = "authority"
-	// FieldStatus holds the string denoting the status field in the database.
-	FieldStatus = "status"
-	// FieldLastLoginTime holds the string denoting the last_login_time field in the database.
-	FieldLastLoginTime = "last_login_time"
+	// FieldLastLoginAt holds the string denoting the last_login_at field in the database.
+	FieldLastLoginAt = "last_login_at"
 	// FieldLastLoginIP holds the string denoting the last_login_ip field in the database.
 	FieldLastLoginIP = "last_login_ip"
-	// FieldOrgID holds the string denoting the org_id field in the database.
-	FieldOrgID = "org_id"
-	// FieldDepartmentID holds the string denoting the department_id field in the database.
-	FieldDepartmentID = "department_id"
-	// FieldPositionID holds the string denoting the position_id field in the database.
-	FieldPositionID = "position_id"
-	// FieldWorkID holds the string denoting the work_id field in the database.
-	FieldWorkID = "work_id"
-	// FieldRoleIds holds the string denoting the role_ids field in the database.
-	FieldRoleIds = "role_ids"
+	// FieldIsBanned holds the string denoting the is_banned field in the database.
+	FieldIsBanned = "is_banned"
 	// Table holds the table name of the user in the database.
 	Table = "sys_users"
 )
@@ -95,15 +83,9 @@ var Columns = []string{
 	FieldRegion,
 	FieldDescription,
 	FieldGender,
-	FieldAuthority,
-	FieldStatus,
-	FieldLastLoginTime,
+	FieldLastLoginAt,
 	FieldLastLoginIP,
-	FieldOrgID,
-	FieldDepartmentID,
-	FieldPositionID,
-	FieldWorkID,
-	FieldRoleIds,
+	FieldIsBanned,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -135,6 +117,8 @@ var (
 	DefaultRegion string
 	// DescriptionValidator is a validator for the "description" field. It is called by the builders before save.
 	DescriptionValidator func(string) error
+	// DefaultIsBanned holds the default value on creation for the "is_banned" field.
+	DefaultIsBanned bool
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.
 	IDValidator func(uint32) error
 )
@@ -163,60 +147,6 @@ func GenderValidator(ge Gender) error {
 		return nil
 	default:
 		return fmt.Errorf("user: invalid enum value for gender field: %q", ge)
-	}
-}
-
-// Authority defines the type for the "authority" enum field.
-type Authority string
-
-// AuthorityCustomerUser is the default value of the Authority enum.
-const DefaultAuthority = AuthorityCustomerUser
-
-// Authority values.
-const (
-	AuthoritySysAdmin     Authority = "SYS_ADMIN"
-	AuthorityTenantAdmin  Authority = "TENANT_ADMIN"
-	AuthorityCustomerUser Authority = "CUSTOMER_USER"
-	AuthorityGuest        Authority = "GUEST"
-)
-
-func (a Authority) String() string {
-	return string(a)
-}
-
-// AuthorityValidator is a validator for the "authority" field enum values. It is called by the builders before save.
-func AuthorityValidator(a Authority) error {
-	switch a {
-	case AuthoritySysAdmin, AuthorityTenantAdmin, AuthorityCustomerUser, AuthorityGuest:
-		return nil
-	default:
-		return fmt.Errorf("user: invalid enum value for authority field: %q", a)
-	}
-}
-
-// Status defines the type for the "status" enum field.
-type Status string
-
-// StatusOn is the default value of the Status enum.
-const DefaultStatus = StatusOn
-
-// Status values.
-const (
-	StatusOn  Status = "ON"
-	StatusOff Status = "OFF"
-)
-
-func (s Status) String() string {
-	return string(s)
-}
-
-// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
-func StatusValidator(s Status) error {
-	switch s {
-	case StatusOn, StatusOff:
-		return nil
-	default:
-		return fmt.Errorf("user: invalid enum value for status field: %q", s)
 	}
 }
 
@@ -323,19 +253,9 @@ func ByGender(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldGender, opts...).ToFunc()
 }
 
-// ByAuthority orders the results by the authority field.
-func ByAuthority(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldAuthority, opts...).ToFunc()
-}
-
-// ByStatus orders the results by the status field.
-func ByStatus(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldStatus, opts...).ToFunc()
-}
-
-// ByLastLoginTime orders the results by the last_login_time field.
-func ByLastLoginTime(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldLastLoginTime, opts...).ToFunc()
+// ByLastLoginAt orders the results by the last_login_at field.
+func ByLastLoginAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLastLoginAt, opts...).ToFunc()
 }
 
 // ByLastLoginIP orders the results by the last_login_ip field.
@@ -343,22 +263,7 @@ func ByLastLoginIP(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLastLoginIP, opts...).ToFunc()
 }
 
-// ByOrgID orders the results by the org_id field.
-func ByOrgID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldOrgID, opts...).ToFunc()
-}
-
-// ByDepartmentID orders the results by the department_id field.
-func ByDepartmentID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDepartmentID, opts...).ToFunc()
-}
-
-// ByPositionID orders the results by the position_id field.
-func ByPositionID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldPositionID, opts...).ToFunc()
-}
-
-// ByWorkID orders the results by the work_id field.
-func ByWorkID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldWorkID, opts...).ToFunc()
+// ByIsBanned orders the results by the is_banned field.
+func ByIsBanned(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsBanned, opts...).ToFunc()
 }

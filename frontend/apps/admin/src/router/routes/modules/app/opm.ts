@@ -18,27 +18,15 @@ const opm: RouteRecordRaw[] = [
     },
     children: [
       {
-        path: 'organizations',
-        name: 'OrganizationManagement',
+        path: 'org-units',
+        name: 'OrgUnitManagement',
         meta: {
           order: 1,
           icon: 'lucide:layers',
-          title: $t('menu.opm.org'),
+          title: $t('menu.opm.orgUnit'),
           authority: ['super', 'admin'],
         },
-        component: () => import('#/views/app/opm/org/index.vue'),
-      },
-
-      {
-        path: 'departments',
-        name: 'DepartmentManagement',
-        meta: {
-          order: 2,
-          icon: 'lucide:folder-tree',
-          title: $t('menu.opm.dept'),
-          authority: ['super', 'admin'],
-        },
-        component: () => import('#/views/app/opm/dept/index.vue'),
+        component: () => import('#/views/app/opm/org_unit/index.vue'),
       },
 
       {

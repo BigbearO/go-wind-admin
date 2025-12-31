@@ -49,16 +49,22 @@ func (Role) Fields() []ent.Field {
 			Comment("分配的API列表").
 			Optional(),
 
+		field.JSON("permissions", []uint32{}).
+			Comment("权限点列表").
+			Optional(),
+
+		field.JSON("custom_org_unit_ids", []uint32{}).
+			Comment("当 DataScope 为 SELECTED_UNITS 时关联的组织单元列表").
+			Optional(),
+
 		field.Enum("data_scope").
 			Comment("数据权限范围").
 			NamedValues(
 				"All", "ALL",
-				"Custom", "CUSTOM",
 				"Self", "SELF",
-				"Org", "ORG",
-				"OrgAndChild", "ORG_AND_CHILD",
-				"Dept", "DEPT",
-				"DeptAndChild", "DEPT_AND_CHILD",
+				"UnitOnly", "UNIT_ONLY",
+				"UnitAndChild", "UNIT_AND_CHILD",
+				"SelectedUnits", "SELECTED_UNITS",
 			).
 			Optional().
 			Nillable(),
@@ -70,6 +76,16 @@ func (Role) Fields() []ent.Field {
 				"Off", "OFF",
 			).
 			Default("ON").
+			Optional().
+			Nillable(),
+
+		field.Enum("type").
+			Comment("角色类型").
+			NamedValues(
+				"System", "SYSTEM",
+				"Custom", "CUSTOM",
+			).
+			Default("SYSTEM").
 			Optional().
 			Nillable(),
 	}

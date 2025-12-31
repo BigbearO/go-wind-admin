@@ -20,7 +20,6 @@ import (
 	"github.com/tx7do/kratos-bootstrap/rpc"
 
 	"go-wind-admin/app/admin/service/cmd/server/assets"
-
 	"go-wind-admin/app/admin/service/internal/data"
 	"go-wind-admin/app/admin/service/internal/service"
 
@@ -69,22 +68,24 @@ func newRestMiddleware(
 // NewRestServer new an HTTP server.
 func NewRestServer(
 	ctx *bootstrap.Context,
+
 	authenticator authnEngine.Authenticator, authorizer *data.Authorizer,
+
 	operationLogRepo *data.AdminOperationLogRepo,
 	loginLogRepo *data.AdminLoginLogRepo,
-	authnSvc *service.AuthenticationService,
-	userSvc *service.UserService,
-	menuSvc *service.MenuService,
-	routerSvc *service.RouterService,
-	orgSvc *service.OrganizationService,
-	roleSvc *service.RoleService,
-	positionSvc *service.PositionService,
-	dictSvc *service.DictService,
-	deptSvc *service.DepartmentService,
-	adminLoginLogSvc *service.AdminLoginLogService,
-	adminOperationLogSvc *service.AdminOperationLogService,
-	ossSvc *service.OssService,
-	ueditorSvc *service.UEditorService,
+
+	authenticationService *service.AuthenticationService,
+	userService *service.UserService,
+	menuService *service.MenuService,
+	routerService *service.RouterService,
+	orgUnitService *service.OrgUnitService,
+	roleService *service.RoleService,
+	positionService *service.PositionService,
+	dictService *service.DictService,
+	adminLoginLogService *service.AdminLoginLogService,
+	adminOperationLogService *service.AdminOperationLogService,
+	ossService *service.OssService,
+	uEditorService *service.UEditorService,
 	fileService *service.FileService,
 	tenantService *service.TenantService,
 	taskService *service.TaskService,
@@ -94,6 +95,7 @@ func NewRestServer(
 	adminLoginRestrictionService *service.AdminLoginRestrictionService,
 	userProfileService *service.UserProfileService,
 	apiResourceService *service.ApiResourceService,
+	permissionService *service.PermissionService,
 ) (*http.Server, error) {
 	cfg := ctx.GetConfig()
 
@@ -110,38 +112,38 @@ func NewRestServer(
 
 	apiResourceService.RegisterRouteWalker(srv)
 
-	adminV1.RegisterAuthenticationServiceHTTPServer(srv, authnSvc)
+	adminV1.RegisterAuthenticationServiceHTTPServer(srv, authenticationService)
 
 	adminV1.RegisterUserProfileServiceHTTPServer(srv, userProfileService)
 
-	adminV1.RegisterMenuServiceHTTPServer(srv, menuSvc)
-	adminV1.RegisterRouterServiceHTTPServer(srv, routerSvc)
-	adminV1.RegisterDictServiceHTTPServer(srv, dictSvc)
+	adminV1.RegisterMenuServiceHTTPServer(srv, menuService)
+	adminV1.RegisterRouterServiceHTTPServer(srv, routerService)
+	adminV1.RegisterDictServiceHTTPServer(srv, dictService)
 	adminV1.RegisterTaskServiceHTTPServer(srv, taskService)
 	adminV1.RegisterAdminLoginRestrictionServiceHTTPServer(srv, adminLoginRestrictionService)
 	adminV1.RegisterApiResourceServiceHTTPServer(srv, apiResourceService)
+	adminV1.RegisterPermissionServiceHTTPServer(srv, permissionService)
 
-	adminV1.RegisterUserServiceHTTPServer(srv, userSvc)
-	adminV1.RegisterOrganizationServiceHTTPServer(srv, orgSvc)
-	adminV1.RegisterRoleServiceHTTPServer(srv, roleSvc)
-	adminV1.RegisterPositionServiceHTTPServer(srv, positionSvc)
-	adminV1.RegisterDepartmentServiceHTTPServer(srv, deptSvc)
+	adminV1.RegisterUserServiceHTTPServer(srv, userService)
+	adminV1.RegisterOrgUnitServiceHTTPServer(srv, orgUnitService)
+	adminV1.RegisterRoleServiceHTTPServer(srv, roleService)
+	adminV1.RegisterPositionServiceHTTPServer(srv, positionService)
 	adminV1.RegisterTenantServiceHTTPServer(srv, tenantService)
 
-	adminV1.RegisterAdminLoginLogServiceHTTPServer(srv, adminLoginLogSvc)
-	adminV1.RegisterAdminOperationLogServiceHTTPServer(srv, adminOperationLogSvc)
+	adminV1.RegisterAdminLoginLogServiceHTTPServer(srv, adminLoginLogService)
+	adminV1.RegisterAdminOperationLogServiceHTTPServer(srv, adminOperationLogService)
 
-	adminV1.RegisterOssServiceHTTPServer(srv, ossSvc)
+	adminV1.RegisterOssServiceHTTPServer(srv, ossService)
 	adminV1.RegisterFileServiceHTTPServer(srv, fileService)
 
-	adminV1.RegisterUEditorServiceHTTPServer(srv, ueditorSvc)
+	adminV1.RegisterUEditorServiceHTTPServer(srv, uEditorService)
 
 	adminV1.RegisterInternalMessageServiceHTTPServer(srv, internalMessageService)
 	adminV1.RegisterInternalMessageCategoryServiceHTTPServer(srv, internalMessageCategoryService)
 	adminV1.RegisterInternalMessageRecipientServiceHTTPServer(srv, internalMessageRecipientService)
 
-	registerFileUploadHandler(srv, ossSvc)
-	registerUEditorUploadHandler(srv, ueditorSvc)
+	registerFileUploadHandler(srv, ossService)
+	registerUEditorUploadHandler(srv, uEditorService)
 
 	if cfg.GetServer().GetRest().GetEnableSwagger() {
 		swaggerUI.RegisterSwaggerUIServerWithOption(

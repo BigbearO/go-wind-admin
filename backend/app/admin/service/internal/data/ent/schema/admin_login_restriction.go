@@ -47,10 +47,10 @@ func (AdminLoginRestriction) Fields() []ent.Field {
 		field.Enum("type").
 			Comment("限制类型").
 			NamedValues(
-				"Blacklist", "BLACKLIST",
-				"Whitelist", "WHITELIST",
+				"Blacklist", "BLACK_LIST",
+				"Whitelist", "WHITE_LIST",
 			).
-			Default("BLACKLIST").
+			Default("BLACK_LIST").
 			Optional().
 			Nillable(),
 
@@ -72,7 +72,8 @@ func (AdminLoginRestriction) Fields() []ent.Field {
 // Indexes of the AdminLoginRestriction.
 func (AdminLoginRestriction) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("target_id", "type", "method").Unique().StorageKey("idx_sys_admin_login_restriction_target_type_method"),
+		index.Fields("target_id", "type", "method").Unique().
+			StorageKey("idx_sys_admin_login_restriction_target_type_method"),
 	}
 }
 

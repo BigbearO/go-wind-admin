@@ -28,106 +28,6 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// 用户状态
-type User_Status int32
-
-const (
-	User_OFF User_Status = 0 // 禁用
-	User_ON  User_Status = 1 // 启用
-)
-
-// Enum value maps for User_Status.
-var (
-	User_Status_name = map[int32]string{
-		0: "OFF",
-		1: "ON",
-	}
-	User_Status_value = map[string]int32{
-		"OFF": 0,
-		"ON":  1,
-	}
-)
-
-func (x User_Status) Enum() *User_Status {
-	p := new(User_Status)
-	*p = x
-	return p
-}
-
-func (x User_Status) String() string {
-	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
-}
-
-func (User_Status) Descriptor() protoreflect.EnumDescriptor {
-	return file_user_service_v1_user_proto_enumTypes[0].Descriptor()
-}
-
-func (User_Status) Type() protoreflect.EnumType {
-	return &file_user_service_v1_user_proto_enumTypes[0]
-}
-
-func (x User_Status) Number() protoreflect.EnumNumber {
-	return protoreflect.EnumNumber(x)
-}
-
-// Deprecated: Use User_Status.Descriptor instead.
-func (User_Status) EnumDescriptor() ([]byte, []int) {
-	return file_user_service_v1_user_proto_rawDescGZIP(), []int{0, 0}
-}
-
-// 用户权限
-type User_Authority int32
-
-const (
-	User_GUEST         User_Authority = 0 // 游客，仅能访问系统公开资源（如首页、帮助中心），无业务操作及管理权限。
-	User_CUSTOMER_USER User_Authority = 1 // 普通用户，仅拥有个人业务操作权限，可访问授权的功能模块，无管理权限。
-	User_TENANT_ADMIN  User_Authority = 2 // 租户管理，拥有当前租户内的管理权限，可管理租户内用户、角色及业务资源，无系统级配置权限。
-	User_SYS_ADMIN     User_Authority = 3 // 系统管理员，拥有系统全量权限，可管理所有租户、用户、配置及资源
-)
-
-// Enum value maps for User_Authority.
-var (
-	User_Authority_name = map[int32]string{
-		0: "GUEST",
-		1: "CUSTOMER_USER",
-		2: "TENANT_ADMIN",
-		3: "SYS_ADMIN",
-	}
-	User_Authority_value = map[string]int32{
-		"GUEST":         0,
-		"CUSTOMER_USER": 1,
-		"TENANT_ADMIN":  2,
-		"SYS_ADMIN":     3,
-	}
-)
-
-func (x User_Authority) Enum() *User_Authority {
-	p := new(User_Authority)
-	*p = x
-	return p
-}
-
-func (x User_Authority) String() string {
-	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
-}
-
-func (User_Authority) Descriptor() protoreflect.EnumDescriptor {
-	return file_user_service_v1_user_proto_enumTypes[1].Descriptor()
-}
-
-func (User_Authority) Type() protoreflect.EnumType {
-	return &file_user_service_v1_user_proto_enumTypes[1]
-}
-
-func (x User_Authority) Number() protoreflect.EnumNumber {
-	return protoreflect.EnumNumber(x)
-}
-
-// Deprecated: Use User_Authority.Descriptor instead.
-func (User_Authority) EnumDescriptor() ([]byte, []int) {
-	return file_user_service_v1_user_proto_rawDescGZIP(), []int{0, 1}
-}
-
 // 用户性别
 type User_Gender int32
 
@@ -162,11 +62,11 @@ func (x User_Gender) String() string {
 }
 
 func (User_Gender) Descriptor() protoreflect.EnumDescriptor {
-	return file_user_service_v1_user_proto_enumTypes[2].Descriptor()
+	return file_user_service_v1_user_proto_enumTypes[0].Descriptor()
 }
 
 func (User_Gender) Type() protoreflect.EnumType {
-	return &file_user_service_v1_user_proto_enumTypes[2]
+	return &file_user_service_v1_user_proto_enumTypes[0]
 }
 
 func (x User_Gender) Number() protoreflect.EnumNumber {
@@ -175,48 +75,45 @@ func (x User_Gender) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use User_Gender.Descriptor instead.
 func (User_Gender) EnumDescriptor() ([]byte, []int) {
-	return file_user_service_v1_user_proto_rawDescGZIP(), []int{0, 2}
+	return file_user_service_v1_user_proto_rawDescGZIP(), []int{0, 0}
 }
 
 // 用户
 type User struct {
-	state          protoimpl.MessageState `protogen:"open.v1"`
-	Id             *uint32                `protobuf:"varint,1,opt,name=id,proto3,oneof" json:"id,omitempty"`                                              // 用户ID
-	TenantId       *uint32                `protobuf:"varint,2,opt,name=tenant_id,json=tenantId,proto3,oneof" json:"tenant_id,omitempty"`                  // 租户ID
-	TenantName     *string                `protobuf:"bytes,3,opt,name=tenant_name,json=tenantName,proto3,oneof" json:"tenant_name,omitempty"`             // 租户名称
-	OrgId          *uint32                `protobuf:"varint,4,opt,name=org_id,json=orgId,proto3,oneof" json:"org_id,omitempty"`                           // 组织ID
-	OrgName        *string                `protobuf:"bytes,5,opt,name=org_name,json=orgName,proto3,oneof" json:"org_name,omitempty"`                      // 组织名称
-	DepartmentId   *uint32                `protobuf:"varint,6,opt,name=department_id,json=departmentId,proto3,oneof" json:"department_id,omitempty"`      // 部门ID
-	DepartmentName *string                `protobuf:"bytes,7,opt,name=department_name,json=departmentName,proto3,oneof" json:"department_name,omitempty"` // 部门名称
-	PositionId     *uint32                `protobuf:"varint,8,opt,name=position_id,json=positionId,proto3,oneof" json:"position_id,omitempty"`            // 职位ID
-	PositionName   *string                `protobuf:"bytes,9,opt,name=position_name,json=positionName,proto3,oneof" json:"position_name,omitempty"`       // 职位名称
-	WorkId         *uint32                `protobuf:"varint,10,opt,name=work_id,json=workId,proto3,oneof" json:"work_id,omitempty"`                       // 工号
-	//  optional uint32 role_id = 11 [json_name = "roleId", (gnostic.openapi.v3.property) = {description: "角色ID"}];  // 角色ID
-	RoleIds       []uint32               `protobuf:"varint,12,rep,packed,name=role_ids,json=roleIds,proto3" json:"role_ids,omitempty"`                         // 角色ID列表
-	Roles         []string               `protobuf:"bytes,13,rep,name=roles,proto3" json:"roles,omitempty"`                                                    // 角色码列表
-	RoleNames     []string               `protobuf:"bytes,14,rep,name=role_names,json=roleNames,proto3" json:"role_names,omitempty"`                           // 角色名称列表
-	Username      *string                `protobuf:"bytes,20,opt,name=username,proto3,oneof" json:"username,omitempty"`                                        // 用户名
-	Nickname      *string                `protobuf:"bytes,21,opt,name=nickname,proto3,oneof" json:"nickname,omitempty"`                                        // 昵称
-	Realname      *string                `protobuf:"bytes,22,opt,name=realname,proto3,oneof" json:"realname,omitempty"`                                        // 真实姓名
-	Avatar        *string                `protobuf:"bytes,23,opt,name=avatar,proto3,oneof" json:"avatar,omitempty"`                                            // 头像
-	Email         *string                `protobuf:"bytes,24,opt,name=email,proto3,oneof" json:"email,omitempty"`                                              // 邮箱
-	Mobile        *string                `protobuf:"bytes,25,opt,name=mobile,proto3,oneof" json:"mobile,omitempty"`                                            // 手机号
-	Telephone     *string                `protobuf:"bytes,26,opt,name=telephone,proto3,oneof" json:"telephone,omitempty"`                                      // 座机号
-	Gender        *User_Gender           `protobuf:"varint,27,opt,name=gender,proto3,enum=user.service.v1.User_Gender,oneof" json:"gender,omitempty"`          // 性别
-	Address       *string                `protobuf:"bytes,28,opt,name=address,proto3,oneof" json:"address,omitempty"`                                          // 住址
-	Region        *string                `protobuf:"bytes,29,opt,name=region,proto3,oneof" json:"region,omitempty"`                                            // 国家地区
-	Description   *string                `protobuf:"bytes,30,opt,name=description,proto3,oneof" json:"description,omitempty"`                                  // 个人描述
-	Remark        *string                `protobuf:"bytes,31,opt,name=remark,proto3,oneof" json:"remark,omitempty"`                                            // 备注
-	LastLoginTime *timestamppb.Timestamp `protobuf:"bytes,32,opt,name=last_login_time,json=lastLoginTime,proto3,oneof" json:"last_login_time,omitempty"`       // 最后登录时间
-	LastLoginIp   *string                `protobuf:"bytes,33,opt,name=last_login_ip,json=lastLoginIp,proto3,oneof" json:"last_login_ip,omitempty"`             // 最后登录IP
-	Status        *User_Status           `protobuf:"varint,34,opt,name=status,proto3,enum=user.service.v1.User_Status,oneof" json:"status,omitempty"`          // 用户状态
-	Authority     *User_Authority        `protobuf:"varint,35,opt,name=authority,proto3,enum=user.service.v1.User_Authority,oneof" json:"authority,omitempty"` // 权限
-	CreatedBy     *uint32                `protobuf:"varint,100,opt,name=created_by,json=createdBy,proto3,oneof" json:"created_by,omitempty"`                   // 创建者ID
-	UpdatedBy     *uint32                `protobuf:"varint,101,opt,name=updated_by,json=updatedBy,proto3,oneof" json:"updated_by,omitempty"`                   // 更新者ID
-	DeletedBy     *uint32                `protobuf:"varint,102,opt,name=deleted_by,json=deletedBy,proto3,oneof" json:"deleted_by,omitempty"`                   // 删除者用户ID
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,200,opt,name=created_at,json=createdAt,proto3,oneof" json:"created_at,omitempty"`                    // 创建时间
-	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,201,opt,name=updated_at,json=updatedAt,proto3,oneof" json:"updated_at,omitempty"`                    // 更新时间
-	DeletedAt     *timestamppb.Timestamp `protobuf:"bytes,202,opt,name=deleted_at,json=deletedAt,proto3,oneof" json:"deleted_at,omitempty"`                    // 删除时间
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            *uint32                `protobuf:"varint,1,opt,name=id,proto3,oneof" json:"id,omitempty"`                                           // 用户ID
+	TenantId      *uint32                `protobuf:"varint,2,opt,name=tenant_id,json=tenantId,proto3,oneof" json:"tenant_id,omitempty"`               // 租户ID
+	TenantName    *string                `protobuf:"bytes,3,opt,name=tenant_name,json=tenantName,proto3,oneof" json:"tenant_name,omitempty"`          // 租户名称
+	OrgUnitId     *uint32                `protobuf:"varint,4,opt,name=org_unit_id,json=orgUnitId,proto3,oneof" json:"org_unit_id,omitempty"`          // 组织ID
+	OrgUnitIds    []uint32               `protobuf:"varint,5,rep,packed,name=org_unit_ids,json=orgUnitIds,proto3" json:"org_unit_ids,omitempty"`      // 归属列表
+	OrgUnitName   *string                `protobuf:"bytes,6,opt,name=org_unit_name,json=orgUnitName,proto3,oneof" json:"org_unit_name,omitempty"`     // 组织名称
+	PositionId    *uint32                `protobuf:"varint,7,opt,name=position_id,json=positionId,proto3,oneof" json:"position_id,omitempty"`         // 职位ID
+	PositionIds   []uint32               `protobuf:"varint,8,rep,packed,name=position_ids,json=positionIds,proto3" json:"position_ids,omitempty"`     // 职位列表
+	PositionName  *string                `protobuf:"bytes,9,opt,name=position_name,json=positionName,proto3,oneof" json:"position_name,omitempty"`    // 职位名称
+	RoleId        *uint32                `protobuf:"varint,10,opt,name=role_id,json=roleId,proto3,oneof" json:"role_id,omitempty"`                    // 角色ID
+	RoleIds       []uint32               `protobuf:"varint,11,rep,packed,name=role_ids,json=roleIds,proto3" json:"role_ids,omitempty"`                // 角色ID列表
+	Roles         []string               `protobuf:"bytes,12,rep,name=roles,proto3" json:"roles,omitempty"`                                           // 角色码列表
+	RoleNames     []string               `protobuf:"bytes,13,rep,name=role_names,json=roleNames,proto3" json:"role_names,omitempty"`                  // 角色名称列表
+	Username      *string                `protobuf:"bytes,20,opt,name=username,proto3,oneof" json:"username,omitempty"`                               // 用户名
+	Nickname      *string                `protobuf:"bytes,21,opt,name=nickname,proto3,oneof" json:"nickname,omitempty"`                               // 昵称
+	Realname      *string                `protobuf:"bytes,22,opt,name=realname,proto3,oneof" json:"realname,omitempty"`                               // 真实姓名
+	Avatar        *string                `protobuf:"bytes,23,opt,name=avatar,proto3,oneof" json:"avatar,omitempty"`                                   // 头像
+	Email         *string                `protobuf:"bytes,24,opt,name=email,proto3,oneof" json:"email,omitempty"`                                     // 邮箱
+	Mobile        *string                `protobuf:"bytes,25,opt,name=mobile,proto3,oneof" json:"mobile,omitempty"`                                   // 手机号
+	Telephone     *string                `protobuf:"bytes,26,opt,name=telephone,proto3,oneof" json:"telephone,omitempty"`                             // 座机号
+	Gender        *User_Gender           `protobuf:"varint,27,opt,name=gender,proto3,enum=user.service.v1.User_Gender,oneof" json:"gender,omitempty"` // 性别
+	Address       *string                `protobuf:"bytes,28,opt,name=address,proto3,oneof" json:"address,omitempty"`                                 // 住址
+	Region        *string                `protobuf:"bytes,29,opt,name=region,proto3,oneof" json:"region,omitempty"`                                   // 国家地区
+	Description   *string                `protobuf:"bytes,30,opt,name=description,proto3,oneof" json:"description,omitempty"`                         // 个人描述
+	Remark        *string                `protobuf:"bytes,31,opt,name=remark,proto3,oneof" json:"remark,omitempty"`                                   // 备注
+	LastLoginAt   *timestamppb.Timestamp `protobuf:"bytes,32,opt,name=last_login_at,json=lastLoginAt,proto3,oneof" json:"last_login_at,omitempty"`    // 最后登录时间
+	LastLoginIp   *string                `protobuf:"bytes,33,opt,name=last_login_ip,json=lastLoginIp,proto3,oneof" json:"last_login_ip,omitempty"`    // 最后登录IP
+	CreatedBy     *uint32                `protobuf:"varint,100,opt,name=created_by,json=createdBy,proto3,oneof" json:"created_by,omitempty"`          // 创建者ID
+	UpdatedBy     *uint32                `protobuf:"varint,101,opt,name=updated_by,json=updatedBy,proto3,oneof" json:"updated_by,omitempty"`          // 更新者ID
+	DeletedBy     *uint32                `protobuf:"varint,102,opt,name=deleted_by,json=deletedBy,proto3,oneof" json:"deleted_by,omitempty"`          // 删除者用户ID
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,200,opt,name=created_at,json=createdAt,proto3,oneof" json:"created_at,omitempty"`           // 创建时间
+	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,201,opt,name=updated_at,json=updatedAt,proto3,oneof" json:"updated_at,omitempty"`           // 更新时间
+	DeletedAt     *timestamppb.Timestamp `protobuf:"bytes,202,opt,name=deleted_at,json=deletedAt,proto3,oneof" json:"deleted_at,omitempty"`           // 删除时间
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -272,30 +169,23 @@ func (x *User) GetTenantName() string {
 	return ""
 }
 
-func (x *User) GetOrgId() uint32 {
-	if x != nil && x.OrgId != nil {
-		return *x.OrgId
+func (x *User) GetOrgUnitId() uint32 {
+	if x != nil && x.OrgUnitId != nil {
+		return *x.OrgUnitId
 	}
 	return 0
 }
 
-func (x *User) GetOrgName() string {
-	if x != nil && x.OrgName != nil {
-		return *x.OrgName
+func (x *User) GetOrgUnitIds() []uint32 {
+	if x != nil {
+		return x.OrgUnitIds
 	}
-	return ""
+	return nil
 }
 
-func (x *User) GetDepartmentId() uint32 {
-	if x != nil && x.DepartmentId != nil {
-		return *x.DepartmentId
-	}
-	return 0
-}
-
-func (x *User) GetDepartmentName() string {
-	if x != nil && x.DepartmentName != nil {
-		return *x.DepartmentName
+func (x *User) GetOrgUnitName() string {
+	if x != nil && x.OrgUnitName != nil {
+		return *x.OrgUnitName
 	}
 	return ""
 }
@@ -307,6 +197,13 @@ func (x *User) GetPositionId() uint32 {
 	return 0
 }
 
+func (x *User) GetPositionIds() []uint32 {
+	if x != nil {
+		return x.PositionIds
+	}
+	return nil
+}
+
 func (x *User) GetPositionName() string {
 	if x != nil && x.PositionName != nil {
 		return *x.PositionName
@@ -314,9 +211,9 @@ func (x *User) GetPositionName() string {
 	return ""
 }
 
-func (x *User) GetWorkId() uint32 {
-	if x != nil && x.WorkId != nil {
-		return *x.WorkId
+func (x *User) GetRoleId() uint32 {
+	if x != nil && x.RoleId != nil {
+		return *x.RoleId
 	}
 	return 0
 }
@@ -426,9 +323,9 @@ func (x *User) GetRemark() string {
 	return ""
 }
 
-func (x *User) GetLastLoginTime() *timestamppb.Timestamp {
+func (x *User) GetLastLoginAt() *timestamppb.Timestamp {
 	if x != nil {
-		return x.LastLoginTime
+		return x.LastLoginAt
 	}
 	return nil
 }
@@ -438,20 +335,6 @@ func (x *User) GetLastLoginIp() string {
 		return *x.LastLoginIp
 	}
 	return ""
-}
-
-func (x *User) GetStatus() User_Status {
-	if x != nil && x.Status != nil {
-		return *x.Status
-	}
-	return User_OFF
-}
-
-func (x *User) GetAuthority() User_Authority {
-	if x != nil && x.Authority != nil {
-		return *x.Authority
-	}
-	return User_GUEST
 }
 
 func (x *User) GetCreatedBy() uint32 {
@@ -1732,63 +1615,54 @@ var File_user_service_v1_user_proto protoreflect.FileDescriptor
 
 const file_user_service_v1_user_proto_rawDesc = "" +
 	"\n" +
-	"\x1auser/service/v1/user.proto\x12\x0fuser.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a google/protobuf/field_mask.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x16redact/v3/redact.proto\x1a\x1epagination/v1/pagination.proto\"\xdf\x14\n" +
+	"\x1auser/service/v1/user.proto\x12\x0fuser.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a google/protobuf/field_mask.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x16redact/v3/redact.proto\x1a\x1epagination/v1/pagination.proto\"\xfb\x11\n" +
 	"\x04User\x12#\n" +
 	"\x02id\x18\x01 \x01(\rB\x0e\xbaG\v\x92\x02\b用户IDH\x00R\x02id\x88\x01\x01\x120\n" +
 	"\ttenant_id\x18\x02 \x01(\rB\x0e\xbaG\v\x92\x02\b租户IDH\x01R\btenantId\x88\x01\x01\x128\n" +
 	"\vtenant_name\x18\x03 \x01(\tB\x12\xbaG\x0f\x92\x02\f租户名称H\x02R\n" +
-	"tenantName\x88\x01\x01\x12*\n" +
-	"\x06org_id\x18\x04 \x01(\rB\x0e\xbaG\v\x92\x02\b组织IDH\x03R\x05orgId\x88\x01\x01\x122\n" +
-	"\borg_name\x18\x05 \x01(\tB\x12\xbaG\x0f\x92\x02\f组织名称H\x04R\aorgName\x88\x01\x01\x128\n" +
-	"\rdepartment_id\x18\x06 \x01(\rB\x0e\xbaG\v\x92\x02\b部门IDH\x05R\fdepartmentId\x88\x01\x01\x12@\n" +
-	"\x0fdepartment_name\x18\a \x01(\tB\x12\xbaG\x0f\x92\x02\f部门名称H\x06R\x0edepartmentName\x88\x01\x01\x124\n" +
-	"\vposition_id\x18\b \x01(\rB\x0e\xbaG\v\x92\x02\b职位IDH\aR\n" +
-	"positionId\x88\x01\x01\x12<\n" +
-	"\rposition_name\x18\t \x01(\tB\x12\xbaG\x0f\x92\x02\f职位名称H\bR\fpositionName\x88\x01\x01\x12*\n" +
-	"\awork_id\x18\n" +
-	" \x01(\rB\f\xbaG\t\x92\x02\x06工号H\tR\x06workId\x88\x01\x01\x12/\n" +
-	"\brole_ids\x18\f \x03(\rB\x14\xbaG\x11\x92\x02\x0e角色ID列表R\aroleIds\x12+\n" +
-	"\x05roles\x18\r \x03(\tB\x15\xbaG\x12\x92\x02\x0f角色码列表R\x05roles\x127\n" +
+	"tenantName\x88\x01\x01\x123\n" +
+	"\vorg_unit_id\x18\x04 \x01(\rB\x0e\xbaG\v\x92\x02\b组织IDH\x03R\torgUnitId\x88\x01\x01\x12 \n" +
+	"\forg_unit_ids\x18\x05 \x03(\rR\n" +
+	"orgUnitIds\x12;\n" +
+	"\rorg_unit_name\x18\x06 \x01(\tB\x12\xbaG\x0f\x92\x02\f组织名称H\x04R\vorgUnitName\x88\x01\x01\x124\n" +
+	"\vposition_id\x18\a \x01(\rB\x0e\xbaG\v\x92\x02\b职位IDH\x05R\n" +
+	"positionId\x88\x01\x01\x125\n" +
+	"\fposition_ids\x18\b \x03(\rB\x12\xbaG\x0f\x92\x02\f职位列表R\vpositionIds\x12<\n" +
+	"\rposition_name\x18\t \x01(\tB\x12\xbaG\x0f\x92\x02\f职位名称H\x06R\fpositionName\x88\x01\x01\x12,\n" +
+	"\arole_id\x18\n" +
+	" \x01(\rB\x0e\xbaG\v\x92\x02\b角色IDH\aR\x06roleId\x88\x01\x01\x12/\n" +
+	"\brole_ids\x18\v \x03(\rB\x14\xbaG\x11\x92\x02\x0e角色ID列表R\aroleIds\x12+\n" +
+	"\x05roles\x18\f \x03(\tB\x15\xbaG\x12\x92\x02\x0f角色码列表R\x05roles\x127\n" +
 	"\n" +
-	"role_names\x18\x0e \x03(\tB\x18\xbaG\x15\x92\x02\x12角色名称列表R\troleNames\x120\n" +
-	"\busername\x18\x14 \x01(\tB\x0f\xbaG\f\x92\x02\t用户名H\n" +
-	"R\busername\x88\x01\x01\x12-\n" +
-	"\bnickname\x18\x15 \x01(\tB\f\xbaG\t\x92\x02\x06昵称H\vR\bnickname\x88\x01\x01\x123\n" +
-	"\brealname\x18\x16 \x01(\tB\x12\xbaG\x0f\x92\x02\f真实姓名H\fR\brealname\x88\x01\x01\x12)\n" +
-	"\x06avatar\x18\x17 \x01(\tB\f\xbaG\t\x92\x02\x06头像H\rR\x06avatar\x88\x01\x01\x125\n" +
+	"role_names\x18\r \x03(\tB\x18\xbaG\x15\x92\x02\x12角色名称列表R\troleNames\x120\n" +
+	"\busername\x18\x14 \x01(\tB\x0f\xbaG\f\x92\x02\t用户名H\bR\busername\x88\x01\x01\x12-\n" +
+	"\bnickname\x18\x15 \x01(\tB\f\xbaG\t\x92\x02\x06昵称H\tR\bnickname\x88\x01\x01\x123\n" +
+	"\brealname\x18\x16 \x01(\tB\x12\xbaG\x0f\x92\x02\f真实姓名H\n" +
+	"R\brealname\x88\x01\x01\x12)\n" +
+	"\x06avatar\x18\x17 \x01(\tB\f\xbaG\t\x92\x02\x06头像H\vR\x06avatar\x88\x01\x01\x125\n" +
 	"\x05email\x18\x18 \x01(\tB\x1a\xbaG\t\x92\x02\x06邮箱ڶ\x1a\n" +
-	"z\br*d@ct*dH\x0eR\x05email\x88\x01\x01\x12,\n" +
-	"\x06mobile\x18\x19 \x01(\tB\x0f\xbaG\f\x92\x02\t手机号H\x0fR\x06mobile\x88\x01\x01\x122\n" +
-	"\ttelephone\x18\x1a \x01(\tB\x0f\xbaG\f\x92\x02\t座机号H\x10R\ttelephone\x88\x01\x01\x12G\n" +
-	"\x06gender\x18\x1b \x01(\x0e2\x1c.user.service.v1.User.GenderB\f\xbaG\t\x92\x02\x06性别H\x11R\x06gender\x88\x01\x01\x12+\n" +
-	"\aaddress\x18\x1c \x01(\tB\f\xbaG\t\x92\x02\x06住址H\x12R\aaddress\x88\x01\x01\x12/\n" +
-	"\x06region\x18\x1d \x01(\tB\x12\xbaG\x0f\x92\x02\f国家地区H\x13R\x06region\x88\x01\x01\x129\n" +
-	"\vdescription\x18\x1e \x01(\tB\x12\xbaG\x0f\x92\x02\f个人描述H\x14R\vdescription\x88\x01\x01\x12)\n" +
-	"\x06remark\x18\x1f \x01(\tB\f\xbaG\t\x92\x02\x06备注H\x15R\x06remark\x88\x01\x01\x12a\n" +
-	"\x0flast_login_time\x18  \x01(\v2\x1a.google.protobuf.TimestampB\x18\xbaG\x15\x92\x02\x12最后登录时间H\x16R\rlastLoginTime\x88\x01\x01\x12=\n" +
-	"\rlast_login_ip\x18! \x01(\tB\x14\xbaG\x11\x92\x02\x0e最后登录IPH\x17R\vlastLoginIp\x88\x01\x01\x12M\n" +
-	"\x06status\x18\" \x01(\x0e2\x1c.user.service.v1.User.StatusB\x12\xbaG\x0f\x92\x02\f用户状态H\x18R\x06status\x88\x01\x01\x12b\n" +
-	"\tauthority\x18# \x01(\x0e2\x1f.user.service.v1.User.AuthorityB\x1e\xbaG\x1b\x8a\x02\x0f\x1a\rCUSTOMER_USER\x92\x02\x06权限H\x19R\tauthority\x88\x01\x01\x125\n" +
+	"z\br*d@ct*dH\fR\x05email\x88\x01\x01\x12,\n" +
+	"\x06mobile\x18\x19 \x01(\tB\x0f\xbaG\f\x92\x02\t手机号H\rR\x06mobile\x88\x01\x01\x122\n" +
+	"\ttelephone\x18\x1a \x01(\tB\x0f\xbaG\f\x92\x02\t座机号H\x0eR\ttelephone\x88\x01\x01\x12G\n" +
+	"\x06gender\x18\x1b \x01(\x0e2\x1c.user.service.v1.User.GenderB\f\xbaG\t\x92\x02\x06性别H\x0fR\x06gender\x88\x01\x01\x12+\n" +
+	"\aaddress\x18\x1c \x01(\tB\f\xbaG\t\x92\x02\x06住址H\x10R\aaddress\x88\x01\x01\x12/\n" +
+	"\x06region\x18\x1d \x01(\tB\x12\xbaG\x0f\x92\x02\f国家地区H\x11R\x06region\x88\x01\x01\x129\n" +
+	"\vdescription\x18\x1e \x01(\tB\x12\xbaG\x0f\x92\x02\f个人描述H\x12R\vdescription\x88\x01\x01\x12)\n" +
+	"\x06remark\x18\x1f \x01(\tB\f\xbaG\t\x92\x02\x06备注H\x13R\x06remark\x88\x01\x01\x12]\n" +
+	"\rlast_login_at\x18  \x01(\v2\x1a.google.protobuf.TimestampB\x18\xbaG\x15\x92\x02\x12最后登录时间H\x14R\vlastLoginAt\x88\x01\x01\x12=\n" +
+	"\rlast_login_ip\x18! \x01(\tB\x14\xbaG\x11\x92\x02\x0e最后登录IPH\x15R\vlastLoginIp\x88\x01\x01\x125\n" +
 	"\n" +
-	"created_by\x18d \x01(\rB\x11\xbaG\x0e\x92\x02\v创建者IDH\x1aR\tcreatedBy\x88\x01\x01\x125\n" +
+	"created_by\x18d \x01(\rB\x11\xbaG\x0e\x92\x02\v创建者IDH\x16R\tcreatedBy\x88\x01\x01\x125\n" +
 	"\n" +
-	"updated_by\x18e \x01(\rB\x11\xbaG\x0e\x92\x02\v更新者IDH\x1bR\tupdatedBy\x88\x01\x01\x12;\n" +
+	"updated_by\x18e \x01(\rB\x11\xbaG\x0e\x92\x02\v更新者IDH\x17R\tupdatedBy\x88\x01\x01\x12;\n" +
 	"\n" +
-	"deleted_by\x18f \x01(\rB\x17\xbaG\x14\x92\x02\x11删除者用户IDH\x1cR\tdeletedBy\x88\x01\x01\x12S\n" +
+	"deleted_by\x18f \x01(\rB\x17\xbaG\x14\x92\x02\x11删除者用户IDH\x18R\tdeletedBy\x88\x01\x01\x12S\n" +
 	"\n" +
-	"created_at\x18\xc8\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f创建时间H\x1dR\tcreatedAt\x88\x01\x01\x12S\n" +
+	"created_at\x18\xc8\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f创建时间H\x19R\tcreatedAt\x88\x01\x01\x12S\n" +
 	"\n" +
-	"updated_at\x18\xc9\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f更新时间H\x1eR\tupdatedAt\x88\x01\x01\x12S\n" +
+	"updated_at\x18\xc9\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f更新时间H\x1aR\tupdatedAt\x88\x01\x01\x12S\n" +
 	"\n" +
-	"deleted_at\x18\xca\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f删除时间H\x1fR\tdeletedAt\x88\x01\x01\"\x19\n" +
-	"\x06Status\x12\a\n" +
-	"\x03OFF\x10\x00\x12\x06\n" +
-	"\x02ON\x10\x01\"J\n" +
-	"\tAuthority\x12\t\n" +
-	"\x05GUEST\x10\x00\x12\x11\n" +
-	"\rCUSTOMER_USER\x10\x01\x12\x10\n" +
-	"\fTENANT_ADMIN\x10\x02\x12\r\n" +
-	"\tSYS_ADMIN\x10\x03\"*\n" +
+	"deleted_at\x18\xca\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f删除时间H\x1bR\tdeletedAt\x88\x01\x01\"*\n" +
 	"\x06Gender\x12\n" +
 	"\n" +
 	"\x06SECRET\x10\x00\x12\b\n" +
@@ -1798,15 +1672,13 @@ const file_user_service_v1_user_proto_rawDesc = "" +
 	"\x03_idB\f\n" +
 	"\n" +
 	"_tenant_idB\x0e\n" +
-	"\f_tenant_nameB\t\n" +
-	"\a_org_idB\v\n" +
-	"\t_org_nameB\x10\n" +
-	"\x0e_department_idB\x12\n" +
-	"\x10_department_nameB\x0e\n" +
+	"\f_tenant_nameB\x0e\n" +
+	"\f_org_unit_idB\x10\n" +
+	"\x0e_org_unit_nameB\x0e\n" +
 	"\f_position_idB\x10\n" +
 	"\x0e_position_nameB\n" +
 	"\n" +
-	"\b_work_idB\v\n" +
+	"\b_role_idB\v\n" +
 	"\t_usernameB\v\n" +
 	"\t_nicknameB\v\n" +
 	"\t_realnameB\t\n" +
@@ -1820,12 +1692,9 @@ const file_user_service_v1_user_proto_rawDesc = "" +
 	"\b_addressB\t\n" +
 	"\a_regionB\x0e\n" +
 	"\f_descriptionB\t\n" +
-	"\a_remarkB\x12\n" +
-	"\x10_last_login_timeB\x10\n" +
-	"\x0e_last_login_ipB\t\n" +
-	"\a_statusB\f\n" +
-	"\n" +
-	"_authorityB\r\n" +
+	"\a_remarkB\x10\n" +
+	"\x0e_last_login_atB\x10\n" +
+	"\x0e_last_login_ipB\r\n" +
 	"\v_created_byB\r\n" +
 	"\v_updated_byB\r\n" +
 	"\v_deleted_byB\r\n" +
@@ -1932,75 +1801,71 @@ func file_user_service_v1_user_proto_rawDescGZIP() []byte {
 	return file_user_service_v1_user_proto_rawDescData
 }
 
-var file_user_service_v1_user_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
+var file_user_service_v1_user_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_user_service_v1_user_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
 var file_user_service_v1_user_proto_goTypes = []any{
-	(User_Status)(0),                 // 0: user.service.v1.User.Status
-	(User_Authority)(0),              // 1: user.service.v1.User.Authority
-	(User_Gender)(0),                 // 2: user.service.v1.User.Gender
-	(*User)(nil),                     // 3: user.service.v1.User
-	(*ListUserResponse)(nil),         // 4: user.service.v1.ListUserResponse
-	(*GetUserRequest)(nil),           // 5: user.service.v1.GetUserRequest
-	(*CreateUserRequest)(nil),        // 6: user.service.v1.CreateUserRequest
-	(*UpdateUserRequest)(nil),        // 7: user.service.v1.UpdateUserRequest
-	(*DeleteUserRequest)(nil),        // 8: user.service.v1.DeleteUserRequest
-	(*UserExistsRequest)(nil),        // 9: user.service.v1.UserExistsRequest
-	(*UserExistsResponse)(nil),       // 10: user.service.v1.UserExistsResponse
-	(*BatchCreateUsersRequest)(nil),  // 11: user.service.v1.BatchCreateUsersRequest
-	(*BatchCreateUsersResponse)(nil), // 12: user.service.v1.BatchCreateUsersResponse
-	(*GetUsersByIdsRequest)(nil),     // 13: user.service.v1.GetUsersByIdsRequest
-	(*EditUserPasswordRequest)(nil),  // 14: user.service.v1.EditUserPasswordRequest
-	(*ChangePasswordRequest)(nil),    // 15: user.service.v1.ChangePasswordRequest
-	(*UploadAvatarRequest)(nil),      // 16: user.service.v1.UploadAvatarRequest
-	(*UploadAvatarResponse)(nil),     // 17: user.service.v1.UploadAvatarResponse
-	(*BindContactRequest)(nil),       // 18: user.service.v1.BindContactRequest
-	(*BindPhoneRequest)(nil),         // 19: user.service.v1.BindPhoneRequest
-	(*BindEmailRequest)(nil),         // 20: user.service.v1.BindEmailRequest
-	(*VerifyContactRequest)(nil),     // 21: user.service.v1.VerifyContactRequest
-	(*PhoneVerification)(nil),        // 22: user.service.v1.PhoneVerification
-	(*EmailVerification)(nil),        // 23: user.service.v1.EmailVerification
-	(*timestamppb.Timestamp)(nil),    // 24: google.protobuf.Timestamp
-	(*fieldmaskpb.FieldMask)(nil),    // 25: google.protobuf.FieldMask
-	(*v1.PagingRequest)(nil),         // 26: pagination.PagingRequest
-	(*emptypb.Empty)(nil),            // 27: google.protobuf.Empty
+	(User_Gender)(0),                 // 0: user.service.v1.User.Gender
+	(*User)(nil),                     // 1: user.service.v1.User
+	(*ListUserResponse)(nil),         // 2: user.service.v1.ListUserResponse
+	(*GetUserRequest)(nil),           // 3: user.service.v1.GetUserRequest
+	(*CreateUserRequest)(nil),        // 4: user.service.v1.CreateUserRequest
+	(*UpdateUserRequest)(nil),        // 5: user.service.v1.UpdateUserRequest
+	(*DeleteUserRequest)(nil),        // 6: user.service.v1.DeleteUserRequest
+	(*UserExistsRequest)(nil),        // 7: user.service.v1.UserExistsRequest
+	(*UserExistsResponse)(nil),       // 8: user.service.v1.UserExistsResponse
+	(*BatchCreateUsersRequest)(nil),  // 9: user.service.v1.BatchCreateUsersRequest
+	(*BatchCreateUsersResponse)(nil), // 10: user.service.v1.BatchCreateUsersResponse
+	(*GetUsersByIdsRequest)(nil),     // 11: user.service.v1.GetUsersByIdsRequest
+	(*EditUserPasswordRequest)(nil),  // 12: user.service.v1.EditUserPasswordRequest
+	(*ChangePasswordRequest)(nil),    // 13: user.service.v1.ChangePasswordRequest
+	(*UploadAvatarRequest)(nil),      // 14: user.service.v1.UploadAvatarRequest
+	(*UploadAvatarResponse)(nil),     // 15: user.service.v1.UploadAvatarResponse
+	(*BindContactRequest)(nil),       // 16: user.service.v1.BindContactRequest
+	(*BindPhoneRequest)(nil),         // 17: user.service.v1.BindPhoneRequest
+	(*BindEmailRequest)(nil),         // 18: user.service.v1.BindEmailRequest
+	(*VerifyContactRequest)(nil),     // 19: user.service.v1.VerifyContactRequest
+	(*PhoneVerification)(nil),        // 20: user.service.v1.PhoneVerification
+	(*EmailVerification)(nil),        // 21: user.service.v1.EmailVerification
+	(*timestamppb.Timestamp)(nil),    // 22: google.protobuf.Timestamp
+	(*fieldmaskpb.FieldMask)(nil),    // 23: google.protobuf.FieldMask
+	(*v1.PagingRequest)(nil),         // 24: pagination.PagingRequest
+	(*emptypb.Empty)(nil),            // 25: google.protobuf.Empty
 }
 var file_user_service_v1_user_proto_depIdxs = []int32{
-	2,  // 0: user.service.v1.User.gender:type_name -> user.service.v1.User.Gender
-	24, // 1: user.service.v1.User.last_login_time:type_name -> google.protobuf.Timestamp
-	0,  // 2: user.service.v1.User.status:type_name -> user.service.v1.User.Status
-	1,  // 3: user.service.v1.User.authority:type_name -> user.service.v1.User.Authority
-	24, // 4: user.service.v1.User.created_at:type_name -> google.protobuf.Timestamp
-	24, // 5: user.service.v1.User.updated_at:type_name -> google.protobuf.Timestamp
-	24, // 6: user.service.v1.User.deleted_at:type_name -> google.protobuf.Timestamp
-	3,  // 7: user.service.v1.ListUserResponse.items:type_name -> user.service.v1.User
-	25, // 8: user.service.v1.GetUserRequest.view_mask:type_name -> google.protobuf.FieldMask
-	3,  // 9: user.service.v1.CreateUserRequest.data:type_name -> user.service.v1.User
-	3,  // 10: user.service.v1.UpdateUserRequest.data:type_name -> user.service.v1.User
-	25, // 11: user.service.v1.UpdateUserRequest.update_mask:type_name -> google.protobuf.FieldMask
-	3,  // 12: user.service.v1.BatchCreateUsersRequest.data:type_name -> user.service.v1.User
-	19, // 13: user.service.v1.BindContactRequest.phone:type_name -> user.service.v1.BindPhoneRequest
-	20, // 14: user.service.v1.BindContactRequest.email:type_name -> user.service.v1.BindEmailRequest
-	22, // 15: user.service.v1.VerifyContactRequest.phone:type_name -> user.service.v1.PhoneVerification
-	23, // 16: user.service.v1.VerifyContactRequest.email:type_name -> user.service.v1.EmailVerification
-	26, // 17: user.service.v1.UserService.List:input_type -> pagination.PagingRequest
-	5,  // 18: user.service.v1.UserService.Get:input_type -> user.service.v1.GetUserRequest
-	6,  // 19: user.service.v1.UserService.Create:input_type -> user.service.v1.CreateUserRequest
-	7,  // 20: user.service.v1.UserService.Update:input_type -> user.service.v1.UpdateUserRequest
-	8,  // 21: user.service.v1.UserService.Delete:input_type -> user.service.v1.DeleteUserRequest
-	11, // 22: user.service.v1.UserService.BatchCreate:input_type -> user.service.v1.BatchCreateUsersRequest
-	9,  // 23: user.service.v1.UserService.UserExists:input_type -> user.service.v1.UserExistsRequest
-	4,  // 24: user.service.v1.UserService.List:output_type -> user.service.v1.ListUserResponse
-	3,  // 25: user.service.v1.UserService.Get:output_type -> user.service.v1.User
-	27, // 26: user.service.v1.UserService.Create:output_type -> google.protobuf.Empty
-	27, // 27: user.service.v1.UserService.Update:output_type -> google.protobuf.Empty
-	27, // 28: user.service.v1.UserService.Delete:output_type -> google.protobuf.Empty
-	12, // 29: user.service.v1.UserService.BatchCreate:output_type -> user.service.v1.BatchCreateUsersResponse
-	10, // 30: user.service.v1.UserService.UserExists:output_type -> user.service.v1.UserExistsResponse
-	24, // [24:31] is the sub-list for method output_type
-	17, // [17:24] is the sub-list for method input_type
-	17, // [17:17] is the sub-list for extension type_name
-	17, // [17:17] is the sub-list for extension extendee
-	0,  // [0:17] is the sub-list for field type_name
+	0,  // 0: user.service.v1.User.gender:type_name -> user.service.v1.User.Gender
+	22, // 1: user.service.v1.User.last_login_at:type_name -> google.protobuf.Timestamp
+	22, // 2: user.service.v1.User.created_at:type_name -> google.protobuf.Timestamp
+	22, // 3: user.service.v1.User.updated_at:type_name -> google.protobuf.Timestamp
+	22, // 4: user.service.v1.User.deleted_at:type_name -> google.protobuf.Timestamp
+	1,  // 5: user.service.v1.ListUserResponse.items:type_name -> user.service.v1.User
+	23, // 6: user.service.v1.GetUserRequest.view_mask:type_name -> google.protobuf.FieldMask
+	1,  // 7: user.service.v1.CreateUserRequest.data:type_name -> user.service.v1.User
+	1,  // 8: user.service.v1.UpdateUserRequest.data:type_name -> user.service.v1.User
+	23, // 9: user.service.v1.UpdateUserRequest.update_mask:type_name -> google.protobuf.FieldMask
+	1,  // 10: user.service.v1.BatchCreateUsersRequest.data:type_name -> user.service.v1.User
+	17, // 11: user.service.v1.BindContactRequest.phone:type_name -> user.service.v1.BindPhoneRequest
+	18, // 12: user.service.v1.BindContactRequest.email:type_name -> user.service.v1.BindEmailRequest
+	20, // 13: user.service.v1.VerifyContactRequest.phone:type_name -> user.service.v1.PhoneVerification
+	21, // 14: user.service.v1.VerifyContactRequest.email:type_name -> user.service.v1.EmailVerification
+	24, // 15: user.service.v1.UserService.List:input_type -> pagination.PagingRequest
+	3,  // 16: user.service.v1.UserService.Get:input_type -> user.service.v1.GetUserRequest
+	4,  // 17: user.service.v1.UserService.Create:input_type -> user.service.v1.CreateUserRequest
+	5,  // 18: user.service.v1.UserService.Update:input_type -> user.service.v1.UpdateUserRequest
+	6,  // 19: user.service.v1.UserService.Delete:input_type -> user.service.v1.DeleteUserRequest
+	9,  // 20: user.service.v1.UserService.BatchCreate:input_type -> user.service.v1.BatchCreateUsersRequest
+	7,  // 21: user.service.v1.UserService.UserExists:input_type -> user.service.v1.UserExistsRequest
+	2,  // 22: user.service.v1.UserService.List:output_type -> user.service.v1.ListUserResponse
+	1,  // 23: user.service.v1.UserService.Get:output_type -> user.service.v1.User
+	25, // 24: user.service.v1.UserService.Create:output_type -> google.protobuf.Empty
+	25, // 25: user.service.v1.UserService.Update:output_type -> google.protobuf.Empty
+	25, // 26: user.service.v1.UserService.Delete:output_type -> google.protobuf.Empty
+	10, // 27: user.service.v1.UserService.BatchCreate:output_type -> user.service.v1.BatchCreateUsersResponse
+	8,  // 28: user.service.v1.UserService.UserExists:output_type -> user.service.v1.UserExistsResponse
+	22, // [22:29] is the sub-list for method output_type
+	15, // [15:22] is the sub-list for method input_type
+	15, // [15:15] is the sub-list for extension type_name
+	15, // [15:15] is the sub-list for extension extendee
+	0,  // [0:15] is the sub-list for field type_name
 }
 
 func init() { file_user_service_v1_user_proto_init() }
@@ -2041,7 +1906,7 @@ func file_user_service_v1_user_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_service_v1_user_proto_rawDesc), len(file_user_service_v1_user_proto_rawDesc)),
-			NumEnums:      3,
+			NumEnums:      1,
 			NumMessages:   21,
 			NumExtensions: 0,
 			NumServices:   1,
