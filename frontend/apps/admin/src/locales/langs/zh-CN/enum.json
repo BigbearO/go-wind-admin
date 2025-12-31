@@ -7,12 +7,6 @@
     "true": "启用",
     "false": "禁用"
   },
-  "authority": {
-    "GUEST": "访客用户",
-    "CUSTOMER_USER": "普通用户",
-    "TENANT_ADMIN": "租户管理",
-    "SYS_ADMIN": "超级管理"
-  },
   "menuType": {
     "FOLDER": "目录",
     "MENU": "菜单",
@@ -114,6 +108,16 @@
       "INTERN": "实习岗",
       "CONTRACT": "合同岗",
       "OTHER": "其他"
+    }
+  },
+  "permission": {
+    "type": {
+      "CATALOG": "目录权限",
+      "MENU": "菜单权限",
+      "PAGE": "页面权限",
+      "BUTTON": "按钮权限",
+      "API": "接口权限",
+      "DATA": "数据权限"
     }
   },
   "internalMessageStatus" : {

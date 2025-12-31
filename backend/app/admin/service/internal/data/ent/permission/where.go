@@ -115,14 +115,9 @@ func Path(v string) predicate.Permission {
 	return predicate.Permission(sql.FieldEQ(FieldPath, v))
 }
 
-// Resource applies equality check predicate on the "resource" field. It's identical to ResourceEQ.
-func Resource(v string) predicate.Permission {
-	return predicate.Permission(sql.FieldEQ(FieldResource, v))
-}
-
-// Method applies equality check predicate on the "method" field. It's identical to MethodEQ.
-func Method(v string) predicate.Permission {
-	return predicate.Permission(sql.FieldEQ(FieldMethod, v))
+// Module applies equality check predicate on the "module" field. It's identical to ModuleEQ.
+func Module(v string) predicate.Permission {
+	return predicate.Permission(sql.FieldEQ(FieldModule, v))
 }
 
 // SortOrder applies equality check predicate on the "sort_order" field. It's identical to SortOrderEQ.
@@ -830,154 +825,79 @@ func PathContainsFold(v string) predicate.Permission {
 	return predicate.Permission(sql.FieldContainsFold(FieldPath, v))
 }
 
-// ResourceEQ applies the EQ predicate on the "resource" field.
-func ResourceEQ(v string) predicate.Permission {
-	return predicate.Permission(sql.FieldEQ(FieldResource, v))
+// ModuleEQ applies the EQ predicate on the "module" field.
+func ModuleEQ(v string) predicate.Permission {
+	return predicate.Permission(sql.FieldEQ(FieldModule, v))
 }
 
-// ResourceNEQ applies the NEQ predicate on the "resource" field.
-func ResourceNEQ(v string) predicate.Permission {
-	return predicate.Permission(sql.FieldNEQ(FieldResource, v))
+// ModuleNEQ applies the NEQ predicate on the "module" field.
+func ModuleNEQ(v string) predicate.Permission {
+	return predicate.Permission(sql.FieldNEQ(FieldModule, v))
 }
 
-// ResourceIn applies the In predicate on the "resource" field.
-func ResourceIn(vs ...string) predicate.Permission {
-	return predicate.Permission(sql.FieldIn(FieldResource, vs...))
+// ModuleIn applies the In predicate on the "module" field.
+func ModuleIn(vs ...string) predicate.Permission {
+	return predicate.Permission(sql.FieldIn(FieldModule, vs...))
 }
 
-// ResourceNotIn applies the NotIn predicate on the "resource" field.
-func ResourceNotIn(vs ...string) predicate.Permission {
-	return predicate.Permission(sql.FieldNotIn(FieldResource, vs...))
+// ModuleNotIn applies the NotIn predicate on the "module" field.
+func ModuleNotIn(vs ...string) predicate.Permission {
+	return predicate.Permission(sql.FieldNotIn(FieldModule, vs...))
 }
 
-// ResourceGT applies the GT predicate on the "resource" field.
-func ResourceGT(v string) predicate.Permission {
-	return predicate.Permission(sql.FieldGT(FieldResource, v))
+// ModuleGT applies the GT predicate on the "module" field.
+func ModuleGT(v string) predicate.Permission {
+	return predicate.Permission(sql.FieldGT(FieldModule, v))
 }
 
-// ResourceGTE applies the GTE predicate on the "resource" field.
-func ResourceGTE(v string) predicate.Permission {
-	return predicate.Permission(sql.FieldGTE(FieldResource, v))
+// ModuleGTE applies the GTE predicate on the "module" field.
+func ModuleGTE(v string) predicate.Permission {
+	return predicate.Permission(sql.FieldGTE(FieldModule, v))
 }
 
-// ResourceLT applies the LT predicate on the "resource" field.
-func ResourceLT(v string) predicate.Permission {
-	return predicate.Permission(sql.FieldLT(FieldResource, v))
+// ModuleLT applies the LT predicate on the "module" field.
+func ModuleLT(v string) predicate.Permission {
+	return predicate.Permission(sql.FieldLT(FieldModule, v))
 }
 
-// ResourceLTE applies the LTE predicate on the "resource" field.
-func ResourceLTE(v string) predicate.Permission {
-	return predicate.Permission(sql.FieldLTE(FieldResource, v))
+// ModuleLTE applies the LTE predicate on the "module" field.
+func ModuleLTE(v string) predicate.Permission {
+	return predicate.Permission(sql.FieldLTE(FieldModule, v))
 }
 
-// ResourceContains applies the Contains predicate on the "resource" field.
-func ResourceContains(v string) predicate.Permission {
-	return predicate.Permission(sql.FieldContains(FieldResource, v))
+// ModuleContains applies the Contains predicate on the "module" field.
+func ModuleContains(v string) predicate.Permission {
+	return predicate.Permission(sql.FieldContains(FieldModule, v))
 }
 
-// ResourceHasPrefix applies the HasPrefix predicate on the "resource" field.
-func ResourceHasPrefix(v string) predicate.Permission {
-	return predicate.Permission(sql.FieldHasPrefix(FieldResource, v))
+// ModuleHasPrefix applies the HasPrefix predicate on the "module" field.
+func ModuleHasPrefix(v string) predicate.Permission {
+	return predicate.Permission(sql.FieldHasPrefix(FieldModule, v))
 }
 
-// ResourceHasSuffix applies the HasSuffix predicate on the "resource" field.
-func ResourceHasSuffix(v string) predicate.Permission {
-	return predicate.Permission(sql.FieldHasSuffix(FieldResource, v))
+// ModuleHasSuffix applies the HasSuffix predicate on the "module" field.
+func ModuleHasSuffix(v string) predicate.Permission {
+	return predicate.Permission(sql.FieldHasSuffix(FieldModule, v))
 }
 
-// ResourceIsNil applies the IsNil predicate on the "resource" field.
-func ResourceIsNil() predicate.Permission {
-	return predicate.Permission(sql.FieldIsNull(FieldResource))
+// ModuleIsNil applies the IsNil predicate on the "module" field.
+func ModuleIsNil() predicate.Permission {
+	return predicate.Permission(sql.FieldIsNull(FieldModule))
 }
 
-// ResourceNotNil applies the NotNil predicate on the "resource" field.
-func ResourceNotNil() predicate.Permission {
-	return predicate.Permission(sql.FieldNotNull(FieldResource))
+// ModuleNotNil applies the NotNil predicate on the "module" field.
+func ModuleNotNil() predicate.Permission {
+	return predicate.Permission(sql.FieldNotNull(FieldModule))
 }
 
-// ResourceEqualFold applies the EqualFold predicate on the "resource" field.
-func ResourceEqualFold(v string) predicate.Permission {
-	return predicate.Permission(sql.FieldEqualFold(FieldResource, v))
+// ModuleEqualFold applies the EqualFold predicate on the "module" field.
+func ModuleEqualFold(v string) predicate.Permission {
+	return predicate.Permission(sql.FieldEqualFold(FieldModule, v))
 }
 
-// ResourceContainsFold applies the ContainsFold predicate on the "resource" field.
-func ResourceContainsFold(v string) predicate.Permission {
-	return predicate.Permission(sql.FieldContainsFold(FieldResource, v))
-}
-
-// MethodEQ applies the EQ predicate on the "method" field.
-func MethodEQ(v string) predicate.Permission {
-	return predicate.Permission(sql.FieldEQ(FieldMethod, v))
-}
-
-// MethodNEQ applies the NEQ predicate on the "method" field.
-func MethodNEQ(v string) predicate.Permission {
-	return predicate.Permission(sql.FieldNEQ(FieldMethod, v))
-}
-
-// MethodIn applies the In predicate on the "method" field.
-func MethodIn(vs ...string) predicate.Permission {
-	return predicate.Permission(sql.FieldIn(FieldMethod, vs...))
-}
-
-// MethodNotIn applies the NotIn predicate on the "method" field.
-func MethodNotIn(vs ...string) predicate.Permission {
-	return predicate.Permission(sql.FieldNotIn(FieldMethod, vs...))
-}
-
-// MethodGT applies the GT predicate on the "method" field.
-func MethodGT(v string) predicate.Permission {
-	return predicate.Permission(sql.FieldGT(FieldMethod, v))
-}
-
-// MethodGTE applies the GTE predicate on the "method" field.
-func MethodGTE(v string) predicate.Permission {
-	return predicate.Permission(sql.FieldGTE(FieldMethod, v))
-}
-
-// MethodLT applies the LT predicate on the "method" field.
-func MethodLT(v string) predicate.Permission {
-	return predicate.Permission(sql.FieldLT(FieldMethod, v))
-}
-
-// MethodLTE applies the LTE predicate on the "method" field.
-func MethodLTE(v string) predicate.Permission {
-	return predicate.Permission(sql.FieldLTE(FieldMethod, v))
-}
-
-// MethodContains applies the Contains predicate on the "method" field.
-func MethodContains(v string) predicate.Permission {
-	return predicate.Permission(sql.FieldContains(FieldMethod, v))
-}
-
-// MethodHasPrefix applies the HasPrefix predicate on the "method" field.
-func MethodHasPrefix(v string) predicate.Permission {
-	return predicate.Permission(sql.FieldHasPrefix(FieldMethod, v))
-}
-
-// MethodHasSuffix applies the HasSuffix predicate on the "method" field.
-func MethodHasSuffix(v string) predicate.Permission {
-	return predicate.Permission(sql.FieldHasSuffix(FieldMethod, v))
-}
-
-// MethodIsNil applies the IsNil predicate on the "method" field.
-func MethodIsNil() predicate.Permission {
-	return predicate.Permission(sql.FieldIsNull(FieldMethod))
-}
-
-// MethodNotNil applies the NotNil predicate on the "method" field.
-func MethodNotNil() predicate.Permission {
-	return predicate.Permission(sql.FieldNotNull(FieldMethod))
-}
-
-// MethodEqualFold applies the EqualFold predicate on the "method" field.
-func MethodEqualFold(v string) predicate.Permission {
-	return predicate.Permission(sql.FieldEqualFold(FieldMethod, v))
-}
-
-// MethodContainsFold applies the ContainsFold predicate on the "method" field.
-func MethodContainsFold(v string) predicate.Permission {
-	return predicate.Permission(sql.FieldContainsFold(FieldMethod, v))
+// ModuleContainsFold applies the ContainsFold predicate on the "module" field.
+func ModuleContainsFold(v string) predicate.Permission {
+	return predicate.Permission(sql.FieldContainsFold(FieldModule, v))
 }
 
 // SortOrderEQ applies the EQ predicate on the "sort_order" field.

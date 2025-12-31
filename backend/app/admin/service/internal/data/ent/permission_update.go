@@ -264,43 +264,23 @@ func (_u *PermissionUpdate) ClearPath() *PermissionUpdate {
 	return _u
 }
 
-// SetResource sets the "resource" field.
-func (_u *PermissionUpdate) SetResource(v string) *PermissionUpdate {
-	_u.mutation.SetResource(v)
+// SetModule sets the "module" field.
+func (_u *PermissionUpdate) SetModule(v string) *PermissionUpdate {
+	_u.mutation.SetModule(v)
 	return _u
 }
 
-// SetNillableResource sets the "resource" field if the given value is not nil.
-func (_u *PermissionUpdate) SetNillableResource(v *string) *PermissionUpdate {
+// SetNillableModule sets the "module" field if the given value is not nil.
+func (_u *PermissionUpdate) SetNillableModule(v *string) *PermissionUpdate {
 	if v != nil {
-		_u.SetResource(*v)
+		_u.SetModule(*v)
 	}
 	return _u
 }
 
-// ClearResource clears the value of the "resource" field.
-func (_u *PermissionUpdate) ClearResource() *PermissionUpdate {
-	_u.mutation.ClearResource()
-	return _u
-}
-
-// SetMethod sets the "method" field.
-func (_u *PermissionUpdate) SetMethod(v string) *PermissionUpdate {
-	_u.mutation.SetMethod(v)
-	return _u
-}
-
-// SetNillableMethod sets the "method" field if the given value is not nil.
-func (_u *PermissionUpdate) SetNillableMethod(v *string) *PermissionUpdate {
-	if v != nil {
-		_u.SetMethod(*v)
-	}
-	return _u
-}
-
-// ClearMethod clears the value of the "method" field.
-func (_u *PermissionUpdate) ClearMethod() *PermissionUpdate {
-	_u.mutation.ClearMethod()
+// ClearModule clears the value of the "module" field.
+func (_u *PermissionUpdate) ClearModule() *PermissionUpdate {
+	_u.mutation.ClearModule()
 	return _u
 }
 
@@ -534,17 +514,11 @@ func (_u *PermissionUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	if _u.mutation.PathCleared() {
 		_spec.ClearField(permission.FieldPath, field.TypeString)
 	}
-	if value, ok := _u.mutation.Resource(); ok {
-		_spec.SetField(permission.FieldResource, field.TypeString, value)
+	if value, ok := _u.mutation.Module(); ok {
+		_spec.SetField(permission.FieldModule, field.TypeString, value)
 	}
-	if _u.mutation.ResourceCleared() {
-		_spec.ClearField(permission.FieldResource, field.TypeString)
-	}
-	if value, ok := _u.mutation.Method(); ok {
-		_spec.SetField(permission.FieldMethod, field.TypeString, value)
-	}
-	if _u.mutation.MethodCleared() {
-		_spec.ClearField(permission.FieldMethod, field.TypeString)
+	if _u.mutation.ModuleCleared() {
+		_spec.ClearField(permission.FieldModule, field.TypeString)
 	}
 	if value, ok := _u.mutation.SortOrder(); ok {
 		_spec.SetField(permission.FieldSortOrder, field.TypeInt32, value)
@@ -889,43 +863,23 @@ func (_u *PermissionUpdateOne) ClearPath() *PermissionUpdateOne {
 	return _u
 }
 
-// SetResource sets the "resource" field.
-func (_u *PermissionUpdateOne) SetResource(v string) *PermissionUpdateOne {
-	_u.mutation.SetResource(v)
+// SetModule sets the "module" field.
+func (_u *PermissionUpdateOne) SetModule(v string) *PermissionUpdateOne {
+	_u.mutation.SetModule(v)
 	return _u
 }
 
-// SetNillableResource sets the "resource" field if the given value is not nil.
-func (_u *PermissionUpdateOne) SetNillableResource(v *string) *PermissionUpdateOne {
+// SetNillableModule sets the "module" field if the given value is not nil.
+func (_u *PermissionUpdateOne) SetNillableModule(v *string) *PermissionUpdateOne {
 	if v != nil {
-		_u.SetResource(*v)
+		_u.SetModule(*v)
 	}
 	return _u
 }
 
-// ClearResource clears the value of the "resource" field.
-func (_u *PermissionUpdateOne) ClearResource() *PermissionUpdateOne {
-	_u.mutation.ClearResource()
-	return _u
-}
-
-// SetMethod sets the "method" field.
-func (_u *PermissionUpdateOne) SetMethod(v string) *PermissionUpdateOne {
-	_u.mutation.SetMethod(v)
-	return _u
-}
-
-// SetNillableMethod sets the "method" field if the given value is not nil.
-func (_u *PermissionUpdateOne) SetNillableMethod(v *string) *PermissionUpdateOne {
-	if v != nil {
-		_u.SetMethod(*v)
-	}
-	return _u
-}
-
-// ClearMethod clears the value of the "method" field.
-func (_u *PermissionUpdateOne) ClearMethod() *PermissionUpdateOne {
-	_u.mutation.ClearMethod()
+// ClearModule clears the value of the "module" field.
+func (_u *PermissionUpdateOne) ClearModule() *PermissionUpdateOne {
+	_u.mutation.ClearModule()
 	return _u
 }
 
@@ -1189,17 +1143,11 @@ func (_u *PermissionUpdateOne) sqlSave(ctx context.Context) (_node *Permission, 
 	if _u.mutation.PathCleared() {
 		_spec.ClearField(permission.FieldPath, field.TypeString)
 	}
-	if value, ok := _u.mutation.Resource(); ok {
-		_spec.SetField(permission.FieldResource, field.TypeString, value)
+	if value, ok := _u.mutation.Module(); ok {
+		_spec.SetField(permission.FieldModule, field.TypeString, value)
 	}
-	if _u.mutation.ResourceCleared() {
-		_spec.ClearField(permission.FieldResource, field.TypeString)
-	}
-	if value, ok := _u.mutation.Method(); ok {
-		_spec.SetField(permission.FieldMethod, field.TypeString, value)
-	}
-	if _u.mutation.MethodCleared() {
-		_spec.ClearField(permission.FieldMethod, field.TypeString)
+	if _u.mutation.ModuleCleared() {
+		_spec.ClearField(permission.FieldModule, field.TypeString)
 	}
 	if value, ok := _u.mutation.SortOrder(); ok {
 		_spec.SetField(permission.FieldSortOrder, field.TypeInt32, value)

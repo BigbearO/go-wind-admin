@@ -196,30 +196,16 @@ func (_c *PermissionCreate) SetNillablePath(v *string) *PermissionCreate {
 	return _c
 }
 
-// SetResource sets the "resource" field.
-func (_c *PermissionCreate) SetResource(v string) *PermissionCreate {
-	_c.mutation.SetResource(v)
+// SetModule sets the "module" field.
+func (_c *PermissionCreate) SetModule(v string) *PermissionCreate {
+	_c.mutation.SetModule(v)
 	return _c
 }
 
-// SetNillableResource sets the "resource" field if the given value is not nil.
-func (_c *PermissionCreate) SetNillableResource(v *string) *PermissionCreate {
+// SetNillableModule sets the "module" field if the given value is not nil.
+func (_c *PermissionCreate) SetNillableModule(v *string) *PermissionCreate {
 	if v != nil {
-		_c.SetResource(*v)
-	}
-	return _c
-}
-
-// SetMethod sets the "method" field.
-func (_c *PermissionCreate) SetMethod(v string) *PermissionCreate {
-	_c.mutation.SetMethod(v)
-	return _c
-}
-
-// SetNillableMethod sets the "method" field if the given value is not nil.
-func (_c *PermissionCreate) SetNillableMethod(v *string) *PermissionCreate {
-	if v != nil {
-		_c.SetMethod(*v)
+		_c.SetModule(*v)
 	}
 	return _c
 }
@@ -436,13 +422,9 @@ func (_c *PermissionCreate) createSpec() (*Permission, *sqlgraph.CreateSpec) {
 		_spec.SetField(permission.FieldPath, field.TypeString, value)
 		_node.Path = &value
 	}
-	if value, ok := _c.mutation.Resource(); ok {
-		_spec.SetField(permission.FieldResource, field.TypeString, value)
-		_node.Resource = &value
-	}
-	if value, ok := _c.mutation.Method(); ok {
-		_spec.SetField(permission.FieldMethod, field.TypeString, value)
-		_node.Method = &value
+	if value, ok := _c.mutation.Module(); ok {
+		_spec.SetField(permission.FieldModule, field.TypeString, value)
+		_node.Module = &value
 	}
 	if value, ok := _c.mutation.SortOrder(); ok {
 		_spec.SetField(permission.FieldSortOrder, field.TypeInt32, value)
@@ -747,39 +729,21 @@ func (u *PermissionUpsert) ClearPath() *PermissionUpsert {
 	return u
 }
 
-// SetResource sets the "resource" field.
-func (u *PermissionUpsert) SetResource(v string) *PermissionUpsert {
-	u.Set(permission.FieldResource, v)
+// SetModule sets the "module" field.
+func (u *PermissionUpsert) SetModule(v string) *PermissionUpsert {
+	u.Set(permission.FieldModule, v)
 	return u
 }
 
-// UpdateResource sets the "resource" field to the value that was provided on create.
-func (u *PermissionUpsert) UpdateResource() *PermissionUpsert {
-	u.SetExcluded(permission.FieldResource)
+// UpdateModule sets the "module" field to the value that was provided on create.
+func (u *PermissionUpsert) UpdateModule() *PermissionUpsert {
+	u.SetExcluded(permission.FieldModule)
 	return u
 }
 
-// ClearResource clears the value of the "resource" field.
-func (u *PermissionUpsert) ClearResource() *PermissionUpsert {
-	u.SetNull(permission.FieldResource)
-	return u
-}
-
-// SetMethod sets the "method" field.
-func (u *PermissionUpsert) SetMethod(v string) *PermissionUpsert {
-	u.Set(permission.FieldMethod, v)
-	return u
-}
-
-// UpdateMethod sets the "method" field to the value that was provided on create.
-func (u *PermissionUpsert) UpdateMethod() *PermissionUpsert {
-	u.SetExcluded(permission.FieldMethod)
-	return u
-}
-
-// ClearMethod clears the value of the "method" field.
-func (u *PermissionUpsert) ClearMethod() *PermissionUpsert {
-	u.SetNull(permission.FieldMethod)
+// ClearModule clears the value of the "module" field.
+func (u *PermissionUpsert) ClearModule() *PermissionUpsert {
+	u.SetNull(permission.FieldModule)
 	return u
 }
 
@@ -1118,45 +1082,24 @@ func (u *PermissionUpsertOne) ClearPath() *PermissionUpsertOne {
 	})
 }
 
-// SetResource sets the "resource" field.
-func (u *PermissionUpsertOne) SetResource(v string) *PermissionUpsertOne {
+// SetModule sets the "module" field.
+func (u *PermissionUpsertOne) SetModule(v string) *PermissionUpsertOne {
 	return u.Update(func(s *PermissionUpsert) {
-		s.SetResource(v)
+		s.SetModule(v)
 	})
 }
 
-// UpdateResource sets the "resource" field to the value that was provided on create.
-func (u *PermissionUpsertOne) UpdateResource() *PermissionUpsertOne {
+// UpdateModule sets the "module" field to the value that was provided on create.
+func (u *PermissionUpsertOne) UpdateModule() *PermissionUpsertOne {
 	return u.Update(func(s *PermissionUpsert) {
-		s.UpdateResource()
+		s.UpdateModule()
 	})
 }
 
-// ClearResource clears the value of the "resource" field.
-func (u *PermissionUpsertOne) ClearResource() *PermissionUpsertOne {
+// ClearModule clears the value of the "module" field.
+func (u *PermissionUpsertOne) ClearModule() *PermissionUpsertOne {
 	return u.Update(func(s *PermissionUpsert) {
-		s.ClearResource()
-	})
-}
-
-// SetMethod sets the "method" field.
-func (u *PermissionUpsertOne) SetMethod(v string) *PermissionUpsertOne {
-	return u.Update(func(s *PermissionUpsert) {
-		s.SetMethod(v)
-	})
-}
-
-// UpdateMethod sets the "method" field to the value that was provided on create.
-func (u *PermissionUpsertOne) UpdateMethod() *PermissionUpsertOne {
-	return u.Update(func(s *PermissionUpsert) {
-		s.UpdateMethod()
-	})
-}
-
-// ClearMethod clears the value of the "method" field.
-func (u *PermissionUpsertOne) ClearMethod() *PermissionUpsertOne {
-	return u.Update(func(s *PermissionUpsert) {
-		s.ClearMethod()
+		s.ClearModule()
 	})
 }
 
@@ -1667,45 +1610,24 @@ func (u *PermissionUpsertBulk) ClearPath() *PermissionUpsertBulk {
 	})
 }
 
-// SetResource sets the "resource" field.
-func (u *PermissionUpsertBulk) SetResource(v string) *PermissionUpsertBulk {
+// SetModule sets the "module" field.
+func (u *PermissionUpsertBulk) SetModule(v string) *PermissionUpsertBulk {
 	return u.Update(func(s *PermissionUpsert) {
-		s.SetResource(v)
+		s.SetModule(v)
 	})
 }
 
-// UpdateResource sets the "resource" field to the value that was provided on create.
-func (u *PermissionUpsertBulk) UpdateResource() *PermissionUpsertBulk {
+// UpdateModule sets the "module" field to the value that was provided on create.
+func (u *PermissionUpsertBulk) UpdateModule() *PermissionUpsertBulk {
 	return u.Update(func(s *PermissionUpsert) {
-		s.UpdateResource()
+		s.UpdateModule()
 	})
 }
 
-// ClearResource clears the value of the "resource" field.
-func (u *PermissionUpsertBulk) ClearResource() *PermissionUpsertBulk {
+// ClearModule clears the value of the "module" field.
+func (u *PermissionUpsertBulk) ClearModule() *PermissionUpsertBulk {
 	return u.Update(func(s *PermissionUpsert) {
-		s.ClearResource()
-	})
-}
-
-// SetMethod sets the "method" field.
-func (u *PermissionUpsertBulk) SetMethod(v string) *PermissionUpsertBulk {
-	return u.Update(func(s *PermissionUpsert) {
-		s.SetMethod(v)
-	})
-}
-
-// UpdateMethod sets the "method" field to the value that was provided on create.
-func (u *PermissionUpsertBulk) UpdateMethod() *PermissionUpsertBulk {
-	return u.Update(func(s *PermissionUpsert) {
-		s.UpdateMethod()
-	})
-}
-
-// ClearMethod clears the value of the "method" field.
-func (u *PermissionUpsertBulk) ClearMethod() *PermissionUpsertBulk {
-	return u.Update(func(s *PermissionUpsert) {
-		s.ClearMethod()
+		s.ClearModule()
 	})
 }
 

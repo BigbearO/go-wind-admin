@@ -20,7 +20,7 @@ const (
 	ClaimFieldClientID        = "cid"                   // 客户端 ID
 	ClaimFieldDeviceID        = "did"                   // 设备 ID
 	ClaimFieldRoleCodes       = "roc"                   // 角色码列表
-	ClaimFieldIsPlatformAdmin = "pad"                   // 是否平台管理员
+	ClaimFieldIsPlatformAdmin = "pad"                   // 是否为平台管理员
 	ClaimFieldIsTenantAdmin   = "tad"                   // 是否为租户管理员
 	ClaimFieldDataScope       = "ds"                    // 数据范围
 	ClaimFieldOrgUnitID       = "ouid"                  // 组织单元 ID
@@ -28,58 +28,58 @@ const (
 
 // NewUserTokenPayload 创建用户令牌
 func NewUserTokenPayload(
-	user *userV1.User,
-	dataScope *userV1.Role_DataScope,
+	username string,
+	userID uint32,
+	tenantID uint32,
 	orgUnitID *uint32,
+	roleCodes []string,
+	dataScope *userV1.Role_DataScope,
 	clientID *string,
 	deviceID *string,
 	isPlatformAdmin *bool,
 	isTenantAdmin *bool,
 ) *authenticationV1.UserTokenPayload {
-	if user == nil {
-		return &authenticationV1.UserTokenPayload{}
-	}
-
 	if isTenantAdmin != nil && *isTenantAdmin == true {
-		if user.TenantId == nil || *user.TenantId == 0 {
+		if tenantID == 0 {
 			*isTenantAdmin = false
 		}
 	}
 
 	return &authenticationV1.UserTokenPayload{
-		Username:        user.Username,
-		UserId:          user.GetId(),
-		TenantId:        user.TenantId,
+		Username:        trans.Ptr(username),
+		UserId:          userID,
+		TenantId:        trans.Ptr(tenantID),
+		OrgUnitId:       orgUnitID,
+		Roles:           roleCodes,
 		ClientId:        clientID,
 		DeviceId:        deviceID,
-		Roles:           user.Roles,
 		IsPlatformAdmin: isPlatformAdmin,
 		IsTenantAdmin:   isTenantAdmin,
 		DataScope:       dataScope,
-		OrgUnitId:       orgUnitID,
 	}
 }
 
 func NewUserTokenAuthClaims(
-	user *userV1.User,
-	dataScope *userV1.Role_DataScope,
+	username string,
+	userID uint32,
+	tenantID uint32,
 	orgUnitID *uint32,
+	roleCodes []string,
+	dataScope *userV1.Role_DataScope,
 	clientID *string,
 	deviceID *string,
 	isPlatformAdmin *bool,
 	isTenantAdmin *bool,
 ) *authn.AuthClaims {
-	if user == nil {
-		return &authn.AuthClaims{}
-	}
-
 	authClaims := authn.AuthClaims{
-		ClaimFieldUserName:  user.GetUsername(),
-		ClaimFieldUserID:    user.GetId(),
-		ClaimFieldTenantID:  user.GetTenantId(),
-		ClaimFieldRoleCodes: user.Roles,
+		ClaimFieldUserName: username,
+		ClaimFieldUserID:   userID,
+		ClaimFieldTenantID: tenantID,
 	}
 
+	if len(roleCodes) > 0 {
+		authClaims[ClaimFieldRoleCodes] = roleCodes
+	}
 	if deviceID != nil {
 		authClaims[ClaimFieldDeviceID] = *deviceID
 	}

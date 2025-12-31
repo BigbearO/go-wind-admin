@@ -21,11 +21,14 @@ import (
 	"go-wind-admin/app/admin/service/internal/data/ent/menu"
 	"go-wind-admin/app/admin/service/internal/data/ent/orgunit"
 	"go-wind-admin/app/admin/service/internal/data/ent/permission"
+	"go-wind-admin/app/admin/service/internal/data/ent/permissionapiresource"
+	"go-wind-admin/app/admin/service/internal/data/ent/permissionmenu"
 	"go-wind-admin/app/admin/service/internal/data/ent/position"
 	"go-wind-admin/app/admin/service/internal/data/ent/predicate"
 	"go-wind-admin/app/admin/service/internal/data/ent/role"
 	"go-wind-admin/app/admin/service/internal/data/ent/roleapi"
 	"go-wind-admin/app/admin/service/internal/data/ent/rolemenu"
+	"go-wind-admin/app/admin/service/internal/data/ent/rolepermission"
 	"go-wind-admin/app/admin/service/internal/data/ent/task"
 	"go-wind-admin/app/admin/service/internal/data/ent/tenant"
 	"go-wind-admin/app/admin/service/internal/data/ent/user"
@@ -39,7 +42,7 @@ import (
 
 // schemaGraph holds a representation of ent/schema at runtime.
 var schemaGraph = func() *sqlgraph.Schema {
-	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 26)}
+	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 29)}
 	graph.Nodes[0] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   adminloginlog.Table,
@@ -561,13 +564,56 @@ var schemaGraph = func() *sqlgraph.Schema {
 			permission.FieldName:      {Type: field.TypeString, Column: permission.FieldName},
 			permission.FieldCode:      {Type: field.TypeString, Column: permission.FieldCode},
 			permission.FieldPath:      {Type: field.TypeString, Column: permission.FieldPath},
-			permission.FieldResource:  {Type: field.TypeString, Column: permission.FieldResource},
-			permission.FieldMethod:    {Type: field.TypeString, Column: permission.FieldMethod},
+			permission.FieldModule:    {Type: field.TypeString, Column: permission.FieldModule},
 			permission.FieldSortOrder: {Type: field.TypeInt32, Column: permission.FieldSortOrder},
 			permission.FieldType:      {Type: field.TypeEnum, Column: permission.FieldType},
 		},
 	}
 	graph.Nodes[18] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   permissionapiresource.Table,
+			Columns: permissionapiresource.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeUint32,
+				Column: permissionapiresource.FieldID,
+			},
+		},
+		Type: "PermissionApiResource",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			permissionapiresource.FieldCreatedAt:     {Type: field.TypeTime, Column: permissionapiresource.FieldCreatedAt},
+			permissionapiresource.FieldUpdatedAt:     {Type: field.TypeTime, Column: permissionapiresource.FieldUpdatedAt},
+			permissionapiresource.FieldDeletedAt:     {Type: field.TypeTime, Column: permissionapiresource.FieldDeletedAt},
+			permissionapiresource.FieldCreatedBy:     {Type: field.TypeUint32, Column: permissionapiresource.FieldCreatedBy},
+			permissionapiresource.FieldUpdatedBy:     {Type: field.TypeUint32, Column: permissionapiresource.FieldUpdatedBy},
+			permissionapiresource.FieldDeletedBy:     {Type: field.TypeUint32, Column: permissionapiresource.FieldDeletedBy},
+			permissionapiresource.FieldTenantID:      {Type: field.TypeUint32, Column: permissionapiresource.FieldTenantID},
+			permissionapiresource.FieldAPIResourceID: {Type: field.TypeUint32, Column: permissionapiresource.FieldAPIResourceID},
+			permissionapiresource.FieldPermissionID:  {Type: field.TypeUint32, Column: permissionapiresource.FieldPermissionID},
+		},
+	}
+	graph.Nodes[19] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   permissionmenu.Table,
+			Columns: permissionmenu.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeUint32,
+				Column: permissionmenu.FieldID,
+			},
+		},
+		Type: "PermissionMenu",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			permissionmenu.FieldCreatedAt:    {Type: field.TypeTime, Column: permissionmenu.FieldCreatedAt},
+			permissionmenu.FieldUpdatedAt:    {Type: field.TypeTime, Column: permissionmenu.FieldUpdatedAt},
+			permissionmenu.FieldDeletedAt:    {Type: field.TypeTime, Column: permissionmenu.FieldDeletedAt},
+			permissionmenu.FieldCreatedBy:    {Type: field.TypeUint32, Column: permissionmenu.FieldCreatedBy},
+			permissionmenu.FieldUpdatedBy:    {Type: field.TypeUint32, Column: permissionmenu.FieldUpdatedBy},
+			permissionmenu.FieldDeletedBy:    {Type: field.TypeUint32, Column: permissionmenu.FieldDeletedBy},
+			permissionmenu.FieldTenantID:     {Type: field.TypeUint32, Column: permissionmenu.FieldTenantID},
+			permissionmenu.FieldMenuID:       {Type: field.TypeUint32, Column: permissionmenu.FieldMenuID},
+			permissionmenu.FieldPermissionID: {Type: field.TypeUint32, Column: permissionmenu.FieldPermissionID},
+		},
+	}
+	graph.Nodes[20] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   position.Table,
 			Columns: position.Columns,
@@ -604,7 +650,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			position.FieldEndAt:               {Type: field.TypeTime, Column: position.FieldEndAt},
 		},
 	}
-	graph.Nodes[19] = &sqlgraph.Node{
+	graph.Nodes[21] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   role.Table,
 			Columns: role.Columns,
@@ -636,7 +682,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			role.FieldType:             {Type: field.TypeEnum, Column: role.FieldType},
 		},
 	}
-	graph.Nodes[20] = &sqlgraph.Node{
+	graph.Nodes[22] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   roleapi.Table,
 			Columns: roleapi.Columns,
@@ -657,7 +703,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			roleapi.FieldAPIID:     {Type: field.TypeUint32, Column: roleapi.FieldAPIID},
 		},
 	}
-	graph.Nodes[21] = &sqlgraph.Node{
+	graph.Nodes[23] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   rolemenu.Table,
 			Columns: rolemenu.Columns,
@@ -678,7 +724,29 @@ var schemaGraph = func() *sqlgraph.Schema {
 			rolemenu.FieldMenuID:    {Type: field.TypeUint32, Column: rolemenu.FieldMenuID},
 		},
 	}
-	graph.Nodes[22] = &sqlgraph.Node{
+	graph.Nodes[24] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   rolepermission.Table,
+			Columns: rolepermission.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeUint32,
+				Column: rolepermission.FieldID,
+			},
+		},
+		Type: "RolePermission",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			rolepermission.FieldCreatedAt:    {Type: field.TypeTime, Column: rolepermission.FieldCreatedAt},
+			rolepermission.FieldUpdatedAt:    {Type: field.TypeTime, Column: rolepermission.FieldUpdatedAt},
+			rolepermission.FieldDeletedAt:    {Type: field.TypeTime, Column: rolepermission.FieldDeletedAt},
+			rolepermission.FieldCreatedBy:    {Type: field.TypeUint32, Column: rolepermission.FieldCreatedBy},
+			rolepermission.FieldUpdatedBy:    {Type: field.TypeUint32, Column: rolepermission.FieldUpdatedBy},
+			rolepermission.FieldDeletedBy:    {Type: field.TypeUint32, Column: rolepermission.FieldDeletedBy},
+			rolepermission.FieldTenantID:     {Type: field.TypeUint32, Column: rolepermission.FieldTenantID},
+			rolepermission.FieldRoleID:       {Type: field.TypeUint32, Column: rolepermission.FieldRoleID},
+			rolepermission.FieldPermissionID: {Type: field.TypeUint32, Column: rolepermission.FieldPermissionID},
+		},
+	}
+	graph.Nodes[25] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   task.Table,
 			Columns: task.Columns,
@@ -705,7 +773,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			task.FieldEnable:      {Type: field.TypeBool, Column: task.FieldEnable},
 		},
 	}
-	graph.Nodes[23] = &sqlgraph.Node{
+	graph.Nodes[26] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   tenant.Table,
 			Columns: tenant.Columns,
@@ -739,7 +807,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			tenant.FieldLastLoginIP:      {Type: field.TypeString, Column: tenant.FieldLastLoginIP},
 		},
 	}
-	graph.Nodes[24] = &sqlgraph.Node{
+	graph.Nodes[27] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   user.Table,
 			Columns: user.Columns,
@@ -774,7 +842,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			user.FieldIsBanned:    {Type: field.TypeBool, Column: user.FieldIsBanned},
 		},
 	}
-	graph.Nodes[25] = &sqlgraph.Node{
+	graph.Nodes[28] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   usercredential.Table,
 			Columns: usercredential.Columns,
@@ -3261,14 +3329,9 @@ func (f *PermissionFilter) WherePath(p entql.StringP) {
 	f.Where(p.Field(permission.FieldPath))
 }
 
-// WhereResource applies the entql string predicate on the resource field.
-func (f *PermissionFilter) WhereResource(p entql.StringP) {
-	f.Where(p.Field(permission.FieldResource))
-}
-
-// WhereMethod applies the entql string predicate on the method field.
-func (f *PermissionFilter) WhereMethod(p entql.StringP) {
-	f.Where(p.Field(permission.FieldMethod))
+// WhereModule applies the entql string predicate on the module field.
+func (f *PermissionFilter) WhereModule(p entql.StringP) {
+	f.Where(p.Field(permission.FieldModule))
 }
 
 // WhereSortOrder applies the entql int32 predicate on the sort_order field.
@@ -3310,6 +3373,176 @@ func (f *PermissionFilter) WhereHasChildrenWith(preds ...predicate.Permission) {
 }
 
 // addPredicate implements the predicateAdder interface.
+func (_q *PermissionApiResourceQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the PermissionApiResourceQuery builder.
+func (_q *PermissionApiResourceQuery) Filter() *PermissionApiResourceFilter {
+	return &PermissionApiResourceFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *PermissionApiResourceMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the PermissionApiResourceMutation builder.
+func (m *PermissionApiResourceMutation) Filter() *PermissionApiResourceFilter {
+	return &PermissionApiResourceFilter{config: m.config, predicateAdder: m}
+}
+
+// PermissionApiResourceFilter provides a generic filtering capability at runtime for PermissionApiResourceQuery.
+type PermissionApiResourceFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *PermissionApiResourceFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[18].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql uint32 predicate on the id field.
+func (f *PermissionApiResourceFilter) WhereID(p entql.Uint32P) {
+	f.Where(p.Field(permissionapiresource.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *PermissionApiResourceFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(permissionapiresource.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *PermissionApiResourceFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(permissionapiresource.FieldUpdatedAt))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *PermissionApiResourceFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(permissionapiresource.FieldDeletedAt))
+}
+
+// WhereCreatedBy applies the entql uint32 predicate on the created_by field.
+func (f *PermissionApiResourceFilter) WhereCreatedBy(p entql.Uint32P) {
+	f.Where(p.Field(permissionapiresource.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql uint32 predicate on the updated_by field.
+func (f *PermissionApiResourceFilter) WhereUpdatedBy(p entql.Uint32P) {
+	f.Where(p.Field(permissionapiresource.FieldUpdatedBy))
+}
+
+// WhereDeletedBy applies the entql uint32 predicate on the deleted_by field.
+func (f *PermissionApiResourceFilter) WhereDeletedBy(p entql.Uint32P) {
+	f.Where(p.Field(permissionapiresource.FieldDeletedBy))
+}
+
+// WhereTenantID applies the entql uint32 predicate on the tenant_id field.
+func (f *PermissionApiResourceFilter) WhereTenantID(p entql.Uint32P) {
+	f.Where(p.Field(permissionapiresource.FieldTenantID))
+}
+
+// WhereAPIResourceID applies the entql uint32 predicate on the api_resource_id field.
+func (f *PermissionApiResourceFilter) WhereAPIResourceID(p entql.Uint32P) {
+	f.Where(p.Field(permissionapiresource.FieldAPIResourceID))
+}
+
+// WherePermissionID applies the entql uint32 predicate on the permission_id field.
+func (f *PermissionApiResourceFilter) WherePermissionID(p entql.Uint32P) {
+	f.Where(p.Field(permissionapiresource.FieldPermissionID))
+}
+
+// addPredicate implements the predicateAdder interface.
+func (_q *PermissionMenuQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the PermissionMenuQuery builder.
+func (_q *PermissionMenuQuery) Filter() *PermissionMenuFilter {
+	return &PermissionMenuFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *PermissionMenuMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the PermissionMenuMutation builder.
+func (m *PermissionMenuMutation) Filter() *PermissionMenuFilter {
+	return &PermissionMenuFilter{config: m.config, predicateAdder: m}
+}
+
+// PermissionMenuFilter provides a generic filtering capability at runtime for PermissionMenuQuery.
+type PermissionMenuFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *PermissionMenuFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[19].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql uint32 predicate on the id field.
+func (f *PermissionMenuFilter) WhereID(p entql.Uint32P) {
+	f.Where(p.Field(permissionmenu.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *PermissionMenuFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(permissionmenu.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *PermissionMenuFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(permissionmenu.FieldUpdatedAt))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *PermissionMenuFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(permissionmenu.FieldDeletedAt))
+}
+
+// WhereCreatedBy applies the entql uint32 predicate on the created_by field.
+func (f *PermissionMenuFilter) WhereCreatedBy(p entql.Uint32P) {
+	f.Where(p.Field(permissionmenu.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql uint32 predicate on the updated_by field.
+func (f *PermissionMenuFilter) WhereUpdatedBy(p entql.Uint32P) {
+	f.Where(p.Field(permissionmenu.FieldUpdatedBy))
+}
+
+// WhereDeletedBy applies the entql uint32 predicate on the deleted_by field.
+func (f *PermissionMenuFilter) WhereDeletedBy(p entql.Uint32P) {
+	f.Where(p.Field(permissionmenu.FieldDeletedBy))
+}
+
+// WhereTenantID applies the entql uint32 predicate on the tenant_id field.
+func (f *PermissionMenuFilter) WhereTenantID(p entql.Uint32P) {
+	f.Where(p.Field(permissionmenu.FieldTenantID))
+}
+
+// WhereMenuID applies the entql uint32 predicate on the menu_id field.
+func (f *PermissionMenuFilter) WhereMenuID(p entql.Uint32P) {
+	f.Where(p.Field(permissionmenu.FieldMenuID))
+}
+
+// WherePermissionID applies the entql uint32 predicate on the permission_id field.
+func (f *PermissionMenuFilter) WherePermissionID(p entql.Uint32P) {
+	f.Where(p.Field(permissionmenu.FieldPermissionID))
+}
+
+// addPredicate implements the predicateAdder interface.
 func (_q *PositionQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
 }
@@ -3338,7 +3571,7 @@ type PositionFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *PositionFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[18].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[20].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -3526,7 +3759,7 @@ type RoleFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *RoleFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[19].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[21].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -3689,7 +3922,7 @@ type RoleApiFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *RoleApiFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[20].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[22].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -3769,7 +4002,7 @@ type RoleMenuFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *RoleMenuFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[21].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[23].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -3821,6 +4054,91 @@ func (f *RoleMenuFilter) WhereMenuID(p entql.Uint32P) {
 }
 
 // addPredicate implements the predicateAdder interface.
+func (_q *RolePermissionQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the RolePermissionQuery builder.
+func (_q *RolePermissionQuery) Filter() *RolePermissionFilter {
+	return &RolePermissionFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *RolePermissionMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the RolePermissionMutation builder.
+func (m *RolePermissionMutation) Filter() *RolePermissionFilter {
+	return &RolePermissionFilter{config: m.config, predicateAdder: m}
+}
+
+// RolePermissionFilter provides a generic filtering capability at runtime for RolePermissionQuery.
+type RolePermissionFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *RolePermissionFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[24].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql uint32 predicate on the id field.
+func (f *RolePermissionFilter) WhereID(p entql.Uint32P) {
+	f.Where(p.Field(rolepermission.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *RolePermissionFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(rolepermission.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *RolePermissionFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(rolepermission.FieldUpdatedAt))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *RolePermissionFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(rolepermission.FieldDeletedAt))
+}
+
+// WhereCreatedBy applies the entql uint32 predicate on the created_by field.
+func (f *RolePermissionFilter) WhereCreatedBy(p entql.Uint32P) {
+	f.Where(p.Field(rolepermission.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql uint32 predicate on the updated_by field.
+func (f *RolePermissionFilter) WhereUpdatedBy(p entql.Uint32P) {
+	f.Where(p.Field(rolepermission.FieldUpdatedBy))
+}
+
+// WhereDeletedBy applies the entql uint32 predicate on the deleted_by field.
+func (f *RolePermissionFilter) WhereDeletedBy(p entql.Uint32P) {
+	f.Where(p.Field(rolepermission.FieldDeletedBy))
+}
+
+// WhereTenantID applies the entql uint32 predicate on the tenant_id field.
+func (f *RolePermissionFilter) WhereTenantID(p entql.Uint32P) {
+	f.Where(p.Field(rolepermission.FieldTenantID))
+}
+
+// WhereRoleID applies the entql uint32 predicate on the role_id field.
+func (f *RolePermissionFilter) WhereRoleID(p entql.Uint32P) {
+	f.Where(p.Field(rolepermission.FieldRoleID))
+}
+
+// WherePermissionID applies the entql uint32 predicate on the permission_id field.
+func (f *RolePermissionFilter) WherePermissionID(p entql.Uint32P) {
+	f.Where(p.Field(rolepermission.FieldPermissionID))
+}
+
+// addPredicate implements the predicateAdder interface.
 func (_q *TaskQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
 }
@@ -3849,7 +4167,7 @@ type TaskFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TaskFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[22].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[25].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -3959,7 +4277,7 @@ type TenantFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TenantFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[23].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[26].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -4104,7 +4422,7 @@ type UserFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[24].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[27].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -4254,7 +4572,7 @@ type UserCredentialFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserCredentialFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[25].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[28].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})

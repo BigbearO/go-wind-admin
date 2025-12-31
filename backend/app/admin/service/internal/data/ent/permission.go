@@ -12,7 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
-// 权限表（资源/路由/菜单/数据权限 等）
+// 权限核心表
 type Permission struct {
 	config `json:"-"`
 	// ID of the ent.
@@ -38,16 +38,14 @@ type Permission struct {
 	TenantID *uint32 `json:"tenant_id,omitempty"`
 	// 父节点ID
 	ParentID *uint32 `json:"parent_id,omitempty"`
-	// 名称
+	// 权限名称（如：删除用户）
 	Name *string `json:"name,omitempty"`
-	// 唯一编码（租户范围内唯一，便于引用/导入）
+	// 权限唯一编码（如：user.delete）
 	Code *string `json:"code,omitempty"`
-	// 路径/路由，如 `/api/users` 或 菜单路径
+	// 树路径，如：/1/10/
 	Path *string `json:"path,omitempty"`
-	// 资源标识（如 API 资源名）
-	Resource *string `json:"resource,omitempty"`
-	// HTTP 方法/动作，如 GET/POST（可选）
-	Method *string `json:"method,omitempty"`
+	// 所属业务模块（如：用户管理/订单管理）
+	Module *string `json:"module,omitempty"`
 	// 排序序号
 	SortOrder *int32 `json:"sort_order,omitempty"`
 	// 权限类型
@@ -96,7 +94,7 @@ func (*Permission) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case permission.FieldID, permission.FieldCreatedBy, permission.FieldUpdatedBy, permission.FieldDeletedBy, permission.FieldTenantID, permission.FieldParentID, permission.FieldSortOrder:
 			values[i] = new(sql.NullInt64)
-		case permission.FieldRemark, permission.FieldStatus, permission.FieldName, permission.FieldCode, permission.FieldPath, permission.FieldResource, permission.FieldMethod, permission.FieldType:
+		case permission.FieldRemark, permission.FieldStatus, permission.FieldName, permission.FieldCode, permission.FieldPath, permission.FieldModule, permission.FieldType:
 			values[i] = new(sql.NullString)
 		case permission.FieldCreatedAt, permission.FieldUpdatedAt, permission.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -212,19 +210,12 @@ func (_m *Permission) assignValues(columns []string, values []any) error {
 				_m.Path = new(string)
 				*_m.Path = value.String
 			}
-		case permission.FieldResource:
+		case permission.FieldModule:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field resource", values[i])
+				return fmt.Errorf("unexpected type %T for field module", values[i])
 			} else if value.Valid {
-				_m.Resource = new(string)
-				*_m.Resource = value.String
-			}
-		case permission.FieldMethod:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field method", values[i])
-			} else if value.Valid {
-				_m.Method = new(string)
-				*_m.Method = value.String
+				_m.Module = new(string)
+				*_m.Module = value.String
 			}
 		case permission.FieldSortOrder:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -351,13 +342,8 @@ func (_m *Permission) String() string {
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	if v := _m.Resource; v != nil {
-		builder.WriteString("resource=")
-		builder.WriteString(*v)
-	}
-	builder.WriteString(", ")
-	if v := _m.Method; v != nil {
-		builder.WriteString("method=")
+	if v := _m.Module; v != nil {
+		builder.WriteString("module=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")

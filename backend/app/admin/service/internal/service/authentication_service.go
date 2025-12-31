@@ -215,26 +215,29 @@ func (s *AuthenticationService) pickMostSpecificOrgUnit(units []*userV1.OrgUnit)
 }
 
 // resolveUserAuthority 解析用户权限信息
-func (s *AuthenticationService) resolveUserAuthority(ctx context.Context, user *userV1.User) (dataScope userV1.Role_DataScope, isPlatformAdmin bool, isTenantAdmin bool, err error) {
+func (s *AuthenticationService) resolveUserAuthority(ctx context.Context, userID, tenantID uint32) (
+	roleIDs []uint32, roleCodes []string,
+	positionIDs []uint32,
+	orgUnitIDs []uint32, orgUnitId *uint32,
+	dataScope userV1.Role_DataScope,
+	isPlatformAdmin bool, isTenantAdmin bool,
+	err error) {
 	dataScope = userV1.Role_SELF
 	isPlatformAdmin = false
 	isTenantAdmin = false
 
 	// 获取用户角色、岗位、组织单元等信息
-	roleIDs, _, orgUnitIDs, err := s.membershipRepo.ListMembershipAllIDs(ctx, user.GetId(), user.GetTenantId())
+	roleIDs, positionIDs, orgUnitIDs, err = s.membershipRepo.ListMembershipAllIDs(ctx, userID, tenantID)
 	if err != nil {
-		s.log.Errorf("list user [%d] membership ids failed [%s]", user.GetId(), err.Error())
-		return dataScope, isPlatformAdmin, isTenantAdmin, authenticationV1.ErrorServiceUnavailable("获取用户角色失败")
+		s.log.Errorf("list user [%d] membership ids failed [%s]", userID, err.Error())
+		err = authenticationV1.ErrorServiceUnavailable("获取用户角色失败")
+		return
 	}
-
-	user.RoleIds = roleIDs
-	//user.PositionIds = positionIDs
-	//user.OrgUnitIds = orgUnitIDs
 
 	//s.log.Infof("resolveUserAuthority: [%v] [%v]", roleIDs, orgUnitIDs)
 
 	// 获取用户角色信息
-	roles, err := s.roleRepo.ListRolesByRoleIds(ctx, user.GetRoleIds())
+	roles, err := s.roleRepo.ListRolesByRoleIds(ctx, roleIDs)
 	if err != nil {
 		s.log.Errorf("get user role codes failed [%s]", err.Error())
 	}
@@ -242,16 +245,16 @@ func (s *AuthenticationService) resolveUserAuthority(ctx context.Context, user *
 		if role == nil {
 			continue
 		}
-		user.Roles = append(user.Roles, role.GetCode())
+		roleCodes = append(roleCodes, role.GetCode())
 	}
 	dataScope = s.mergeRolesDataScope(roles)
 
 	// 判断是否为平台管理员或租户管理员
-	if user.GetTenantId() == 0 && s.HasPlatformAdminRole(roles) {
+	if tenantID == 0 && s.HasPlatformAdminRole(roles) {
 		isPlatformAdmin = true
 		// 平台管理员赋予全局数据权限，避免后续因 dataScope == SELF 被拒绝
 		dataScope = userV1.Role_ALL
-	} else if user.GetTenantId() > 0 && s.HasTenantAdminRole(roles) {
+	} else if tenantID > 0 && s.HasTenantAdminRole(roles) {
 		isTenantAdmin = true
 	}
 
@@ -262,10 +265,10 @@ func (s *AuthenticationService) resolveUserAuthority(ctx context.Context, user *
 	}
 	mostSpecificOrgUnit := s.pickMostSpecificOrgUnit(orgUnits)
 	if mostSpecificOrgUnit != nil {
-		user.OrgUnitId = mostSpecificOrgUnit.Id
+		orgUnitId = mostSpecificOrgUnit.Id
 	}
 
-	return dataScope, isPlatformAdmin, isTenantAdmin, nil
+	return
 }
 
 // doGrantTypePassword 处理授权类型 - 密码
@@ -290,7 +293,7 @@ func (s *AuthenticationService) doGrantTypePassword(ctx context.Context, req *au
 	}
 
 	// 解析用户权限信息
-	dataScope, isPlatformAdmin, isTenantAdmin, err := s.resolveUserAuthority(ctx, user)
+	_, roleCodes, _, _, orgUnitId, dataScope, isPlatformAdmin, isTenantAdmin, err := s.resolveUserAuthority(ctx, user.GetId(), user.GetTenantId())
 	if err != nil {
 		s.log.Errorf("resolve user [%d] authority failed [%s]", user.GetId(), err.Error())
 		return nil, err
@@ -311,9 +314,12 @@ func (s *AuthenticationService) doGrantTypePassword(ctx context.Context, req *au
 	// 生成令牌
 	accessToken, refreshToken, err := s.userToken.GenerateToken(
 		ctx,
-		user,
+		req.GetUsername(),
+		user.GetId(),
+		user.GetTenantId(),
+		orgUnitId,
+		roleCodes,
 		trans.Ptr(dataScope),
-		user.OrgUnitId,
 		req.ClientId,
 		req.DeviceId,
 		trans.Ptr(isPlatformAdmin),
@@ -349,7 +355,7 @@ func (s *AuthenticationService) doGrantTypeRefreshToken(ctx context.Context, req
 	}
 
 	// 解析用户权限信息
-	dataScope, isPlatformAdmin, isTenantAdmin, err := s.resolveUserAuthority(ctx, user)
+	_, roleCodes, _, _, orgUnitId, dataScope, isPlatformAdmin, isTenantAdmin, err := s.resolveUserAuthority(ctx, user.GetId(), user.GetTenantId())
 	if err != nil {
 		return nil, err
 	}
@@ -373,20 +379,15 @@ func (s *AuthenticationService) doGrantTypeRefreshToken(ctx context.Context, req
 		s.log.Errorf("remove refresh token failed [%s]", err.Error())
 	}
 
-	roleCodes, err := s.roleRepo.ListRoleCodesByRoleIds(ctx, user.GetRoleIds())
-	if err != nil {
-		s.log.Errorf("get user role codes failed [%s]", err.Error())
-	}
-	if roleCodes != nil {
-		user.Roles = roleCodes
-	}
-
 	// 生成令牌
 	accessToken, refreshToken, err := s.userToken.GenerateToken(
 		ctx,
-		user,
+		req.GetUsername(),
+		user.GetId(),
+		user.GetTenantId(),
+		orgUnitId,
+		roleCodes,
 		trans.Ptr(dataScope),
-		user.OrgUnitId,
 		req.ClientId,
 		req.DeviceId,
 		trans.Ptr(isPlatformAdmin),

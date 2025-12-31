@@ -48,6 +48,10 @@ type Tx struct {
 	OrgUnit *OrgUnitClient
 	// Permission is the client for interacting with the Permission builders.
 	Permission *PermissionClient
+	// PermissionApiResource is the client for interacting with the PermissionApiResource builders.
+	PermissionApiResource *PermissionApiResourceClient
+	// PermissionMenu is the client for interacting with the PermissionMenu builders.
+	PermissionMenu *PermissionMenuClient
 	// Position is the client for interacting with the Position builders.
 	Position *PositionClient
 	// Role is the client for interacting with the Role builders.
@@ -56,6 +60,8 @@ type Tx struct {
 	RoleApi *RoleApiClient
 	// RoleMenu is the client for interacting with the RoleMenu builders.
 	RoleMenu *RoleMenuClient
+	// RolePermission is the client for interacting with the RolePermission builders.
+	RolePermission *RolePermissionClient
 	// Task is the client for interacting with the Task builders.
 	Task *TaskClient
 	// Tenant is the client for interacting with the Tenant builders.
@@ -213,10 +219,13 @@ func (tx *Tx) init() {
 	tx.Menu = NewMenuClient(tx.config)
 	tx.OrgUnit = NewOrgUnitClient(tx.config)
 	tx.Permission = NewPermissionClient(tx.config)
+	tx.PermissionApiResource = NewPermissionApiResourceClient(tx.config)
+	tx.PermissionMenu = NewPermissionMenuClient(tx.config)
 	tx.Position = NewPositionClient(tx.config)
 	tx.Role = NewRoleClient(tx.config)
 	tx.RoleApi = NewRoleApiClient(tx.config)
 	tx.RoleMenu = NewRoleMenuClient(tx.config)
+	tx.RolePermission = NewRolePermissionClient(tx.config)
 	tx.Task = NewTaskClient(tx.config)
 	tx.Tenant = NewTenantClient(tx.config)
 	tx.User = NewUserClient(tx.config)

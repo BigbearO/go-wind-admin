@@ -95,32 +95,28 @@ func (m *Permission) validate(all bool) error {
 		// no validation rules for Id
 	}
 
+	if m.Name != nil {
+		// no validation rules for Name
+	}
+
 	if m.Code != nil {
 		// no validation rules for Code
 	}
 
-	if m.Name != nil {
-		// no validation rules for Name
+	if m.Type != nil {
+		// no validation rules for Type
 	}
 
 	if m.Path != nil {
 		// no validation rules for Path
 	}
 
-	if m.Resource != nil {
-		// no validation rules for Resource
-	}
-
-	if m.Method != nil {
-		// no validation rules for Method
+	if m.Module != nil {
+		// no validation rules for Module
 	}
 
 	if m.SortOrder != nil {
 		// no validation rules for SortOrder
-	}
-
-	if m.Type != nil {
-		// no validation rules for Type
 	}
 
 	if m.Remark != nil {

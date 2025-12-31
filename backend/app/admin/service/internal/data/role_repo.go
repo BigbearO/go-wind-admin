@@ -39,9 +39,19 @@ type RoleRepo struct {
 		predicate.Role,
 		userV1.Role, ent.Role,
 	]
+
+	polePermissionRepo *RolePermissionRepo
+	roleApiRepo        *RoleApiRepo
+	roleMenuRepo       *RoleMenuRepo
 }
 
-func NewRoleRepo(ctx *bootstrap.Context, entClient *entCrud.EntClient[*ent.Client]) *RoleRepo {
+func NewRoleRepo(
+	ctx *bootstrap.Context,
+	entClient *entCrud.EntClient[*ent.Client],
+	polePermissionRepo *RolePermissionRepo,
+	roleApiRepo *RoleApiRepo,
+	roleMenuRepo *RoleMenuRepo,
+) *RoleRepo {
 	repo := &RoleRepo{
 		log:       ctx.NewLoggerHelper("role/repo/admin-service"),
 		entClient: entClient,
@@ -58,6 +68,9 @@ func NewRoleRepo(ctx *bootstrap.Context, entClient *entCrud.EntClient[*ent.Clien
 			userV1.Role_DataScope_name,
 			userV1.Role_DataScope_value,
 		),
+		polePermissionRepo: polePermissionRepo,
+		roleApiRepo:        roleApiRepo,
+		roleMenuRepo:       roleMenuRepo,
 	}
 
 	repo.init()

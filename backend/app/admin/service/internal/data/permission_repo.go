@@ -38,15 +38,25 @@ type PermissionRepo struct {
 		predicate.Permission,
 		adminV1.Permission, ent.Permission,
 	]
+
+	permissionApiResourceRepo *PermissionApiResourceRepo
+	permissionMenuRepo        *PermissionMenuRepo
 }
 
-func NewPermissionRepo(ctx *bootstrap.Context, entClient *entCrud.EntClient[*ent.Client]) *PermissionRepo {
+func NewPermissionRepo(
+	ctx *bootstrap.Context,
+	entClient *entCrud.EntClient[*ent.Client],
+	permissionApiResourceRepo *PermissionApiResourceRepo,
+	permissionMenuRepo *PermissionMenuRepo,
+) *PermissionRepo {
 	repo := &PermissionRepo{
-		log:             ctx.NewLoggerHelper("permission/repo/admin-service"),
-		entClient:       entClient,
-		mapper:          mapper.NewCopierMapper[adminV1.Permission, ent.Permission](),
-		typeConverter:   mapper.NewEnumTypeConverter[adminV1.Permission_Type, permission.Type](adminV1.Permission_Type_name, adminV1.Permission_Type_value),
-		statusConverter: mapper.NewEnumTypeConverter[adminV1.Permission_Status, permission.Status](adminV1.Permission_Status_name, adminV1.Permission_Status_value),
+		log:                       ctx.NewLoggerHelper("permission/repo/admin-service"),
+		entClient:                 entClient,
+		mapper:                    mapper.NewCopierMapper[adminV1.Permission, ent.Permission](),
+		typeConverter:             mapper.NewEnumTypeConverter[adminV1.Permission_Type, permission.Type](adminV1.Permission_Type_name, adminV1.Permission_Type_value),
+		statusConverter:           mapper.NewEnumTypeConverter[adminV1.Permission_Status, permission.Status](adminV1.Permission_Status_name, adminV1.Permission_Status_value),
+		permissionApiResourceRepo: permissionApiResourceRepo,
+		permissionMenuRepo:        permissionMenuRepo,
 	}
 
 	repo.init()
@@ -140,31 +150,6 @@ func (r *PermissionRepo) Get(ctx context.Context, req *adminV1.GetPermissionRequ
 	return dto, err
 }
 
-// GetPermissionByEndpoint 根据路径和方法获取API资源
-func (r *PermissionRepo) GetPermissionByEndpoint(ctx context.Context, path, method string) (*adminV1.Permission, error) {
-	if path == "" || method == "" {
-		return nil, adminV1.ErrorBadRequest("invalid parameter")
-	}
-
-	entity, err := r.entClient.Client().Permission.Query().
-		Where(
-			permission.PathEQ(path),
-			permission.MethodEQ(method),
-		).
-		Only(ctx)
-	if err != nil {
-		if ent.IsNotFound(err) {
-			return nil, adminV1.ErrorNotFound("permission not found")
-		}
-
-		r.log.Errorf("query one data failed: %s", err.Error())
-
-		return nil, adminV1.ErrorInternalServerError("query data failed")
-	}
-
-	return r.mapper.ToDTO(entity), nil
-}
-
 func (r *PermissionRepo) Create(ctx context.Context, req *adminV1.CreatePermissionRequest) error {
 	if req == nil || req.Data == nil {
 		return adminV1.ErrorBadRequest("invalid parameter")
@@ -174,8 +159,7 @@ func (r *PermissionRepo) Create(ctx context.Context, req *adminV1.CreatePermissi
 		SetNillableCode(req.Data.Code).
 		SetName(req.Data.GetName()).
 		SetNillablePath(req.Data.Path).
-		SetNillableResource(req.Data.Resource).
-		SetNillableMethod(req.Data.Method).
+		SetNillableModule(req.Data.Module).
 		SetNillableSortOrder(req.Data.SortOrder).
 		SetNillableRemark(req.Data.Remark).
 		SetNillableParentID(req.Data.ParentId).
@@ -228,9 +212,8 @@ func (r *PermissionRepo) Update(ctx context.Context, req *adminV1.UpdatePermissi
 			builder.
 				SetNillableCode(req.Data.Code).
 				SetNillableName(req.Data.Name).
+				SetNillableModule(req.Data.Module).
 				SetNillablePath(req.Data.Path).
-				SetNillableResource(req.Data.Resource).
-				SetNillableMethod(req.Data.Method).
 				SetNillableSortOrder(req.Data.SortOrder).
 				SetNillableRemark(req.Data.Remark).
 				SetNillableParentID(req.Data.ParentId).

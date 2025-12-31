@@ -3263,13 +3263,12 @@ export type fileservicev1_UploadOssFileResponse = {
 // 权限
 export type Permission = {
   id?: number;
-  code?: string;
   name?: string;
-  path?: string;
-  resource?: string;
-  method?: string;
-  sortOrder?: number;
+  code?: string;
   type?: Permission_Type;
+  path?: string;
+  module?: string;
+  sortOrder?: number;
   remark?: string;
   status?: Permission_Status;
   tenantId?: number;
@@ -3285,11 +3284,12 @@ export type Permission = {
 
 // 权限类型
 export type Permission_Type =
+  | "CATALOG"
+  | "MENU"
+  | "PAGE"
+  | "BUTTON"
   | "API"
   | "DATA"
-  | "MENU"
-  | "BUTTON"
-  | "PAGE"
   | "OTHER";
 // 权限状态
 export type Permission_Status =

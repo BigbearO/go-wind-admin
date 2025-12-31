@@ -31,31 +31,34 @@ const (
 type Permission_Type int32
 
 const (
-	Permission_API    Permission_Type = 0   // 接口权限
-	Permission_DATA   Permission_Type = 1   // 数据权限
-	Permission_MENU   Permission_Type = 2   // 菜单权限
-	Permission_BUTTON Permission_Type = 3   // 按钮权限
-	Permission_PAGE   Permission_Type = 4   // 页面权限
-	Permission_OTHER  Permission_Type = 100 // 其他权限
+	Permission_CATALOG Permission_Type = 0   // 目录权限，侧边栏的分类标题（无路由，仅展开）。
+	Permission_MENU    Permission_Type = 1   // 菜单权限，具体的导航菜单，点击后进入 PAGE。
+	Permission_PAGE    Permission_Type = 2   // 页面权限，独立的页面（如详情页），可能不在侧边栏显示。
+	Permission_BUTTON  Permission_Type = 3   // 按钮权限，页面内的操作按钮。
+	Permission_API     Permission_Type = 4   // 接口权限，后端接口鉴权。
+	Permission_DATA    Permission_Type = 5   // 数据权限，数据行级/列级过滤规则。
+	Permission_OTHER   Permission_Type = 100 // 其他权限
 )
 
 // Enum value maps for Permission_Type.
 var (
 	Permission_Type_name = map[int32]string{
-		0:   "API",
-		1:   "DATA",
-		2:   "MENU",
+		0:   "CATALOG",
+		1:   "MENU",
+		2:   "PAGE",
 		3:   "BUTTON",
-		4:   "PAGE",
+		4:   "API",
+		5:   "DATA",
 		100: "OTHER",
 	}
 	Permission_Type_value = map[string]int32{
-		"API":    0,
-		"DATA":   1,
-		"MENU":   2,
-		"BUTTON": 3,
-		"PAGE":   4,
-		"OTHER":  100,
+		"CATALOG": 0,
+		"MENU":    1,
+		"PAGE":    2,
+		"BUTTON":  3,
+		"API":     4,
+		"DATA":    5,
+		"OTHER":   100,
 	}
 )
 
@@ -137,14 +140,13 @@ func (Permission_Status) EnumDescriptor() ([]byte, []int) {
 type Permission struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            *uint32                `protobuf:"varint,1,opt,name=id,proto3,oneof" json:"id,omitempty"`                                                  // 权限ID
-	Code          *string                `protobuf:"bytes,2,opt,name=code,proto3,oneof" json:"code,omitempty"`                                               // 唯一编码
-	Name          *string                `protobuf:"bytes,3,opt,name=name,proto3,oneof" json:"name,omitempty"`                                               // 名称
-	Path          *string                `protobuf:"bytes,4,opt,name=path,proto3,oneof" json:"path,omitempty"`                                               // 路径/路由
-	Resource      *string                `protobuf:"bytes,5,opt,name=resource,proto3,oneof" json:"resource,omitempty"`                                       // 资源标识（如 API 资源名）
-	Method        *string                `protobuf:"bytes,6,opt,name=method,proto3,oneof" json:"method,omitempty"`                                           // HTTP 方法/动作，如 GET/POST（可选）
+	Name          *string                `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty"`                                               // 权限名称（如：删除用户）
+	Code          *string                `protobuf:"bytes,3,opt,name=code,proto3,oneof" json:"code,omitempty"`                                               // 权限唯一编码（如：user.delete）
+	Type          *Permission_Type       `protobuf:"varint,4,opt,name=type,proto3,enum=admin.service.v1.Permission_Type,oneof" json:"type,omitempty"`        // 权限类型（关联的资源类型）
+	Path          *string                `protobuf:"bytes,5,opt,name=path,proto3,oneof" json:"path,omitempty"`                                               // 树路径
+	Module        *string                `protobuf:"bytes,6,opt,name=module,proto3,oneof" json:"module,omitempty"`                                           // 所属业务模块（如：用户管理/订单管理）
 	SortOrder     *int32                 `protobuf:"varint,7,opt,name=sort_order,json=sortOrder,proto3,oneof" json:"sort_order,omitempty"`                   // 排序序号
-	Type          *Permission_Type       `protobuf:"varint,8,opt,name=type,proto3,enum=admin.service.v1.Permission_Type,oneof" json:"type,omitempty"`        // 权限类型
-	Remark        *string                `protobuf:"bytes,9,opt,name=remark,proto3,oneof" json:"remark,omitempty"`                                           // 备注
+	Remark        *string                `protobuf:"bytes,8,opt,name=remark,proto3,oneof" json:"remark,omitempty"`                                           // 备注
 	Status        *Permission_Status     `protobuf:"varint,10,opt,name=status,proto3,enum=admin.service.v1.Permission_Status,oneof" json:"status,omitempty"` // 状态
 	TenantId      *uint32                `protobuf:"varint,11,opt,name=tenant_id,json=tenantId,proto3,oneof" json:"tenant_id,omitempty"`                     // 租户ID
 	ParentId      *uint32                `protobuf:"varint,50,opt,name=parent_id,json=parentId,proto3,oneof" json:"parent_id,omitempty"`                     // 父节点ID
@@ -196,6 +198,13 @@ func (x *Permission) GetId() uint32 {
 	return 0
 }
 
+func (x *Permission) GetName() string {
+	if x != nil && x.Name != nil {
+		return *x.Name
+	}
+	return ""
+}
+
 func (x *Permission) GetCode() string {
 	if x != nil && x.Code != nil {
 		return *x.Code
@@ -203,11 +212,11 @@ func (x *Permission) GetCode() string {
 	return ""
 }
 
-func (x *Permission) GetName() string {
-	if x != nil && x.Name != nil {
-		return *x.Name
+func (x *Permission) GetType() Permission_Type {
+	if x != nil && x.Type != nil {
+		return *x.Type
 	}
-	return ""
+	return Permission_CATALOG
 }
 
 func (x *Permission) GetPath() string {
@@ -217,16 +226,9 @@ func (x *Permission) GetPath() string {
 	return ""
 }
 
-func (x *Permission) GetResource() string {
-	if x != nil && x.Resource != nil {
-		return *x.Resource
-	}
-	return ""
-}
-
-func (x *Permission) GetMethod() string {
-	if x != nil && x.Method != nil {
-		return *x.Method
+func (x *Permission) GetModule() string {
+	if x != nil && x.Module != nil {
+		return *x.Module
 	}
 	return ""
 }
@@ -236,13 +238,6 @@ func (x *Permission) GetSortOrder() int32 {
 		return *x.SortOrder
 	}
 	return 0
-}
-
-func (x *Permission) GetType() Permission_Type {
-	if x != nil && x.Type != nil {
-		return *x.Type
-	}
-	return Permission_API
 }
 
 func (x *Permission) GetRemark() string {
@@ -613,56 +608,55 @@ var File_admin_service_v1_i_permission_proto protoreflect.FileDescriptor
 
 const file_admin_service_v1_i_permission_proto_rawDesc = "" +
 	"\n" +
-	"#admin/service/v1/i_permission.proto\x12\x10admin.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\"\xf2\v\n" +
+	"#admin/service/v1/i_permission.proto\x12\x10admin.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\"\x82\f\n" +
 	"\n" +
 	"Permission\x12#\n" +
-	"\x02id\x18\x01 \x01(\rB\x0e\xbaG\v\x92\x02\b权限IDH\x00R\x02id\x88\x01\x01\x12+\n" +
-	"\x04code\x18\x02 \x01(\tB\x12\xbaG\x0f\x92\x02\f唯一编码H\x01R\x04code\x88\x01\x01\x12%\n" +
-	"\x04name\x18\x03 \x01(\tB\f\xbaG\t\x92\x02\x06名称H\x02R\x04name\x88\x01\x01\x12,\n" +
-	"\x04path\x18\x04 \x01(\tB\x13\xbaG\x10\x92\x02\r路径/路由H\x03R\x04path\x88\x01\x01\x12J\n" +
-	"\bresource\x18\x05 \x01(\tB)\xbaG&\x92\x02#资源标识（如 API 资源名）H\x04R\bresource\x88\x01\x01\x12P\n" +
-	"\x06method\x18\x06 \x01(\tB3\xbaG0\x92\x02-HTTP 方法/动作，如 GET/POST（可选）H\x05R\x06method\x88\x01\x01\x126\n" +
+	"\x02id\x18\x01 \x01(\rB\x0e\xbaG\v\x92\x02\b权限IDH\x00R\x02id\x88\x01\x01\x12C\n" +
+	"\x04name\x18\x02 \x01(\tB*\xbaG'\x92\x02$权限名称（如：删除用户）H\x01R\x04name\x88\x01\x01\x12H\n" +
+	"\x04code\x18\x03 \x01(\tB/\xbaG,\x92\x02)权限唯一编码（如：user.delete）H\x02R\x04code\x88\x01\x01\x12i\n" +
+	"\x04type\x18\x04 \x01(\x0e2!.admin.service.v1.Permission.TypeB-\xbaG*\x92\x02'权限类型（关联的资源类型）H\x03R\x04type\x88\x01\x01\x12(\n" +
+	"\x04path\x18\x05 \x01(\tB\x0f\xbaG\f\x92\x02\t树路径H\x04R\x04path\x88\x01\x01\x12Z\n" +
+	"\x06module\x18\x06 \x01(\tB=\xbaG:\x92\x027所属业务模块（如：用户管理/订单管理）H\x05R\x06module\x88\x01\x01\x126\n" +
 	"\n" +
-	"sort_order\x18\a \x01(\x05B\x12\xbaG\x0f\x92\x02\f排序序号H\x06R\tsortOrder\x88\x01\x01\x12N\n" +
-	"\x04type\x18\b \x01(\x0e2!.admin.service.v1.Permission.TypeB\x12\xbaG\x0f\x92\x02\f权限类型H\aR\x04type\x88\x01\x01\x12)\n" +
-	"\x06remark\x18\t \x01(\tB\f\xbaG\t\x92\x02\x06备注H\bR\x06remark\x88\x01\x01\x12N\n" +
+	"sort_order\x18\a \x01(\x05B\x12\xbaG\x0f\x92\x02\f排序序号H\x06R\tsortOrder\x88\x01\x01\x12)\n" +
+	"\x06remark\x18\b \x01(\tB\f\xbaG\t\x92\x02\x06备注H\aR\x06remark\x88\x01\x01\x12N\n" +
 	"\x06status\x18\n" +
-	" \x01(\x0e2#.admin.service.v1.Permission.StatusB\f\xbaG\t\x92\x02\x06状态H\tR\x06status\x88\x01\x01\x120\n" +
-	"\ttenant_id\x18\v \x01(\rB\x0e\xbaG\v\x92\x02\b租户IDH\n" +
-	"R\btenantId\x88\x01\x01\x123\n" +
-	"\tparent_id\x182 \x01(\rB\x11\xbaG\x0e\x92\x02\v父节点IDH\vR\bparentId\x88\x01\x01\x12L\n" +
+	" \x01(\x0e2#.admin.service.v1.Permission.StatusB\f\xbaG\t\x92\x02\x06状态H\bR\x06status\x88\x01\x01\x120\n" +
+	"\ttenant_id\x18\v \x01(\rB\x0e\xbaG\v\x92\x02\b租户IDH\tR\btenantId\x88\x01\x01\x123\n" +
+	"\tparent_id\x182 \x01(\rB\x11\xbaG\x0e\x92\x02\v父节点IDH\n" +
+	"R\bparentId\x88\x01\x01\x12L\n" +
 	"\bchildren\x183 \x03(\v2\x1c.admin.service.v1.PermissionB\x12\xbaG\x0f\x92\x02\f子节点树R\bchildren\x125\n" +
 	"\n" +
-	"created_by\x18d \x01(\rB\x11\xbaG\x0e\x92\x02\v创建者IDH\fR\tcreatedBy\x88\x01\x01\x125\n" +
+	"created_by\x18d \x01(\rB\x11\xbaG\x0e\x92\x02\v创建者IDH\vR\tcreatedBy\x88\x01\x01\x125\n" +
 	"\n" +
-	"updated_by\x18e \x01(\rB\x11\xbaG\x0e\x92\x02\v更新者IDH\rR\tupdatedBy\x88\x01\x01\x12;\n" +
+	"updated_by\x18e \x01(\rB\x11\xbaG\x0e\x92\x02\v更新者IDH\fR\tupdatedBy\x88\x01\x01\x12;\n" +
 	"\n" +
-	"deleted_by\x18f \x01(\rB\x17\xbaG\x14\x92\x02\x11删除者用户IDH\x0eR\tdeletedBy\x88\x01\x01\x12S\n" +
+	"deleted_by\x18f \x01(\rB\x17\xbaG\x14\x92\x02\x11删除者用户IDH\rR\tdeletedBy\x88\x01\x01\x12S\n" +
 	"\n" +
-	"created_at\x18\xc8\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f创建时间H\x0fR\tcreatedAt\x88\x01\x01\x12S\n" +
+	"created_at\x18\xc8\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f创建时间H\x0eR\tcreatedAt\x88\x01\x01\x12S\n" +
 	"\n" +
-	"updated_at\x18\xc9\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f更新时间H\x10R\tupdatedAt\x88\x01\x01\x12S\n" +
+	"updated_at\x18\xc9\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f更新时间H\x0fR\tupdatedAt\x88\x01\x01\x12S\n" +
 	"\n" +
-	"deleted_at\x18\xca\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f删除时间H\x11R\tdeletedAt\x88\x01\x01\"D\n" +
-	"\x04Type\x12\a\n" +
-	"\x03API\x10\x00\x12\b\n" +
-	"\x04DATA\x10\x01\x12\b\n" +
-	"\x04MENU\x10\x02\x12\n" +
+	"deleted_at\x18\xca\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f删除时间H\x10R\tdeletedAt\x88\x01\x01\"Q\n" +
+	"\x04Type\x12\v\n" +
+	"\aCATALOG\x10\x00\x12\b\n" +
+	"\x04MENU\x10\x01\x12\b\n" +
+	"\x04PAGE\x10\x02\x12\n" +
 	"\n" +
-	"\x06BUTTON\x10\x03\x12\b\n" +
-	"\x04PAGE\x10\x04\x12\t\n" +
+	"\x06BUTTON\x10\x03\x12\a\n" +
+	"\x03API\x10\x04\x12\b\n" +
+	"\x04DATA\x10\x05\x12\t\n" +
 	"\x05OTHER\x10d\"\x19\n" +
 	"\x06Status\x12\a\n" +
 	"\x03OFF\x10\x00\x12\x06\n" +
 	"\x02ON\x10\x01B\x05\n" +
 	"\x03_idB\a\n" +
-	"\x05_codeB\a\n" +
 	"\x05_nameB\a\n" +
-	"\x05_pathB\v\n" +
-	"\t_resourceB\t\n" +
-	"\a_methodB\r\n" +
-	"\v_sort_orderB\a\n" +
-	"\x05_typeB\t\n" +
+	"\x05_codeB\a\n" +
+	"\x05_typeB\a\n" +
+	"\x05_pathB\t\n" +
+	"\a_moduleB\r\n" +
+	"\v_sort_orderB\t\n" +
 	"\a_remarkB\t\n" +
 	"\a_statusB\f\n" +
 	"\n" +

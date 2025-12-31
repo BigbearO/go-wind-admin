@@ -28,13 +28,10 @@ var ProviderSet = wire.NewSet(
 
 	data.NewMinIoClient,
 
-	data.NewMenuRepo,
 	data.NewDictTypeRepo,
 	data.NewDictEntryRepo,
 	data.NewTaskRepo,
 	data.NewAdminLoginRestrictionRepo,
-	data.NewApiResourceRepo,
-	data.NewPermissionRepo,
 
 	data.NewOrgUnitRepo,
 	data.NewPositionRepo,
@@ -45,11 +42,19 @@ var ProviderSet = wire.NewSet(
 
 	data.NewRoleApiRepo,
 	data.NewRoleMenuRepo,
+	data.NewRolePermissionRepo,
 
 	data.NewMembershipRepo,
 	data.NewMembershipOrgUnitRepo,
 	data.NewMembershipPositionRepo,
 	data.NewMembershipRoleRepo,
+
+	data.NewApiResourceRepo,
+	data.NewMenuRepo,
+
+	data.NewPermissionRepo,
+	data.NewPermissionApiResourceRepo,
+	data.NewPermissionMenuRepo,
 
 	data.NewAdminLoginLogRepo,
 	data.NewAdminOperationLogRepo,

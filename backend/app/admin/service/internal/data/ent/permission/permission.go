@@ -40,10 +40,8 @@ const (
 	FieldCode = "code"
 	// FieldPath holds the string denoting the path field in the database.
 	FieldPath = "path"
-	// FieldResource holds the string denoting the resource field in the database.
-	FieldResource = "resource"
-	// FieldMethod holds the string denoting the method field in the database.
-	FieldMethod = "method"
+	// FieldModule holds the string denoting the module field in the database.
+	FieldModule = "module"
 	// FieldSortOrder holds the string denoting the sort_order field in the database.
 	FieldSortOrder = "sort_order"
 	// FieldType holds the string denoting the type field in the database.
@@ -80,8 +78,7 @@ var Columns = []string{
 	FieldName,
 	FieldCode,
 	FieldPath,
-	FieldResource,
-	FieldMethod,
+	FieldModule,
 	FieldSortOrder,
 	FieldType,
 }
@@ -139,12 +136,13 @@ const DefaultType = TypeApi
 
 // Type values.
 const (
-	TypeApi    Type = "API"
-	TypeMenu   Type = "MENU"
-	TypeButton Type = "BUTTON"
-	TypePage   Type = "PAGE"
-	TypeData   Type = "DATA"
-	TypeOther  Type = "OTHER"
+	TypeCatalog Type = "CATALOG"
+	TypeMenu    Type = "MENU"
+	TypePage    Type = "PAGE"
+	TypeButton  Type = "BUTTON"
+	TypeApi     Type = "API"
+	TypeData    Type = "DATA"
+	TypeOther   Type = "OTHER"
 )
 
 func (_type Type) String() string {
@@ -154,7 +152,7 @@ func (_type Type) String() string {
 // TypeValidator is a validator for the "type" field enum values. It is called by the builders before save.
 func TypeValidator(_type Type) error {
 	switch _type {
-	case TypeApi, TypeMenu, TypeButton, TypePage, TypeData, TypeOther:
+	case TypeCatalog, TypeMenu, TypePage, TypeButton, TypeApi, TypeData, TypeOther:
 		return nil
 	default:
 		return fmt.Errorf("permission: invalid enum value for type field: %q", _type)
@@ -234,14 +232,9 @@ func ByPath(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPath, opts...).ToFunc()
 }
 
-// ByResource orders the results by the resource field.
-func ByResource(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldResource, opts...).ToFunc()
-}
-
-// ByMethod orders the results by the method field.
-func ByMethod(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldMethod, opts...).ToFunc()
+// ByModule orders the results by the module field.
+func ByModule(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldModule, opts...).ToFunc()
 }
 
 // BySortOrder orders the results by the sort_order field.

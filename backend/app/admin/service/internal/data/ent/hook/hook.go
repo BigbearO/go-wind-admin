@@ -224,6 +224,30 @@ func (f PermissionFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, 
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PermissionMutation", m)
 }
 
+// The PermissionApiResourceFunc type is an adapter to allow the use of ordinary
+// function as PermissionApiResource mutator.
+type PermissionApiResourceFunc func(context.Context, *ent.PermissionApiResourceMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f PermissionApiResourceFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.PermissionApiResourceMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PermissionApiResourceMutation", m)
+}
+
+// The PermissionMenuFunc type is an adapter to allow the use of ordinary
+// function as PermissionMenu mutator.
+type PermissionMenuFunc func(context.Context, *ent.PermissionMenuMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f PermissionMenuFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.PermissionMenuMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PermissionMenuMutation", m)
+}
+
 // The PositionFunc type is an adapter to allow the use of ordinary
 // function as Position mutator.
 type PositionFunc func(context.Context, *ent.PositionMutation) (ent.Value, error)
@@ -270,6 +294,18 @@ func (f RoleMenuFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, er
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.RoleMenuMutation", m)
+}
+
+// The RolePermissionFunc type is an adapter to allow the use of ordinary
+// function as RolePermission mutator.
+type RolePermissionFunc func(context.Context, *ent.RolePermissionMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f RolePermissionFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.RolePermissionMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.RolePermissionMutation", m)
 }
 
 // The TaskFunc type is an adapter to allow the use of ordinary

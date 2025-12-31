@@ -21,10 +21,13 @@ import (
 	"go-wind-admin/app/admin/service/internal/data/ent/menu"
 	"go-wind-admin/app/admin/service/internal/data/ent/orgunit"
 	"go-wind-admin/app/admin/service/internal/data/ent/permission"
+	"go-wind-admin/app/admin/service/internal/data/ent/permissionapiresource"
+	"go-wind-admin/app/admin/service/internal/data/ent/permissionmenu"
 	"go-wind-admin/app/admin/service/internal/data/ent/position"
 	"go-wind-admin/app/admin/service/internal/data/ent/role"
 	"go-wind-admin/app/admin/service/internal/data/ent/roleapi"
 	"go-wind-admin/app/admin/service/internal/data/ent/rolemenu"
+	"go-wind-admin/app/admin/service/internal/data/ent/rolepermission"
 	"go-wind-admin/app/admin/service/internal/data/ent/schema"
 	"go-wind-admin/app/admin/service/internal/data/ent/task"
 	"go-wind-admin/app/admin/service/internal/data/ent/tenant"
@@ -327,13 +330,31 @@ func init() {
 	// permission.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	permission.NameValidator = permissionDescName.Validators[0].(func(string) error)
 	// permissionDescSortOrder is the schema descriptor for sort_order field.
-	permissionDescSortOrder := permissionFields[5].Descriptor()
+	permissionDescSortOrder := permissionFields[4].Descriptor()
 	// permission.DefaultSortOrder holds the default value on creation for the sort_order field.
 	permission.DefaultSortOrder = permissionDescSortOrder.Default.(int32)
 	// permissionDescID is the schema descriptor for id field.
 	permissionDescID := permissionMixinFields0[0].Descriptor()
 	// permission.IDValidator is a validator for the "id" field. It is called by the builders before save.
 	permission.IDValidator = permissionDescID.Validators[0].(func(uint32) error)
+	permissionapiresourceMixin := schema.PermissionApiResource{}.Mixin()
+	permissionapiresourceMixinFields0 := permissionapiresourceMixin[0].Fields()
+	_ = permissionapiresourceMixinFields0
+	permissionapiresourceFields := schema.PermissionApiResource{}.Fields()
+	_ = permissionapiresourceFields
+	// permissionapiresourceDescID is the schema descriptor for id field.
+	permissionapiresourceDescID := permissionapiresourceMixinFields0[0].Descriptor()
+	// permissionapiresource.IDValidator is a validator for the "id" field. It is called by the builders before save.
+	permissionapiresource.IDValidator = permissionapiresourceDescID.Validators[0].(func(uint32) error)
+	permissionmenuMixin := schema.PermissionMenu{}.Mixin()
+	permissionmenuMixinFields0 := permissionmenuMixin[0].Fields()
+	_ = permissionmenuMixinFields0
+	permissionmenuFields := schema.PermissionMenu{}.Fields()
+	_ = permissionmenuFields
+	// permissionmenuDescID is the schema descriptor for id field.
+	permissionmenuDescID := permissionmenuMixinFields0[0].Descriptor()
+	// permissionmenu.IDValidator is a validator for the "id" field. It is called by the builders before save.
+	permissionmenu.IDValidator = permissionmenuDescID.Validators[0].(func(uint32) error)
 	positionMixin := schema.Position{}.Mixin()
 	positionMixinFields0 := positionMixin[0].Fields()
 	_ = positionMixinFields0
@@ -408,6 +429,15 @@ func init() {
 	rolemenuDescID := rolemenuMixinFields0[0].Descriptor()
 	// rolemenu.IDValidator is a validator for the "id" field. It is called by the builders before save.
 	rolemenu.IDValidator = rolemenuDescID.Validators[0].(func(uint32) error)
+	rolepermissionMixin := schema.RolePermission{}.Mixin()
+	rolepermissionMixinFields0 := rolepermissionMixin[0].Fields()
+	_ = rolepermissionMixinFields0
+	rolepermissionFields := schema.RolePermission{}.Fields()
+	_ = rolepermissionFields
+	// rolepermissionDescID is the schema descriptor for id field.
+	rolepermissionDescID := rolepermissionMixinFields0[0].Descriptor()
+	// rolepermission.IDValidator is a validator for the "id" field. It is called by the builders before save.
+	rolepermission.IDValidator = rolepermissionDescID.Validators[0].(func(uint32) error)
 	taskMixin := schema.Task{}.Mixin()
 	taskMixinFields0 := taskMixin[0].Fields()
 	_ = taskMixinFields0

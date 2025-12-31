@@ -22,7 +22,7 @@ func (Permission) Annotations() []schema.Annotation {
 			Collation: "utf8mb4_bin",
 		},
 		entsql.WithComments(true),
-		schema.Comment("权限表（资源/路由/菜单/数据权限 等）"),
+		schema.Comment("权限核心表"),
 	}
 }
 
@@ -31,27 +31,22 @@ func (Permission) Fields() []ent.Field {
 		field.String("name").
 			NotEmpty().
 			Nillable().
-			Comment("名称"),
+			Comment("权限名称（如：删除用户）"),
 
 		field.String("code").
 			Optional().
 			Nillable().
-			Comment("唯一编码（租户范围内唯一，便于引用/导入）"),
+			Comment("权限唯一编码（如：user.delete）"),
 
 		field.String("path").
 			Optional().
 			Nillable().
-			Comment("路径/路由，如 `/api/users` 或 菜单路径"),
+			Comment("树路径，如：/1/10/"),
 
-		field.String("resource").
+		field.String("module").
+			Comment("所属业务模块（如：用户管理/订单管理）").
 			Optional().
-			Nillable().
-			Comment("资源标识（如 API 资源名）"),
-
-		field.String("method").
-			Optional().
-			Nillable().
-			Comment("HTTP 方法/动作，如 GET/POST（可选）"),
+			Nillable(),
 
 		field.Int32("sort_order").
 			Optional().
@@ -61,10 +56,11 @@ func (Permission) Fields() []ent.Field {
 
 		field.Enum("type").
 			NamedValues(
-				"Api", "API",
+				"Catalog", "CATALOG",
 				"Menu", "MENU",
-				"Button", "BUTTON",
 				"Page", "PAGE",
+				"Button", "BUTTON",
+				"Api", "API",
 				"Data", "DATA",
 				"Other", "OTHER",
 			).
@@ -90,9 +86,13 @@ func (Permission) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("tenant_id").StorageKey("idx_perm_tenant_id"),
 		index.Fields("parent_id").StorageKey("idx_perm_parent_id"),
+
 		// tenant + code 唯一，便于按租户内查找/引用
 		index.Fields("tenant_id", "code").
 			Unique().
 			StorageKey("uix_perm_tenant_code"),
+
+		index.Fields("module", "type").
+			StorageKey("idx_perm_module_type"),
 	}
 }

@@ -193,14 +193,14 @@ func (s *PermissionService) syncWithOpenAPI(ctx context.Context) error {
 			//fmt.Println(moduleDescription, resource, code)
 
 			apiResourceList = append(apiResourceList, &adminV1.Permission{
-				Id:       trans.Ptr(count),
-				Name:     trans.Ptr(operation.Description),
-				Code:     trans.Ptr(code),
-				Path:     trans.Ptr(path),
-				Resource: trans.Ptr(resource),
-				Method:   trans.Ptr(method),
-				Type:     trans.Ptr(adminV1.Permission_API),
-				Status:   trans.Ptr(adminV1.Permission_ON),
+				Id:   trans.Ptr(count),
+				Name: trans.Ptr(operation.Description),
+				Code: trans.Ptr(code),
+				//Path:     trans.Ptr(path),
+				//Resource: trans.Ptr(resource),
+				//Method:   trans.Ptr(method),
+				Type:   trans.Ptr(adminV1.Permission_API),
+				Status: trans.Ptr(adminV1.Permission_ON),
 			})
 		}
 	}

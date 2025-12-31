@@ -4753,36 +4753,34 @@ components:
                     type: integer
                     description: 权限ID
                     format: uint32
-                code:
-                    type: string
-                    description: 唯一编码
                 name:
                     type: string
-                    description: 名称
+                    description: 权限名称（如：删除用户）
+                code:
+                    type: string
+                    description: 权限唯一编码（如：user.delete）
+                type:
+                    enum:
+                        - CATALOG
+                        - MENU
+                        - PAGE
+                        - BUTTON
+                        - API
+                        - DATA
+                        - OTHER
+                    type: string
+                    description: 权限类型（关联的资源类型）
+                    format: enum
                 path:
                     type: string
-                    description: 路径/路由
-                resource:
+                    description: 树路径
+                module:
                     type: string
-                    description: 资源标识（如 API 资源名）
-                method:
-                    type: string
-                    description: HTTP 方法/动作，如 GET/POST（可选）
+                    description: 所属业务模块（如：用户管理/订单管理）
                 sortOrder:
                     type: integer
                     description: 排序序号
                     format: int32
-                type:
-                    enum:
-                        - API
-                        - DATA
-                        - MENU
-                        - BUTTON
-                        - PAGE
-                        - OTHER
-                    type: string
-                    description: 权限类型
-                    format: enum
                 remark:
                     type: string
                     description: 备注

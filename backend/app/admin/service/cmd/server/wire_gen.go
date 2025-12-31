@@ -32,7 +32,10 @@ func initApp(context *bootstrap.Context) (*kratos.App, func(), error) {
 	if err != nil {
 		return nil, nil, err
 	}
-	roleRepo := data.NewRoleRepo(context, entClient)
+	rolePermissionRepo := data.NewRolePermissionRepo(context, entClient)
+	roleApiRepo := data.NewRoleApiRepo(context, entClient)
+	roleMenuRepo := data.NewRoleMenuRepo(context, entClient)
+	roleRepo := data.NewRoleRepo(context, entClient, rolePermissionRepo, roleApiRepo, roleMenuRepo)
 	apiResourceRepo := data.NewApiResourceRepo(context, entClient)
 	authorizer := data.NewAuthorizer(context, roleRepo, apiResourceRepo)
 	adminOperationLogRepo := data.NewAdminOperationLogRepo(context, entClient)
@@ -59,8 +62,6 @@ func initApp(context *bootstrap.Context) (*kratos.App, func(), error) {
 	menuService := service.NewMenuService(context, menuRepo)
 	routerService := service.NewRouterService(context, menuRepo, roleRepo, userRepo)
 	orgUnitService := service.NewOrgUnitService(context, orgUnitRepo, userRepo)
-	roleApiRepo := data.NewRoleApiRepo(context, entClient)
-	roleMenuRepo := data.NewRoleMenuRepo(context, entClient)
 	roleService := service.NewRoleService(context, authorizer, roleRepo, roleApiRepo, roleMenuRepo, membershipOrgUnitRepo, membershipRepo)
 	positionService := service.NewPositionService(context, positionRepo, orgUnitRepo)
 	dictTypeRepo := data.NewDictTypeRepo(context, entClient)
@@ -87,7 +88,9 @@ func initApp(context *bootstrap.Context) (*kratos.App, func(), error) {
 	adminLoginRestrictionService := service.NewAdminLoginRestrictionService(context, adminLoginRestrictionRepo)
 	userProfileService := service.NewUserProfileService(context, userRepo, userTokenCacheRepo, roleRepo, userCredentialRepo, membershipRepo)
 	apiResourceService := service.NewApiResourceService(context, apiResourceRepo, authorizer)
-	permissionRepo := data.NewPermissionRepo(context, entClient)
+	permissionApiResourceRepo := data.NewPermissionApiResourceRepo(context, entClient)
+	permissionMenuRepo := data.NewPermissionMenuRepo(context, entClient)
+	permissionRepo := data.NewPermissionRepo(context, entClient, permissionApiResourceRepo, permissionMenuRepo)
 	permissionService := service.NewPermissionService(context, permissionRepo, membershipRepo, authorizer)
 	httpServer, err := server.NewRestServer(context, authenticator, authorizer, adminOperationLogRepo, adminLoginLogRepo, authenticationService, userService, menuService, routerService, orgUnitService, roleService, positionService, dictService, adminLoginLogService, adminOperationLogService, ossService, uEditorService, fileService, tenantService, taskService, internalMessageService, internalMessageCategoryService, internalMessageRecipientService, adminLoginRestrictionService, userProfileService, apiResourceService, permissionService)
 	if err != nil {

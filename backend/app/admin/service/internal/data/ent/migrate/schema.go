@@ -733,25 +733,24 @@ var (
 		{Name: "remark", Type: field.TypeString, Nullable: true, Comment: "备注"},
 		{Name: "status", Type: field.TypeEnum, Nullable: true, Comment: "状态", Enums: []string{"OFF", "ON"}, Default: "ON"},
 		{Name: "tenant_id", Type: field.TypeUint32, Nullable: true, Comment: "租户ID"},
-		{Name: "name", Type: field.TypeString, Comment: "名称"},
-		{Name: "code", Type: field.TypeString, Nullable: true, Comment: "唯一编码（租户范围内唯一，便于引用/导入）"},
-		{Name: "path", Type: field.TypeString, Nullable: true, Comment: "路径/路由，如 `/api/users` 或 菜单路径"},
-		{Name: "resource", Type: field.TypeString, Nullable: true, Comment: "资源标识（如 API 资源名）"},
-		{Name: "method", Type: field.TypeString, Nullable: true, Comment: "HTTP 方法/动作，如 GET/POST（可选）"},
+		{Name: "name", Type: field.TypeString, Comment: "权限名称（如：删除用户）"},
+		{Name: "code", Type: field.TypeString, Nullable: true, Comment: "权限唯一编码（如：user.delete）"},
+		{Name: "path", Type: field.TypeString, Nullable: true, Comment: "树路径，如：/1/10/"},
+		{Name: "module", Type: field.TypeString, Nullable: true, Comment: "所属业务模块（如：用户管理/订单管理）"},
 		{Name: "sort_order", Type: field.TypeInt32, Nullable: true, Comment: "排序序号", Default: 0},
-		{Name: "type", Type: field.TypeEnum, Comment: "权限类型", Enums: []string{"API", "MENU", "BUTTON", "PAGE", "DATA", "OTHER"}, Default: "API"},
+		{Name: "type", Type: field.TypeEnum, Comment: "权限类型", Enums: []string{"CATALOG", "MENU", "PAGE", "BUTTON", "API", "DATA", "OTHER"}, Default: "API"},
 		{Name: "parent_id", Type: field.TypeUint32, Nullable: true, Comment: "父节点ID"},
 	}
 	// SysPermissionsTable holds the schema information for the "sys_permissions" table.
 	SysPermissionsTable = &schema.Table{
 		Name:       "sys_permissions",
-		Comment:    "权限表（资源/路由/菜单/数据权限 等）",
+		Comment:    "权限核心表",
 		Columns:    SysPermissionsColumns,
 		PrimaryKey: []*schema.Column{SysPermissionsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "sys_permissions_sys_permissions_children",
-				Columns:    []*schema.Column{SysPermissionsColumns[17]},
+				Columns:    []*schema.Column{SysPermissionsColumns[16]},
 				RefColumns: []*schema.Column{SysPermissionsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -775,12 +774,91 @@ var (
 			{
 				Name:    "idx_perm_parent_id",
 				Unique:  false,
-				Columns: []*schema.Column{SysPermissionsColumns[17]},
+				Columns: []*schema.Column{SysPermissionsColumns[16]},
 			},
 			{
 				Name:    "uix_perm_tenant_code",
 				Unique:  true,
 				Columns: []*schema.Column{SysPermissionsColumns[9], SysPermissionsColumns[11]},
+			},
+			{
+				Name:    "idx_perm_module_type",
+				Unique:  false,
+				Columns: []*schema.Column{SysPermissionsColumns[13], SysPermissionsColumns[15]},
+			},
+		},
+	}
+	// SysPermissionAPIResourcesColumns holds the columns for the "sys_permission_api_resources" table.
+	SysPermissionAPIResourcesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUint32, Increment: true, Comment: "id"},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "更新时间"},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true, Comment: "删除时间"},
+		{Name: "created_by", Type: field.TypeUint32, Nullable: true, Comment: "创建者ID"},
+		{Name: "updated_by", Type: field.TypeUint32, Nullable: true, Comment: "更新者ID"},
+		{Name: "deleted_by", Type: field.TypeUint32, Nullable: true, Comment: "删除者ID"},
+		{Name: "tenant_id", Type: field.TypeUint32, Nullable: true, Comment: "租户ID"},
+		{Name: "api_resource_id", Type: field.TypeUint32, Comment: "API资源ID（关联sys_api_resources.id）"},
+		{Name: "permission_id", Type: field.TypeUint32, Comment: "权限ID（关联sys_permissions.id）"},
+	}
+	// SysPermissionAPIResourcesTable holds the schema information for the "sys_permission_api_resources" table.
+	SysPermissionAPIResourcesTable = &schema.Table{
+		Name:       "sys_permission_api_resources",
+		Comment:    "权限点 - API接口多对多关联表",
+		Columns:    SysPermissionAPIResourcesColumns,
+		PrimaryKey: []*schema.Column{SysPermissionAPIResourcesColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "permissionapiresource_tenant_id",
+				Unique:  false,
+				Columns: []*schema.Column{SysPermissionAPIResourcesColumns[7]},
+			},
+			{
+				Name:    "uk_perm_api",
+				Unique:  true,
+				Columns: []*schema.Column{SysPermissionAPIResourcesColumns[8], SysPermissionAPIResourcesColumns[9]},
+			},
+			{
+				Name:    "uix_perm_api_tenant",
+				Unique:  true,
+				Columns: []*schema.Column{SysPermissionAPIResourcesColumns[7], SysPermissionAPIResourcesColumns[8]},
+			},
+		},
+	}
+	// SysPermissionMenusColumns holds the columns for the "sys_permission_menus" table.
+	SysPermissionMenusColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUint32, Increment: true, Comment: "id"},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "更新时间"},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true, Comment: "删除时间"},
+		{Name: "created_by", Type: field.TypeUint32, Nullable: true, Comment: "创建者ID"},
+		{Name: "updated_by", Type: field.TypeUint32, Nullable: true, Comment: "更新者ID"},
+		{Name: "deleted_by", Type: field.TypeUint32, Nullable: true, Comment: "删除者ID"},
+		{Name: "tenant_id", Type: field.TypeUint32, Nullable: true, Comment: "租户ID"},
+		{Name: "menu_id", Type: field.TypeUint32, Comment: "菜单ID（关联sys_menus.id）"},
+		{Name: "permission_id", Type: field.TypeUint32, Comment: "权限ID（关联sys_permissions.id）"},
+	}
+	// SysPermissionMenusTable holds the schema information for the "sys_permission_menus" table.
+	SysPermissionMenusTable = &schema.Table{
+		Name:       "sys_permission_menus",
+		Comment:    "权限点 - 前端菜单多对多关联表",
+		Columns:    SysPermissionMenusColumns,
+		PrimaryKey: []*schema.Column{SysPermissionMenusColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "permissionmenu_tenant_id",
+				Unique:  false,
+				Columns: []*schema.Column{SysPermissionMenusColumns[7]},
+			},
+			{
+				Name:    "uk_perm_menu",
+				Unique:  true,
+				Columns: []*schema.Column{SysPermissionMenusColumns[8], SysPermissionMenusColumns[9]},
+			},
+			{
+				Name:    "uix_perm_menu_tenant",
+				Unique:  true,
+				Columns: []*schema.Column{SysPermissionMenusColumns[7], SysPermissionMenusColumns[8]},
 			},
 		},
 	}
@@ -978,6 +1056,43 @@ var (
 				Name:    "idx_sys_role_menu_role_id",
 				Unique:  false,
 				Columns: []*schema.Column{SysRoleMenuColumns[7]},
+			},
+		},
+	}
+	// SysRolePermissionsColumns holds the columns for the "sys_role_permissions" table.
+	SysRolePermissionsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUint32, Increment: true, Comment: "id"},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "更新时间"},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true, Comment: "删除时间"},
+		{Name: "created_by", Type: field.TypeUint32, Nullable: true, Comment: "创建者ID"},
+		{Name: "updated_by", Type: field.TypeUint32, Nullable: true, Comment: "更新者ID"},
+		{Name: "deleted_by", Type: field.TypeUint32, Nullable: true, Comment: "删除者ID"},
+		{Name: "tenant_id", Type: field.TypeUint32, Nullable: true, Comment: "租户ID"},
+		{Name: "role_id", Type: field.TypeUint32, Comment: "API资源ID（关联sys_api_resources.id）"},
+		{Name: "permission_id", Type: field.TypeUint32, Comment: "权限ID（关联sys_permissions.id）"},
+	}
+	// SysRolePermissionsTable holds the schema information for the "sys_role_permissions" table.
+	SysRolePermissionsTable = &schema.Table{
+		Name:       "sys_role_permissions",
+		Comment:    "角色 - 权限多对多关联表",
+		Columns:    SysRolePermissionsColumns,
+		PrimaryKey: []*schema.Column{SysRolePermissionsColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "rolepermission_tenant_id",
+				Unique:  false,
+				Columns: []*schema.Column{SysRolePermissionsColumns[7]},
+			},
+			{
+				Name:    "uix_perm_role",
+				Unique:  true,
+				Columns: []*schema.Column{SysRolePermissionsColumns[8], SysRolePermissionsColumns[9]},
+			},
+			{
+				Name:    "uix_perm_role_tenant",
+				Unique:  true,
+				Columns: []*schema.Column{SysRolePermissionsColumns[7], SysRolePermissionsColumns[8]},
 			},
 		},
 	}
@@ -1205,10 +1320,13 @@ var (
 		SysMenusTable,
 		SysOrgUnitsTable,
 		SysPermissionsTable,
+		SysPermissionAPIResourcesTable,
+		SysPermissionMenusTable,
 		SysPositionsTable,
 		SysRolesTable,
 		SysRoleAPITable,
 		SysRoleMenuTable,
+		SysRolePermissionsTable,
 		SysTasksTable,
 		SysTenantsTable,
 		SysUsersTable,
@@ -1312,6 +1430,16 @@ func init() {
 		Charset:   "utf8mb4",
 		Collation: "utf8mb4_bin",
 	}
+	SysPermissionAPIResourcesTable.Annotation = &entsql.Annotation{
+		Table:     "sys_permission_api_resources",
+		Charset:   "utf8mb4",
+		Collation: "utf8mb4_bin",
+	}
+	SysPermissionMenusTable.Annotation = &entsql.Annotation{
+		Table:     "sys_permission_menus",
+		Charset:   "utf8mb4",
+		Collation: "utf8mb4_bin",
+	}
 	SysPositionsTable.ForeignKeys[0].RefTable = SysPositionsTable
 	SysPositionsTable.Annotation = &entsql.Annotation{
 		Table:     "sys_positions",
@@ -1331,6 +1459,11 @@ func init() {
 	}
 	SysRoleMenuTable.Annotation = &entsql.Annotation{
 		Table:     "sys_role_menu",
+		Charset:   "utf8mb4",
+		Collation: "utf8mb4_bin",
+	}
+	SysRolePermissionsTable.Annotation = &entsql.Annotation{
+		Table:     "sys_role_permissions",
 		Charset:   "utf8mb4",
 		Collation: "utf8mb4_bin",
 	}

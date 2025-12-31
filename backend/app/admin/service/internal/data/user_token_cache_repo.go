@@ -55,9 +55,12 @@ func NewUserTokenCacheRepo(
 // GenerateToken 创建令牌
 func (r *UserTokenCacheRepo) GenerateToken(
 	ctx context.Context,
-	user *userV1.User,
-	dataScope *userV1.Role_DataScope,
+	username string,
+	userID uint32,
+	tenantID uint32,
 	orgUnitID *uint32,
+	roleCodes []string,
+	dataScope *userV1.Role_DataScope,
 	clientID *string,
 	deviceID *string,
 	isPlatformAdmin *bool,
@@ -66,9 +69,12 @@ func (r *UserTokenCacheRepo) GenerateToken(
 	// 创建访问令牌
 	if accessToken, err = r.GenerateAccessToken(
 		ctx,
-		user,
-		dataScope,
+		username,
+		userID,
+		tenantID,
 		orgUnitID,
+		roleCodes,
+		dataScope,
 		clientID,
 		deviceID,
 		isPlatformAdmin,
@@ -79,7 +85,7 @@ func (r *UserTokenCacheRepo) GenerateToken(
 	}
 
 	// 创建刷新令牌
-	if refreshToken, err = r.GenerateRefreshToken(ctx, user); refreshToken == "" {
+	if refreshToken, err = r.GenerateRefreshToken(ctx, userID); refreshToken == "" {
 		err = errors.New("create refresh token failed")
 		return
 	}
@@ -90,18 +96,24 @@ func (r *UserTokenCacheRepo) GenerateToken(
 // GenerateAccessToken 创建访问令牌
 func (r *UserTokenCacheRepo) GenerateAccessToken(
 	ctx context.Context,
-	user *userV1.User,
-	dataScope *userV1.Role_DataScope,
+	username string,
+	userID uint32,
+	tenantID uint32,
 	orgUnitID *uint32,
+	roleCodes []string,
+	dataScope *userV1.Role_DataScope,
 	clientID *string,
 	deviceID *string,
 	isPlatformAdmin *bool,
 	isTenantAdmin *bool,
 ) (accessToken string, err error) {
 	if accessToken = r.createAccessJwtToken(
-		user,
-		dataScope,
+		username,
+		userID,
+		tenantID,
 		orgUnitID,
+		roleCodes,
+		dataScope,
 		clientID,
 		deviceID,
 		isPlatformAdmin,
@@ -111,7 +123,7 @@ func (r *UserTokenCacheRepo) GenerateAccessToken(
 		return
 	}
 
-	if err = r.setAccessTokenToRedis(ctx, user.GetId(), accessToken, r.accessTokenExpires); err != nil {
+	if err = r.setAccessTokenToRedis(ctx, userID, accessToken, r.accessTokenExpires); err != nil {
 		return
 	}
 
@@ -119,13 +131,13 @@ func (r *UserTokenCacheRepo) GenerateAccessToken(
 }
 
 // GenerateRefreshToken 创建刷新令牌
-func (r *UserTokenCacheRepo) GenerateRefreshToken(ctx context.Context, user *userV1.User) (refreshToken string, err error) {
+func (r *UserTokenCacheRepo) GenerateRefreshToken(ctx context.Context, userID uint32) (refreshToken string, err error) {
 	if refreshToken = r.createRefreshToken(); refreshToken == "" {
 		err = errors.New("create refresh token failed")
 		return
 	}
 
-	if err = r.setRefreshTokenToRedis(ctx, user.GetId(), refreshToken, r.refreshTokenExpires); err != nil {
+	if err = r.setRefreshTokenToRedis(ctx, userID, refreshToken, r.refreshTokenExpires); err != nil {
 		return
 	}
 
@@ -253,15 +265,23 @@ func (r *UserTokenCacheRepo) deleteRefreshTokenFromRedis(ctx context.Context, us
 
 // createAccessJwtToken 生成JWT访问令牌
 func (r *UserTokenCacheRepo) createAccessJwtToken(
-	user *userV1.User,
-	dataScope *userV1.Role_DataScope,
+	username string,
+	userID uint32,
+	tenantID uint32,
 	orgUnitID *uint32,
+	roleCodes []string,
+	dataScope *userV1.Role_DataScope,
 	clientID *string,
 	deviceID *string,
 	isPlatformAdmin *bool,
 	isTenantAdmin *bool,
 ) string {
-	authClaims := jwt.NewUserTokenAuthClaims(user, dataScope, orgUnitID, clientID, deviceID, isPlatformAdmin, isTenantAdmin)
+	authClaims := jwt.NewUserTokenAuthClaims(
+		username, userID, tenantID, orgUnitID, roleCodes,
+		dataScope,
+		clientID, deviceID,
+		isPlatformAdmin, isTenantAdmin,
+	)
 
 	signedToken, err := r.authenticator.CreateIdentity(*authClaims)
 	if err != nil {

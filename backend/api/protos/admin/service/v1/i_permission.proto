@@ -57,12 +57,12 @@ service PermissionService {
 message Permission {
   // 权限类型
   enum Type {
-    API = 0;      // 接口权限
-    DATA = 1;     // 数据权限
-
-    MENU = 2;     // 菜单权限
-    BUTTON = 3;   // 按钮权限
-    PAGE = 4;     // 页面权限
+    CATALOG = 0;  // 目录权限，侧边栏的分类标题（无路由，仅展开）。
+    MENU = 1;     // 菜单权限，具体的导航菜单，点击后进入 PAGE。
+    PAGE = 2;     // 页面权限，独立的页面（如详情页），可能不在侧边栏显示。
+    BUTTON = 3;   // 按钮权限，页面内的操作按钮。
+    API = 4;      // 接口权限，后端接口鉴权。
+    DATA = 5;     // 数据权限，数据行级/列级过滤规则。
 
     OTHER = 100; // 其他权限
   }
@@ -78,42 +78,34 @@ message Permission {
     (gnostic.openapi.v3.property) = { description: "权限ID" }
   ]; // 权限ID
 
-  optional string code = 2 [
-    json_name = "code",
-    (gnostic.openapi.v3.property) = { description: "唯一编码" }
-  ]; // 唯一编码
-
-  optional string name = 3 [
+  optional string name = 2 [
     json_name = "name",
-    (gnostic.openapi.v3.property) = { description: "名称" }
-  ]; // 名称
+    (gnostic.openapi.v3.property) = { description: "权限名称（如：删除用户）" }
+  ]; // 权限名称（如：删除用户）
 
-  optional string path = 4 [
-    json_name = "path",
-    (gnostic.openapi.v3.property) = { description: "路径/路由" }
-  ]; // 路径/路由
+  optional string code = 3 [
+    json_name = "code",
+    (gnostic.openapi.v3.property) = { description: "权限唯一编码（如：user.delete）" }
+  ]; // 权限唯一编码（如：user.delete）
 
-  optional string resource = 5 [
-    json_name = "resource",
-    (gnostic.openapi.v3.property) = { description: "资源标识（如 API 资源名）" }
-  ]; // 资源标识（如 API 资源名）
+  optional Type type = 4 [
+    json_name = "type",
+    (gnostic.openapi.v3.property) = { description: "权限类型（关联的资源类型）" }
+  ]; // 权限类型（关联的资源类型）
 
-  optional string method = 6 [
-    json_name = "method",
-    (gnostic.openapi.v3.property) = { description: "HTTP 方法/动作，如 GET/POST（可选）" }
-  ]; // HTTP 方法/动作，如 GET/POST（可选）
+  optional string path = 5 [json_name = "path", (gnostic.openapi.v3.property) = {description: "树路径"}];  // 树路径
+
+  optional string module = 6 [
+    json_name = "module",
+    (gnostic.openapi.v3.property) = { description: "所属业务模块（如：用户管理/订单管理）" }
+  ]; // 所属业务模块（如：用户管理/订单管理）
 
   optional int32 sort_order = 7 [
     json_name = "sortOrder",
     (gnostic.openapi.v3.property) = { description: "排序序号" }
   ]; // 排序序号
 
-  optional Type type = 8 [
-    json_name = "type",
-    (gnostic.openapi.v3.property) = { description: "权限类型" }
-  ]; // 权限类型
-
-  optional string remark = 9 [
+  optional string remark = 8 [
     json_name = "remark",
     (gnostic.openapi.v3.property) = { description: "备注" }
   ]; // 备注

@@ -60,6 +60,12 @@ type OrgUnit func(*sql.Selector)
 // Permission is the predicate function for permission builders.
 type Permission func(*sql.Selector)
 
+// PermissionApiResource is the predicate function for permissionapiresource builders.
+type PermissionApiResource func(*sql.Selector)
+
+// PermissionMenu is the predicate function for permissionmenu builders.
+type PermissionMenu func(*sql.Selector)
+
 // Position is the predicate function for position builders.
 type Position func(*sql.Selector)
 
@@ -71,6 +77,9 @@ type RoleApi func(*sql.Selector)
 
 // RoleMenu is the predicate function for rolemenu builders.
 type RoleMenu func(*sql.Selector)
+
+// RolePermission is the predicate function for rolepermission builders.
+type RolePermission func(*sql.Selector)
 
 // Task is the predicate function for task builders.
 type Task func(*sql.Selector)

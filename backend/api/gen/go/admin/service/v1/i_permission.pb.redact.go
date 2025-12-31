@@ -109,19 +109,17 @@ func (x *Permission) Redact() string {
 
 	// Safe field: Id
 
+	// Safe field: Name
+
 	// Safe field: Code
 
-	// Safe field: Name
+	// Safe field: Type
 
 	// Safe field: Path
 
-	// Safe field: Resource
-
-	// Safe field: Method
+	// Safe field: Module
 
 	// Safe field: SortOrder
-
-	// Safe field: Type
 
 	// Safe field: Remark
 
