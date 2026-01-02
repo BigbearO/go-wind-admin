@@ -112,15 +112,15 @@ const gridOptions: VxeGridProps<Permission> = {
       align: 'left',
       treeNode: true,
     },
+    { title: $t('page.permission.module'), field: 'module' },
+    { title: $t('page.permission.code'), field: 'code', width: 200 },
     {
       title: $t('page.permission.type'),
       field: 'type',
       slots: { default: 'type' },
       width: 95,
     },
-    { title: $t('page.permission.code'), field: 'code', width: 200 },
     { title: $t('page.permission.path'), field: 'path' },
-    { title: $t('page.permission.module'), field: 'module' },
     {
       title: $t('ui.table.status'),
       field: 'status',

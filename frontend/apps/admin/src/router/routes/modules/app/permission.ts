@@ -19,7 +19,7 @@ const permission: RouteRecordRaw[] = [
     children: [
       {
         path: 'permissions',
-        name: 'PermissionList',
+        name: 'PermissionPointsManagement',
         meta: {
           order: 1,
           icon: 'lucide:shield-ellipsis',
@@ -53,6 +53,18 @@ const permission: RouteRecordRaw[] = [
           authority: ['super', 'admin'],
         },
         component: () => import('#/views/app/permission/menu/index.vue'),
+      },
+
+      {
+        path: 'apis',
+        name: 'APIResourceManagement',
+        meta: {
+          order: 4,
+          icon: 'lucide:route',
+          title: $t('menu.system.apiResource'),
+          authority: ['super', 'admin'],
+        },
+        component: () => import('#/views/app/permission/api_resource/index.vue'),
       },
     ],
   },

@@ -51,17 +51,6 @@ const system: RouteRecordRaw[] = [
       },
 
       {
-        path: 'apis',
-        name: 'APIResourceManagement',
-        meta: {
-          icon: 'lucide:route',
-          title: $t('menu.system.apiResource'),
-          authority: ['super', 'admin'],
-        },
-        component: () => import('#/views/app/system/api_resource/index.vue'),
-      },
-
-      {
         path: 'admin_login_restriction',
         name: 'AdminLoginRestrictionManagement',
         meta: {
