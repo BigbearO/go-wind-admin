@@ -18,10 +18,23 @@ const permission: RouteRecordRaw[] = [
     },
     children: [
       {
+        path: 'permissions',
+        name: 'PermissionList',
+        meta: {
+          order: 1,
+          icon: 'lucide:shield-ellipsis',
+          title: $t('menu.permission.permission'),
+          hideInTab: false,
+          authority: ['super', 'admin'],
+        },
+        component: () => import('#/views/app/permission/permission/index.vue'),
+      },
+
+      {
         path: 'roles',
         name: 'RoleManagement',
         meta: {
-          order: 1,
+          order: 2,
           icon: 'lucide:shield-user',
           title: $t('menu.permission.role'),
           hideInTab: false,
@@ -34,7 +47,7 @@ const permission: RouteRecordRaw[] = [
         path: 'menus',
         name: 'MenuManagement',
         meta: {
-          order: 2,
+          order: 3,
           icon: 'lucide:square-menu',
           title: $t('menu.permission.menu'),
           authority: ['super', 'admin'],

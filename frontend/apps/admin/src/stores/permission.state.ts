@@ -1,3 +1,7 @@
+import { computed } from 'vue';
+
+import { $t } from '@vben/locales';
+
 import { defineStore } from 'pinia';
 
 import {
@@ -86,37 +90,6 @@ export const usePermissionStore = defineStore('permission', () => {
   };
 });
 
-interface PermissionTreeDataNode {
-  key: number | string; // 节点唯一标识（父节点用module，子节点用api.id）
-  title: string; // 节点显示文本（父节点用module，子节点用api.name）
-  children?: PermissionTreeDataNode[]; // 子节点（仅父节点有）
-  disabled?: boolean;
-  permission?: Permission;
-}
-
-export function convertPermissionToTree(
-  rawApiList: Permission[],
-): PermissionTreeDataNode[] {
-  const moduleMap = new Map<string, Permission[]>();
-  rawApiList.forEach((api) => {
-    const moduleName = api.name ?? '';
-    if (!moduleMap.has(moduleName)) {
-      moduleMap.set(moduleName, []);
-    }
-    moduleMap.get(moduleName)?.push(api);
-  });
-
-  return [...moduleMap.entries()].map(([moduleName, apiList]) => ({
-    key: `module-${moduleName}`,
-    title: moduleName,
-    children: apiList.map((permission, index) => ({
-      key: permission.id ?? `permission-default-${index}`,
-      title: `${permission.name}（${permission.method}）`,
-      permission,
-    })),
-  }));
-}
-
 // 权限类型-颜色映射常量
 const PERMISSION_TYPE_COLOR_MAP = {
   MENU: '#165DFF', // 菜单权限：深蓝色（核心导航、层级化属性）
@@ -140,4 +113,108 @@ export function permissionTypeToColor(permissionType: Permission_Type): string {
       permissionType as keyof typeof PERMISSION_TYPE_COLOR_MAP
     ] || PERMISSION_TYPE_COLOR_MAP.DEFAULT
   );
+}
+
+// 权限类型-名称映射常量
+export const PERMISSION_TYPE_NAME_MAP = computed(() => [
+  { label: $t('enum.permission.type.CATALOG'), value: 'CATALOG' },
+  { label: $t('enum.permission.type.MENU'), value: 'MENU' },
+  { label: $t('enum.permission.type.PAGE'), value: 'PAGE' },
+  { label: $t('enum.permission.type.BUTTON'), value: 'BUTTON' },
+  { label: $t('enum.permission.type.API'), value: 'API' },
+  { label: $t('enum.permission.type.DATA'), value: 'DATA' },
+]);
+
+export function permissionTypeToName(permissionType: Permission_Type): string {
+  const values = PERMISSION_TYPE_NAME_MAP.value;
+  const matchedItem = values.find((item) => item.value === permissionType);
+  return matchedItem ? matchedItem.label : '';
+}
+
+/** 遍历菜单子节点
+ * @param nodes 节点列表
+ * @param parent 父节点
+ * @return 是否找到并添加
+ */
+export function travelPermissionChild(
+  nodes: Permission[] | undefined,
+  parent: Permission,
+): boolean {
+  if (nodes === undefined) {
+    return false;
+  }
+
+  if (parent.parentId === 0 || parent.parentId === undefined) {
+    if (parent?.name) {
+      parent.name = $t(parent?.name ?? '');
+    }
+    nodes.push(parent);
+    return true;
+  }
+
+  for (const node of nodes) {
+    if (node === undefined) {
+      continue;
+    }
+    if (node.id === parent.parentId) {
+      if (parent?.name) {
+        parent.name = $t(parent?.name ?? '');
+      }
+      if (node.children !== undefined) {
+        node.children.push(parent);
+      }
+      return true;
+    }
+
+    if (travelPermissionChild(node.children, parent)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+/**
+ * 构建菜单树
+ * @param permissions 菜单列表
+ * @return 菜单树
+ */
+export function buildPermissionTree(permissions: Permission[]): Permission[] {
+  const tree: Permission[] = [];
+
+  for (const menu of permissions) {
+    if (!menu) {
+      continue;
+    }
+
+    if (menu.parentId !== 0 && menu.parentId !== undefined) {
+      continue;
+    }
+
+    if (menu?.name) {
+      menu.name = $t(menu?.name ?? '');
+    }
+    tree.push(menu);
+  }
+
+  for (const menu of permissions) {
+    if (!menu) {
+      continue;
+    }
+
+    if (menu.parentId === 0 || menu.parentId === undefined) {
+      continue;
+    }
+
+    if (travelPermissionChild(tree, menu)) {
+      continue;
+    }
+
+    if (menu?.name) {
+      menu.name = $t(menu?.name ?? '');
+    }
+    tree.push(menu);
+  }
+
+  return tree;
 }

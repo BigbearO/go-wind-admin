@@ -93,6 +93,20 @@
       "create": "创建角色"
     }
   },
+  "permission": {
+    "moduleName": "权限",
+    "name": "权限名称",
+    "code": "权限编码",
+    "type": "权限类型",
+    "path": "树路径",
+    "module": "业务模块",
+    "sortOrder": "排序序号",
+    "parentId": "上级权限",
+    "description": "权限描述",
+    "button": {
+      "create": "创建权限"
+    }
+  },
   "dict": {
     "moduleName": "字典",
     "dictType": "字典类型",
