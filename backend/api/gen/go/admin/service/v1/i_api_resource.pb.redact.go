@@ -145,6 +145,8 @@ func (x *ApiResource) Redact() string {
 
 	// Safe field: Scope
 
+	// Safe field: Status
+
 	// Safe field: CreatedBy
 
 	// Safe field: UpdatedBy

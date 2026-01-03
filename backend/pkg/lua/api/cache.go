@@ -54,7 +54,7 @@ func RegisterCache(L *lua.LState, rdb *redis.Client, logger *log.Helper) {
 			value := L.Get(2)
 			ttl := L.OptInt(3, 0) // Default: no expiration
 
-			// Convert Lua value to Go value
+			// ConvertCode Lua value to Go value
 			goVal := convert.ToGoValue(value)
 
 			// Serialize to JSON if it's a table/object
@@ -225,7 +225,7 @@ func RegisterCache(L *lua.LState, rdb *redis.Client, logger *log.Helper) {
 				return 2
 			}
 
-			// Convert to Lua table (array)
+			// ConvertCode to Lua table (array)
 			table := L.NewTable()
 			for i, key := range keys {
 				table.RawSetInt(i+1, lua.LString(key))
@@ -286,7 +286,7 @@ func RegisterCache(L *lua.LState, rdb *redis.Client, logger *log.Helper) {
 				return 2
 			}
 
-			// Convert to Lua table (map)
+			// ConvertCode to Lua table (map)
 			table := L.NewTable()
 			for field, value := range vals {
 				table.RawSetString(field, lua.LString(value))

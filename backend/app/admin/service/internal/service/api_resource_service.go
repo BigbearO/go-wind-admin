@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"sort"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/http"
@@ -238,6 +239,13 @@ func (s *ApiResourceService) syncWithWalkRoute(ctx context.Context) error {
 		return adminV1.ErrorInternalServerError("failed to walk route")
 	}
 
+	sort.SliceStable(apiResourceList, func(i, j int) bool {
+		if apiResourceList[i].GetPath() == apiResourceList[j].GetPath() {
+			return apiResourceList[i].GetMethod() < apiResourceList[j].GetMethod()
+		}
+		return apiResourceList[i].GetPath() < apiResourceList[j].GetPath()
+	})
+
 	for i, res := range apiResourceList {
 		res.Id = trans.Ptr(uint32(i + 1))
 		_ = s.repo.Update(ctx, &adminV1.UpdateApiResourceRequest{
@@ -266,6 +274,7 @@ func (s *ApiResourceService) GetWalkRouteData(_ context.Context, _ *emptypb.Empt
 			Id:     trans.Ptr(count),
 			Path:   trans.Ptr(info.Path),
 			Method: trans.Ptr(info.Method),
+			Status: trans.Ptr(adminV1.ApiResource_ON),
 		})
 		return nil
 	}); err != nil {

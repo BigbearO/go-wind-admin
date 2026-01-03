@@ -111,6 +111,7 @@ var (
 		{Name: "created_by", Type: field.TypeUint32, Nullable: true, Comment: "创建者ID"},
 		{Name: "updated_by", Type: field.TypeUint32, Nullable: true, Comment: "更新者ID"},
 		{Name: "deleted_by", Type: field.TypeUint32, Nullable: true, Comment: "删除者ID"},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Comment: "状态", Enums: []string{"OFF", "ON"}, Default: "ON"},
 		{Name: "description", Type: field.TypeString, Nullable: true, Comment: "描述"},
 		{Name: "module", Type: field.TypeString, Nullable: true, Comment: "所属业务模块"},
 		{Name: "module_description", Type: field.TypeString, Nullable: true, Comment: "业务模块描述"},
@@ -125,6 +126,13 @@ var (
 		Comment:    "API资源表",
 		Columns:    SysAPIResourcesColumns,
 		PrimaryKey: []*schema.Column{SysAPIResourcesColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "apiresource_status",
+				Unique:  false,
+				Columns: []*schema.Column{SysAPIResourcesColumns[7]},
+			},
+		},
 	}
 	// SysDictEntriesColumns holds the columns for the "sys_dict_entries" table.
 	SysDictEntriesColumns = []*schema.Column{

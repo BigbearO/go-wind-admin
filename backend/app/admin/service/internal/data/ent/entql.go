@@ -152,6 +152,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			apiresource.FieldCreatedBy:         {Type: field.TypeUint32, Column: apiresource.FieldCreatedBy},
 			apiresource.FieldUpdatedBy:         {Type: field.TypeUint32, Column: apiresource.FieldUpdatedBy},
 			apiresource.FieldDeletedBy:         {Type: field.TypeUint32, Column: apiresource.FieldDeletedBy},
+			apiresource.FieldStatus:            {Type: field.TypeEnum, Column: apiresource.FieldStatus},
 			apiresource.FieldDescription:       {Type: field.TypeString, Column: apiresource.FieldDescription},
 			apiresource.FieldModule:            {Type: field.TypeString, Column: apiresource.FieldModule},
 			apiresource.FieldModuleDescription: {Type: field.TypeString, Column: apiresource.FieldModuleDescription},
@@ -1502,6 +1503,11 @@ func (f *ApiResourceFilter) WhereUpdatedBy(p entql.Uint32P) {
 // WhereDeletedBy applies the entql uint32 predicate on the deleted_by field.
 func (f *ApiResourceFilter) WhereDeletedBy(p entql.Uint32P) {
 	f.Where(p.Field(apiresource.FieldDeletedBy))
+}
+
+// WhereStatus applies the entql string predicate on the status field.
+func (f *ApiResourceFilter) WhereStatus(p entql.StringP) {
+	f.Where(p.Field(apiresource.FieldStatus))
 }
 
 // WhereDescription applies the entql string predicate on the description field.

@@ -76,5 +76,6 @@ func (ApiResource) Mixin() []ent.Mixin {
 		mixin.AutoIncrementId{},
 		mixin.TimeAt{},
 		mixin.OperatorID{},
+		mixin.SwitchStatus{},
 	}
 }

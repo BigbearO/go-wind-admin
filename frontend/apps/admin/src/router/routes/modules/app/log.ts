@@ -5,10 +5,10 @@ import { $t } from '#/locales';
 
 const log: RouteRecordRaw[] = [
   {
-    path: '/log',
+    path: '/logs',
     name: 'LogAuditManagement',
     component: BasicLayout,
-    redirect: '/log/login',
+    redirect: '/logs/login',
     meta: {
       order: 2004,
       icon: 'lucide:activity',

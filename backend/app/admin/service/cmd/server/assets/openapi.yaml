@@ -2124,6 +2124,34 @@ paths:
                 "200":
                     description: OK
                     content: {}
+    /admin/v1/permissions/sync:apis:
+        post:
+            tags:
+                - PermissionService
+            description: 同步API资源
+            operationId: PermissionService_SyncApiResources
+            requestBody:
+                content:
+                    application/json: {}
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content: {}
+    /admin/v1/permissions/sync:menus:
+        post:
+            tags:
+                - PermissionService
+            description: 同步菜单资源
+            operationId: PermissionService_SyncMenus
+            requestBody:
+                content:
+                    application/json: {}
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content: {}
     /admin/v1/permissions/{id}:
         get:
             tags:
@@ -2137,6 +2165,10 @@ paths:
                   schema:
                     type: integer
                     format: uint32
+                - name: code
+                  in: query
+                  schema:
+                    type: string
                 - name: viewMask
                   in: query
                   schema:
@@ -3563,6 +3595,13 @@ components:
                     type: string
                     description: 作用域
                     format: enum
+                status:
+                    enum:
+                        - OFF
+                        - ON
+                    type: string
+                    description: 状态
+                    format: enum
                 createdBy:
                     type: integer
                     description: 创建者ID
@@ -4794,6 +4833,14 @@ components:
                 tenantId:
                     type: integer
                     description: 租户ID
+                    format: uint32
+                apiResourceId:
+                    type: integer
+                    description: 关联的API资源ID
+                    format: uint32
+                menuId:
+                    type: integer
+                    description: 关联的菜单ID
                     format: uint32
                 parentId:
                     type: integer

@@ -25,7 +25,7 @@ func (h *LuaEventHandler) Handle(ctx context.Context, event *eventbus.Event) err
 	h.mu.Lock()
 	defer h.mu.Unlock()
 
-	// Convert event to Lua table
+	// ConvertCode event to Lua table
 	eventTable := h.L.NewTable()
 	eventTable.RawSetString("id", lua.LString(event.ID))
 	eventTable.RawSetString("type", lua.LString(event.Type))
@@ -33,13 +33,13 @@ func (h *LuaEventHandler) Handle(ctx context.Context, event *eventbus.Event) err
 	eventTable.RawSetString("priority", lua.LNumber(event.Priority))
 	eventTable.RawSetString("timestamp", lua.LNumber(event.Timestamp.Unix()))
 
-	// Convert event data
+	// ConvertCode event data
 	if event.Data != nil {
 		dataLua := convert.ToLuaValue(h.L, event.Data)
 		eventTable.RawSetString("data", dataLua)
 	}
 
-	// Convert metadata
+	// ConvertCode metadata
 	if event.Metadata != nil {
 		metaTable := h.L.NewTable()
 		for k, v := range event.Metadata {

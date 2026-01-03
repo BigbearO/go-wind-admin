@@ -167,28 +167,55 @@ func (r *ApiResourceRepo) Create(ctx context.Context, req *adminV1.CreateApiReso
 		return adminV1.ErrorBadRequest("invalid parameter")
 	}
 
-	builder := r.entClient.Client().ApiResource.Create().
-		SetNillableDescription(req.Data.Description).
-		SetNillableModule(req.Data.Module).
-		SetNillableModuleDescription(req.Data.ModuleDescription).
-		SetNillableOperation(req.Data.Operation).
-		SetNillablePath(req.Data.Path).
-		SetNillableMethod(req.Data.Method).
-		SetNillableScope(r.scopeConverter.ToEntity(req.Data.Scope)).
-		SetNillableCreatedBy(req.Data.CreatedBy).
-		SetNillableCreatedAt(timeutil.TimestamppbToTime(req.Data.CreatedAt))
-
-	if req.Data.CreatedAt == nil {
-		builder.SetCreatedAt(time.Now())
-	}
-
-	if req.Data.Id != nil {
-		builder.SetID(req.GetData().GetId())
-	}
+	builder := r.newApiResourceCreate(req.Data)
 
 	if err := builder.Exec(ctx); err != nil {
 		r.log.Errorf("insert one data failed: %s", err.Error())
 		return adminV1.ErrorInternalServerError("insert data failed")
+	}
+
+	return nil
+}
+
+func (r *ApiResourceRepo) newApiResourceCreate(apiResource *adminV1.ApiResource) *ent.ApiResourceCreate {
+	builder := r.entClient.Client().ApiResource.Create().
+		SetNillableDescription(apiResource.Description).
+		SetNillableModule(apiResource.Module).
+		SetNillableModuleDescription(apiResource.ModuleDescription).
+		SetNillableOperation(apiResource.Operation).
+		SetNillablePath(apiResource.Path).
+		SetNillableMethod(apiResource.Method).
+		SetNillableScope(r.scopeConverter.ToEntity(apiResource.Scope)).
+		SetNillableCreatedBy(apiResource.CreatedBy).
+		SetNillableCreatedAt(timeutil.TimestamppbToTime(apiResource.CreatedAt))
+
+	if apiResource.CreatedAt == nil {
+		builder.SetCreatedAt(time.Now())
+	}
+
+	if apiResource.Id != nil {
+		builder.SetID(apiResource.GetId())
+	}
+
+	return builder
+}
+
+func (r *ApiResourceRepo) BatchCreate(ctx context.Context, apiResources []*adminV1.ApiResource) error {
+	if len(apiResources) == 0 {
+		return nil
+	}
+
+	bulk := make([]*ent.ApiResourceCreate, 0, len(apiResources))
+	for _, dto := range apiResources {
+		builder := r.newApiResourceCreate(dto)
+		bulk = append(bulk, builder)
+	}
+
+	bulkBuilder := r.entClient.Client().ApiResource.CreateBulk(bulk...)
+
+	if err := bulkBuilder.Exec(ctx); err != nil {
+		r.log.Errorf("batch insert data failed: %s", err.Error())
+		return adminV1.ErrorInternalServerError("batch insert data failed")
 	}
 
 	return nil

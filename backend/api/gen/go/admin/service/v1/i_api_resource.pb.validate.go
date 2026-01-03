@@ -89,6 +89,10 @@ func (m *ApiResource) validate(all bool) error {
 		// no validation rules for Scope
 	}
 
+	if m.Status != nil {
+		// no validation rules for Status
+	}
+
 	if m.CreatedBy != nil {
 		// no validation rules for CreatedBy
 	}

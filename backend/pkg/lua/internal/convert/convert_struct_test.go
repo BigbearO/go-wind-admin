@@ -34,7 +34,7 @@ func TestToLuaValue_Struct(t *testing.T) {
 		},
 	}
 
-	// Convert to Lua
+	// ConvertCode to Lua
 	luaValue := ToLuaValue(L, person)
 
 	// Should be a table
@@ -97,7 +97,7 @@ func TestToLuaValue_StructPointer(t *testing.T) {
 		Port: 8080,
 	}
 
-	// Convert pointer to Lua
+	// ConvertCode pointer to Lua
 	luaValue := ToLuaValue(L, config)
 
 	// Should be a table (pointer dereferenced)

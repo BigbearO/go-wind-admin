@@ -69,6 +69,8 @@ func init() {
 	apiresourceMixin := schema.ApiResource{}.Mixin()
 	apiresourceMixinFields0 := apiresourceMixin[0].Fields()
 	_ = apiresourceMixinFields0
+	apiresourceMixinFields3 := apiresourceMixin[3].Fields()
+	_ = apiresourceMixinFields3
 	apiresourceFields := schema.ApiResource{}.Fields()
 	_ = apiresourceFields
 	// apiresourceDescID is the schema descriptor for id field.

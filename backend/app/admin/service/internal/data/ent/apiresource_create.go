@@ -106,6 +106,20 @@ func (_c *ApiResourceCreate) SetNillableDeletedBy(v *uint32) *ApiResourceCreate 
 	return _c
 }
 
+// SetStatus sets the "status" field.
+func (_c *ApiResourceCreate) SetStatus(v apiresource.Status) *ApiResourceCreate {
+	_c.mutation.SetStatus(v)
+	return _c
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_c *ApiResourceCreate) SetNillableStatus(v *apiresource.Status) *ApiResourceCreate {
+	if v != nil {
+		_c.SetStatus(*v)
+	}
+	return _c
+}
+
 // SetDescription sets the "description" field.
 func (_c *ApiResourceCreate) SetDescription(v string) *ApiResourceCreate {
 	_c.mutation.SetDescription(v)
@@ -245,6 +259,10 @@ func (_c *ApiResourceCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (_c *ApiResourceCreate) defaults() {
+	if _, ok := _c.mutation.Status(); !ok {
+		v := apiresource.DefaultStatus
+		_c.mutation.SetStatus(v)
+	}
 	if _, ok := _c.mutation.Scope(); !ok {
 		v := apiresource.DefaultScope
 		_c.mutation.SetScope(v)
@@ -253,6 +271,11 @@ func (_c *ApiResourceCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *ApiResourceCreate) check() error {
+	if v, ok := _c.mutation.Status(); ok {
+		if err := apiresource.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "ApiResource.status": %w`, err)}
+		}
+	}
 	if v, ok := _c.mutation.Scope(); ok {
 		if err := apiresource.ScopeValidator(v); err != nil {
 			return &ValidationError{Name: "scope", err: fmt.Errorf(`ent: validator failed for field "ApiResource.scope": %w`, err)}
@@ -319,6 +342,10 @@ func (_c *ApiResourceCreate) createSpec() (*ApiResource, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(apiresource.FieldDeletedBy, field.TypeUint32, value)
 		_node.DeletedBy = &value
+	}
+	if value, ok := _c.mutation.Status(); ok {
+		_spec.SetField(apiresource.FieldStatus, field.TypeEnum, value)
+		_node.Status = &value
 	}
 	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(apiresource.FieldDescription, field.TypeString, value)
@@ -505,6 +532,24 @@ func (u *ApiResourceUpsert) AddDeletedBy(v uint32) *ApiResourceUpsert {
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (u *ApiResourceUpsert) ClearDeletedBy() *ApiResourceUpsert {
 	u.SetNull(apiresource.FieldDeletedBy)
+	return u
+}
+
+// SetStatus sets the "status" field.
+func (u *ApiResourceUpsert) SetStatus(v apiresource.Status) *ApiResourceUpsert {
+	u.Set(apiresource.FieldStatus, v)
+	return u
+}
+
+// UpdateStatus sets the "status" field to the value that was provided on create.
+func (u *ApiResourceUpsert) UpdateStatus() *ApiResourceUpsert {
+	u.SetExcluded(apiresource.FieldStatus)
+	return u
+}
+
+// ClearStatus clears the value of the "status" field.
+func (u *ApiResourceUpsert) ClearStatus() *ApiResourceUpsert {
+	u.SetNull(apiresource.FieldStatus)
 	return u
 }
 
@@ -808,6 +853,27 @@ func (u *ApiResourceUpsertOne) UpdateDeletedBy() *ApiResourceUpsertOne {
 func (u *ApiResourceUpsertOne) ClearDeletedBy() *ApiResourceUpsertOne {
 	return u.Update(func(s *ApiResourceUpsert) {
 		s.ClearDeletedBy()
+	})
+}
+
+// SetStatus sets the "status" field.
+func (u *ApiResourceUpsertOne) SetStatus(v apiresource.Status) *ApiResourceUpsertOne {
+	return u.Update(func(s *ApiResourceUpsert) {
+		s.SetStatus(v)
+	})
+}
+
+// UpdateStatus sets the "status" field to the value that was provided on create.
+func (u *ApiResourceUpsertOne) UpdateStatus() *ApiResourceUpsertOne {
+	return u.Update(func(s *ApiResourceUpsert) {
+		s.UpdateStatus()
+	})
+}
+
+// ClearStatus clears the value of the "status" field.
+func (u *ApiResourceUpsertOne) ClearStatus() *ApiResourceUpsertOne {
+	return u.Update(func(s *ApiResourceUpsert) {
+		s.ClearStatus()
 	})
 }
 
@@ -1298,6 +1364,27 @@ func (u *ApiResourceUpsertBulk) UpdateDeletedBy() *ApiResourceUpsertBulk {
 func (u *ApiResourceUpsertBulk) ClearDeletedBy() *ApiResourceUpsertBulk {
 	return u.Update(func(s *ApiResourceUpsert) {
 		s.ClearDeletedBy()
+	})
+}
+
+// SetStatus sets the "status" field.
+func (u *ApiResourceUpsertBulk) SetStatus(v apiresource.Status) *ApiResourceUpsertBulk {
+	return u.Update(func(s *ApiResourceUpsert) {
+		s.SetStatus(v)
+	})
+}
+
+// UpdateStatus sets the "status" field to the value that was provided on create.
+func (u *ApiResourceUpsertBulk) UpdateStatus() *ApiResourceUpsertBulk {
+	return u.Update(func(s *ApiResourceUpsert) {
+		s.UpdateStatus()
+	})
+}
+
+// ClearStatus clears the value of the "status" field.
+func (u *ApiResourceUpsertBulk) ClearStatus() *ApiResourceUpsertBulk {
+	return u.Update(func(s *ApiResourceUpsert) {
+		s.ClearStatus()
 	})
 }
 

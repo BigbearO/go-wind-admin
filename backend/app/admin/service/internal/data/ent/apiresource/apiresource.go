@@ -25,6 +25,8 @@ const (
 	FieldUpdatedBy = "updated_by"
 	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
 	FieldDeletedBy = "deleted_by"
+	// FieldStatus holds the string denoting the status field in the database.
+	FieldStatus = "status"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
 	// FieldModule holds the string denoting the module field in the database.
@@ -52,6 +54,7 @@ var Columns = []string{
 	FieldCreatedBy,
 	FieldUpdatedBy,
 	FieldDeletedBy,
+	FieldStatus,
 	FieldDescription,
 	FieldModule,
 	FieldModuleDescription,
@@ -75,6 +78,32 @@ var (
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.
 	IDValidator func(uint32) error
 )
+
+// Status defines the type for the "status" enum field.
+type Status string
+
+// StatusOn is the default value of the Status enum.
+const DefaultStatus = StatusOn
+
+// Status values.
+const (
+	StatusOff Status = "OFF"
+	StatusOn  Status = "ON"
+)
+
+func (s Status) String() string {
+	return string(s)
+}
+
+// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
+func StatusValidator(s Status) error {
+	switch s {
+	case StatusOff, StatusOn:
+		return nil
+	default:
+		return fmt.Errorf("apiresource: invalid enum value for status field: %q", s)
+	}
+}
 
 // Scope defines the type for the "scope" enum field.
 type Scope string
@@ -138,6 +167,11 @@ func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 // ByDeletedBy orders the results by the deleted_by field.
 func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
+}
+
+// ByStatus orders the results by the status field.
+func ByStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
 // ByDescription orders the results by the description field.

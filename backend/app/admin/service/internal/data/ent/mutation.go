@@ -5126,6 +5126,7 @@ type ApiResourceMutation struct {
 	addupdated_by      *int32
 	deleted_by         *uint32
 	adddeleted_by      *int32
+	status             *apiresource.Status
 	description        *string
 	module             *string
 	module_description *string
@@ -5600,6 +5601,55 @@ func (m *ApiResourceMutation) ResetDeletedBy() {
 	delete(m.clearedFields, apiresource.FieldDeletedBy)
 }
 
+// SetStatus sets the "status" field.
+func (m *ApiResourceMutation) SetStatus(a apiresource.Status) {
+	m.status = &a
+}
+
+// Status returns the value of the "status" field in the mutation.
+func (m *ApiResourceMutation) Status() (r apiresource.Status, exists bool) {
+	v := m.status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatus returns the old "status" field's value of the ApiResource entity.
+// If the ApiResource object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApiResourceMutation) OldStatus(ctx context.Context) (v *apiresource.Status, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatus: %w", err)
+	}
+	return oldValue.Status, nil
+}
+
+// ClearStatus clears the value of the "status" field.
+func (m *ApiResourceMutation) ClearStatus() {
+	m.status = nil
+	m.clearedFields[apiresource.FieldStatus] = struct{}{}
+}
+
+// StatusCleared returns if the "status" field was cleared in this mutation.
+func (m *ApiResourceMutation) StatusCleared() bool {
+	_, ok := m.clearedFields[apiresource.FieldStatus]
+	return ok
+}
+
+// ResetStatus resets all changes to the "status" field.
+func (m *ApiResourceMutation) ResetStatus() {
+	m.status = nil
+	delete(m.clearedFields, apiresource.FieldStatus)
+}
+
 // SetDescription sets the "description" field.
 func (m *ApiResourceMutation) SetDescription(s string) {
 	m.description = &s
@@ -5977,7 +6027,7 @@ func (m *ApiResourceMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ApiResourceMutation) Fields() []string {
-	fields := make([]string, 0, 13)
+	fields := make([]string, 0, 14)
 	if m.created_at != nil {
 		fields = append(fields, apiresource.FieldCreatedAt)
 	}
@@ -5995,6 +6045,9 @@ func (m *ApiResourceMutation) Fields() []string {
 	}
 	if m.deleted_by != nil {
 		fields = append(fields, apiresource.FieldDeletedBy)
+	}
+	if m.status != nil {
+		fields = append(fields, apiresource.FieldStatus)
 	}
 	if m.description != nil {
 		fields = append(fields, apiresource.FieldDescription)
@@ -6037,6 +6090,8 @@ func (m *ApiResourceMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedBy()
 	case apiresource.FieldDeletedBy:
 		return m.DeletedBy()
+	case apiresource.FieldStatus:
+		return m.Status()
 	case apiresource.FieldDescription:
 		return m.Description()
 	case apiresource.FieldModule:
@@ -6072,6 +6127,8 @@ func (m *ApiResourceMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldUpdatedBy(ctx)
 	case apiresource.FieldDeletedBy:
 		return m.OldDeletedBy(ctx)
+	case apiresource.FieldStatus:
+		return m.OldStatus(ctx)
 	case apiresource.FieldDescription:
 		return m.OldDescription(ctx)
 	case apiresource.FieldModule:
@@ -6136,6 +6193,13 @@ func (m *ApiResourceMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDeletedBy(v)
+		return nil
+	case apiresource.FieldStatus:
+		v, ok := value.(apiresource.Status)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatus(v)
 		return nil
 	case apiresource.FieldDescription:
 		v, ok := value.(string)
@@ -6273,6 +6337,9 @@ func (m *ApiResourceMutation) ClearedFields() []string {
 	if m.FieldCleared(apiresource.FieldDeletedBy) {
 		fields = append(fields, apiresource.FieldDeletedBy)
 	}
+	if m.FieldCleared(apiresource.FieldStatus) {
+		fields = append(fields, apiresource.FieldStatus)
+	}
 	if m.FieldCleared(apiresource.FieldDescription) {
 		fields = append(fields, apiresource.FieldDescription)
 	}
@@ -6326,6 +6393,9 @@ func (m *ApiResourceMutation) ClearField(name string) error {
 	case apiresource.FieldDeletedBy:
 		m.ClearDeletedBy()
 		return nil
+	case apiresource.FieldStatus:
+		m.ClearStatus()
+		return nil
 	case apiresource.FieldDescription:
 		m.ClearDescription()
 		return nil
@@ -6372,6 +6442,9 @@ func (m *ApiResourceMutation) ResetField(name string) error {
 		return nil
 	case apiresource.FieldDeletedBy:
 		m.ResetDeletedBy()
+		return nil
+	case apiresource.FieldStatus:
+		m.ResetStatus()
 		return nil
 	case apiresource.FieldDescription:
 		m.ResetDescription()

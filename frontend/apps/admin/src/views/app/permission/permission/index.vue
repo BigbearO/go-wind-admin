@@ -107,7 +107,6 @@ const gridOptions: VxeGridProps<Permission> = {
     {
       title: $t('page.permission.name'),
       field: 'name',
-      width: 250,
       fixed: 'left',
       align: 'left',
       treeNode: true,
@@ -120,7 +119,7 @@ const gridOptions: VxeGridProps<Permission> = {
       slots: { default: 'type' },
       width: 95,
     },
-    { title: $t('page.permission.path'), field: 'path' },
+    { title: $t('page.permission.path'), field: 'path',width: 110 },
     {
       title: $t('ui.table.status'),
       field: 'status',
@@ -205,6 +204,42 @@ const expandAll = () => {
 const collapseAll = () => {
   gridApi.grid?.setAllTreeExpand(false);
 };
+
+async function handleSyncApiResources() {
+  console.log('同步');
+
+  try {
+    await permissionStore.syncApiResources();
+
+    notification.success({
+      message: $t('ui.notification.sync_success'),
+    });
+
+    await gridApi.reload();
+  } catch {
+    notification.error({
+      message: $t('ui.notification.sync_failed'),
+    });
+  }
+}
+
+async function handleSyncMenus() {
+  console.log('同步');
+
+  try {
+    await permissionStore.syncMenus();
+
+    notification.success({
+      message: $t('ui.notification.sync_success'),
+    });
+
+    await gridApi.reload();
+  } catch {
+    notification.error({
+      message: $t('ui.notification.sync_failed'),
+    });
+  }
+}
 </script>
 
 <template>
@@ -214,6 +249,34 @@ const collapseAll = () => {
         <a-button class="mr-2" type="primary" @click="handleCreate">
           {{ $t('page.permission.button.create') }}
         </a-button>
+        <a-popconfirm
+          :cancel-text="$t('ui.button.cancel')"
+          :ok-text="$t('ui.button.ok')"
+          :title="
+            $t('ui.text.do_you_want_sync_api', {
+              moduleName: $t('page.permission.moduleName'),
+            })
+          "
+          @confirm="() => handleSyncApiResources()"
+        >
+          <a-button type="primary" danger class="mr-2">
+            {{ $t('page.permission.button.syncApi') }}
+          </a-button>
+        </a-popconfirm>
+        <a-popconfirm
+          :cancel-text="$t('ui.button.cancel')"
+          :ok-text="$t('ui.button.ok')"
+          :title="
+            $t('ui.text.do_you_want_sync_api', {
+              moduleName: $t('page.permission.moduleName'),
+            })
+          "
+          @confirm="() => handleSyncMenus()"
+        >
+          <a-button type="primary" danger class="mr-2">
+            {{ $t('page.permission.button.syncMenu') }}
+          </a-button>
+        </a-popconfirm>
         <a-button class="mr-2" @click="expandAll">
           {{ $t('ui.tree.expand_all') }}
         </a-button>

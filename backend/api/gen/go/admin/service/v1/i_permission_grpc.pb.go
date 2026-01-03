@@ -21,11 +21,13 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	PermissionService_List_FullMethodName   = "/admin.service.v1.PermissionService/List"
-	PermissionService_Get_FullMethodName    = "/admin.service.v1.PermissionService/Get"
-	PermissionService_Create_FullMethodName = "/admin.service.v1.PermissionService/Create"
-	PermissionService_Update_FullMethodName = "/admin.service.v1.PermissionService/Update"
-	PermissionService_Delete_FullMethodName = "/admin.service.v1.PermissionService/Delete"
+	PermissionService_List_FullMethodName             = "/admin.service.v1.PermissionService/List"
+	PermissionService_Get_FullMethodName              = "/admin.service.v1.PermissionService/Get"
+	PermissionService_Create_FullMethodName           = "/admin.service.v1.PermissionService/Create"
+	PermissionService_Update_FullMethodName           = "/admin.service.v1.PermissionService/Update"
+	PermissionService_Delete_FullMethodName           = "/admin.service.v1.PermissionService/Delete"
+	PermissionService_SyncApiResources_FullMethodName = "/admin.service.v1.PermissionService/SyncApiResources"
+	PermissionService_SyncMenus_FullMethodName        = "/admin.service.v1.PermissionService/SyncMenus"
 )
 
 // PermissionServiceClient is the client API for PermissionService service.
@@ -44,6 +46,10 @@ type PermissionServiceClient interface {
 	Update(ctx context.Context, in *UpdatePermissionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// 删除权限
 	Delete(ctx context.Context, in *DeletePermissionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// 同步API资源
+	SyncApiResources(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// 同步菜单资源
+	SyncMenus(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type permissionServiceClient struct {
@@ -104,6 +110,26 @@ func (c *permissionServiceClient) Delete(ctx context.Context, in *DeletePermissi
 	return out, nil
 }
 
+func (c *permissionServiceClient) SyncApiResources(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, PermissionService_SyncApiResources_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *permissionServiceClient) SyncMenus(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, PermissionService_SyncMenus_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PermissionServiceServer is the server API for PermissionService service.
 // All implementations must embed UnimplementedPermissionServiceServer
 // for forward compatibility.
@@ -120,6 +146,10 @@ type PermissionServiceServer interface {
 	Update(context.Context, *UpdatePermissionRequest) (*emptypb.Empty, error)
 	// 删除权限
 	Delete(context.Context, *DeletePermissionRequest) (*emptypb.Empty, error)
+	// 同步API资源
+	SyncApiResources(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
+	// 同步菜单资源
+	SyncMenus(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedPermissionServiceServer()
 }
 
@@ -144,6 +174,12 @@ func (UnimplementedPermissionServiceServer) Update(context.Context, *UpdatePermi
 }
 func (UnimplementedPermissionServiceServer) Delete(context.Context, *DeletePermissionRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
+}
+func (UnimplementedPermissionServiceServer) SyncApiResources(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SyncApiResources not implemented")
+}
+func (UnimplementedPermissionServiceServer) SyncMenus(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SyncMenus not implemented")
 }
 func (UnimplementedPermissionServiceServer) mustEmbedUnimplementedPermissionServiceServer() {}
 func (UnimplementedPermissionServiceServer) testEmbeddedByValue()                           {}
@@ -256,6 +292,42 @@ func _PermissionService_Delete_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PermissionService_SyncApiResources_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PermissionServiceServer).SyncApiResources(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PermissionService_SyncApiResources_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PermissionServiceServer).SyncApiResources(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PermissionService_SyncMenus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PermissionServiceServer).SyncMenus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PermissionService_SyncMenus_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PermissionServiceServer).SyncMenus(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PermissionService_ServiceDesc is the grpc.ServiceDesc for PermissionService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -282,6 +354,14 @@ var PermissionService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Delete",
 			Handler:    _PermissionService_Delete_Handler,
+		},
+		{
+			MethodName: "SyncApiResources",
+			Handler:    _PermissionService_SyncApiResources_Handler,
+		},
+		{
+			MethodName: "SyncMenus",
+			Handler:    _PermissionService_SyncMenus_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

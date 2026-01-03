@@ -91,7 +91,7 @@ func initApp(context *bootstrap.Context) (*kratos.App, func(), error) {
 	permissionApiResourceRepo := data.NewPermissionApiResourceRepo(context, entClient)
 	permissionMenuRepo := data.NewPermissionMenuRepo(context, entClient)
 	permissionRepo := data.NewPermissionRepo(context, entClient, permissionApiResourceRepo, permissionMenuRepo)
-	permissionService := service.NewPermissionService(context, permissionRepo, membershipRepo, authorizer)
+	permissionService := service.NewPermissionService(context, permissionRepo, membershipRepo, menuRepo, apiResourceRepo, authorizer)
 	httpServer, err := server.NewRestServer(context, authenticator, authorizer, adminOperationLogRepo, adminLoginLogRepo, authenticationService, userService, menuService, routerService, orgUnitService, roleService, positionService, dictService, adminLoginLogService, adminOperationLogService, ossService, uEditorService, fileService, tenantService, taskService, internalMessageService, internalMessageCategoryService, internalMessageRecipientService, adminLoginRestrictionService, userProfileService, apiResourceService, permissionService)
 	if err != nil {
 		cleanup2()

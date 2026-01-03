@@ -51,6 +51,58 @@ service PermissionService {
       delete: "/admin/v1/permissions/{id}"
     };
   }
+
+  // 同步API资源
+  rpc SyncApiResources (google.protobuf.Empty) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/admin/v1/permissions/sync:apis"
+      body: "*"
+    };
+  }
+
+  // 同步菜单资源
+  rpc SyncMenus (google.protobuf.Empty) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/admin/v1/permissions/sync:menus"
+      body: "*"
+    };
+  }
+}
+
+// 权限 - API 关联关系
+message PermissionApiResource {
+  optional uint32 id = 1 [
+    json_name = "id",
+    (gnostic.openapi.v3.property) = { description: "ID" }
+  ]; // ID
+
+  optional uint32 permission_id = 2 [
+    json_name = "permissionId",
+    (gnostic.openapi.v3.property) = { description: "权限ID" }
+  ]; // 权限ID
+
+  optional uint32 api_id = 3 [
+    json_name = "apiId",
+    (gnostic.openapi.v3.property) = { description: "API ID" }
+  ]; // API ID
+}
+
+// 权限 - 菜单 关联关系
+message PermissionMenu {
+  optional uint32 id = 1 [
+    json_name = "id",
+    (gnostic.openapi.v3.property) = { description: "ID" }
+  ]; // ID
+
+  optional uint32 permission_id = 2 [
+    json_name = "permissionId",
+    (gnostic.openapi.v3.property) = { description: "权限ID" }
+  ]; // 权限ID
+
+  optional uint32 menu_id = 3 [
+    json_name = "menuId",
+    (gnostic.openapi.v3.property) = { description: "菜单ID" }
+  ]; // 菜单ID
 }
 
 // 权限
@@ -114,6 +166,11 @@ message Permission {
 
   optional uint32 tenant_id = 11 [json_name = "tenantId", (gnostic.openapi.v3.property) = {description: "租户ID"}];  // 租户ID
 
+  oneof bind {
+    uint32 api_resource_id = 20 [json_name = "apiResourceId", (gnostic.openapi.v3.property) = {description: "关联的API资源ID"}]; // 关联的API资源ID
+    uint32 menu_id = 21 [json_name = "menuId", (gnostic.openapi.v3.property) = {description: "关联的菜单ID"}]; // 关联的菜单ID
+  }
+
   optional uint32 parent_id = 50 [json_name = "parentId", (gnostic.openapi.v3.property) = {description: "父节点ID"}];  // 父节点ID
   repeated Permission children = 51 [json_name = "children", (gnostic.openapi.v3.property) = {description: "子节点树"}];  // 子节点树
 
@@ -139,6 +196,10 @@ message GetPermissionRequest {
       (gnostic.openapi.v3.property) = {description: "ID", read_only: true},
       json_name = "id"
     ]; // ID
+    string code = 2 [
+      (gnostic.openapi.v3.property) = {description: "权限编码", read_only: true},
+      json_name = "code"
+    ]; // 权限编码
   }
 
   optional google.protobuf.FieldMask view_mask = 100 [

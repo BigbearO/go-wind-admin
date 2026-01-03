@@ -30,6 +30,8 @@ type ApiResource struct {
 	UpdatedBy *uint32 `json:"updated_by,omitempty"`
 	// 删除者ID
 	DeletedBy *uint32 `json:"deleted_by,omitempty"`
+	// 状态
+	Status *apiresource.Status `json:"status,omitempty"`
 	// 描述
 	Description *string `json:"description,omitempty"`
 	// 所属业务模块
@@ -54,7 +56,7 @@ func (*ApiResource) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case apiresource.FieldID, apiresource.FieldCreatedBy, apiresource.FieldUpdatedBy, apiresource.FieldDeletedBy:
 			values[i] = new(sql.NullInt64)
-		case apiresource.FieldDescription, apiresource.FieldModule, apiresource.FieldModuleDescription, apiresource.FieldOperation, apiresource.FieldPath, apiresource.FieldMethod, apiresource.FieldScope:
+		case apiresource.FieldStatus, apiresource.FieldDescription, apiresource.FieldModule, apiresource.FieldModuleDescription, apiresource.FieldOperation, apiresource.FieldPath, apiresource.FieldMethod, apiresource.FieldScope:
 			values[i] = new(sql.NullString)
 		case apiresource.FieldCreatedAt, apiresource.FieldUpdatedAt, apiresource.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -120,6 +122,13 @@ func (_m *ApiResource) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.DeletedBy = new(uint32)
 				*_m.DeletedBy = uint32(value.Int64)
+			}
+		case apiresource.FieldStatus:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field status", values[i])
+			} else if value.Valid {
+				_m.Status = new(apiresource.Status)
+				*_m.Status = apiresource.Status(value.String)
 			}
 		case apiresource.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -233,6 +242,11 @@ func (_m *ApiResource) String() string {
 	builder.WriteString(", ")
 	if v := _m.DeletedBy; v != nil {
 		builder.WriteString("deleted_by=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	if v := _m.Status; v != nil {
+		builder.WriteString("status=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")

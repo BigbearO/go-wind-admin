@@ -8,7 +8,7 @@ const opm: RouteRecordRaw[] = [
     path: '/opm',
     name: 'OrganizationalPersonnelManagement',
     component: BasicLayout,
-    redirect: '/opm/organizations',
+    redirect: '/opm/users',
     meta: {
       order: 2001,
       icon: 'lucide:users',

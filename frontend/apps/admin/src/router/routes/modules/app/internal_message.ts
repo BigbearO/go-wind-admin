@@ -5,9 +5,9 @@ import { $t } from '#/locales';
 
 const internal_message: RouteRecordRaw[] = [
   {
-    path: '/internal_message',
+    path: '/internal-message',
     name: 'InternalMessageManagement',
-    redirect: '/internal_message/notifications',
+    redirect: '/internal-message/messages',
     component: BasicLayout,
     meta: {
       order: 2003,

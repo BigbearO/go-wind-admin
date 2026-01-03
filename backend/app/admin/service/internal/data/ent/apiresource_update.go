@@ -150,6 +150,26 @@ func (_u *ApiResourceUpdate) ClearDeletedBy() *ApiResourceUpdate {
 	return _u
 }
 
+// SetStatus sets the "status" field.
+func (_u *ApiResourceUpdate) SetStatus(v apiresource.Status) *ApiResourceUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_u *ApiResourceUpdate) SetNillableStatus(v *apiresource.Status) *ApiResourceUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
+	}
+	return _u
+}
+
+// ClearStatus clears the value of the "status" field.
+func (_u *ApiResourceUpdate) ClearStatus() *ApiResourceUpdate {
+	_u.mutation.ClearStatus()
+	return _u
+}
+
 // SetDescription sets the "description" field.
 func (_u *ApiResourceUpdate) SetDescription(v string) *ApiResourceUpdate {
 	_u.mutation.SetDescription(v)
@@ -324,6 +344,11 @@ func (_u *ApiResourceUpdate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *ApiResourceUpdate) check() error {
+	if v, ok := _u.mutation.Status(); ok {
+		if err := apiresource.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "ApiResource.status": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Scope(); ok {
 		if err := apiresource.ScopeValidator(v); err != nil {
 			return &ValidationError{Name: "scope", err: fmt.Errorf(`ent: validator failed for field "ApiResource.scope": %w`, err)}
@@ -391,6 +416,12 @@ func (_u *ApiResourceUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(apiresource.FieldDeletedBy, field.TypeUint32)
+	}
+	if value, ok := _u.mutation.Status(); ok {
+		_spec.SetField(apiresource.FieldStatus, field.TypeEnum, value)
+	}
+	if _u.mutation.StatusCleared() {
+		_spec.ClearField(apiresource.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(apiresource.FieldDescription, field.TypeString, value)
@@ -574,6 +605,26 @@ func (_u *ApiResourceUpdateOne) AddDeletedBy(v int32) *ApiResourceUpdateOne {
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (_u *ApiResourceUpdateOne) ClearDeletedBy() *ApiResourceUpdateOne {
 	_u.mutation.ClearDeletedBy()
+	return _u
+}
+
+// SetStatus sets the "status" field.
+func (_u *ApiResourceUpdateOne) SetStatus(v apiresource.Status) *ApiResourceUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_u *ApiResourceUpdateOne) SetNillableStatus(v *apiresource.Status) *ApiResourceUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
+	}
+	return _u
+}
+
+// ClearStatus clears the value of the "status" field.
+func (_u *ApiResourceUpdateOne) ClearStatus() *ApiResourceUpdateOne {
+	_u.mutation.ClearStatus()
 	return _u
 }
 
@@ -764,6 +815,11 @@ func (_u *ApiResourceUpdateOne) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *ApiResourceUpdateOne) check() error {
+	if v, ok := _u.mutation.Status(); ok {
+		if err := apiresource.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "ApiResource.status": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Scope(); ok {
 		if err := apiresource.ScopeValidator(v); err != nil {
 			return &ValidationError{Name: "scope", err: fmt.Errorf(`ent: validator failed for field "ApiResource.scope": %w`, err)}
@@ -848,6 +904,12 @@ func (_u *ApiResourceUpdateOne) sqlSave(ctx context.Context) (_node *ApiResource
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(apiresource.FieldDeletedBy, field.TypeUint32)
+	}
+	if value, ok := _u.mutation.Status(); ok {
+		_spec.SetField(apiresource.FieldStatus, field.TypeEnum, value)
+	}
+	if _u.mutation.StatusCleared() {
+		_spec.ClearField(apiresource.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(apiresource.FieldDescription, field.TypeString, value)

@@ -364,7 +364,7 @@ func (e *Engine) ExecuteHook(ctx context.Context, hookName string, execCtx *Cont
 			continue
 		}
 
-		// Convert hook.Script to lua.Script
+		// ConvertCode hook.Script to lua.Script
 		script := &Script{
 			ID:          hookScript.ID,
 			Name:        hookScript.Name,
@@ -455,7 +455,7 @@ func (e *Engine) AddScript(hookName string, script interface{}) error {
 
 	switch s := script.(type) {
 	case *Script:
-		// Convert lua.Script to hook.Script
+		// ConvertCode lua.Script to hook.Script
 		hookScript = &hook.Script{
 			ID:          s.ID,
 			Name:        s.Name,

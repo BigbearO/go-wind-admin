@@ -228,7 +228,7 @@ func reflectStructToLua(L *lua.LState, v reflect.Value) *lua.LTable {
 		// Use field name as key
 		key := field.Name
 
-		// Convert field value to Lua
+		// ConvertCode field value to Lua
 		luaValue := reflectToLua(L, fieldValue.Interface())
 		table.RawSetString(key, luaValue)
 	}
@@ -245,7 +245,7 @@ func reflectMapToLua(L *lua.LState, v reflect.Value) *lua.LTable {
 		key := iter.Key()
 		val := iter.Value()
 
-		// Convert key to string (Lua table keys)
+		// ConvertCode key to string (Lua table keys)
 		var keyStr string
 		switch key.Kind() {
 		case reflect.String:
@@ -254,7 +254,7 @@ func reflectMapToLua(L *lua.LState, v reflect.Value) *lua.LTable {
 			keyStr = fmt.Sprintf("%v", key.Interface())
 		}
 
-		// Convert value to Lua
+		// ConvertCode value to Lua
 		luaValue := reflectToLua(L, val.Interface())
 		table.RawSetString(keyStr, luaValue)
 	}

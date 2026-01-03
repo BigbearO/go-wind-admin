@@ -78,6 +78,14 @@ export const usePermissionStore = defineStore('permission', () => {
     return await service.Delete({ id });
   }
 
+  async function syncApiResources() {
+    return await service.SyncApiResources({});
+  }
+
+  async function syncMenus() {
+    return await service.SyncMenus({});
+  }
+
   function $reset() {}
 
   return {
@@ -87,11 +95,14 @@ export const usePermissionStore = defineStore('permission', () => {
     createPermission,
     updatePermission,
     deletePermission,
+    syncApiResources,
+    syncMenus,
   };
 });
 
 // 权限类型-颜色映射常量
 const PERMISSION_TYPE_COLOR_MAP = {
+  CATALOG: '#4A90E2', // 目录权限
   MENU: '#165DFF', // 菜单权限：深蓝色（核心导航、层级化属性）
   BUTTON: '#00B42A', // 按钮权限：企业绿（操作级、功能点属性）
   API: '#722ED1', // 接口权限：深紫色（底层、技术级属性）

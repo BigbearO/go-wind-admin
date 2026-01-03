@@ -101,6 +101,56 @@ func (s *redactedPermissionServiceServer) Delete(ctx context.Context, in *Delete
 	return res, err
 }
 
+// SyncApiResources is the redacted wrapper for the actual PermissionServiceServer.SyncApiResources method
+// Unary RPC
+func (s *redactedPermissionServiceServer) SyncApiResources(ctx context.Context, in *emptypb.Empty) (*emptypb.Empty, error) {
+	res, err := s.srv.SyncApiResources(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
+// SyncMenus is the redacted wrapper for the actual PermissionServiceServer.SyncMenus method
+// Unary RPC
+func (s *redactedPermissionServiceServer) SyncMenus(ctx context.Context, in *emptypb.Empty) (*emptypb.Empty, error) {
+	res, err := s.srv.SyncMenus(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
+// Redact method implementation for PermissionApiResource
+func (x *PermissionApiResource) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: Id
+
+	// Safe field: PermissionId
+
+	// Safe field: ApiId
+	return x.String()
+}
+
+// Redact method implementation for PermissionMenu
+func (x *PermissionMenu) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: Id
+
+	// Safe field: PermissionId
+
+	// Safe field: MenuId
+	return x.String()
+}
+
 // Redact method implementation for Permission
 func (x *Permission) Redact() string {
 	if x == nil {
@@ -126,6 +176,10 @@ func (x *Permission) Redact() string {
 	// Safe field: Status
 
 	// Safe field: TenantId
+
+	// Safe field: ApiResourceId
+
+	// Safe field: MenuId
 
 	// Safe field: ParentId
 
@@ -164,6 +218,8 @@ func (x *GetPermissionRequest) Redact() string {
 	}
 
 	// Safe field: Id
+
+	// Safe field: Code
 
 	// Safe field: ViewMask
 	return x.String()

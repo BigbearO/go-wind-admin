@@ -13,11 +13,11 @@ const routes: RouteRecordRaw[] = [
       authority: ['super', 'admin'],
     },
     name: 'Dashboard',
-    path: '/',
+    path: '/dashboard',
     children: [
       {
         name: 'Analytics',
-        path: '/analytics',
+        path: 'analytics',
         component: () => import('#/views/dashboard/analytics/index.vue'),
         meta: {
           affixTab: true,

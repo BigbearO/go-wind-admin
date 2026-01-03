@@ -25,6 +25,8 @@ const OperationPermissionServiceCreate = "/admin.service.v1.PermissionService/Cr
 const OperationPermissionServiceDelete = "/admin.service.v1.PermissionService/Delete"
 const OperationPermissionServiceGet = "/admin.service.v1.PermissionService/Get"
 const OperationPermissionServiceList = "/admin.service.v1.PermissionService/List"
+const OperationPermissionServiceSyncApiResources = "/admin.service.v1.PermissionService/SyncApiResources"
+const OperationPermissionServiceSyncMenus = "/admin.service.v1.PermissionService/SyncMenus"
 const OperationPermissionServiceUpdate = "/admin.service.v1.PermissionService/Update"
 
 type PermissionServiceHTTPServer interface {
@@ -36,6 +38,10 @@ type PermissionServiceHTTPServer interface {
 	Get(context.Context, *GetPermissionRequest) (*Permission, error)
 	// List 查询权限列表
 	List(context.Context, *v1.PagingRequest) (*ListPermissionResponse, error)
+	// SyncApiResources 同步API资源
+	SyncApiResources(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
+	// SyncMenus 同步菜单资源
+	SyncMenus(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	// Update 更新权限
 	Update(context.Context, *UpdatePermissionRequest) (*emptypb.Empty, error)
 }
@@ -47,6 +53,8 @@ func RegisterPermissionServiceHTTPServer(s *http.Server, srv PermissionServiceHT
 	r.POST("/admin/v1/permissions", _PermissionService_Create6_HTTP_Handler(srv))
 	r.PUT("/admin/v1/permissions/{id}", _PermissionService_Update6_HTTP_Handler(srv))
 	r.DELETE("/admin/v1/permissions/{id}", _PermissionService_Delete6_HTTP_Handler(srv))
+	r.POST("/admin/v1/permissions/sync:apis", _PermissionService_SyncApiResources1_HTTP_Handler(srv))
+	r.POST("/admin/v1/permissions/sync:menus", _PermissionService_SyncMenus0_HTTP_Handler(srv))
 }
 
 func _PermissionService_List8_HTTP_Handler(srv PermissionServiceHTTPServer) func(ctx http.Context) error {
@@ -159,6 +167,50 @@ func _PermissionService_Delete6_HTTP_Handler(srv PermissionServiceHTTPServer) fu
 	}
 }
 
+func _PermissionService_SyncApiResources1_HTTP_Handler(srv PermissionServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in emptypb.Empty
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationPermissionServiceSyncApiResources)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.SyncApiResources(ctx, req.(*emptypb.Empty))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*emptypb.Empty)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _PermissionService_SyncMenus0_HTTP_Handler(srv PermissionServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in emptypb.Empty
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationPermissionServiceSyncMenus)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.SyncMenus(ctx, req.(*emptypb.Empty))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*emptypb.Empty)
+		return ctx.Result(200, reply)
+	}
+}
+
 type PermissionServiceHTTPClient interface {
 	// Create 创建权限
 	Create(ctx context.Context, req *CreatePermissionRequest, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
@@ -168,6 +220,10 @@ type PermissionServiceHTTPClient interface {
 	Get(ctx context.Context, req *GetPermissionRequest, opts ...http.CallOption) (rsp *Permission, err error)
 	// List 查询权限列表
 	List(ctx context.Context, req *v1.PagingRequest, opts ...http.CallOption) (rsp *ListPermissionResponse, err error)
+	// SyncApiResources 同步API资源
+	SyncApiResources(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
+	// SyncMenus 同步菜单资源
+	SyncMenus(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 	// Update 更新权限
 	Update(ctx context.Context, req *UpdatePermissionRequest, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 }
@@ -230,6 +286,34 @@ func (c *PermissionServiceHTTPClientImpl) List(ctx context.Context, in *v1.Pagin
 	opts = append(opts, http.Operation(OperationPermissionServiceList))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// SyncApiResources 同步API资源
+func (c *PermissionServiceHTTPClientImpl) SyncApiResources(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*emptypb.Empty, error) {
+	var out emptypb.Empty
+	pattern := "/admin/v1/permissions/sync:apis"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationPermissionServiceSyncApiResources))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// SyncMenus 同步菜单资源
+func (c *PermissionServiceHTTPClientImpl) SyncMenus(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*emptypb.Empty, error) {
+	var out emptypb.Empty
+	pattern := "/admin/v1/permissions/sync:menus"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationPermissionServiceSyncMenus))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

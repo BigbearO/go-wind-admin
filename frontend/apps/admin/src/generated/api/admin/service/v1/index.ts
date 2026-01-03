@@ -835,6 +835,7 @@ export type ApiResource = {
   moduleDescription?: string;
   description?: string;
   scope?: ApiResource_Scope;
+  status?: ApiResource_Status;
   createdBy?: number;
   updatedBy?: number;
   deletedBy?: number;
@@ -848,6 +849,10 @@ export type ApiResource_Scope =
   | "API_SCOPE_INVALID"
   | "ADMIN"
   | "APP";
+// 权限状态
+export type ApiResource_Status =
+  | "OFF"
+  | "ON";
 // 查询列表 - 回应
 export type ListApiResourceResponse = {
   items: ApiResource[] | undefined;
@@ -3260,6 +3265,20 @@ export type fileservicev1_UploadOssFileResponse = {
   url: string | undefined;
 };
 
+// 权限 - API 关联关系
+export type PermissionApiResource = {
+  id?: number;
+  permissionId?: number;
+  apiId?: number;
+};
+
+// 权限 - 菜单 关联关系
+export type PermissionMenu = {
+  id?: number;
+  permissionId?: number;
+  menuId?: number;
+};
+
 // 权限
 export type Permission = {
   id?: number;
@@ -3272,6 +3291,8 @@ export type Permission = {
   remark?: string;
   status?: Permission_Status;
   tenantId?: number;
+  apiResourceId?: number;
+  menuId?: number;
   parentId?: number;
   children: Permission[] | undefined;
   createdBy?: number;
@@ -3304,6 +3325,7 @@ export type ListPermissionResponse = {
 // 查询 - 请求
 export type GetPermissionRequest = {
   id?: number;
+  code?: string;
   viewMask?: wellKnownFieldMask;
 };
 
@@ -3337,6 +3359,10 @@ export interface PermissionService {
   Update(request: UpdatePermissionRequest): Promise<wellKnownEmpty>;
   // 删除权限
   Delete(request: DeletePermissionRequest): Promise<wellKnownEmpty>;
+  // 同步API资源
+  SyncApiResources(request: wellKnownEmpty): Promise<wellKnownEmpty>;
+  // 同步菜单资源
+  SyncMenus(request: wellKnownEmpty): Promise<wellKnownEmpty>;
 }
 
 export function createPermissionServiceClient(
@@ -3422,6 +3448,9 @@ export function createPermissionServiceClient(
       const path = `admin/v1/permissions/${request.id}`; // eslint-disable-line quotes
       const body = null;
       const queryParams: string[] = [];
+      if (request.code) {
+        queryParams.push(`code=${encodeURIComponent(request.code.toString())}`)
+      }
       if (request.viewMask) {
         queryParams.push(`viewMask=${encodeURIComponent(request.viewMask.toString())}`)
       }
@@ -3493,6 +3522,40 @@ export function createPermissionServiceClient(
       }, {
         service: "PermissionService",
         method: "Delete",
+      }) as Promise<wellKnownEmpty>;
+    },
+    SyncApiResources(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      const path = `admin/v1/permissions/sync:apis`; // eslint-disable-line quotes
+      const body = JSON.stringify(request);
+      const queryParams: string[] = [];
+      let uri = path;
+      if (queryParams.length > 0) {
+        uri += `?${queryParams.join("&")}`
+      }
+      return handler({
+        path: uri,
+        method: "POST",
+        body,
+      }, {
+        service: "PermissionService",
+        method: "SyncApiResources",
+      }) as Promise<wellKnownEmpty>;
+    },
+    SyncMenus(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      const path = `admin/v1/permissions/sync:menus`; // eslint-disable-line quotes
+      const body = JSON.stringify(request);
+      const queryParams: string[] = [];
+      let uri = path;
+      if (queryParams.length > 0) {
+        uri += `?${queryParams.join("&")}`
+      }
+      return handler({
+        path: uri,
+        method: "POST",
+        body,
+      }, {
+        service: "PermissionService",
+        method: "SyncMenus",
       }) as Promise<wellKnownEmpty>;
     },
   };

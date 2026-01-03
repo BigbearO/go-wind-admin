@@ -36,103 +36,103 @@ func RegisterHookAPI(L *lua.LState, engine HookEngine, logger *log.Helper) {
 		// Create hook module
 		hookModule := L.NewTable()
 
-	// hook.register(hook_name, description, callback_function)
-	// Register a new hook point and optionally attach a callback
-	hookModule.RawSetString("register", L.NewFunction(func(L *lua.LState) int {
-		hookName := L.CheckString(1)
-		description := L.OptString(2, "")
-		callback := L.Get(3) // Optional callback function
+		// hook.register(hook_name, description, callback_function)
+		// Register a new hook point and optionally attach a callback
+		hookModule.RawSetString("register", L.NewFunction(func(L *lua.LState) int {
+			hookName := L.CheckString(1)
+			description := L.OptString(2, "")
+			callback := L.Get(3) // Optional callback function
 
-		// Register the hook (ignore error if already registered)
-		err := engine.RegisterHook(hookName, description)
-		if err != nil {
-			// Only log error, don't return - we still want to register the callback
-			logger.Debugf("hook.register: %v (continuing to register callback)", err)
-		} else {
-			logger.Debugf("Registered hook: %s", hookName)
-		}
-
-		// If callback provided, register it directly with the engine
-		if callback != lua.LNil {
-			if fn, ok := callback.(*lua.LFunction); ok {
-				// Register the callback function with the engine
-				// The engine will store the LState and function for later execution
-				engine.RegisterCallback(hookName, L, fn)
-				logger.Debugf("Registered callback for hook: %s", hookName)
+			// Register the hook (ignore error if already registered)
+			err := engine.RegisterHook(hookName, description)
+			if err != nil {
+				// Only log error, don't return - we still want to register the callback
+				logger.Debugf("hook.register: %v (continuing to register callback)", err)
 			} else {
-				logger.Warnf("Third argument is not a function, ignoring callback")
+				logger.Debugf("Registered hook: %s", hookName)
 			}
-		}
 
-		L.Push(lua.LBool(true))
-		return 1
-	}))
-
-	// hook.add_script(hook_name, script_table)
-	// Add a script to a hook dynamically
-	// script_table: {name, source, enabled, priority, description}
-	hookModule.RawSetString("add_script", L.NewFunction(func(L *lua.LState) int {
-		hookName := L.CheckString(1)
-		scriptTable := L.CheckTable(2)
-
-		// Extract script properties
-		name := scriptTable.RawGetString("name").String()
-		source := scriptTable.RawGetString("source").String()
-
-		enabled := true
-		if enabledVal := scriptTable.RawGetString("enabled"); enabledVal != lua.LNil {
-			enabled = lua.LVAsBool(enabledVal)
-		}
-
-		priority := 0
-		if priorityVal := scriptTable.RawGetString("priority"); priorityVal != lua.LNil {
-			if num, ok := priorityVal.(lua.LNumber); ok {
-				priority = int(num)
+			// If callback provided, register it directly with the engine
+			if callback != lua.LNil {
+				if fn, ok := callback.(*lua.LFunction); ok {
+					// Register the callback function with the engine
+					// The engine will store the LState and function for later execution
+					engine.RegisterCallback(hookName, L, fn)
+					logger.Debugf("Registered callback for hook: %s", hookName)
+				} else {
+					logger.Warnf("Third argument is not a function, ignoring callback")
+				}
 			}
-		}
 
-		description := ""
-		if descVal := scriptTable.RawGetString("description"); descVal != lua.LNil {
-			description = descVal.String()
-		}
+			L.Push(lua.LBool(true))
+			return 1
+		}))
 
-		// Create script
-		script := Script{
-			Name:        name,
-			Hook:        hookName,
-			Source:      source,
-			Enabled:     enabled,
-			Priority:    priority,
-			Description: description,
-		}
+		// hook.add_script(hook_name, script_table)
+		// Add a script to a hook dynamically
+		// script_table: {name, source, enabled, priority, description}
+		hookModule.RawSetString("add_script", L.NewFunction(func(L *lua.LState) int {
+			hookName := L.CheckString(1)
+			scriptTable := L.CheckTable(2)
 
-		err := engine.AddScript(hookName, script)
-		if err != nil {
-			logger.Errorf("hook.add_script error: %v", err)
-			L.Push(lua.LBool(false))
-			L.Push(lua.LString(err.Error()))
-			return 2
-		}
+			// Extract script properties
+			name := scriptTable.RawGetString("name").String()
+			source := scriptTable.RawGetString("source").String()
 
-		logger.Debugf("Added script '%s' to hook: %s", name, hookName)
-		L.Push(lua.LBool(true))
-		return 1
-	}))
+			enabled := true
+			if enabledVal := scriptTable.RawGetString("enabled"); enabledVal != lua.LNil {
+				enabled = lua.LVAsBool(enabledVal)
+			}
 
-	// hook.list()
-	// Get list of all registered hooks
-	hookModule.RawSetString("list", L.NewFunction(func(L *lua.LState) int {
-		hooks := engine.ListHooks()
+			priority := 0
+			if priorityVal := scriptTable.RawGetString("priority"); priorityVal != lua.LNil {
+				if num, ok := priorityVal.(lua.LNumber); ok {
+					priority = int(num)
+				}
+			}
 
-		// Convert to Lua table (array)
-		table := L.NewTable()
-		for i, hookName := range hooks {
-			table.RawSetInt(i+1, lua.LString(hookName))
-		}
+			description := ""
+			if descVal := scriptTable.RawGetString("description"); descVal != lua.LNil {
+				description = descVal.String()
+			}
 
-		L.Push(table)
-		return 1
-	}))
+			// Create script
+			script := Script{
+				Name:        name,
+				Hook:        hookName,
+				Source:      source,
+				Enabled:     enabled,
+				Priority:    priority,
+				Description: description,
+			}
+
+			err := engine.AddScript(hookName, script)
+			if err != nil {
+				logger.Errorf("hook.add_script error: %v", err)
+				L.Push(lua.LBool(false))
+				L.Push(lua.LString(err.Error()))
+				return 2
+			}
+
+			logger.Debugf("Added script '%s' to hook: %s", name, hookName)
+			L.Push(lua.LBool(true))
+			return 1
+		}))
+
+		// hook.list()
+		// Get list of all registered hooks
+		hookModule.RawSetString("list", L.NewFunction(func(L *lua.LState) int {
+			hooks := engine.ListHooks()
+
+			// ConvertCode to Lua table (array)
+			table := L.NewTable()
+			for i, hookName := range hooks {
+				table.RawSetInt(i+1, lua.LString(hookName))
+			}
+
+			L.Push(table)
+			return 1
+		}))
 
 		L.Push(hookModule)
 		return 1

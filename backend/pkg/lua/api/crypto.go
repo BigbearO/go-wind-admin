@@ -67,7 +67,7 @@ func RegisterCrypto(L *lua.LState, logger *log.Helper) {
 		cryptoModule.RawSetString("encrypt_payload", L.NewFunction(func(L *lua.LState) int {
 			payloadTable := L.CheckTable(1)
 
-			// Convert Lua table to Go map
+			// ConvertCode Lua table to Go map
 			payloadMap := convert.ToGoValue(payloadTable).(map[string]interface{})
 
 			// Encrypt the payload
@@ -77,7 +77,7 @@ func RegisterCrypto(L *lua.LState, logger *log.Helper) {
 				return 0
 			}
 
-			// Convert back to Lua table
+			// ConvertCode back to Lua table
 			result := convert.ToLuaValue(L, encrypted)
 			L.Push(result)
 			return 1
@@ -89,7 +89,7 @@ func RegisterCrypto(L *lua.LState, logger *log.Helper) {
 		cryptoModule.RawSetString("decrypt_payload", L.NewFunction(func(L *lua.LState) int {
 			encryptedTable := L.CheckTable(1)
 
-			// Convert Lua table to Go map
+			// ConvertCode Lua table to Go map
 			encryptedMap := convert.ToGoValue(encryptedTable).(map[string]interface{})
 
 			// Decrypt the payload
@@ -99,7 +99,7 @@ func RegisterCrypto(L *lua.LState, logger *log.Helper) {
 				return 0
 			}
 
-			// Convert back to Lua table
+			// ConvertCode back to Lua table
 			result := convert.ToLuaValue(L, decrypted)
 			L.Push(result)
 			return 1
@@ -111,7 +111,7 @@ func RegisterCrypto(L *lua.LState, logger *log.Helper) {
 		cryptoModule.RawSetString("has_encrypted_payload", L.NewFunction(func(L *lua.LState) int {
 			payloadTable := L.CheckTable(1)
 
-			// Convert Lua table to Go map
+			// ConvertCode Lua table to Go map
 			payloadMap := convert.ToGoValue(payloadTable).(map[string]interface{})
 
 			// Check if encrypted
@@ -126,7 +126,7 @@ func RegisterCrypto(L *lua.LState, logger *log.Helper) {
 		cryptoModule.RawSetString("encrypt_json", L.NewFunction(func(L *lua.LState) int {
 			dataTable := L.CheckTable(1)
 
-			// Convert to Go value
+			// ConvertCode to Go value
 			goValue := convert.ToGoValue(dataTable)
 
 			// Marshal to JSON
@@ -167,7 +167,7 @@ func RegisterCrypto(L *lua.LState, logger *log.Helper) {
 				return 0
 			}
 
-			// Convert to Lua value
+			// ConvertCode to Lua value
 			luaValue := convert.ToLuaValue(L, result)
 			L.Push(luaValue)
 			return 1
@@ -181,7 +181,7 @@ func RegisterCrypto(L *lua.LState, logger *log.Helper) {
 			// Calculate SHA-256 hash
 			hash := sha256.Sum256([]byte(data))
 
-			// Convert to hex string
+			// ConvertCode to hex string
 			hexHash := hex.EncodeToString(hash[:])
 
 			L.Push(lua.LString(hexHash))
