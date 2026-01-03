@@ -31,7 +31,7 @@ const (
 type Menu_Type int32
 
 const (
-	Menu_FOLDER   Menu_Type = 0 // 目录
+	Menu_CATALOG  Menu_Type = 0 // 目录
 	Menu_MENU     Menu_Type = 1 // 菜单
 	Menu_BUTTON   Menu_Type = 2 // 按钮
 	Menu_EMBEDDED Menu_Type = 3 // 内嵌
@@ -41,14 +41,14 @@ const (
 // Enum value maps for Menu_Type.
 var (
 	Menu_Type_name = map[int32]string{
-		0: "FOLDER",
+		0: "CATALOG",
 		1: "MENU",
 		2: "BUTTON",
 		3: "EMBEDDED",
 		4: "LINK",
 	}
 	Menu_Type_value = map[string]int32{
-		"FOLDER":   0,
+		"CATALOG":  0,
 		"MENU":     1,
 		"BUTTON":   2,
 		"EMBEDDED": 3,
@@ -202,7 +202,7 @@ func (x *Menu) GetType() Menu_Type {
 	if x != nil && x.Type != nil {
 		return *x.Type
 	}
-	return Menu_FOLDER
+	return Menu_CATALOG
 }
 
 func (x *Menu) GetPath() string {
@@ -602,7 +602,7 @@ var File_admin_service_v1_i_menu_proto protoreflect.FileDescriptor
 
 const file_admin_service_v1_i_menu_proto_rawDesc = "" +
 	"\n" +
-	"\x1dadmin/service/v1/i_menu.proto\x12\x10admin.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\x1a\x1fadmin/service/v1/i_router.proto\"\xc1\v\n" +
+	"\x1dadmin/service/v1/i_menu.proto\x12\x10admin.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\x1a\x1fadmin/service/v1/i_router.proto\"\xc2\v\n" +
 	"\x04Menu\x12&\n" +
 	"\x02id\x18\x01 \x01(\rB\x11\xe0A\x01\xbaG\v\x92\x02\b菜单IDH\x00R\x02id\x88\x01\x01\x12N\n" +
 	"\x06status\x18\x02 \x01(\x0e2\x1d.admin.service.v1.Menu.StatusB\x12\xbaG\x0f\x92\x02\f菜单状态H\x01R\x06status\x88\x01\x01\x12H\n" +
@@ -628,10 +628,9 @@ const file_admin_service_v1_i_menu_proto_rawDesc = "" +
 	"\n" +
 	"updated_at\x18\xc9\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f更新时间H\x0eR\tupdatedAt\x88\x01\x01\x12S\n" +
 	"\n" +
-	"deleted_at\x18\xca\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f删除时间H\x0fR\tdeletedAt\x88\x01\x01\"@\n" +
-	"\x04Type\x12\n" +
-	"\n" +
-	"\x06FOLDER\x10\x00\x12\b\n" +
+	"deleted_at\x18\xca\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f删除时间H\x0fR\tdeletedAt\x88\x01\x01\"A\n" +
+	"\x04Type\x12\v\n" +
+	"\aCATALOG\x10\x00\x12\b\n" +
 	"\x04MENU\x10\x01\x12\n" +
 	"\n" +
 	"\x06BUTTON\x10\x02\x12\f\n" +

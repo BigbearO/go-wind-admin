@@ -14,7 +14,7 @@ import { useVbenForm } from '#/adapter/form';
 import {
   buildMenuTree,
   isButton,
-  isFolder,
+  isCatalog,
   isMenu,
   menuTypeList,
   statusList,
@@ -165,7 +165,7 @@ const [BaseForm, baseFormApi] = useVbenForm({
         allowClear: true,
       },
       dependencies: {
-        show: (values) => !isFolder(values.type),
+        show: (values) => !isCatalog(values.type),
         triggerFields: ['type'],
       },
     },
@@ -250,7 +250,7 @@ const [BaseForm, baseFormApi] = useVbenForm({
       fieldName: 'meta.hideChildrenInMenu',
       dependencies: {
         show: (values) => {
-          return ['FOLDER', 'MENU'].includes(values.type);
+          return ['CATALOG', 'MENU'].includes(values.type);
         },
         triggerFields: ['type'],
       },

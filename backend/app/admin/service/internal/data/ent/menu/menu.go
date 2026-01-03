@@ -136,7 +136,7 @@ const DefaultType = TypeMenu
 
 // Type values.
 const (
-	TypeFolder   Type = "FOLDER"
+	TypeCatalog  Type = "CATALOG"
 	TypeMenu     Type = "MENU"
 	TypeButton   Type = "BUTTON"
 	TypeEmbedded Type = "EMBEDDED"
@@ -150,7 +150,7 @@ func (_type Type) String() string {
 // TypeValidator is a validator for the "type" field enum values. It is called by the builders before save.
 func TypeValidator(_type Type) error {
 	switch _type {
-	case TypeFolder, TypeMenu, TypeButton, TypeEmbedded, TypeLink:
+	case TypeCatalog, TypeMenu, TypeButton, TypeEmbedded, TypeLink:
 		return nil
 	default:
 		return fmt.Errorf("menu: invalid enum value for type field: %q", _type)

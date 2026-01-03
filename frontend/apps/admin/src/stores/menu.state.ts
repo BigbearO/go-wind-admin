@@ -129,7 +129,7 @@ export const useMenuStore = defineStore('menu', () => {
 });
 
 export const menuTypeList = computed(() => [
-  { value: 'FOLDER', label: $t('enum.menuType.FOLDER') },
+  { value: 'CATALOG', label: $t('enum.menuType.CATALOG') },
   { value: 'MENU', label: $t('enum.menuType.MENU') },
   { value: 'BUTTON', label: $t('enum.menuType.BUTTON') },
   { value: 'EMBEDDED', label: $t('enum.menuType.EMBEDDED') },
@@ -157,14 +157,14 @@ export function menuTypeToColor(menuType: Menu_Type) {
       // 按钮：操作型元素，醒目柔和
       return '#F56C6C';
     } // 柔和红色
+    case 'CATALOG': {
+      // 文件夹：归类属性
+      return '#27AE60';
+    } // 深绿色
     case 'EMBEDDED': {
       // 嵌入式菜单：融合科技感
       return '#4096FF';
     } // 浅蓝色
-    case 'FOLDER': {
-      // 文件夹：归类属性
-      return '#27AE60';
-    } // 深绿色
     case 'LINK': {
       // 链接菜单：跳转属性
       return '#9B59B6';
@@ -180,7 +180,7 @@ export function menuTypeToColor(menuType: Menu_Type) {
   }
 }
 
-export const isFolder = (type: string) => type === 'FOLDER';
+export const isCatalog = (type: string) => type === 'CATALOG';
 export const isMenu = (type: string) => type === 'MENU';
 export const isButton = (type: string) => type === 'BUTTON';
 export const isEmbedded = (type: string) => type === 'EMBEDDED';

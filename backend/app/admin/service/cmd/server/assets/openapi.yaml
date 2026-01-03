@@ -4478,7 +4478,7 @@ components:
                     format: enum
                 type:
                     enum:
-                        - FOLDER
+                        - CATALOG
                         - MENU
                         - BUTTON
                         - EMBEDDED

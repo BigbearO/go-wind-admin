@@ -622,7 +622,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeUint32, Nullable: true, Comment: "删除者ID"},
 		{Name: "remark", Type: field.TypeString, Nullable: true, Comment: "备注"},
 		{Name: "status", Type: field.TypeEnum, Nullable: true, Comment: "菜单状态", Enums: []string{"ON", "OFF"}, Default: "ON"},
-		{Name: "type", Type: field.TypeEnum, Nullable: true, Comment: "菜单类型 FOLDER: 目录 MENU: 菜单 BUTTON: 按钮 EMBEDDED: 内嵌 LINK: 外链", Enums: []string{"FOLDER", "MENU", "BUTTON", "EMBEDDED", "LINK"}, Default: "MENU"},
+		{Name: "type", Type: field.TypeEnum, Nullable: true, Comment: "菜单类型 CATALOG: 目录 MENU: 菜单 BUTTON: 按钮 EMBEDDED: 内嵌 LINK: 外链", Enums: []string{"CATALOG", "MENU", "BUTTON", "EMBEDDED", "LINK"}, Default: "MENU"},
 		{Name: "path", Type: field.TypeString, Nullable: true, Comment: "路径,当其类型为'按钮'的时候对应的数据操作名,例如:/user.service.v1.UserService/Login", Default: ""},
 		{Name: "redirect", Type: field.TypeString, Nullable: true, Comment: "重定向地址"},
 		{Name: "alias", Type: field.TypeString, Nullable: true, Comment: "路由别名"},

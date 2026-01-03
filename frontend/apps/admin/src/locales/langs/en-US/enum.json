@@ -14,7 +14,7 @@
     "SYS_ADMIN": "Admin"
   },
   "menuType": {
-    "FOLDER": "Folder",
+    "CATALOG": "Catalog",
     "MENU": "Menu",
     "BUTTON": "Button",
     "EMBEDDED": "Embedded",

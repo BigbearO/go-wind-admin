@@ -59,7 +59,7 @@ service MenuService {
 message Menu {
   // 菜单类型
   enum Type {
-    FOLDER = 0;     // 目录
+    CATALOG = 0;    // 目录
     MENU = 1;       // 菜单
     BUTTON = 2;     // 按钮
     EMBEDDED = 3;   // 内嵌

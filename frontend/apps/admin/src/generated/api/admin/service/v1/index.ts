@@ -2690,7 +2690,7 @@ export type Menu_Status =
   | "ON";
 // 菜单类型
 export type Menu_Type =
-  | "FOLDER"
+  | "CATALOG"
   | "MENU"
   | "BUTTON"
   | "EMBEDDED"

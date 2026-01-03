@@ -8,7 +8,7 @@
     "false": "禁用"
   },
   "menuType": {
-    "FOLDER": "目录",
+    "CATALOG": "目录",
     "MENU": "菜单",
     "BUTTON": "按钮",
     "EMBEDDED": "内嵌",
