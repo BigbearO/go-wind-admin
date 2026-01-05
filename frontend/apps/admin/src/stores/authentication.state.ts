@@ -193,13 +193,17 @@ export const useAuthStore = defineStore('auth', () => {
 
     loginLoading.value = false;
 
+    console.log('currentRoute', router.currentRoute.value);
+    // 如果当前页是登录页，则不处理
+    if ('/auth/login' === router.currentRoute.value.path) return;
+
     // 回登录页带上当前路由地址
     await router.replace({
       path: LOGIN_PATH,
       query: redirect
         ? {
-            redirect: encodeURIComponent(router.currentRoute.value.fullPath),
-          }
+          redirect: encodeURIComponent(router.currentRoute.value.fullPath),
+        }
         : {},
     });
   }
