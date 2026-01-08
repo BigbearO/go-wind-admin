@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"go-wind-admin/pkg/constants"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/go-kratos/kratos/v2/log"
@@ -105,21 +106,10 @@ func (s *PermissionGroupService) Delete(ctx context.Context, req *permissionV1.D
 
 func (s *PermissionGroupService) createDefaultPermissionGroups(ctx context.Context) error {
 	var err error
-
-	defaultPermissionGroups := []*permissionV1.CreatePermissionGroupRequest{
-		{
-			Data: &permissionV1.PermissionGroup{
-				Id:        trans.Ptr(uint32(1)),
-				Name:      trans.Ptr("系统权限"),
-				Path:      trans.Ptr("/1/"),
-				Module:    trans.Ptr("system"),
-				SortOrder: trans.Ptr(uint32(1)),
-				Status:    trans.Ptr(permissionV1.PermissionGroup_ON),
-			},
-		},
-	}
-	for _, req := range defaultPermissionGroups {
-		if err = s.permissionGroupRepo.Create(ctx, req); err != nil {
+	for _, d := range constants.DefaultPermissionGroups {
+		if err = s.permissionGroupRepo.Create(ctx, &permissionV1.CreatePermissionGroupRequest{
+			Data: d,
+		}); err != nil {
 			s.log.Errorf("create default permission group error: %v", err)
 			return err
 		}

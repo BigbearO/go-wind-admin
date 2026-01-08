@@ -15,6 +15,7 @@ import (
 	adminV1 "go-wind-admin/api/gen/go/admin/service/v1"
 	userV1 "go-wind-admin/api/gen/go/user/service/v1"
 
+	"go-wind-admin/pkg/constants"
 	"go-wind-admin/pkg/middleware/auth"
 )
 
@@ -169,22 +170,10 @@ func (s *RoleService) GetRolesByRoleIds(ctx context.Context, req *userV1.GetRole
 func (s *RoleService) createDefaultRoles(ctx context.Context) error {
 	var err error
 
-	defaultRoles := []*userV1.CreateRoleRequest{
-		{
-			Data: &userV1.Role{
-				Id:          trans.Ptr(uint32(1)),
-				Name:        trans.Ptr("平台管理员"),
-				Code:        trans.Ptr("platform_admin"),
-				Status:      trans.Ptr(userV1.Role_ON),
-				Description: trans.Ptr("拥有系统所有功能的操作权限，可管理租户、用户、角色及所有资源"),
-				IsProtected: trans.Ptr(true),
-				Permissions: []uint32{1},
-			},
-		},
-	}
-
-	for _, roleReq := range defaultRoles {
-		err = s.roleRepo.Create(ctx, roleReq)
+	for _, d := range constants.DefaultRoles {
+		err = s.roleRepo.Create(ctx, &userV1.CreateRoleRequest{
+			Data: d,
+		})
 		if err != nil {
 			return err
 		}

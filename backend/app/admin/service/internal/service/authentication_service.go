@@ -17,12 +17,10 @@ import (
 	permissionV1 "go-wind-admin/api/gen/go/permission/service/v1"
 	userV1 "go-wind-admin/api/gen/go/user/service/v1"
 
+	"go-wind-admin/pkg/constants"
 	"go-wind-admin/pkg/jwt"
 	"go-wind-admin/pkg/middleware/auth"
 )
-
-// 系统访问后台权限代码
-const accessSystemPermissionCode = "system:access_backend"
 
 type AuthenticationService struct {
 	adminV1.AuthenticationServiceHTTPServer
@@ -213,7 +211,7 @@ func (s *AuthenticationService) authorizeAndEnrichUserTokenPayload(ctx context.C
 		s.log.Infof("user [%d] membership [%d] permission codes: %v", userID, m.GetId(), permissionCodes)
 
 		// 检查是否包含系统访问后台权限
-		if containsPermission(permissionCodes, accessSystemPermissionCode) {
+		if containsPermission(permissionCodes, constants.AccessSystemPermissionCode) {
 			hasBackendAccess = true
 			validMemberships = append(validMemberships, m)
 			validRoleIDs = append(validRoleIDs, roleIDs...)

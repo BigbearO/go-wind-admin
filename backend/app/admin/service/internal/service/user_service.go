@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"go-wind-admin/pkg/constants"
 
 	"github.com/go-kratos/kratos/v2/log"
 	pagination "github.com/tx7do/go-crud/api/gen/go/pagination/v1"
@@ -64,7 +65,7 @@ func NewUserService(
 func (s *UserService) init() {
 	ctx := context.Background()
 	if count, _ := s.userRepo.Count(ctx); count == 0 {
-		_ = s.CreateDefaultUser(ctx)
+		_ = s.createDefaultUser(ctx)
 	}
 }
 
@@ -383,57 +384,36 @@ func (s *UserService) EditUserPassword(ctx context.Context, req *userV1.EditUser
 	return &emptypb.Empty{}, nil
 }
 
-// CreateDefaultUser 创建默认用户，即超级用户
-func (s *UserService) CreateDefaultUser(ctx context.Context) error {
-	const (
-		defaultUsername = "admin"
-		defaultPassword = "admin"
-	)
-
+// createDefaultUser 创建默认用户，即超级用户
+func (s *UserService) createDefaultUser(ctx context.Context) error {
 	var err error
 
 	// 创建默认用户
-	if _, err = s.userRepo.Create(ctx, &userV1.CreateUserRequest{
-		Data: &userV1.User{
-			Id:       trans.Ptr(uint32(1)),
-			TenantId: trans.Ptr(uint32(0)),
-			Username: trans.Ptr(defaultUsername),
-			Realname: trans.Ptr("喵个咪"),
-			Nickname: trans.Ptr("鹳狸猿"),
-			Region:   trans.Ptr("中国"),
-			Email:    trans.Ptr("admin@gmail.com"),
-		},
-	}); err != nil {
-		s.log.Errorf("create default user err: %v", err)
-		return err
+	for _, user := range constants.DefaultUsers {
+		if _, err = s.userRepo.Create(ctx, &userV1.CreateUserRequest{
+			Data: user,
+		}); err != nil {
+			s.log.Errorf("create default user err: %v", err)
+			return err
+		}
 	}
 
 	// 创建默认用户凭证
-	if err = s.userCredentialRepo.Create(ctx, &authenticationV1.CreateUserCredentialRequest{
-		Data: &authenticationV1.UserCredential{
-			UserId:         trans.Ptr(uint32(1)),
-			IdentityType:   authenticationV1.UserCredential_USERNAME.Enum(),
-			Identifier:     trans.Ptr(defaultUsername),
-			CredentialType: authenticationV1.UserCredential_PASSWORD_HASH.Enum(),
-			Credential:     trans.Ptr(defaultPassword),
-			IsPrimary:      trans.Ptr(true),
-			Status:         authenticationV1.UserCredential_ENABLED.Enum(),
-		},
-	}); err != nil {
-		s.log.Errorf("create default user credential err: %v", err)
-		return err
+	for _, userCredential := range constants.DefaultUserCredentials {
+		if err = s.userCredentialRepo.Create(ctx, &authenticationV1.CreateUserCredentialRequest{
+			Data: userCredential,
+		}); err != nil {
+			s.log.Errorf("create default user credential err: %v", err)
+			return err
+		}
 	}
 
 	// 创建默认用户租户关联关系
-	if err = s.membershipRepo.AssignTenantMembership(ctx, &userV1.Membership{
-		UserId:    trans.Ptr(uint32(1)),
-		TenantId:  trans.Ptr(uint32(0)),
-		Status:    userV1.Membership_ACTIVE.Enum(),
-		IsPrimary: trans.Ptr(true),
-		RoleIds:   []uint32{1},
-	}); err != nil {
-		s.log.Errorf("create default user membership err: %v", err)
-		return err
+	for _, membership := range constants.DefaultMemberships {
+		if err = s.membershipRepo.AssignTenantMembership(ctx, membership); err != nil {
+			s.log.Errorf("create default user membership err: %v", err)
+			return err
+		}
 	}
 
 	return err
