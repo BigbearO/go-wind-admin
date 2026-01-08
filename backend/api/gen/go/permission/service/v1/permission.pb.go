@@ -141,9 +141,8 @@ type Permission struct {
 	Code          *string                `protobuf:"bytes,3,opt,name=code,proto3,oneof" json:"code,omitempty"`                                                   // 权限点唯一编码（如：user.delete）
 	Remark        *string                `protobuf:"bytes,4,opt,name=remark,proto3,oneof" json:"remark,omitempty"`                                               // 备注
 	Status        *Permission_Status     `protobuf:"varint,5,opt,name=status,proto3,enum=permission.service.v1.Permission_Status,oneof" json:"status,omitempty"` // 状态
-	TenantId      *uint32                `protobuf:"varint,6,opt,name=tenant_id,json=tenantId,proto3,oneof" json:"tenant_id,omitempty"`                          // 租户ID
-	GroupId       *uint32                `protobuf:"varint,7,opt,name=group_id,json=groupId,proto3,oneof" json:"group_id,omitempty"`                             // 分组ID
-	GroupName     *string                `protobuf:"bytes,8,opt,name=group_name,json=groupName,proto3,oneof" json:"group_name,omitempty"`                        // 分组名称
+	GroupId       *uint32                `protobuf:"varint,6,opt,name=group_id,json=groupId,proto3,oneof" json:"group_id,omitempty"`                             // 分组ID
+	GroupName     *string                `protobuf:"bytes,7,opt,name=group_name,json=groupName,proto3,oneof" json:"group_name,omitempty"`                        // 分组名称
 	MenuIds       []uint32               `protobuf:"varint,10,rep,packed,name=menu_ids,json=menuIds,proto3" json:"menu_ids,omitempty"`                           // 关联的菜单ID
 	ApiIds        []uint32               `protobuf:"varint,11,rep,packed,name=api_ids,json=apiIds,proto3" json:"api_ids,omitempty"`                              // 关联的API资源ID
 	CreatedBy     *uint32                `protobuf:"varint,100,opt,name=created_by,json=createdBy,proto3,oneof" json:"created_by,omitempty"`                     // 创建者ID
@@ -219,13 +218,6 @@ func (x *Permission) GetStatus() Permission_Status {
 		return *x.Status
 	}
 	return Permission_OFF
-}
-
-func (x *Permission) GetTenantId() uint32 {
-	if x != nil && x.TenantId != nil {
-		return *x.TenantId
-	}
-	return 0
 }
 
 func (x *Permission) GetGroupId() uint32 {
@@ -605,34 +597,33 @@ var File_permission_service_v1_permission_proto protoreflect.FileDescriptor
 
 const file_permission_service_v1_permission_proto_rawDesc = "" +
 	"\n" +
-	"&permission/service/v1/permission.proto\x12\x15permission.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\"\xc4\t\n" +
+	"&permission/service/v1/permission.proto\x12\x15permission.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\"\x84\t\n" +
 	"\n" +
 	"Permission\x12&\n" +
 	"\x02id\x18\x01 \x01(\rB\x11\xbaG\x0e\x92\x02\v权限点IDH\x00R\x02id\x88\x01\x01\x12F\n" +
 	"\x04name\x18\x02 \x01(\tB-\xbaG*\x92\x02'权限点名称（如：删除用户）H\x01R\x04name\x88\x01\x01\x12K\n" +
 	"\x04code\x18\x03 \x01(\tB2\xbaG/\x92\x02,权限点唯一编码（如：user.delete）H\x02R\x04code\x88\x01\x01\x12)\n" +
 	"\x06remark\x18\x04 \x01(\tB\f\xbaG\t\x92\x02\x06备注H\x03R\x06remark\x88\x01\x01\x12S\n" +
-	"\x06status\x18\x05 \x01(\x0e2(.permission.service.v1.Permission.StatusB\f\xbaG\t\x92\x02\x06状态H\x04R\x06status\x88\x01\x01\x120\n" +
-	"\ttenant_id\x18\x06 \x01(\rB\x0e\xbaG\v\x92\x02\b租户IDH\x05R\btenantId\x88\x01\x01\x12.\n" +
-	"\bgroup_id\x18\a \x01(\rB\x0e\xbaG\v\x92\x02\b分组IDH\x06R\agroupId\x88\x01\x01\x126\n" +
+	"\x06status\x18\x05 \x01(\x0e2(.permission.service.v1.Permission.StatusB\f\xbaG\t\x92\x02\x06状态H\x04R\x06status\x88\x01\x01\x12.\n" +
+	"\bgroup_id\x18\x06 \x01(\rB\x0e\xbaG\v\x92\x02\b分组IDH\x05R\agroupId\x88\x01\x01\x126\n" +
 	"\n" +
-	"group_name\x18\b \x01(\tB\x12\xbaG\x0f\x92\x02\f分组名称H\aR\tgroupName\x88\x01\x01\x122\n" +
+	"group_name\x18\a \x01(\tB\x12\xbaG\x0f\x92\x02\f分组名称H\x06R\tgroupName\x88\x01\x01\x122\n" +
 	"\bmenu_ids\x18\n" +
 	" \x03(\rB\x17\xbaG\x14\x92\x02\x11关联的菜单IDR\amenuIds\x123\n" +
 	"\aapi_ids\x18\v \x03(\rB\x1a\xbaG\x17\x92\x02\x14关联的API资源IDR\x06apiIds\x125\n" +
 	"\n" +
-	"created_by\x18d \x01(\rB\x11\xbaG\x0e\x92\x02\v创建者IDH\bR\tcreatedBy\x88\x01\x01\x125\n" +
+	"created_by\x18d \x01(\rB\x11\xbaG\x0e\x92\x02\v创建者IDH\aR\tcreatedBy\x88\x01\x01\x125\n" +
 	"\n" +
-	"updated_by\x18e \x01(\rB\x11\xbaG\x0e\x92\x02\v更新者IDH\tR\tupdatedBy\x88\x01\x01\x12;\n" +
+	"updated_by\x18e \x01(\rB\x11\xbaG\x0e\x92\x02\v更新者IDH\bR\tupdatedBy\x88\x01\x01\x12;\n" +
 	"\n" +
-	"deleted_by\x18f \x01(\rB\x17\xbaG\x14\x92\x02\x11删除者用户IDH\n" +
-	"R\tdeletedBy\x88\x01\x01\x12S\n" +
+	"deleted_by\x18f \x01(\rB\x17\xbaG\x14\x92\x02\x11删除者用户IDH\tR\tdeletedBy\x88\x01\x01\x12S\n" +
 	"\n" +
-	"created_at\x18\xc8\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f创建时间H\vR\tcreatedAt\x88\x01\x01\x12S\n" +
+	"created_at\x18\xc8\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f创建时间H\n" +
+	"R\tcreatedAt\x88\x01\x01\x12S\n" +
 	"\n" +
-	"updated_at\x18\xc9\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f更新时间H\fR\tupdatedAt\x88\x01\x01\x12S\n" +
+	"updated_at\x18\xc9\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f更新时间H\vR\tupdatedAt\x88\x01\x01\x12S\n" +
 	"\n" +
-	"deleted_at\x18\xca\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f删除时间H\rR\tdeletedAt\x88\x01\x01\"\x19\n" +
+	"deleted_at\x18\xca\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f删除时间H\fR\tdeletedAt\x88\x01\x01\"\x19\n" +
 	"\x06Status\x12\a\n" +
 	"\x03OFF\x10\x00\x12\x06\n" +
 	"\x02ON\x10\x01B\x05\n" +
@@ -640,9 +631,7 @@ const file_permission_service_v1_permission_proto_rawDesc = "" +
 	"\x05_nameB\a\n" +
 	"\x05_codeB\t\n" +
 	"\a_remarkB\t\n" +
-	"\a_statusB\f\n" +
-	"\n" +
-	"_tenant_idB\v\n" +
+	"\a_statusB\v\n" +
 	"\t_group_idB\r\n" +
 	"\v_group_nameB\r\n" +
 	"\v_created_byB\r\n" +

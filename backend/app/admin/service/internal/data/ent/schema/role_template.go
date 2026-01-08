@@ -66,7 +66,6 @@ func (RoleTemplate) Mixin() []ent.Mixin {
 		mixin.AutoIncrementId{},
 		mixin.TimeAt{},
 		mixin.OperatorID{},
-		mixin.TenantID{},
 		mixin.Description{},
 		mixin.SwitchStatus{},
 		mixin.SortOrder{},
@@ -77,9 +76,9 @@ func (RoleTemplate) Mixin() []ent.Mixin {
 func (RoleTemplate) Indexes() []ent.Index {
 	return []ent.Index{
 		// 在租户范围内保证 name 唯一
-		index.Fields("tenant_id", "name").Unique().StorageKey("idx_sys_role_tpl_tenant_name"),
+		index.Fields("name").Unique().StorageKey("idx_sys_role_tpl_name"),
 		// 在租户范围内保证 code 唯一
-		index.Fields("tenant_id", "code").Unique().StorageKey("idx_sys_role_tpl_tenant_code"),
+		index.Fields("code").Unique().StorageKey("idx_sys_role_tpl_code"),
 		// 分类查询加速
 		index.Fields("category").StorageKey("idx_sys_role_tpl_category"),
 		// 系统模板标识查询加速

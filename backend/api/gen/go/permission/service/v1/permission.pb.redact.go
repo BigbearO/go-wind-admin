@@ -139,8 +139,6 @@ func (x *Permission) Redact() string {
 
 	// Safe field: Status
 
-	// Safe field: TenantId
-
 	// Safe field: GroupId
 
 	// Safe field: GroupName

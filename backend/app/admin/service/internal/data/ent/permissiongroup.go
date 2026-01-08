@@ -34,8 +34,6 @@ type PermissionGroup struct {
 	Remark *string `json:"remark,omitempty"`
 	// 状态
 	Status *permissiongroup.Status `json:"status,omitempty"`
-	// 租户ID
-	TenantID *uint32 `json:"tenant_id,omitempty"`
 	// 排序值（越小越靠前）
 	SortOrder *uint32 `json:"sort_order,omitempty"`
 	// 父节点ID
@@ -88,7 +86,7 @@ func (*PermissionGroup) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case permissiongroup.FieldID, permissiongroup.FieldCreatedBy, permissiongroup.FieldUpdatedBy, permissiongroup.FieldDeletedBy, permissiongroup.FieldTenantID, permissiongroup.FieldSortOrder, permissiongroup.FieldParentID:
+		case permissiongroup.FieldID, permissiongroup.FieldCreatedBy, permissiongroup.FieldUpdatedBy, permissiongroup.FieldDeletedBy, permissiongroup.FieldSortOrder, permissiongroup.FieldParentID:
 			values[i] = new(sql.NullInt64)
 		case permissiongroup.FieldRemark, permissiongroup.FieldStatus, permissiongroup.FieldName, permissiongroup.FieldPath, permissiongroup.FieldModule:
 			values[i] = new(sql.NullString)
@@ -170,13 +168,6 @@ func (_m *PermissionGroup) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Status = new(permissiongroup.Status)
 				*_m.Status = permissiongroup.Status(value.String)
-			}
-		case permissiongroup.FieldTenantID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field tenant_id", values[i])
-			} else if value.Valid {
-				_m.TenantID = new(uint32)
-				*_m.TenantID = uint32(value.Int64)
 			}
 		case permissiongroup.FieldSortOrder:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -296,11 +287,6 @@ func (_m *PermissionGroup) String() string {
 	builder.WriteString(", ")
 	if v := _m.Status; v != nil {
 		builder.WriteString("status=")
-		builder.WriteString(fmt.Sprintf("%v", *v))
-	}
-	builder.WriteString(", ")
-	if v := _m.TenantID; v != nil {
-		builder.WriteString("tenant_id=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")

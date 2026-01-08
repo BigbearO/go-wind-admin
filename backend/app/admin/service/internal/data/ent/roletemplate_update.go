@@ -418,9 +418,6 @@ func (_u *RoleTemplateUpdate) sqlSave(ctx context.Context) (_node int, err error
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(roletemplate.FieldDeletedBy, field.TypeUint32)
 	}
-	if _u.mutation.TenantIDCleared() {
-		_spec.ClearField(roletemplate.FieldTenantID, field.TypeUint32)
-	}
 	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(roletemplate.FieldDescription, field.TypeString, value)
 	}
@@ -907,9 +904,6 @@ func (_u *RoleTemplateUpdateOne) sqlSave(ctx context.Context) (_node *RoleTempla
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(roletemplate.FieldDeletedBy, field.TypeUint32)
-	}
-	if _u.mutation.TenantIDCleared() {
-		_spec.ClearField(roletemplate.FieldTenantID, field.TypeUint32)
 	}
 	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(roletemplate.FieldDescription, field.TypeString, value)

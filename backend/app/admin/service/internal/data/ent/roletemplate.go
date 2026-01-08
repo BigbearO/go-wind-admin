@@ -31,8 +31,6 @@ type RoleTemplate struct {
 	UpdatedBy *uint32 `json:"updated_by,omitempty"`
 	// 删除者ID
 	DeletedBy *uint32 `json:"deleted_by,omitempty"`
-	// 租户ID
-	TenantID *uint32 `json:"tenant_id,omitempty"`
 	// 描述
 	Description *string `json:"description,omitempty"`
 	// 状态
@@ -63,7 +61,7 @@ func (*RoleTemplate) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case roletemplate.FieldIsDefault, roletemplate.FieldIsSystem:
 			values[i] = new(sql.NullBool)
-		case roletemplate.FieldID, roletemplate.FieldCreatedBy, roletemplate.FieldUpdatedBy, roletemplate.FieldDeletedBy, roletemplate.FieldTenantID, roletemplate.FieldSortOrder:
+		case roletemplate.FieldID, roletemplate.FieldCreatedBy, roletemplate.FieldUpdatedBy, roletemplate.FieldDeletedBy, roletemplate.FieldSortOrder:
 			values[i] = new(sql.NullInt64)
 		case roletemplate.FieldDescription, roletemplate.FieldStatus, roletemplate.FieldName, roletemplate.FieldCode, roletemplate.FieldCategory:
 			values[i] = new(sql.NullString)
@@ -131,13 +129,6 @@ func (_m *RoleTemplate) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.DeletedBy = new(uint32)
 				*_m.DeletedBy = uint32(value.Int64)
-			}
-		case roletemplate.FieldTenantID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field tenant_id", values[i])
-			} else if value.Valid {
-				_m.TenantID = new(uint32)
-				*_m.TenantID = uint32(value.Int64)
 			}
 		case roletemplate.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -266,11 +257,6 @@ func (_m *RoleTemplate) String() string {
 	builder.WriteString(", ")
 	if v := _m.DeletedBy; v != nil {
 		builder.WriteString("deleted_by=")
-		builder.WriteString(fmt.Sprintf("%v", *v))
-	}
-	builder.WriteString(", ")
-	if v := _m.TenantID; v != nil {
-		builder.WriteString("tenant_id=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")

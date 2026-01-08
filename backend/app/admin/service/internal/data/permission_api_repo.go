@@ -30,13 +30,11 @@ func NewPermissionApiRepo(ctx *bootstrap.Context, entClient *entCrud.EntClient[*
 func (r *PermissionApiRepo) CleanApis(
 	ctx context.Context,
 	tx *ent.Tx,
-	tenantID uint32,
 	permissionIDs []uint32,
 ) error {
 	if _, err := tx.PermissionApi.Delete().
 		Where(
 			permissionapi.PermissionIDIn(permissionIDs...),
-			permissionapi.TenantIDEQ(tenantID),
 		).
 		Exec(ctx); err != nil {
 		r.log.Errorf("delete old permission apis failed: %s", err.Error())
@@ -49,14 +47,13 @@ func (r *PermissionApiRepo) CleanApis(
 func (r *PermissionApiRepo) CleanNotExistApis(
 	ctx context.Context,
 	tx *ent.Tx,
-	tenantID, permissionID uint32,
+	permissionID uint32,
 	apiIDs []uint32,
 ) error {
 	if _, err := tx.PermissionApi.Delete().
 		Where(
 			permissionapi.APIIDNotIn(apiIDs...),
 			permissionapi.PermissionIDEQ(permissionID),
-			permissionapi.TenantIDEQ(tenantID),
 		).
 		Exec(ctx); err != nil {
 		r.log.Errorf("clean not exists permission apis failed: %s", err.Error())
@@ -68,7 +65,7 @@ func (r *PermissionApiRepo) CleanNotExistApis(
 // AssignApis 给权限分配API资源
 func (r *PermissionApiRepo) AssignApis(
 	ctx context.Context,
-	tenantID, permissionID uint32,
+	permissionID uint32,
 	apiIDs []uint32,
 ) (err error) {
 	var tx *ent.Tx
@@ -90,18 +87,18 @@ func (r *PermissionApiRepo) AssignApis(
 		}
 	}()
 
-	if err = r.CleanNotExistApis(ctx, tx, tenantID, permissionID, apiIDs); err != nil {
+	if err = r.CleanNotExistApis(ctx, tx, permissionID, apiIDs); err != nil {
 
 	}
 
-	return r.AssignApisWithTx(ctx, tx, tenantID, permissionID, apiIDs)
+	return r.AssignApisWithTx(ctx, tx, permissionID, apiIDs)
 }
 
 // AssignApisWithTx 给权限分配API资源
 func (r *PermissionApiRepo) AssignApisWithTx(
 	ctx context.Context,
 	tx *ent.Tx,
-	tenantID, permissionID uint32,
+	permissionID uint32,
 	apis []uint32,
 ) error {
 	if len(apis) == 0 {
@@ -113,12 +110,10 @@ func (r *PermissionApiRepo) AssignApisWithTx(
 	for _, apiID := range apis {
 		pm := tx.PermissionApi.
 			Create().
-			SetTenantID(tenantID).
 			SetPermissionID(permissionID).
 			SetAPIID(apiID).
 			SetCreatedAt(now).
 			OnConflictColumns(
-				permissionapi.FieldTenantID,
 				permissionapi.FieldPermissionID,
 				permissionapi.FieldAPIID,
 			).
@@ -179,41 +174,17 @@ func (r *PermissionApiRepo) Delete(ctx context.Context, permissionID uint32) err
 	return nil
 }
 
-// Get 获取权限关联的API资源ID
-func (r *PermissionApiRepo) Get(ctx context.Context, tenantID, permissionID uint32) (uint32, error) {
-	entity, err := r.entClient.Client().PermissionApi.Query().
-		Where(
-			permissionapi.TenantIDEQ(tenantID),
-			permissionapi.PermissionIDEQ(permissionID),
-		).
-		Only(ctx)
-	if err != nil {
-		if ent.IsNotFound(err) {
-			return 0, nil
-		}
-		r.log.Errorf("get permission api failed: %s", err.Error())
-		return 0, permissionV1.ErrorInternalServerError("get permission api failed")
-	}
-
-	if entity != nil {
-		return *entity.APIID, nil
-	}
-
-	return 0, nil
-}
-
 // AssignApi 给权限分配API资源
-func (r *PermissionApiRepo) AssignApi(ctx context.Context, tenantID uint32, permissionID uint32, apiID uint32) error {
+func (r *PermissionApiRepo) AssignApi(ctx context.Context, permissionID uint32, apiID uint32) error {
 	now := time.Now()
 	pm := r.entClient.Client().PermissionApi.
 		Create().
-		SetTenantID(tenantID).
 		SetPermissionID(permissionID).
 		SetAPIID(apiID).
 		SetCreatedAt(now).
 		OnConflictColumns(
-			permissionapi.FieldTenantID,
 			permissionapi.FieldPermissionID,
+			permissionapi.FieldAPIID,
 		).
 		UpdateNewValues().
 		SetUpdatedAt(now)

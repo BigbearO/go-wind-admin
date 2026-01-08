@@ -153,10 +153,9 @@ func (r *PermissionRepo) GetPermissionCodesByIDs(ctx context.Context, ids []uint
 }
 
 // GetPermissionIDsByCodes 通过权限代码列表获取权限ID列表
-func (r *PermissionRepo) GetPermissionIDsByCodes(ctx context.Context, tenantID uint32, codes []string) ([]uint32, error) {
+func (r *PermissionRepo) GetPermissionIDsByCodes(ctx context.Context, codes []string) ([]uint32, error) {
 	q := r.entClient.Client().Permission.Query().
 		Where(
-			permission.TenantIDEQ(tenantID),
 			permission.CodeIn(codes...),
 		)
 
@@ -175,10 +174,9 @@ func (r *PermissionRepo) GetPermissionIDsByCodes(ctx context.Context, tenantID u
 }
 
 // GetPermissionIDsByCodesWithTx 通过权限代码列表获取权限ID列表
-func (r *PermissionRepo) GetPermissionIDsByCodesWithTx(ctx context.Context, tx *ent.Tx, tenantID uint32, codes []string) ([]uint32, error) {
+func (r *PermissionRepo) GetPermissionIDsByCodesWithTx(ctx context.Context, tx *ent.Tx, codes []string) ([]uint32, error) {
 	q := tx.Permission.Query().
 		Where(
-			permission.TenantIDEQ(tenantID),
 			permission.CodeIn(codes...),
 		)
 
@@ -276,12 +274,12 @@ func (r *PermissionRepo) Create(ctx context.Context, req *permissionV1.CreatePer
 	}
 
 	if len(req.Data.ApiIds) > 0 {
-		if err = r.permissionApiRepo.AssignApis(ctx, req.Data.GetTenantId(), entity.ID, req.Data.GetApiIds()); err != nil {
+		if err = r.permissionApiRepo.AssignApis(ctx, entity.ID, req.Data.GetApiIds()); err != nil {
 			return err
 		}
 	}
 	if len(req.Data.MenuIds) > 0 {
-		if err = r.permissionMenuRepo.AssignMenus(ctx, req.Data.GetTenantId(), entity.ID, req.Data.GetMenuIds()); err != nil {
+		if err = r.permissionMenuRepo.AssignMenus(ctx, entity.ID, req.Data.GetMenuIds()); err != nil {
 			return err
 		}
 	}
@@ -312,11 +310,11 @@ func (r *PermissionRepo) BatchCreate(ctx context.Context, tenantID uint32, permi
 	for i, perm := range permissions {
 		entity := entities[i]
 
-		if err = r.permissionApiRepo.AssignApis(ctx, tenantID, entity.ID, perm.GetApiIds()); err != nil {
+		if err = r.permissionApiRepo.AssignApis(ctx, entity.ID, perm.GetApiIds()); err != nil {
 			return err
 		}
 
-		if err = r.permissionMenuRepo.AssignMenus(ctx, tenantID, entity.ID, perm.GetMenuIds()); err != nil {
+		if err = r.permissionMenuRepo.AssignMenus(ctx, entity.ID, perm.GetMenuIds()); err != nil {
 			return err
 		}
 	}
@@ -331,13 +329,9 @@ func (r *PermissionRepo) newPermissionCreate(permission *permissionV1.Permission
 		SetCode(permission.GetCode()).
 		SetNillableStatus(r.statusConverter.ToEntity(permission.Status)).
 		SetNillableGroupID(permission.GroupId).
-		SetNillableTenantID(permission.TenantId).
 		SetNillableCreatedBy(permission.CreatedBy).
 		SetNillableCreatedAt(timeutil.TimestamppbToTime(permission.CreatedAt))
 
-	if permission.TenantId == nil {
-		builder.SetTenantID(permission.GetTenantId())
-	}
 	if permission.CreatedAt == nil {
 		builder.SetCreatedAt(time.Now())
 	}
@@ -350,7 +344,7 @@ func (r *PermissionRepo) newPermissionCreate(permission *permissionV1.Permission
 }
 
 // Update 更新 Permission
-func (r *PermissionRepo) Update(ctx context.Context, tenantID uint32, req *permissionV1.UpdatePermissionRequest) error {
+func (r *PermissionRepo) Update(ctx context.Context, req *permissionV1.UpdatePermissionRequest) error {
 	if req == nil || req.Data == nil {
 		return permissionV1.ErrorBadRequest("invalid parameter")
 	}
@@ -392,11 +386,11 @@ func (r *PermissionRepo) Update(ctx context.Context, tenantID uint32, req *permi
 		return err
 	}
 
-	if err = r.permissionApiRepo.AssignApis(ctx, tenantID, perm.GetId(), req.Data.GetApiIds()); err != nil {
+	if err = r.permissionApiRepo.AssignApis(ctx, perm.GetId(), req.Data.GetApiIds()); err != nil {
 		return err
 	}
 
-	if err = r.permissionMenuRepo.AssignMenus(ctx, tenantID, perm.GetId(), req.Data.GetMenuIds()); err != nil {
+	if err = r.permissionMenuRepo.AssignMenus(ctx, perm.GetId(), req.Data.GetMenuIds()); err != nil {
 		return err
 	}
 

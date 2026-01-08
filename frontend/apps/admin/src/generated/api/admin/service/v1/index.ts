@@ -3403,7 +3403,6 @@ export type permissionservicev1_Permission = {
   code?: string;
   remark?: string;
   status?: permissionservicev1_Permission_Status;
-  tenantId?: number;
   groupId?: number;
   groupName?: string;
   menuIds: number[] | undefined;
@@ -3766,7 +3765,6 @@ export type permissionservicev1_PermissionGroup = {
   module?: string;
   sortOrder?: number;
   status?: permissionservicev1_PermissionGroup_Status;
-  tenantId?: number;
   parentId?: number;
   children: permissionservicev1_PermissionGroup[] | undefined;
   createdBy?: number;

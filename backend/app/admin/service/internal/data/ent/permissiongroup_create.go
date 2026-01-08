@@ -134,20 +134,6 @@ func (_c *PermissionGroupCreate) SetNillableStatus(v *permissiongroup.Status) *P
 	return _c
 }
 
-// SetTenantID sets the "tenant_id" field.
-func (_c *PermissionGroupCreate) SetTenantID(v uint32) *PermissionGroupCreate {
-	_c.mutation.SetTenantID(v)
-	return _c
-}
-
-// SetNillableTenantID sets the "tenant_id" field if the given value is not nil.
-func (_c *PermissionGroupCreate) SetNillableTenantID(v *uint32) *PermissionGroupCreate {
-	if v != nil {
-		_c.SetTenantID(*v)
-	}
-	return _c
-}
-
 // SetSortOrder sets the "sort_order" field.
 func (_c *PermissionGroupCreate) SetSortOrder(v uint32) *PermissionGroupCreate {
 	_c.mutation.SetSortOrder(v)
@@ -368,10 +354,6 @@ func (_c *PermissionGroupCreate) createSpec() (*PermissionGroup, *sqlgraph.Creat
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(permissiongroup.FieldStatus, field.TypeEnum, value)
 		_node.Status = &value
-	}
-	if value, ok := _c.mutation.TenantID(); ok {
-		_spec.SetField(permissiongroup.FieldTenantID, field.TypeUint32, value)
-		_node.TenantID = &value
 	}
 	if value, ok := _c.mutation.SortOrder(); ok {
 		_spec.SetField(permissiongroup.FieldSortOrder, field.TypeUint32, value)
@@ -721,9 +703,6 @@ func (u *PermissionGroupUpsertOne) UpdateNewValues() *PermissionGroupUpsertOne {
 		}
 		if _, exists := u.create.mutation.CreatedAt(); exists {
 			s.SetIgnore(permissiongroup.FieldCreatedAt)
-		}
-		if _, exists := u.create.mutation.TenantID(); exists {
-			s.SetIgnore(permissiongroup.FieldTenantID)
 		}
 	}))
 	return u
@@ -1206,9 +1185,6 @@ func (u *PermissionGroupUpsertBulk) UpdateNewValues() *PermissionGroupUpsertBulk
 			}
 			if _, exists := b.mutation.CreatedAt(); exists {
 				s.SetIgnore(permissiongroup.FieldCreatedAt)
-			}
-			if _, exists := b.mutation.TenantID(); exists {
-				s.SetIgnore(permissiongroup.FieldTenantID)
 			}
 		}
 	}))

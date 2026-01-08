@@ -448,9 +448,6 @@ func (_u *PermissionGroupUpdate) sqlSave(ctx context.Context) (_node int, err er
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(permissiongroup.FieldStatus, field.TypeEnum, value)
 	}
-	if _u.mutation.TenantIDCleared() {
-		_spec.ClearField(permissiongroup.FieldTenantID, field.TypeUint32)
-	}
 	if value, ok := _u.mutation.SortOrder(); ok {
 		_spec.SetField(permissiongroup.FieldSortOrder, field.TypeUint32, value)
 	}
@@ -1019,9 +1016,6 @@ func (_u *PermissionGroupUpdateOne) sqlSave(ctx context.Context) (_node *Permiss
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(permissiongroup.FieldStatus, field.TypeEnum, value)
-	}
-	if _u.mutation.TenantIDCleared() {
-		_spec.ClearField(permissiongroup.FieldTenantID, field.TypeUint32)
 	}
 	if value, ok := _u.mutation.SortOrder(); ok {
 		_spec.SetField(permissiongroup.FieldSortOrder, field.TypeUint32, value)

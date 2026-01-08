@@ -52,7 +52,6 @@ func (PermissionGroup) Mixin() []ent.Mixin {
 		mixin.OperatorID{},
 		mixin.Remark{},
 		mixin.SwitchStatus{},
-		mixin.TenantID{},
 		mixin.SortOrder{},
 		mixin.Tree[PermissionGroup]{},
 	}
@@ -60,17 +59,11 @@ func (PermissionGroup) Mixin() []ent.Mixin {
 
 func (PermissionGroup) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("tenant_id").StorageKey("idx_perm_group_tenant_id"),
-		index.Fields("parent_id").StorageKey("idx_perm_group_parent_id"),
+		index.Fields("parent_id").
+			StorageKey("idx_perm_group_parent_id"),
 
-		// 使用 path 作为树节点的唯一标识（可在租户内唯一）
-		index.Fields("tenant_id", "path").
-			Unique().
-			StorageKey("uix_perm_group_tenant_path"),
-
-		// 常用按租户+名称查询的非唯一索引
-		index.Fields("tenant_id", "name").
-			StorageKey("idx_perm_group_tenant_name"),
+		index.Fields("name").
+			StorageKey("idx_perm_group_name"),
 
 		// 按 module 的查询索引
 		index.Fields("module").

@@ -326,7 +326,7 @@ func (r *RoleRepo) Create(ctx context.Context, req *userV1.CreateRoleRequest) (e
 	}
 
 	if req.Data.Permissions != nil {
-		if err = r.assignPermissionsToRole(ctx, tx, req.Data.GetTenantId(), ret.ID, req.Data.GetCreatedBy(), req.Data.Permissions); err != nil {
+		if err = r.assignPermissionsToRole(ctx, tx, ret.ID, req.Data.GetCreatedBy(), req.Data.Permissions); err != nil {
 			r.log.Errorf("assign permissions to role failed: %s", err.Error())
 			return userV1.ErrorInternalServerError("assign permissions to role failed")
 		}
@@ -402,7 +402,7 @@ func (r *RoleRepo) Update(ctx context.Context, req *userV1.UpdateRoleRequest) (e
 	}
 
 	if req.Data.Permissions != nil {
-		if err = r.assignPermissionsToRole(ctx, tx, req.Data.GetTenantId(), req.GetId(), req.Data.GetUpdatedBy(), req.Data.Permissions); err != nil {
+		if err = r.assignPermissionsToRole(ctx, tx, req.GetId(), req.Data.GetUpdatedBy(), req.Data.Permissions); err != nil {
 			r.log.Errorf("assign permissions to role failed: %s", err.Error())
 			return userV1.ErrorInternalServerError("assign permissions to role failed")
 		}
@@ -456,18 +456,18 @@ func (r *RoleRepo) GetPermissionsByRoleIDs(ctx context.Context, roleIDs []uint32
 }
 
 // assignPermissionCodesToRole 分配权限编码给角色
-func (r *RoleRepo) assignPermissionCodesToRole(ctx context.Context, tx *ent.Tx, tenantID, roleID, operatorID uint32, codes []string) error {
-	ids, err := r.permissionRepo.GetPermissionIDsByCodesWithTx(ctx, tx, tenantID, codes)
+func (r *RoleRepo) assignPermissionCodesToRole(ctx context.Context, tx *ent.Tx, roleID, operatorID uint32, codes []string) error {
+	ids, err := r.permissionRepo.GetPermissionIDsByCodesWithTx(ctx, tx, codes)
 	if err != nil {
 		return err
 	}
 
-	return r.rolePermissionRepo.AssignPermissions(ctx, tx, tenantID, roleID, operatorID, ids)
+	return r.rolePermissionRepo.AssignPermissions(ctx, tx, roleID, operatorID, ids)
 }
 
 // assignPermissionsToRole 分配权限给角色
-func (r *RoleRepo) assignPermissionsToRole(ctx context.Context, tx *ent.Tx, tenantID, roleID, operatorID uint32, permissionIDs []uint32) error {
-	return r.rolePermissionRepo.AssignPermissions(ctx, tx, tenantID, roleID, operatorID, permissionIDs)
+func (r *RoleRepo) assignPermissionsToRole(ctx context.Context, tx *ent.Tx, roleID, operatorID uint32, permissionIDs []uint32) error {
+	return r.rolePermissionRepo.AssignPermissions(ctx, tx, roleID, operatorID, permissionIDs)
 }
 
 // GetRolePermissionApiIDs 获取角色关联的权限API资源ID列表

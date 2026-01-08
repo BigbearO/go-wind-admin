@@ -5223,10 +5223,6 @@ components:
                     type: string
                     description: 状态
                     format: enum
-                tenantId:
-                    type: integer
-                    description: 租户ID
-                    format: uint32
                 groupId:
                     type: integer
                     description: 分组ID
@@ -5337,10 +5333,6 @@ components:
                     type: string
                     description: 状态
                     format: enum
-                tenantId:
-                    type: integer
-                    description: 租户ID
-                    format: uint32
                 parentId:
                     type: integer
                     description: 父节点ID

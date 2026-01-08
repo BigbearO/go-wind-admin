@@ -45,25 +45,15 @@ func (PermissionApi) Mixin() []ent.Mixin {
 		mixin.AutoIncrementId{},
 		mixin.TimeAt{},
 		mixin.OperatorID{},
-		mixin.TenantID{},
 	}
 }
 
 // Indexes of the PermissionApi.
 func (PermissionApi) Indexes() []ent.Index {
 	return []ent.Index{
-		// 唯一约束：同一租户下权限与 API 资源的组合唯一
-		index.Fields("tenant_id", "permission_id", "api_id").
+		index.Fields("permission_id", "api_id").
 			Unique().
-			StorageKey("uix_perm_api_tenant_permission_api_id"),
-
-		// 常用查询：根据租户+权限查该权限下的所有 API 资源
-		index.Fields("tenant_id", "permission_id").
-			StorageKey("idx_perm_api_tenant_permission_api"),
-
-		// 常用查询：根据租户+API 资源查关联的权限
-		index.Fields("tenant_id", "api_id").
-			StorageKey("idx_perm_api_tenant_api"),
+			StorageKey("uix_perm_api_permission_api_id"),
 
 		// 单列索引：按 permission_id 快速查询
 		index.Fields("permission_id").

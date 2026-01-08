@@ -106,20 +106,6 @@ func (_c *RoleTemplateCreate) SetNillableDeletedBy(v *uint32) *RoleTemplateCreat
 	return _c
 }
 
-// SetTenantID sets the "tenant_id" field.
-func (_c *RoleTemplateCreate) SetTenantID(v uint32) *RoleTemplateCreate {
-	_c.mutation.SetTenantID(v)
-	return _c
-}
-
-// SetNillableTenantID sets the "tenant_id" field if the given value is not nil.
-func (_c *RoleTemplateCreate) SetNillableTenantID(v *uint32) *RoleTemplateCreate {
-	if v != nil {
-		_c.SetTenantID(*v)
-	}
-	return _c
-}
-
 // SetDescription sets the "description" field.
 func (_c *RoleTemplateCreate) SetDescription(v string) *RoleTemplateCreate {
 	_c.mutation.SetDescription(v)
@@ -374,10 +360,6 @@ func (_c *RoleTemplateCreate) createSpec() (*RoleTemplate, *sqlgraph.CreateSpec)
 	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(roletemplate.FieldDeletedBy, field.TypeUint32, value)
 		_node.DeletedBy = &value
-	}
-	if value, ok := _c.mutation.TenantID(); ok {
-		_spec.SetField(roletemplate.FieldTenantID, field.TypeUint32, value)
-		_node.TenantID = &value
 	}
 	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(roletemplate.FieldDescription, field.TypeString, value)
@@ -732,9 +714,6 @@ func (u *RoleTemplateUpsertOne) UpdateNewValues() *RoleTemplateUpsertOne {
 		}
 		if _, exists := u.create.mutation.CreatedAt(); exists {
 			s.SetIgnore(roletemplate.FieldCreatedAt)
-		}
-		if _, exists := u.create.mutation.TenantID(); exists {
-			s.SetIgnore(roletemplate.FieldTenantID)
 		}
 	}))
 	return u
@@ -1238,9 +1217,6 @@ func (u *RoleTemplateUpsertBulk) UpdateNewValues() *RoleTemplateUpsertBulk {
 			}
 			if _, exists := b.mutation.CreatedAt(); exists {
 				s.SetIgnore(roletemplate.FieldCreatedAt)
-			}
-			if _, exists := b.mutation.TenantID(); exists {
-				s.SetIgnore(roletemplate.FieldTenantID)
 			}
 		}
 	}))

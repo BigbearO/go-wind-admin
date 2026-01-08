@@ -30,13 +30,11 @@ func NewPermissionMenuRepo(ctx *bootstrap.Context, entClient *entCrud.EntClient[
 func (r *PermissionMenuRepo) CleanMenus(
 	ctx context.Context,
 	tx *ent.Tx,
-	tenantID uint32,
 	permissionIDs []uint32,
 ) error {
 	if _, err := tx.PermissionMenu.Delete().
 		Where(
 			permissionmenu.PermissionIDIn(permissionIDs...),
-			permissionmenu.TenantIDEQ(tenantID),
 		).
 		Exec(ctx); err != nil {
 		r.log.Errorf("delete old permission menus failed: %s", err.Error())
@@ -49,7 +47,6 @@ func (r *PermissionMenuRepo) CleanMenus(
 func (r *PermissionMenuRepo) CleanNotExistMenus(
 	ctx context.Context,
 	tx *ent.Tx,
-	tenantID uint32,
 	permissionID uint32,
 	menuIDs []uint32,
 ) error {
@@ -57,7 +54,6 @@ func (r *PermissionMenuRepo) CleanNotExistMenus(
 		Where(
 			permissionmenu.MenuIDNotIn(menuIDs...),
 			permissionmenu.PermissionIDEQ(permissionID),
-			permissionmenu.TenantIDEQ(tenantID),
 		).
 		Exec(ctx); err != nil {
 		r.log.Errorf("clean not exists permission menus failed: %s", err.Error())
@@ -67,7 +63,7 @@ func (r *PermissionMenuRepo) CleanNotExistMenus(
 }
 
 // AssignMenus 给权限分配菜单
-func (r *PermissionMenuRepo) AssignMenus(ctx context.Context, tenantID uint32, permissionID uint32, menuIDs []uint32) (err error) {
+func (r *PermissionMenuRepo) AssignMenus(ctx context.Context, permissionID uint32, menuIDs []uint32) (err error) {
 	var tx *ent.Tx
 	tx, err = r.entClient.Client().Tx(ctx)
 	if err != nil {
@@ -87,15 +83,15 @@ func (r *PermissionMenuRepo) AssignMenus(ctx context.Context, tenantID uint32, p
 		}
 	}()
 
-	if err = r.CleanNotExistMenus(ctx, tx, tenantID, permissionID, menuIDs); err != nil {
+	if err = r.CleanNotExistMenus(ctx, tx, permissionID, menuIDs); err != nil {
 
 	}
 
-	return r.AssignMenusWithTx(ctx, tx, tenantID, permissionID, menuIDs)
+	return r.AssignMenusWithTx(ctx, tx, permissionID, menuIDs)
 }
 
 // AssignMenusWithTx 给权限分配菜单
-func (r *PermissionMenuRepo) AssignMenusWithTx(ctx context.Context, tx *ent.Tx, tenantID uint32, permissionID uint32, menuIDs []uint32) error {
+func (r *PermissionMenuRepo) AssignMenusWithTx(ctx context.Context, tx *ent.Tx, permissionID uint32, menuIDs []uint32) error {
 	if len(menuIDs) == 0 {
 		return nil
 	}
@@ -105,12 +101,10 @@ func (r *PermissionMenuRepo) AssignMenusWithTx(ctx context.Context, tx *ent.Tx, 
 	for _, menuID := range menuIDs {
 		pm := tx.PermissionMenu.
 			Create().
-			SetTenantID(tenantID).
 			SetPermissionID(permissionID).
 			SetMenuID(menuID).
 			SetCreatedAt(now).
 			OnConflictColumns(
-				permissionmenu.FieldTenantID,
 				permissionmenu.FieldPermissionID,
 				permissionmenu.FieldMenuID,
 			).
@@ -172,42 +166,18 @@ func (r *PermissionMenuRepo) Delete(ctx context.Context, permissionID uint32) er
 	return nil
 }
 
-// Get 获取权限关联的菜单ID
-func (r *PermissionMenuRepo) Get(ctx context.Context, tenantID, permissionID uint32) (uint32, error) {
-	entity, err := r.entClient.Client().PermissionMenu.Query().
-		Where(
-			permissionmenu.TenantIDEQ(tenantID),
-			permissionmenu.PermissionIDEQ(permissionID),
-		).
-		Only(ctx)
-	if err != nil {
-		if ent.IsNotFound(err) {
-			return 0, nil
-		}
-		r.log.Errorf("get permission menu failed: %s", err.Error())
-		return 0, permissionV1.ErrorInternalServerError("get permission menu failed")
-	}
-
-	if entity != nil {
-		return *entity.MenuID, nil
-	}
-
-	return 0, nil
-}
-
 // AssignMenu 给权限分配菜单
-func (r *PermissionMenuRepo) AssignMenu(ctx context.Context, tenantID uint32, permissionID uint32, menuID uint32) error {
+func (r *PermissionMenuRepo) AssignMenu(ctx context.Context, permissionID uint32, menuID uint32) error {
 	now := time.Now()
 
 	pm := r.entClient.Client().PermissionMenu.
 		Create().
-		SetTenantID(tenantID).
 		SetPermissionID(permissionID).
 		SetMenuID(menuID).
 		SetCreatedAt(now).
 		OnConflictColumns(
-			permissionmenu.FieldTenantID,
 			permissionmenu.FieldPermissionID,
+			permissionmenu.FieldMenuID,
 		).
 		UpdateNewValues().
 		SetUpdatedAt(now)

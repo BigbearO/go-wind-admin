@@ -44,7 +44,7 @@ func (r *RolePermissionRepo) CleanPermissions(
 }
 
 // AssignPermissions 给角色分配权限
-func (r *RolePermissionRepo) AssignPermissions(ctx context.Context, tx *ent.Tx, tenantID, roleID, operatorID uint32, permissions []uint32) error {
+func (r *RolePermissionRepo) AssignPermissions(ctx context.Context, tx *ent.Tx, roleID, operatorID uint32, permissions []uint32) error {
 	if len(permissions) == 0 {
 		return nil
 	}
@@ -54,7 +54,7 @@ func (r *RolePermissionRepo) AssignPermissions(ctx context.Context, tx *ent.Tx, 
 	for _, permissionID := range permissions {
 		rp := tx.RolePermission.
 			Create().
-			SetTenantID(tenantID).
+			//SetTenantID(tenantID).
 			SetPermissionID(permissionID).
 			SetRoleID(roleID).
 			SetCreatedBy(operatorID).

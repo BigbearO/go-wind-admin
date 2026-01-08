@@ -106,20 +106,6 @@ func (_c *PermissionPolicyCreate) SetNillableDeletedBy(v *uint32) *PermissionPol
 	return _c
 }
 
-// SetTenantID sets the "tenant_id" field.
-func (_c *PermissionPolicyCreate) SetTenantID(v uint32) *PermissionPolicyCreate {
-	_c.mutation.SetTenantID(v)
-	return _c
-}
-
-// SetNillableTenantID sets the "tenant_id" field if the given value is not nil.
-func (_c *PermissionPolicyCreate) SetNillableTenantID(v *uint32) *PermissionPolicyCreate {
-	if v != nil {
-		_c.SetTenantID(*v)
-	}
-	return _c
-}
-
 // SetStatus sets the "status" field.
 func (_c *PermissionPolicyCreate) SetStatus(v permissionpolicy.Status) *PermissionPolicyCreate {
 	_c.mutation.SetStatus(v)
@@ -364,10 +350,6 @@ func (_c *PermissionPolicyCreate) createSpec() (*PermissionPolicy, *sqlgraph.Cre
 	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(permissionpolicy.FieldDeletedBy, field.TypeUint32, value)
 		_node.DeletedBy = &value
-	}
-	if value, ok := _c.mutation.TenantID(); ok {
-		_spec.SetField(permissionpolicy.FieldTenantID, field.TypeUint32, value)
-		_node.TenantID = &value
 	}
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(permissionpolicy.FieldStatus, field.TypeEnum, value)
@@ -690,9 +672,6 @@ func (u *PermissionPolicyUpsertOne) UpdateNewValues() *PermissionPolicyUpsertOne
 		}
 		if _, exists := u.create.mutation.CreatedAt(); exists {
 			s.SetIgnore(permissionpolicy.FieldCreatedAt)
-		}
-		if _, exists := u.create.mutation.TenantID(); exists {
-			s.SetIgnore(permissionpolicy.FieldTenantID)
 		}
 	}))
 	return u
@@ -1168,9 +1147,6 @@ func (u *PermissionPolicyUpsertBulk) UpdateNewValues() *PermissionPolicyUpsertBu
 			}
 			if _, exists := b.mutation.CreatedAt(); exists {
 				s.SetIgnore(permissionpolicy.FieldCreatedAt)
-			}
-			if _, exists := b.mutation.TenantID(); exists {
-				s.SetIgnore(permissionpolicy.FieldTenantID)
 			}
 		}
 	}))

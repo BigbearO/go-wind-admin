@@ -329,9 +329,6 @@ func (_u *PermissionUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(permission.FieldStatus, field.TypeEnum, value)
 	}
-	if _u.mutation.TenantIDCleared() {
-		_spec.ClearField(permission.FieldTenantID, field.TypeUint32)
-	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(permission.FieldName, field.TypeString, value)
 	}
@@ -698,9 +695,6 @@ func (_u *PermissionUpdateOne) sqlSave(ctx context.Context) (_node *Permission, 
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(permission.FieldStatus, field.TypeEnum, value)
-	}
-	if _u.mutation.TenantIDCleared() {
-		_spec.ClearField(permission.FieldTenantID, field.TypeUint32)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(permission.FieldName, field.TypeString, value)

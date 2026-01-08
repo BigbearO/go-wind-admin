@@ -83,7 +83,6 @@ type PermissionGroup struct {
 	Module        *string                 `protobuf:"bytes,4,opt,name=module,proto3,oneof" json:"module,omitempty"`                                                    // 业务模块标识（如：opm、order、pay）
 	SortOrder     *uint32                 `protobuf:"varint,5,opt,name=sort_order,json=sortOrder,proto3,oneof" json:"sort_order,omitempty"`                            // 排序值（越小越靠前）
 	Status        *PermissionGroup_Status `protobuf:"varint,6,opt,name=status,proto3,enum=permission.service.v1.PermissionGroup_Status,oneof" json:"status,omitempty"` // 状态
-	TenantId      *uint32                 `protobuf:"varint,7,opt,name=tenant_id,json=tenantId,proto3,oneof" json:"tenant_id,omitempty"`                               // 租户ID
 	ParentId      *uint32                 `protobuf:"varint,50,opt,name=parent_id,json=parentId,proto3,oneof" json:"parent_id,omitempty"`                              // 父节点ID
 	Children      []*PermissionGroup      `protobuf:"bytes,51,rep,name=children,proto3" json:"children,omitempty"`                                                     // 子节点树
 	CreatedBy     *uint32                 `protobuf:"varint,100,opt,name=created_by,json=createdBy,proto3,oneof" json:"created_by,omitempty"`                          // 创建者ID
@@ -166,13 +165,6 @@ func (x *PermissionGroup) GetStatus() PermissionGroup_Status {
 		return *x.Status
 	}
 	return PermissionGroup_OFF
-}
-
-func (x *PermissionGroup) GetTenantId() uint32 {
-	if x != nil && x.TenantId != nil {
-		return *x.TenantId
-	}
-	return 0
 }
 
 func (x *PermissionGroup) GetParentId() uint32 {
@@ -522,8 +514,7 @@ var File_permission_service_v1_permission_group_proto protoreflect.FileDescripto
 
 const file_permission_service_v1_permission_group_proto_rawDesc = "" +
 	"\n" +
-	",permission/service/v1/permission_group.proto\x12\x15permission.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\"\x9f\n" +
-	"\n" +
+	",permission/service/v1/permission_group.proto\x12\x15permission.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\"\xdf\t\n" +
 	"\x0fPermissionGroup\x12&\n" +
 	"\x02id\x18\x01 \x01(\rB\x11\xbaG\x0e\x92\x02\v权限组IDH\x00R\x02id\x88\x01\x01\x12R\n" +
 	"\x04name\x18\x02 \x01(\tB9\xbaG6\x92\x023分组名称（如：用户管理、订单操作）H\x01R\x04name\x88\x01\x01\x12`\n" +
@@ -531,23 +522,22 @@ const file_permission_service_v1_permission_group_proto_rawDesc = "" +
 	"\x06module\x18\x04 \x01(\tB5\xbaG2\x92\x02/业务模块标识（如：opm、order、pay）H\x03R\x06module\x88\x01\x01\x12H\n" +
 	"\n" +
 	"sort_order\x18\x05 \x01(\rB$\xbaG!\x92\x02\x1e排序值（越小越靠前）H\x04R\tsortOrder\x88\x01\x01\x12X\n" +
-	"\x06status\x18\x06 \x01(\x0e2-.permission.service.v1.PermissionGroup.StatusB\f\xbaG\t\x92\x02\x06状态H\x05R\x06status\x88\x01\x01\x120\n" +
-	"\ttenant_id\x18\a \x01(\rB\x0e\xbaG\v\x92\x02\b租户IDH\x06R\btenantId\x88\x01\x01\x123\n" +
-	"\tparent_id\x182 \x01(\rB\x11\xbaG\x0e\x92\x02\v父节点IDH\aR\bparentId\x88\x01\x01\x12V\n" +
+	"\x06status\x18\x06 \x01(\x0e2-.permission.service.v1.PermissionGroup.StatusB\f\xbaG\t\x92\x02\x06状态H\x05R\x06status\x88\x01\x01\x123\n" +
+	"\tparent_id\x182 \x01(\rB\x11\xbaG\x0e\x92\x02\v父节点IDH\x06R\bparentId\x88\x01\x01\x12V\n" +
 	"\bchildren\x183 \x03(\v2&.permission.service.v1.PermissionGroupB\x12\xbaG\x0f\x92\x02\f子节点树R\bchildren\x125\n" +
 	"\n" +
-	"created_by\x18d \x01(\rB\x11\xbaG\x0e\x92\x02\v创建者IDH\bR\tcreatedBy\x88\x01\x01\x125\n" +
+	"created_by\x18d \x01(\rB\x11\xbaG\x0e\x92\x02\v创建者IDH\aR\tcreatedBy\x88\x01\x01\x125\n" +
 	"\n" +
-	"updated_by\x18e \x01(\rB\x11\xbaG\x0e\x92\x02\v更新者IDH\tR\tupdatedBy\x88\x01\x01\x12;\n" +
+	"updated_by\x18e \x01(\rB\x11\xbaG\x0e\x92\x02\v更新者IDH\bR\tupdatedBy\x88\x01\x01\x12;\n" +
 	"\n" +
-	"deleted_by\x18f \x01(\rB\x17\xbaG\x14\x92\x02\x11删除者用户IDH\n" +
-	"R\tdeletedBy\x88\x01\x01\x12S\n" +
+	"deleted_by\x18f \x01(\rB\x17\xbaG\x14\x92\x02\x11删除者用户IDH\tR\tdeletedBy\x88\x01\x01\x12S\n" +
 	"\n" +
-	"created_at\x18\xc8\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f创建时间H\vR\tcreatedAt\x88\x01\x01\x12S\n" +
+	"created_at\x18\xc8\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f创建时间H\n" +
+	"R\tcreatedAt\x88\x01\x01\x12S\n" +
 	"\n" +
-	"updated_at\x18\xc9\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f更新时间H\fR\tupdatedAt\x88\x01\x01\x12S\n" +
+	"updated_at\x18\xc9\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f更新时间H\vR\tupdatedAt\x88\x01\x01\x12S\n" +
 	"\n" +
-	"deleted_at\x18\xca\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f删除时间H\rR\tdeletedAt\x88\x01\x01\"\x19\n" +
+	"deleted_at\x18\xca\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f删除时间H\fR\tdeletedAt\x88\x01\x01\"\x19\n" +
 	"\x06Status\x12\a\n" +
 	"\x03OFF\x10\x00\x12\x06\n" +
 	"\x02ON\x10\x01B\x05\n" +
@@ -557,8 +547,6 @@ const file_permission_service_v1_permission_group_proto_rawDesc = "" +
 	"\a_moduleB\r\n" +
 	"\v_sort_orderB\t\n" +
 	"\a_statusB\f\n" +
-	"\n" +
-	"_tenant_idB\f\n" +
 	"\n" +
 	"_parent_idB\r\n" +
 	"\v_created_byB\r\n" +

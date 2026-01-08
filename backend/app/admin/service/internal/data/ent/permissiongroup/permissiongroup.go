@@ -30,8 +30,6 @@ const (
 	FieldRemark = "remark"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
-	// FieldTenantID holds the string denoting the tenant_id field in the database.
-	FieldTenantID = "tenant_id"
 	// FieldSortOrder holds the string denoting the sort_order field in the database.
 	FieldSortOrder = "sort_order"
 	// FieldParentID holds the string denoting the parent_id field in the database.
@@ -69,7 +67,6 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldRemark,
 	FieldStatus,
-	FieldTenantID,
 	FieldSortOrder,
 	FieldParentID,
 	FieldName,
@@ -168,11 +165,6 @@ func ByRemark(opts ...sql.OrderTermOption) OrderOption {
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
-}
-
-// ByTenantID orders the results by the tenant_id field.
-func ByTenantID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldTenantID, opts...).ToFunc()
 }
 
 // BySortOrder orders the results by the sort_order field.

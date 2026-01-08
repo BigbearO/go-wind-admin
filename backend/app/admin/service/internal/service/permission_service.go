@@ -121,7 +121,7 @@ func (s *PermissionService) Update(ctx context.Context, req *permissionV1.Update
 
 	req.Data.UpdatedBy = trans.Ptr(operator.UserId)
 
-	if err = s.permissionRepo.Update(ctx, operator.GetTenantId(), req); err != nil {
+	if err = s.permissionRepo.Update(ctx, req); err != nil {
 		return nil, err
 	}
 

@@ -368,12 +368,12 @@ func init() {
 	_ = permissiongroupMixinFields0
 	permissiongroupMixinFields4 := permissiongroupMixin[4].Fields()
 	_ = permissiongroupMixinFields4
-	permissiongroupMixinFields6 := permissiongroupMixin[6].Fields()
-	_ = permissiongroupMixinFields6
+	permissiongroupMixinFields5 := permissiongroupMixin[5].Fields()
+	_ = permissiongroupMixinFields5
 	permissiongroupFields := schema.PermissionGroup{}.Fields()
 	_ = permissiongroupFields
 	// permissiongroupDescSortOrder is the schema descriptor for sort_order field.
-	permissiongroupDescSortOrder := permissiongroupMixinFields6[0].Descriptor()
+	permissiongroupDescSortOrder := permissiongroupMixinFields5[0].Descriptor()
 	// permissiongroup.DefaultSortOrder holds the default value on creation for the sort_order field.
 	permissiongroup.DefaultSortOrder = permissiongroupDescSortOrder.Default.(uint32)
 	// permissiongroupDescName is the schema descriptor for name field.
@@ -396,8 +396,8 @@ func init() {
 	permissionpolicyMixin := schema.PermissionPolicy{}.Mixin()
 	permissionpolicyMixinFields0 := permissionpolicyMixin[0].Fields()
 	_ = permissionpolicyMixinFields0
-	permissionpolicyMixinFields4 := permissionpolicyMixin[4].Fields()
-	_ = permissionpolicyMixinFields4
+	permissionpolicyMixinFields3 := permissionpolicyMixin[3].Fields()
+	_ = permissionpolicyMixinFields3
 	permissionpolicyFields := schema.PermissionPolicy{}.Fields()
 	_ = permissionpolicyFields
 	// permissionpolicyDescVersion is the schema descriptor for version field.
@@ -503,14 +503,14 @@ func init() {
 	roletemplateMixin := schema.RoleTemplate{}.Mixin()
 	roletemplateMixinFields0 := roletemplateMixin[0].Fields()
 	_ = roletemplateMixinFields0
+	roletemplateMixinFields4 := roletemplateMixin[4].Fields()
+	_ = roletemplateMixinFields4
 	roletemplateMixinFields5 := roletemplateMixin[5].Fields()
 	_ = roletemplateMixinFields5
-	roletemplateMixinFields6 := roletemplateMixin[6].Fields()
-	_ = roletemplateMixinFields6
 	roletemplateFields := schema.RoleTemplate{}.Fields()
 	_ = roletemplateFields
 	// roletemplateDescSortOrder is the schema descriptor for sort_order field.
-	roletemplateDescSortOrder := roletemplateMixinFields6[0].Descriptor()
+	roletemplateDescSortOrder := roletemplateMixinFields5[0].Descriptor()
 	// roletemplate.DefaultSortOrder holds the default value on creation for the sort_order field.
 	roletemplate.DefaultSortOrder = roletemplateDescSortOrder.Default.(uint32)
 	// roletemplateDescName is the schema descriptor for name field.

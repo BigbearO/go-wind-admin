@@ -77,7 +77,6 @@ func (PermissionPolicy) Mixin() []ent.Mixin {
 		mixin.AutoIncrementId{},
 		mixin.TimeAt{},
 		mixin.OperatorID{},
-		mixin.TenantID{},
 		mixin.SwitchStatus{},
 	}
 }
@@ -85,18 +84,9 @@ func (PermissionPolicy) Mixin() []ent.Mixin {
 // Indexes of the PermissionPolicy.
 func (PermissionPolicy) Indexes() []ent.Index {
 	return []ent.Index{
-		// 唯一约束：同一租户下每个权限只有一条主策略记录（与原实现一致）
-		index.Fields("tenant_id", "permission_id").
-			Unique().
-			StorageKey("uix_perm_policy_tenant_perm"),
-
 		// 常用查询：在租户内按权限+版本查找（用于灰度/回滚场景）
-		index.Fields("tenant_id", "permission_id", "version").
-			StorageKey("idx_perm_policy_tenant_perm_version"),
-
-		// 常用查询：按租户+策略引擎筛选（不同引擎的策略管理）
-		index.Fields("tenant_id", "policy_engine").
-			StorageKey("idx_perm_policy_engine_tenant"),
+		index.Fields("permission_id", "version").
+			StorageKey("idx_perm_policy_perm_version"),
 
 		// 支持按单列快速查询
 		index.Fields("permission_id").
@@ -105,7 +95,5 @@ func (PermissionPolicy) Indexes() []ent.Index {
 			StorageKey("idx_perm_policy_engine"),
 		index.Fields("version").
 			StorageKey("idx_perm_policy_version"),
-		index.Fields("tenant_id").
-			StorageKey("idx_perm_policy_tenant"),
 	}
 }

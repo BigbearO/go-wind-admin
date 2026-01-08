@@ -224,14 +224,10 @@ func (r *PermissionGroupRepo) newPermissionCreate(permission *permissionV1.Permi
 		SetNillableStatus(r.statusConverter.ToEntity(permission.Status)).
 		SetNillableModule(permission.Module).
 		SetNillableSortOrder(permission.SortOrder).
-		SetNillableTenantID(permission.TenantId).
 		SetNillableParentID(permission.ParentId).
 		SetNillableCreatedBy(permission.CreatedBy).
 		SetNillableCreatedAt(timeutil.TimestamppbToTime(permission.CreatedAt))
 
-	if permission.TenantId == nil {
-		builder.SetTenantID(permission.GetTenantId())
-	}
 	if permission.CreatedAt == nil {
 		builder.SetCreatedAt(time.Now())
 	}

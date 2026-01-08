@@ -120,20 +120,6 @@ func (_c *PermissionCreate) SetNillableStatus(v *permission.Status) *PermissionC
 	return _c
 }
 
-// SetTenantID sets the "tenant_id" field.
-func (_c *PermissionCreate) SetTenantID(v uint32) *PermissionCreate {
-	_c.mutation.SetTenantID(v)
-	return _c
-}
-
-// SetNillableTenantID sets the "tenant_id" field if the given value is not nil.
-func (_c *PermissionCreate) SetNillableTenantID(v *uint32) *PermissionCreate {
-	if v != nil {
-		_c.SetTenantID(*v)
-	}
-	return _c
-}
-
 // SetName sets the "name" field.
 func (_c *PermissionCreate) SetName(v string) *PermissionCreate {
 	_c.mutation.SetName(v)
@@ -293,10 +279,6 @@ func (_c *PermissionCreate) createSpec() (*Permission, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(permission.FieldStatus, field.TypeEnum, value)
 		_node.Status = &value
-	}
-	if value, ok := _c.mutation.TenantID(); ok {
-		_spec.SetField(permission.FieldTenantID, field.TypeUint32, value)
-		_node.TenantID = &value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(permission.FieldName, field.TypeString, value)
@@ -549,9 +531,6 @@ func (u *PermissionUpsertOne) UpdateNewValues() *PermissionUpsertOne {
 		}
 		if _, exists := u.create.mutation.CreatedAt(); exists {
 			s.SetIgnore(permission.FieldCreatedAt)
-		}
-		if _, exists := u.create.mutation.TenantID(); exists {
-			s.SetIgnore(permission.FieldTenantID)
 		}
 	}))
 	return u
@@ -964,9 +943,6 @@ func (u *PermissionUpsertBulk) UpdateNewValues() *PermissionUpsertBulk {
 			}
 			if _, exists := b.mutation.CreatedAt(); exists {
 				s.SetIgnore(permission.FieldCreatedAt)
-			}
-			if _, exists := b.mutation.TenantID(); exists {
-				s.SetIgnore(permission.FieldTenantID)
 			}
 		}
 	}))

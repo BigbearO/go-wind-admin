@@ -28699,8 +28699,6 @@ type PermissionMutation struct {
 	deleted_by    *uint32
 	adddeleted_by *int32
 	status        *permission.Status
-	tenant_id     *uint32
-	addtenant_id  *int32
 	name          *string
 	code          *string
 	group_id      *uint32
@@ -29208,76 +29206,6 @@ func (m *PermissionMutation) ResetStatus() {
 	m.status = nil
 }
 
-// SetTenantID sets the "tenant_id" field.
-func (m *PermissionMutation) SetTenantID(u uint32) {
-	m.tenant_id = &u
-	m.addtenant_id = nil
-}
-
-// TenantID returns the value of the "tenant_id" field in the mutation.
-func (m *PermissionMutation) TenantID() (r uint32, exists bool) {
-	v := m.tenant_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldTenantID returns the old "tenant_id" field's value of the Permission entity.
-// If the Permission object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PermissionMutation) OldTenantID(ctx context.Context) (v *uint32, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldTenantID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldTenantID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldTenantID: %w", err)
-	}
-	return oldValue.TenantID, nil
-}
-
-// AddTenantID adds u to the "tenant_id" field.
-func (m *PermissionMutation) AddTenantID(u int32) {
-	if m.addtenant_id != nil {
-		*m.addtenant_id += u
-	} else {
-		m.addtenant_id = &u
-	}
-}
-
-// AddedTenantID returns the value that was added to the "tenant_id" field in this mutation.
-func (m *PermissionMutation) AddedTenantID() (r int32, exists bool) {
-	v := m.addtenant_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ClearTenantID clears the value of the "tenant_id" field.
-func (m *PermissionMutation) ClearTenantID() {
-	m.tenant_id = nil
-	m.addtenant_id = nil
-	m.clearedFields[permission.FieldTenantID] = struct{}{}
-}
-
-// TenantIDCleared returns if the "tenant_id" field was cleared in this mutation.
-func (m *PermissionMutation) TenantIDCleared() bool {
-	_, ok := m.clearedFields[permission.FieldTenantID]
-	return ok
-}
-
-// ResetTenantID resets all changes to the "tenant_id" field.
-func (m *PermissionMutation) ResetTenantID() {
-	m.tenant_id = nil
-	m.addtenant_id = nil
-	delete(m.clearedFields, permission.FieldTenantID)
-}
-
 // SetName sets the "name" field.
 func (m *PermissionMutation) SetName(s string) {
 	m.name = &s
@@ -29454,7 +29382,7 @@ func (m *PermissionMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PermissionMutation) Fields() []string {
-	fields := make([]string, 0, 11)
+	fields := make([]string, 0, 10)
 	if m.created_at != nil {
 		fields = append(fields, permission.FieldCreatedAt)
 	}
@@ -29475,9 +29403,6 @@ func (m *PermissionMutation) Fields() []string {
 	}
 	if m.status != nil {
 		fields = append(fields, permission.FieldStatus)
-	}
-	if m.tenant_id != nil {
-		fields = append(fields, permission.FieldTenantID)
 	}
 	if m.name != nil {
 		fields = append(fields, permission.FieldName)
@@ -29510,8 +29435,6 @@ func (m *PermissionMutation) Field(name string) (ent.Value, bool) {
 		return m.DeletedBy()
 	case permission.FieldStatus:
 		return m.Status()
-	case permission.FieldTenantID:
-		return m.TenantID()
 	case permission.FieldName:
 		return m.Name()
 	case permission.FieldCode:
@@ -29541,8 +29464,6 @@ func (m *PermissionMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldDeletedBy(ctx)
 	case permission.FieldStatus:
 		return m.OldStatus(ctx)
-	case permission.FieldTenantID:
-		return m.OldTenantID(ctx)
 	case permission.FieldName:
 		return m.OldName(ctx)
 	case permission.FieldCode:
@@ -29607,13 +29528,6 @@ func (m *PermissionMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetStatus(v)
 		return nil
-	case permission.FieldTenantID:
-		v, ok := value.(uint32)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetTenantID(v)
-		return nil
 	case permission.FieldName:
 		v, ok := value.(string)
 		if !ok {
@@ -29652,9 +29566,6 @@ func (m *PermissionMutation) AddedFields() []string {
 	if m.adddeleted_by != nil {
 		fields = append(fields, permission.FieldDeletedBy)
 	}
-	if m.addtenant_id != nil {
-		fields = append(fields, permission.FieldTenantID)
-	}
 	if m.addgroup_id != nil {
 		fields = append(fields, permission.FieldGroupID)
 	}
@@ -29672,8 +29583,6 @@ func (m *PermissionMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedUpdatedBy()
 	case permission.FieldDeletedBy:
 		return m.AddedDeletedBy()
-	case permission.FieldTenantID:
-		return m.AddedTenantID()
 	case permission.FieldGroupID:
 		return m.AddedGroupID()
 	}
@@ -29705,13 +29614,6 @@ func (m *PermissionMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddDeletedBy(v)
-		return nil
-	case permission.FieldTenantID:
-		v, ok := value.(int32)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddTenantID(v)
 		return nil
 	case permission.FieldGroupID:
 		v, ok := value.(int32)
@@ -29745,9 +29647,6 @@ func (m *PermissionMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(permission.FieldDeletedBy) {
 		fields = append(fields, permission.FieldDeletedBy)
-	}
-	if m.FieldCleared(permission.FieldTenantID) {
-		fields = append(fields, permission.FieldTenantID)
 	}
 	if m.FieldCleared(permission.FieldGroupID) {
 		fields = append(fields, permission.FieldGroupID)
@@ -29784,9 +29683,6 @@ func (m *PermissionMutation) ClearField(name string) error {
 	case permission.FieldDeletedBy:
 		m.ClearDeletedBy()
 		return nil
-	case permission.FieldTenantID:
-		m.ClearTenantID()
-		return nil
 	case permission.FieldGroupID:
 		m.ClearGroupID()
 		return nil
@@ -29818,9 +29714,6 @@ func (m *PermissionMutation) ResetField(name string) error {
 		return nil
 	case permission.FieldStatus:
 		m.ResetStatus()
-		return nil
-	case permission.FieldTenantID:
-		m.ResetTenantID()
 		return nil
 	case permission.FieldName:
 		m.ResetName()
@@ -29898,8 +29791,6 @@ type PermissionApiMutation struct {
 	addupdated_by    *int32
 	deleted_by       *uint32
 	adddeleted_by    *int32
-	tenant_id        *uint32
-	addtenant_id     *int32
 	permission_id    *uint32
 	addpermission_id *int32
 	api_id           *uint32
@@ -30371,76 +30262,6 @@ func (m *PermissionApiMutation) ResetDeletedBy() {
 	delete(m.clearedFields, permissionapi.FieldDeletedBy)
 }
 
-// SetTenantID sets the "tenant_id" field.
-func (m *PermissionApiMutation) SetTenantID(u uint32) {
-	m.tenant_id = &u
-	m.addtenant_id = nil
-}
-
-// TenantID returns the value of the "tenant_id" field in the mutation.
-func (m *PermissionApiMutation) TenantID() (r uint32, exists bool) {
-	v := m.tenant_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldTenantID returns the old "tenant_id" field's value of the PermissionApi entity.
-// If the PermissionApi object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PermissionApiMutation) OldTenantID(ctx context.Context) (v *uint32, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldTenantID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldTenantID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldTenantID: %w", err)
-	}
-	return oldValue.TenantID, nil
-}
-
-// AddTenantID adds u to the "tenant_id" field.
-func (m *PermissionApiMutation) AddTenantID(u int32) {
-	if m.addtenant_id != nil {
-		*m.addtenant_id += u
-	} else {
-		m.addtenant_id = &u
-	}
-}
-
-// AddedTenantID returns the value that was added to the "tenant_id" field in this mutation.
-func (m *PermissionApiMutation) AddedTenantID() (r int32, exists bool) {
-	v := m.addtenant_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ClearTenantID clears the value of the "tenant_id" field.
-func (m *PermissionApiMutation) ClearTenantID() {
-	m.tenant_id = nil
-	m.addtenant_id = nil
-	m.clearedFields[permissionapi.FieldTenantID] = struct{}{}
-}
-
-// TenantIDCleared returns if the "tenant_id" field was cleared in this mutation.
-func (m *PermissionApiMutation) TenantIDCleared() bool {
-	_, ok := m.clearedFields[permissionapi.FieldTenantID]
-	return ok
-}
-
-// ResetTenantID resets all changes to the "tenant_id" field.
-func (m *PermissionApiMutation) ResetTenantID() {
-	m.tenant_id = nil
-	m.addtenant_id = nil
-	delete(m.clearedFields, permissionapi.FieldTenantID)
-}
-
 // SetPermissionID sets the "permission_id" field.
 func (m *PermissionApiMutation) SetPermissionID(u uint32) {
 	m.permission_id = &u
@@ -30587,7 +30408,7 @@ func (m *PermissionApiMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PermissionApiMutation) Fields() []string {
-	fields := make([]string, 0, 9)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, permissionapi.FieldCreatedAt)
 	}
@@ -30605,9 +30426,6 @@ func (m *PermissionApiMutation) Fields() []string {
 	}
 	if m.deleted_by != nil {
 		fields = append(fields, permissionapi.FieldDeletedBy)
-	}
-	if m.tenant_id != nil {
-		fields = append(fields, permissionapi.FieldTenantID)
 	}
 	if m.permission_id != nil {
 		fields = append(fields, permissionapi.FieldPermissionID)
@@ -30635,8 +30453,6 @@ func (m *PermissionApiMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedBy()
 	case permissionapi.FieldDeletedBy:
 		return m.DeletedBy()
-	case permissionapi.FieldTenantID:
-		return m.TenantID()
 	case permissionapi.FieldPermissionID:
 		return m.PermissionID()
 	case permissionapi.FieldAPIID:
@@ -30662,8 +30478,6 @@ func (m *PermissionApiMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldUpdatedBy(ctx)
 	case permissionapi.FieldDeletedBy:
 		return m.OldDeletedBy(ctx)
-	case permissionapi.FieldTenantID:
-		return m.OldTenantID(ctx)
 	case permissionapi.FieldPermissionID:
 		return m.OldPermissionID(ctx)
 	case permissionapi.FieldAPIID:
@@ -30719,13 +30533,6 @@ func (m *PermissionApiMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDeletedBy(v)
 		return nil
-	case permissionapi.FieldTenantID:
-		v, ok := value.(uint32)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetTenantID(v)
-		return nil
 	case permissionapi.FieldPermissionID:
 		v, ok := value.(uint32)
 		if !ok {
@@ -30757,9 +30564,6 @@ func (m *PermissionApiMutation) AddedFields() []string {
 	if m.adddeleted_by != nil {
 		fields = append(fields, permissionapi.FieldDeletedBy)
 	}
-	if m.addtenant_id != nil {
-		fields = append(fields, permissionapi.FieldTenantID)
-	}
 	if m.addpermission_id != nil {
 		fields = append(fields, permissionapi.FieldPermissionID)
 	}
@@ -30780,8 +30584,6 @@ func (m *PermissionApiMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedUpdatedBy()
 	case permissionapi.FieldDeletedBy:
 		return m.AddedDeletedBy()
-	case permissionapi.FieldTenantID:
-		return m.AddedTenantID()
 	case permissionapi.FieldPermissionID:
 		return m.AddedPermissionID()
 	case permissionapi.FieldAPIID:
@@ -30815,13 +30617,6 @@ func (m *PermissionApiMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddDeletedBy(v)
-		return nil
-	case permissionapi.FieldTenantID:
-		v, ok := value.(int32)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddTenantID(v)
 		return nil
 	case permissionapi.FieldPermissionID:
 		v, ok := value.(int32)
@@ -30863,9 +30658,6 @@ func (m *PermissionApiMutation) ClearedFields() []string {
 	if m.FieldCleared(permissionapi.FieldDeletedBy) {
 		fields = append(fields, permissionapi.FieldDeletedBy)
 	}
-	if m.FieldCleared(permissionapi.FieldTenantID) {
-		fields = append(fields, permissionapi.FieldTenantID)
-	}
 	return fields
 }
 
@@ -30898,9 +30690,6 @@ func (m *PermissionApiMutation) ClearField(name string) error {
 	case permissionapi.FieldDeletedBy:
 		m.ClearDeletedBy()
 		return nil
-	case permissionapi.FieldTenantID:
-		m.ClearTenantID()
-		return nil
 	}
 	return fmt.Errorf("unknown PermissionApi nullable field %s", name)
 }
@@ -30926,9 +30715,6 @@ func (m *PermissionApiMutation) ResetField(name string) error {
 		return nil
 	case permissionapi.FieldDeletedBy:
 		m.ResetDeletedBy()
-		return nil
-	case permissionapi.FieldTenantID:
-		m.ResetTenantID()
 		return nil
 	case permissionapi.FieldPermissionID:
 		m.ResetPermissionID()
@@ -32029,8 +31815,6 @@ type PermissionGroupMutation struct {
 	adddeleted_by   *int32
 	remark          *string
 	status          *permissiongroup.Status
-	tenant_id       *uint32
-	addtenant_id    *int32
 	sort_order      *uint32
 	addsort_order   *int32
 	name            *string
@@ -32593,76 +32377,6 @@ func (m *PermissionGroupMutation) ResetStatus() {
 	m.status = nil
 }
 
-// SetTenantID sets the "tenant_id" field.
-func (m *PermissionGroupMutation) SetTenantID(u uint32) {
-	m.tenant_id = &u
-	m.addtenant_id = nil
-}
-
-// TenantID returns the value of the "tenant_id" field in the mutation.
-func (m *PermissionGroupMutation) TenantID() (r uint32, exists bool) {
-	v := m.tenant_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldTenantID returns the old "tenant_id" field's value of the PermissionGroup entity.
-// If the PermissionGroup object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PermissionGroupMutation) OldTenantID(ctx context.Context) (v *uint32, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldTenantID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldTenantID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldTenantID: %w", err)
-	}
-	return oldValue.TenantID, nil
-}
-
-// AddTenantID adds u to the "tenant_id" field.
-func (m *PermissionGroupMutation) AddTenantID(u int32) {
-	if m.addtenant_id != nil {
-		*m.addtenant_id += u
-	} else {
-		m.addtenant_id = &u
-	}
-}
-
-// AddedTenantID returns the value that was added to the "tenant_id" field in this mutation.
-func (m *PermissionGroupMutation) AddedTenantID() (r int32, exists bool) {
-	v := m.addtenant_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ClearTenantID clears the value of the "tenant_id" field.
-func (m *PermissionGroupMutation) ClearTenantID() {
-	m.tenant_id = nil
-	m.addtenant_id = nil
-	m.clearedFields[permissiongroup.FieldTenantID] = struct{}{}
-}
-
-// TenantIDCleared returns if the "tenant_id" field was cleared in this mutation.
-func (m *PermissionGroupMutation) TenantIDCleared() bool {
-	_, ok := m.clearedFields[permissiongroup.FieldTenantID]
-	return ok
-}
-
-// ResetTenantID resets all changes to the "tenant_id" field.
-func (m *PermissionGroupMutation) ResetTenantID() {
-	m.tenant_id = nil
-	m.addtenant_id = nil
-	delete(m.clearedFields, permissiongroup.FieldTenantID)
-}
-
 // SetSortOrder sets the "sort_order" field.
 func (m *PermissionGroupMutation) SetSortOrder(u uint32) {
 	m.sort_order = &u
@@ -33031,7 +32745,7 @@ func (m *PermissionGroupMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PermissionGroupMutation) Fields() []string {
-	fields := make([]string, 0, 14)
+	fields := make([]string, 0, 13)
 	if m.created_at != nil {
 		fields = append(fields, permissiongroup.FieldCreatedAt)
 	}
@@ -33055,9 +32769,6 @@ func (m *PermissionGroupMutation) Fields() []string {
 	}
 	if m.status != nil {
 		fields = append(fields, permissiongroup.FieldStatus)
-	}
-	if m.tenant_id != nil {
-		fields = append(fields, permissiongroup.FieldTenantID)
 	}
 	if m.sort_order != nil {
 		fields = append(fields, permissiongroup.FieldSortOrder)
@@ -33098,8 +32809,6 @@ func (m *PermissionGroupMutation) Field(name string) (ent.Value, bool) {
 		return m.Remark()
 	case permissiongroup.FieldStatus:
 		return m.Status()
-	case permissiongroup.FieldTenantID:
-		return m.TenantID()
 	case permissiongroup.FieldSortOrder:
 		return m.SortOrder()
 	case permissiongroup.FieldParentID:
@@ -33135,8 +32844,6 @@ func (m *PermissionGroupMutation) OldField(ctx context.Context, name string) (en
 		return m.OldRemark(ctx)
 	case permissiongroup.FieldStatus:
 		return m.OldStatus(ctx)
-	case permissiongroup.FieldTenantID:
-		return m.OldTenantID(ctx)
 	case permissiongroup.FieldSortOrder:
 		return m.OldSortOrder(ctx)
 	case permissiongroup.FieldParentID:
@@ -33212,13 +32919,6 @@ func (m *PermissionGroupMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetStatus(v)
 		return nil
-	case permissiongroup.FieldTenantID:
-		v, ok := value.(uint32)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetTenantID(v)
-		return nil
 	case permissiongroup.FieldSortOrder:
 		v, ok := value.(uint32)
 		if !ok {
@@ -33271,9 +32971,6 @@ func (m *PermissionGroupMutation) AddedFields() []string {
 	if m.adddeleted_by != nil {
 		fields = append(fields, permissiongroup.FieldDeletedBy)
 	}
-	if m.addtenant_id != nil {
-		fields = append(fields, permissiongroup.FieldTenantID)
-	}
 	if m.addsort_order != nil {
 		fields = append(fields, permissiongroup.FieldSortOrder)
 	}
@@ -33291,8 +32988,6 @@ func (m *PermissionGroupMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedUpdatedBy()
 	case permissiongroup.FieldDeletedBy:
 		return m.AddedDeletedBy()
-	case permissiongroup.FieldTenantID:
-		return m.AddedTenantID()
 	case permissiongroup.FieldSortOrder:
 		return m.AddedSortOrder()
 	}
@@ -33324,13 +33019,6 @@ func (m *PermissionGroupMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddDeletedBy(v)
-		return nil
-	case permissiongroup.FieldTenantID:
-		v, ok := value.(int32)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddTenantID(v)
 		return nil
 	case permissiongroup.FieldSortOrder:
 		v, ok := value.(int32)
@@ -33367,9 +33055,6 @@ func (m *PermissionGroupMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(permissiongroup.FieldRemark) {
 		fields = append(fields, permissiongroup.FieldRemark)
-	}
-	if m.FieldCleared(permissiongroup.FieldTenantID) {
-		fields = append(fields, permissiongroup.FieldTenantID)
 	}
 	if m.FieldCleared(permissiongroup.FieldSortOrder) {
 		fields = append(fields, permissiongroup.FieldSortOrder)
@@ -33418,9 +33103,6 @@ func (m *PermissionGroupMutation) ClearField(name string) error {
 	case permissiongroup.FieldRemark:
 		m.ClearRemark()
 		return nil
-	case permissiongroup.FieldTenantID:
-		m.ClearTenantID()
-		return nil
 	case permissiongroup.FieldSortOrder:
 		m.ClearSortOrder()
 		return nil
@@ -33464,9 +33146,6 @@ func (m *PermissionGroupMutation) ResetField(name string) error {
 		return nil
 	case permissiongroup.FieldStatus:
 		m.ResetStatus()
-		return nil
-	case permissiongroup.FieldTenantID:
-		m.ResetTenantID()
 		return nil
 	case permissiongroup.FieldSortOrder:
 		m.ResetSortOrder()
@@ -33604,8 +33283,6 @@ type PermissionMenuMutation struct {
 	addupdated_by    *int32
 	deleted_by       *uint32
 	adddeleted_by    *int32
-	tenant_id        *uint32
-	addtenant_id     *int32
 	permission_id    *uint32
 	addpermission_id *int32
 	menu_id          *uint32
@@ -34077,76 +33754,6 @@ func (m *PermissionMenuMutation) ResetDeletedBy() {
 	delete(m.clearedFields, permissionmenu.FieldDeletedBy)
 }
 
-// SetTenantID sets the "tenant_id" field.
-func (m *PermissionMenuMutation) SetTenantID(u uint32) {
-	m.tenant_id = &u
-	m.addtenant_id = nil
-}
-
-// TenantID returns the value of the "tenant_id" field in the mutation.
-func (m *PermissionMenuMutation) TenantID() (r uint32, exists bool) {
-	v := m.tenant_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldTenantID returns the old "tenant_id" field's value of the PermissionMenu entity.
-// If the PermissionMenu object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PermissionMenuMutation) OldTenantID(ctx context.Context) (v *uint32, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldTenantID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldTenantID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldTenantID: %w", err)
-	}
-	return oldValue.TenantID, nil
-}
-
-// AddTenantID adds u to the "tenant_id" field.
-func (m *PermissionMenuMutation) AddTenantID(u int32) {
-	if m.addtenant_id != nil {
-		*m.addtenant_id += u
-	} else {
-		m.addtenant_id = &u
-	}
-}
-
-// AddedTenantID returns the value that was added to the "tenant_id" field in this mutation.
-func (m *PermissionMenuMutation) AddedTenantID() (r int32, exists bool) {
-	v := m.addtenant_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ClearTenantID clears the value of the "tenant_id" field.
-func (m *PermissionMenuMutation) ClearTenantID() {
-	m.tenant_id = nil
-	m.addtenant_id = nil
-	m.clearedFields[permissionmenu.FieldTenantID] = struct{}{}
-}
-
-// TenantIDCleared returns if the "tenant_id" field was cleared in this mutation.
-func (m *PermissionMenuMutation) TenantIDCleared() bool {
-	_, ok := m.clearedFields[permissionmenu.FieldTenantID]
-	return ok
-}
-
-// ResetTenantID resets all changes to the "tenant_id" field.
-func (m *PermissionMenuMutation) ResetTenantID() {
-	m.tenant_id = nil
-	m.addtenant_id = nil
-	delete(m.clearedFields, permissionmenu.FieldTenantID)
-}
-
 // SetPermissionID sets the "permission_id" field.
 func (m *PermissionMenuMutation) SetPermissionID(u uint32) {
 	m.permission_id = &u
@@ -34293,7 +33900,7 @@ func (m *PermissionMenuMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PermissionMenuMutation) Fields() []string {
-	fields := make([]string, 0, 9)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, permissionmenu.FieldCreatedAt)
 	}
@@ -34311,9 +33918,6 @@ func (m *PermissionMenuMutation) Fields() []string {
 	}
 	if m.deleted_by != nil {
 		fields = append(fields, permissionmenu.FieldDeletedBy)
-	}
-	if m.tenant_id != nil {
-		fields = append(fields, permissionmenu.FieldTenantID)
 	}
 	if m.permission_id != nil {
 		fields = append(fields, permissionmenu.FieldPermissionID)
@@ -34341,8 +33945,6 @@ func (m *PermissionMenuMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedBy()
 	case permissionmenu.FieldDeletedBy:
 		return m.DeletedBy()
-	case permissionmenu.FieldTenantID:
-		return m.TenantID()
 	case permissionmenu.FieldPermissionID:
 		return m.PermissionID()
 	case permissionmenu.FieldMenuID:
@@ -34368,8 +33970,6 @@ func (m *PermissionMenuMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldUpdatedBy(ctx)
 	case permissionmenu.FieldDeletedBy:
 		return m.OldDeletedBy(ctx)
-	case permissionmenu.FieldTenantID:
-		return m.OldTenantID(ctx)
 	case permissionmenu.FieldPermissionID:
 		return m.OldPermissionID(ctx)
 	case permissionmenu.FieldMenuID:
@@ -34425,13 +34025,6 @@ func (m *PermissionMenuMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDeletedBy(v)
 		return nil
-	case permissionmenu.FieldTenantID:
-		v, ok := value.(uint32)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetTenantID(v)
-		return nil
 	case permissionmenu.FieldPermissionID:
 		v, ok := value.(uint32)
 		if !ok {
@@ -34463,9 +34056,6 @@ func (m *PermissionMenuMutation) AddedFields() []string {
 	if m.adddeleted_by != nil {
 		fields = append(fields, permissionmenu.FieldDeletedBy)
 	}
-	if m.addtenant_id != nil {
-		fields = append(fields, permissionmenu.FieldTenantID)
-	}
 	if m.addpermission_id != nil {
 		fields = append(fields, permissionmenu.FieldPermissionID)
 	}
@@ -34486,8 +34076,6 @@ func (m *PermissionMenuMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedUpdatedBy()
 	case permissionmenu.FieldDeletedBy:
 		return m.AddedDeletedBy()
-	case permissionmenu.FieldTenantID:
-		return m.AddedTenantID()
 	case permissionmenu.FieldPermissionID:
 		return m.AddedPermissionID()
 	case permissionmenu.FieldMenuID:
@@ -34521,13 +34109,6 @@ func (m *PermissionMenuMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddDeletedBy(v)
-		return nil
-	case permissionmenu.FieldTenantID:
-		v, ok := value.(int32)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddTenantID(v)
 		return nil
 	case permissionmenu.FieldPermissionID:
 		v, ok := value.(int32)
@@ -34569,9 +34150,6 @@ func (m *PermissionMenuMutation) ClearedFields() []string {
 	if m.FieldCleared(permissionmenu.FieldDeletedBy) {
 		fields = append(fields, permissionmenu.FieldDeletedBy)
 	}
-	if m.FieldCleared(permissionmenu.FieldTenantID) {
-		fields = append(fields, permissionmenu.FieldTenantID)
-	}
 	return fields
 }
 
@@ -34604,9 +34182,6 @@ func (m *PermissionMenuMutation) ClearField(name string) error {
 	case permissionmenu.FieldDeletedBy:
 		m.ClearDeletedBy()
 		return nil
-	case permissionmenu.FieldTenantID:
-		m.ClearTenantID()
-		return nil
 	}
 	return fmt.Errorf("unknown PermissionMenu nullable field %s", name)
 }
@@ -34632,9 +34207,6 @@ func (m *PermissionMenuMutation) ResetField(name string) error {
 		return nil
 	case permissionmenu.FieldDeletedBy:
 		m.ResetDeletedBy()
-		return nil
-	case permissionmenu.FieldTenantID:
-		m.ResetTenantID()
 		return nil
 	case permissionmenu.FieldPermissionID:
 		m.ResetPermissionID()
@@ -34709,8 +34281,6 @@ type PermissionPolicyMutation struct {
 	addupdated_by    *int32
 	deleted_by       *uint32
 	adddeleted_by    *int32
-	tenant_id        *uint32
-	addtenant_id     *int32
 	status           *permissionpolicy.Status
 	permission_id    *uint32
 	addpermission_id *int32
@@ -35189,76 +34759,6 @@ func (m *PermissionPolicyMutation) ResetDeletedBy() {
 	delete(m.clearedFields, permissionpolicy.FieldDeletedBy)
 }
 
-// SetTenantID sets the "tenant_id" field.
-func (m *PermissionPolicyMutation) SetTenantID(u uint32) {
-	m.tenant_id = &u
-	m.addtenant_id = nil
-}
-
-// TenantID returns the value of the "tenant_id" field in the mutation.
-func (m *PermissionPolicyMutation) TenantID() (r uint32, exists bool) {
-	v := m.tenant_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldTenantID returns the old "tenant_id" field's value of the PermissionPolicy entity.
-// If the PermissionPolicy object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PermissionPolicyMutation) OldTenantID(ctx context.Context) (v *uint32, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldTenantID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldTenantID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldTenantID: %w", err)
-	}
-	return oldValue.TenantID, nil
-}
-
-// AddTenantID adds u to the "tenant_id" field.
-func (m *PermissionPolicyMutation) AddTenantID(u int32) {
-	if m.addtenant_id != nil {
-		*m.addtenant_id += u
-	} else {
-		m.addtenant_id = &u
-	}
-}
-
-// AddedTenantID returns the value that was added to the "tenant_id" field in this mutation.
-func (m *PermissionPolicyMutation) AddedTenantID() (r int32, exists bool) {
-	v := m.addtenant_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ClearTenantID clears the value of the "tenant_id" field.
-func (m *PermissionPolicyMutation) ClearTenantID() {
-	m.tenant_id = nil
-	m.addtenant_id = nil
-	m.clearedFields[permissionpolicy.FieldTenantID] = struct{}{}
-}
-
-// TenantIDCleared returns if the "tenant_id" field was cleared in this mutation.
-func (m *PermissionPolicyMutation) TenantIDCleared() bool {
-	_, ok := m.clearedFields[permissionpolicy.FieldTenantID]
-	return ok
-}
-
-// ResetTenantID resets all changes to the "tenant_id" field.
-func (m *PermissionPolicyMutation) ResetTenantID() {
-	m.tenant_id = nil
-	m.addtenant_id = nil
-	delete(m.clearedFields, permissionpolicy.FieldTenantID)
-}
-
 // SetStatus sets the "status" field.
 func (m *PermissionPolicyMutation) SetStatus(pe permissionpolicy.Status) {
 	m.status = &pe
@@ -35638,7 +35138,7 @@ func (m *PermissionPolicyMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PermissionPolicyMutation) Fields() []string {
-	fields := make([]string, 0, 14)
+	fields := make([]string, 0, 13)
 	if m.created_at != nil {
 		fields = append(fields, permissionpolicy.FieldCreatedAt)
 	}
@@ -35656,9 +35156,6 @@ func (m *PermissionPolicyMutation) Fields() []string {
 	}
 	if m.deleted_by != nil {
 		fields = append(fields, permissionpolicy.FieldDeletedBy)
-	}
-	if m.tenant_id != nil {
-		fields = append(fields, permissionpolicy.FieldTenantID)
 	}
 	if m.status != nil {
 		fields = append(fields, permissionpolicy.FieldStatus)
@@ -35701,8 +35198,6 @@ func (m *PermissionPolicyMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedBy()
 	case permissionpolicy.FieldDeletedBy:
 		return m.DeletedBy()
-	case permissionpolicy.FieldTenantID:
-		return m.TenantID()
 	case permissionpolicy.FieldStatus:
 		return m.Status()
 	case permissionpolicy.FieldPermissionID:
@@ -35738,8 +35233,6 @@ func (m *PermissionPolicyMutation) OldField(ctx context.Context, name string) (e
 		return m.OldUpdatedBy(ctx)
 	case permissionpolicy.FieldDeletedBy:
 		return m.OldDeletedBy(ctx)
-	case permissionpolicy.FieldTenantID:
-		return m.OldTenantID(ctx)
 	case permissionpolicy.FieldStatus:
 		return m.OldStatus(ctx)
 	case permissionpolicy.FieldPermissionID:
@@ -35804,13 +35297,6 @@ func (m *PermissionPolicyMutation) SetField(name string, value ent.Value) error 
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDeletedBy(v)
-		return nil
-	case permissionpolicy.FieldTenantID:
-		v, ok := value.(uint32)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetTenantID(v)
 		return nil
 	case permissionpolicy.FieldStatus:
 		v, ok := value.(permissionpolicy.Status)
@@ -35878,9 +35364,6 @@ func (m *PermissionPolicyMutation) AddedFields() []string {
 	if m.adddeleted_by != nil {
 		fields = append(fields, permissionpolicy.FieldDeletedBy)
 	}
-	if m.addtenant_id != nil {
-		fields = append(fields, permissionpolicy.FieldTenantID)
-	}
 	if m.addpermission_id != nil {
 		fields = append(fields, permissionpolicy.FieldPermissionID)
 	}
@@ -35907,8 +35390,6 @@ func (m *PermissionPolicyMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedUpdatedBy()
 	case permissionpolicy.FieldDeletedBy:
 		return m.AddedDeletedBy()
-	case permissionpolicy.FieldTenantID:
-		return m.AddedTenantID()
 	case permissionpolicy.FieldPermissionID:
 		return m.AddedPermissionID()
 	case permissionpolicy.FieldVersion:
@@ -35946,13 +35427,6 @@ func (m *PermissionPolicyMutation) AddField(name string, value ent.Value) error 
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddDeletedBy(v)
-		return nil
-	case permissionpolicy.FieldTenantID:
-		v, ok := value.(int32)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddTenantID(v)
 		return nil
 	case permissionpolicy.FieldPermissionID:
 		v, ok := value.(int32)
@@ -36008,9 +35482,6 @@ func (m *PermissionPolicyMutation) ClearedFields() []string {
 	if m.FieldCleared(permissionpolicy.FieldDeletedBy) {
 		fields = append(fields, permissionpolicy.FieldDeletedBy)
 	}
-	if m.FieldCleared(permissionpolicy.FieldTenantID) {
-		fields = append(fields, permissionpolicy.FieldTenantID)
-	}
 	if m.FieldCleared(permissionpolicy.FieldDefinition) {
 		fields = append(fields, permissionpolicy.FieldDefinition)
 	}
@@ -36046,9 +35517,6 @@ func (m *PermissionPolicyMutation) ClearField(name string) error {
 	case permissionpolicy.FieldDeletedBy:
 		m.ClearDeletedBy()
 		return nil
-	case permissionpolicy.FieldTenantID:
-		m.ClearTenantID()
-		return nil
 	case permissionpolicy.FieldDefinition:
 		m.ClearDefinition()
 		return nil
@@ -36077,9 +35545,6 @@ func (m *PermissionPolicyMutation) ResetField(name string) error {
 		return nil
 	case permissionpolicy.FieldDeletedBy:
 		m.ResetDeletedBy()
-		return nil
-	case permissionpolicy.FieldTenantID:
-		m.ResetTenantID()
 		return nil
 	case permissionpolicy.FieldStatus:
 		m.ResetStatus()
@@ -41951,8 +41416,6 @@ type RoleTemplateMutation struct {
 	addupdated_by     *int32
 	deleted_by        *uint32
 	adddeleted_by     *int32
-	tenant_id         *uint32
-	addtenant_id      *int32
 	description       *string
 	status            *roletemplate.Status
 	sort_order        *uint32
@@ -42431,76 +41894,6 @@ func (m *RoleTemplateMutation) ResetDeletedBy() {
 	delete(m.clearedFields, roletemplate.FieldDeletedBy)
 }
 
-// SetTenantID sets the "tenant_id" field.
-func (m *RoleTemplateMutation) SetTenantID(u uint32) {
-	m.tenant_id = &u
-	m.addtenant_id = nil
-}
-
-// TenantID returns the value of the "tenant_id" field in the mutation.
-func (m *RoleTemplateMutation) TenantID() (r uint32, exists bool) {
-	v := m.tenant_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldTenantID returns the old "tenant_id" field's value of the RoleTemplate entity.
-// If the RoleTemplate object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *RoleTemplateMutation) OldTenantID(ctx context.Context) (v *uint32, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldTenantID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldTenantID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldTenantID: %w", err)
-	}
-	return oldValue.TenantID, nil
-}
-
-// AddTenantID adds u to the "tenant_id" field.
-func (m *RoleTemplateMutation) AddTenantID(u int32) {
-	if m.addtenant_id != nil {
-		*m.addtenant_id += u
-	} else {
-		m.addtenant_id = &u
-	}
-}
-
-// AddedTenantID returns the value that was added to the "tenant_id" field in this mutation.
-func (m *RoleTemplateMutation) AddedTenantID() (r int32, exists bool) {
-	v := m.addtenant_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ClearTenantID clears the value of the "tenant_id" field.
-func (m *RoleTemplateMutation) ClearTenantID() {
-	m.tenant_id = nil
-	m.addtenant_id = nil
-	m.clearedFields[roletemplate.FieldTenantID] = struct{}{}
-}
-
-// TenantIDCleared returns if the "tenant_id" field was cleared in this mutation.
-func (m *RoleTemplateMutation) TenantIDCleared() bool {
-	_, ok := m.clearedFields[roletemplate.FieldTenantID]
-	return ok
-}
-
-// ResetTenantID resets all changes to the "tenant_id" field.
-func (m *RoleTemplateMutation) ResetTenantID() {
-	m.tenant_id = nil
-	m.addtenant_id = nil
-	delete(m.clearedFields, roletemplate.FieldTenantID)
-}
-
 // SetDescription sets the "description" field.
 func (m *RoleTemplateMutation) SetDescription(s string) {
 	m.description = &s
@@ -42948,7 +42341,7 @@ func (m *RoleTemplateMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *RoleTemplateMutation) Fields() []string {
-	fields := make([]string, 0, 16)
+	fields := make([]string, 0, 15)
 	if m.created_at != nil {
 		fields = append(fields, roletemplate.FieldCreatedAt)
 	}
@@ -42966,9 +42359,6 @@ func (m *RoleTemplateMutation) Fields() []string {
 	}
 	if m.deleted_by != nil {
 		fields = append(fields, roletemplate.FieldDeletedBy)
-	}
-	if m.tenant_id != nil {
-		fields = append(fields, roletemplate.FieldTenantID)
 	}
 	if m.description != nil {
 		fields = append(fields, roletemplate.FieldDescription)
@@ -43017,8 +42407,6 @@ func (m *RoleTemplateMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedBy()
 	case roletemplate.FieldDeletedBy:
 		return m.DeletedBy()
-	case roletemplate.FieldTenantID:
-		return m.TenantID()
 	case roletemplate.FieldDescription:
 		return m.Description()
 	case roletemplate.FieldStatus:
@@ -43058,8 +42446,6 @@ func (m *RoleTemplateMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldUpdatedBy(ctx)
 	case roletemplate.FieldDeletedBy:
 		return m.OldDeletedBy(ctx)
-	case roletemplate.FieldTenantID:
-		return m.OldTenantID(ctx)
 	case roletemplate.FieldDescription:
 		return m.OldDescription(ctx)
 	case roletemplate.FieldStatus:
@@ -43128,13 +42514,6 @@ func (m *RoleTemplateMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDeletedBy(v)
-		return nil
-	case roletemplate.FieldTenantID:
-		v, ok := value.(uint32)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetTenantID(v)
 		return nil
 	case roletemplate.FieldDescription:
 		v, ok := value.(string)
@@ -43216,9 +42595,6 @@ func (m *RoleTemplateMutation) AddedFields() []string {
 	if m.adddeleted_by != nil {
 		fields = append(fields, roletemplate.FieldDeletedBy)
 	}
-	if m.addtenant_id != nil {
-		fields = append(fields, roletemplate.FieldTenantID)
-	}
 	if m.addsort_order != nil {
 		fields = append(fields, roletemplate.FieldSortOrder)
 	}
@@ -43236,8 +42612,6 @@ func (m *RoleTemplateMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedUpdatedBy()
 	case roletemplate.FieldDeletedBy:
 		return m.AddedDeletedBy()
-	case roletemplate.FieldTenantID:
-		return m.AddedTenantID()
 	case roletemplate.FieldSortOrder:
 		return m.AddedSortOrder()
 	}
@@ -43269,13 +42643,6 @@ func (m *RoleTemplateMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddDeletedBy(v)
-		return nil
-	case roletemplate.FieldTenantID:
-		v, ok := value.(int32)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddTenantID(v)
 		return nil
 	case roletemplate.FieldSortOrder:
 		v, ok := value.(int32)
@@ -43309,9 +42676,6 @@ func (m *RoleTemplateMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(roletemplate.FieldDeletedBy) {
 		fields = append(fields, roletemplate.FieldDeletedBy)
-	}
-	if m.FieldCleared(roletemplate.FieldTenantID) {
-		fields = append(fields, roletemplate.FieldTenantID)
 	}
 	if m.FieldCleared(roletemplate.FieldDescription) {
 		fields = append(fields, roletemplate.FieldDescription)
@@ -43357,9 +42721,6 @@ func (m *RoleTemplateMutation) ClearField(name string) error {
 	case roletemplate.FieldDeletedBy:
 		m.ClearDeletedBy()
 		return nil
-	case roletemplate.FieldTenantID:
-		m.ClearTenantID()
-		return nil
 	case roletemplate.FieldDescription:
 		m.ClearDescription()
 		return nil
@@ -43397,9 +42758,6 @@ func (m *RoleTemplateMutation) ResetField(name string) error {
 		return nil
 	case roletemplate.FieldDeletedBy:
 		m.ResetDeletedBy()
-		return nil
-	case roletemplate.FieldTenantID:
-		m.ResetTenantID()
 		return nil
 	case roletemplate.FieldDescription:
 		m.ResetDescription()

@@ -84,11 +84,6 @@ func DeletedBy(v uint32) predicate.RoleTemplate {
 	return predicate.RoleTemplate(sql.FieldEQ(FieldDeletedBy, v))
 }
 
-// TenantID applies equality check predicate on the "tenant_id" field. It's identical to TenantIDEQ.
-func TenantID(v uint32) predicate.RoleTemplate {
-	return predicate.RoleTemplate(sql.FieldEQ(FieldTenantID, v))
-}
-
 // Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
 func Description(v string) predicate.RoleTemplate {
 	return predicate.RoleTemplate(sql.FieldEQ(FieldDescription, v))
@@ -422,56 +417,6 @@ func DeletedByIsNil() predicate.RoleTemplate {
 // DeletedByNotNil applies the NotNil predicate on the "deleted_by" field.
 func DeletedByNotNil() predicate.RoleTemplate {
 	return predicate.RoleTemplate(sql.FieldNotNull(FieldDeletedBy))
-}
-
-// TenantIDEQ applies the EQ predicate on the "tenant_id" field.
-func TenantIDEQ(v uint32) predicate.RoleTemplate {
-	return predicate.RoleTemplate(sql.FieldEQ(FieldTenantID, v))
-}
-
-// TenantIDNEQ applies the NEQ predicate on the "tenant_id" field.
-func TenantIDNEQ(v uint32) predicate.RoleTemplate {
-	return predicate.RoleTemplate(sql.FieldNEQ(FieldTenantID, v))
-}
-
-// TenantIDIn applies the In predicate on the "tenant_id" field.
-func TenantIDIn(vs ...uint32) predicate.RoleTemplate {
-	return predicate.RoleTemplate(sql.FieldIn(FieldTenantID, vs...))
-}
-
-// TenantIDNotIn applies the NotIn predicate on the "tenant_id" field.
-func TenantIDNotIn(vs ...uint32) predicate.RoleTemplate {
-	return predicate.RoleTemplate(sql.FieldNotIn(FieldTenantID, vs...))
-}
-
-// TenantIDGT applies the GT predicate on the "tenant_id" field.
-func TenantIDGT(v uint32) predicate.RoleTemplate {
-	return predicate.RoleTemplate(sql.FieldGT(FieldTenantID, v))
-}
-
-// TenantIDGTE applies the GTE predicate on the "tenant_id" field.
-func TenantIDGTE(v uint32) predicate.RoleTemplate {
-	return predicate.RoleTemplate(sql.FieldGTE(FieldTenantID, v))
-}
-
-// TenantIDLT applies the LT predicate on the "tenant_id" field.
-func TenantIDLT(v uint32) predicate.RoleTemplate {
-	return predicate.RoleTemplate(sql.FieldLT(FieldTenantID, v))
-}
-
-// TenantIDLTE applies the LTE predicate on the "tenant_id" field.
-func TenantIDLTE(v uint32) predicate.RoleTemplate {
-	return predicate.RoleTemplate(sql.FieldLTE(FieldTenantID, v))
-}
-
-// TenantIDIsNil applies the IsNil predicate on the "tenant_id" field.
-func TenantIDIsNil() predicate.RoleTemplate {
-	return predicate.RoleTemplate(sql.FieldIsNull(FieldTenantID))
-}
-
-// TenantIDNotNil applies the NotNil predicate on the "tenant_id" field.
-func TenantIDNotNil() predicate.RoleTemplate {
-	return predicate.RoleTemplate(sql.FieldNotNull(FieldTenantID))
 }
 
 // DescriptionEQ applies the EQ predicate on the "description" field.

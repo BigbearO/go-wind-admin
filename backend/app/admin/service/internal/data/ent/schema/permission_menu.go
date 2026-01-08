@@ -45,25 +45,15 @@ func (PermissionMenu) Mixin() []ent.Mixin {
 		mixin.AutoIncrementId{},
 		mixin.TimeAt{},
 		mixin.OperatorID{},
-		mixin.TenantID{},
 	}
 }
 
 // Indexes of the PermissionMenu.
 func (PermissionMenu) Indexes() []ent.Index {
 	return []ent.Index{
-		// 唯一约束：同一租户下权限与菜单的组合唯一
-		index.Fields("tenant_id", "permission_id", "menu_id").
+		index.Fields("permission_id", "menu_id").
 			Unique().
-			StorageKey("uix_perm_menu_tenant"),
-
-		// 常用查询：根据租户+权限查该权限下的所有菜单
-		index.Fields("tenant_id", "permission_id").
-			StorageKey("idx_perm_menu_tenant_perm"),
-
-		// 常用查询：根据租户+菜单查关联的权限
-		index.Fields("tenant_id", "menu_id").
-			StorageKey("idx_perm_menu_tenant_menu"),
+			StorageKey("uix_perm_menu_permission_menu_id"),
 
 		// 单列索引：按 permission_id 快速查询
 		index.Fields("permission_id").

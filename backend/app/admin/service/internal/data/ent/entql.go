@@ -568,7 +568,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			permission.FieldUpdatedBy: {Type: field.TypeUint32, Column: permission.FieldUpdatedBy},
 			permission.FieldDeletedBy: {Type: field.TypeUint32, Column: permission.FieldDeletedBy},
 			permission.FieldStatus:    {Type: field.TypeEnum, Column: permission.FieldStatus},
-			permission.FieldTenantID:  {Type: field.TypeUint32, Column: permission.FieldTenantID},
 			permission.FieldName:      {Type: field.TypeString, Column: permission.FieldName},
 			permission.FieldCode:      {Type: field.TypeString, Column: permission.FieldCode},
 			permission.FieldGroupID:   {Type: field.TypeUint32, Column: permission.FieldGroupID},
@@ -591,7 +590,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			permissionapi.FieldCreatedBy:    {Type: field.TypeUint32, Column: permissionapi.FieldCreatedBy},
 			permissionapi.FieldUpdatedBy:    {Type: field.TypeUint32, Column: permissionapi.FieldUpdatedBy},
 			permissionapi.FieldDeletedBy:    {Type: field.TypeUint32, Column: permissionapi.FieldDeletedBy},
-			permissionapi.FieldTenantID:     {Type: field.TypeUint32, Column: permissionapi.FieldTenantID},
 			permissionapi.FieldPermissionID: {Type: field.TypeUint32, Column: permissionapi.FieldPermissionID},
 			permissionapi.FieldAPIID:        {Type: field.TypeUint32, Column: permissionapi.FieldAPIID},
 		},
@@ -637,7 +635,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			permissiongroup.FieldDeletedBy: {Type: field.TypeUint32, Column: permissiongroup.FieldDeletedBy},
 			permissiongroup.FieldRemark:    {Type: field.TypeString, Column: permissiongroup.FieldRemark},
 			permissiongroup.FieldStatus:    {Type: field.TypeEnum, Column: permissiongroup.FieldStatus},
-			permissiongroup.FieldTenantID:  {Type: field.TypeUint32, Column: permissiongroup.FieldTenantID},
 			permissiongroup.FieldSortOrder: {Type: field.TypeUint32, Column: permissiongroup.FieldSortOrder},
 			permissiongroup.FieldParentID:  {Type: field.TypeUint32, Column: permissiongroup.FieldParentID},
 			permissiongroup.FieldName:      {Type: field.TypeString, Column: permissiongroup.FieldName},
@@ -662,7 +659,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			permissionmenu.FieldCreatedBy:    {Type: field.TypeUint32, Column: permissionmenu.FieldCreatedBy},
 			permissionmenu.FieldUpdatedBy:    {Type: field.TypeUint32, Column: permissionmenu.FieldUpdatedBy},
 			permissionmenu.FieldDeletedBy:    {Type: field.TypeUint32, Column: permissionmenu.FieldDeletedBy},
-			permissionmenu.FieldTenantID:     {Type: field.TypeUint32, Column: permissionmenu.FieldTenantID},
 			permissionmenu.FieldPermissionID: {Type: field.TypeUint32, Column: permissionmenu.FieldPermissionID},
 			permissionmenu.FieldMenuID:       {Type: field.TypeUint32, Column: permissionmenu.FieldMenuID},
 		},
@@ -684,7 +680,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			permissionpolicy.FieldCreatedBy:    {Type: field.TypeUint32, Column: permissionpolicy.FieldCreatedBy},
 			permissionpolicy.FieldUpdatedBy:    {Type: field.TypeUint32, Column: permissionpolicy.FieldUpdatedBy},
 			permissionpolicy.FieldDeletedBy:    {Type: field.TypeUint32, Column: permissionpolicy.FieldDeletedBy},
-			permissionpolicy.FieldTenantID:     {Type: field.TypeUint32, Column: permissionpolicy.FieldTenantID},
 			permissionpolicy.FieldStatus:       {Type: field.TypeEnum, Column: permissionpolicy.FieldStatus},
 			permissionpolicy.FieldPermissionID: {Type: field.TypeUint32, Column: permissionpolicy.FieldPermissionID},
 			permissionpolicy.FieldPolicyEngine: {Type: field.TypeEnum, Column: permissionpolicy.FieldPolicyEngine},
@@ -819,7 +814,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			roletemplate.FieldCreatedBy:   {Type: field.TypeUint32, Column: roletemplate.FieldCreatedBy},
 			roletemplate.FieldUpdatedBy:   {Type: field.TypeUint32, Column: roletemplate.FieldUpdatedBy},
 			roletemplate.FieldDeletedBy:   {Type: field.TypeUint32, Column: roletemplate.FieldDeletedBy},
-			roletemplate.FieldTenantID:    {Type: field.TypeUint32, Column: roletemplate.FieldTenantID},
 			roletemplate.FieldDescription: {Type: field.TypeString, Column: roletemplate.FieldDescription},
 			roletemplate.FieldStatus:      {Type: field.TypeEnum, Column: roletemplate.FieldStatus},
 			roletemplate.FieldSortOrder:   {Type: field.TypeUint32, Column: roletemplate.FieldSortOrder},
@@ -3391,11 +3385,6 @@ func (f *PermissionFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(permission.FieldStatus))
 }
 
-// WhereTenantID applies the entql uint32 predicate on the tenant_id field.
-func (f *PermissionFilter) WhereTenantID(p entql.Uint32P) {
-	f.Where(p.Field(permission.FieldTenantID))
-}
-
 // WhereName applies the entql string predicate on the name field.
 func (f *PermissionFilter) WhereName(p entql.StringP) {
 	f.Where(p.Field(permission.FieldName))
@@ -3479,11 +3468,6 @@ func (f *PermissionApiFilter) WhereUpdatedBy(p entql.Uint32P) {
 // WhereDeletedBy applies the entql uint32 predicate on the deleted_by field.
 func (f *PermissionApiFilter) WhereDeletedBy(p entql.Uint32P) {
 	f.Where(p.Field(permissionapi.FieldDeletedBy))
-}
-
-// WhereTenantID applies the entql uint32 predicate on the tenant_id field.
-func (f *PermissionApiFilter) WhereTenantID(p entql.Uint32P) {
-	f.Where(p.Field(permissionapi.FieldTenantID))
 }
 
 // WherePermissionID applies the entql uint32 predicate on the permission_id field.
@@ -3661,11 +3645,6 @@ func (f *PermissionGroupFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(permissiongroup.FieldStatus))
 }
 
-// WhereTenantID applies the entql uint32 predicate on the tenant_id field.
-func (f *PermissionGroupFilter) WhereTenantID(p entql.Uint32P) {
-	f.Where(p.Field(permissiongroup.FieldTenantID))
-}
-
 // WhereSortOrder applies the entql uint32 predicate on the sort_order field.
 func (f *PermissionGroupFilter) WhereSortOrder(p entql.Uint32P) {
 	f.Where(p.Field(permissiongroup.FieldSortOrder))
@@ -3789,11 +3768,6 @@ func (f *PermissionMenuFilter) WhereDeletedBy(p entql.Uint32P) {
 	f.Where(p.Field(permissionmenu.FieldDeletedBy))
 }
 
-// WhereTenantID applies the entql uint32 predicate on the tenant_id field.
-func (f *PermissionMenuFilter) WhereTenantID(p entql.Uint32P) {
-	f.Where(p.Field(permissionmenu.FieldTenantID))
-}
-
 // WherePermissionID applies the entql uint32 predicate on the permission_id field.
 func (f *PermissionMenuFilter) WherePermissionID(p entql.Uint32P) {
 	f.Where(p.Field(permissionmenu.FieldPermissionID))
@@ -3872,11 +3846,6 @@ func (f *PermissionPolicyFilter) WhereUpdatedBy(p entql.Uint32P) {
 // WhereDeletedBy applies the entql uint32 predicate on the deleted_by field.
 func (f *PermissionPolicyFilter) WhereDeletedBy(p entql.Uint32P) {
 	f.Where(p.Field(permissionpolicy.FieldDeletedBy))
-}
-
-// WhereTenantID applies the entql uint32 predicate on the tenant_id field.
-func (f *PermissionPolicyFilter) WhereTenantID(p entql.Uint32P) {
-	f.Where(p.Field(permissionpolicy.FieldTenantID))
 }
 
 // WhereStatus applies the entql string predicate on the status field.
@@ -4422,11 +4391,6 @@ func (f *RoleTemplateFilter) WhereUpdatedBy(p entql.Uint32P) {
 // WhereDeletedBy applies the entql uint32 predicate on the deleted_by field.
 func (f *RoleTemplateFilter) WhereDeletedBy(p entql.Uint32P) {
 	f.Where(p.Field(roletemplate.FieldDeletedBy))
-}
-
-// WhereTenantID applies the entql uint32 predicate on the tenant_id field.
-func (f *RoleTemplateFilter) WhereTenantID(p entql.Uint32P) {
-	f.Where(p.Field(roletemplate.FieldTenantID))
 }
 
 // WhereDescription applies the entql string predicate on the description field.
