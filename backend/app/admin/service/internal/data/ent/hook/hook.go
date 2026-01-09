@@ -320,6 +320,18 @@ func (f RoleFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error)
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.RoleMutation", m)
 }
 
+// The RoleMetadataFunc type is an adapter to allow the use of ordinary
+// function as RoleMetadata mutator.
+type RoleMetadataFunc func(context.Context, *ent.RoleMetadataMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f RoleMetadataFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.RoleMetadataMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.RoleMetadataMutation", m)
+}
+
 // The RolePermissionFunc type is an adapter to allow the use of ordinary
 // function as RolePermission mutator.
 type RolePermissionFunc func(context.Context, *ent.RolePermissionMutation) (ent.Value, error)
@@ -330,18 +342,6 @@ func (f RolePermissionFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Val
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.RolePermissionMutation", m)
-}
-
-// The RoleTemplateFunc type is an adapter to allow the use of ordinary
-// function as RoleTemplate mutator.
-type RoleTemplateFunc func(context.Context, *ent.RoleTemplateMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f RoleTemplateFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.RoleTemplateMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.RoleTemplateMutation", m)
 }
 
 // The TaskFunc type is an adapter to allow the use of ordinary

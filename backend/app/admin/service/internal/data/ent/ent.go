@@ -32,8 +32,8 @@ import (
 	"go-wind-admin/app/admin/service/internal/data/ent/policyevaluationlog"
 	"go-wind-admin/app/admin/service/internal/data/ent/position"
 	"go-wind-admin/app/admin/service/internal/data/ent/role"
+	"go-wind-admin/app/admin/service/internal/data/ent/rolemetadata"
 	"go-wind-admin/app/admin/service/internal/data/ent/rolepermission"
-	"go-wind-admin/app/admin/service/internal/data/ent/roletemplate"
 	"go-wind-admin/app/admin/service/internal/data/ent/task"
 	"go-wind-admin/app/admin/service/internal/data/ent/tenant"
 	"go-wind-admin/app/admin/service/internal/data/ent/user"
@@ -133,8 +133,8 @@ func checkColumn(t, c string) error {
 			policyevaluationlog.Table:      policyevaluationlog.ValidColumn,
 			position.Table:                 position.ValidColumn,
 			role.Table:                     role.ValidColumn,
+			rolemetadata.Table:             rolemetadata.ValidColumn,
 			rolepermission.Table:           rolepermission.ValidColumn,
-			roletemplate.Table:             roletemplate.ValidColumn,
 			task.Table:                     task.ValidColumn,
 			tenant.Table:                   tenant.ValidColumn,
 			user.Table:                     user.ValidColumn,

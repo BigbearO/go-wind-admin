@@ -36,21 +36,22 @@ var ProviderSet = wire.NewSet(
 
 	data.NewOrgUnitRepo,
 	data.NewPositionRepo,
-	data.NewRoleRepo,
-	data.NewUserRepo,
 	data.NewTenantRepo,
-	data.NewUserCredentialRepo,
 
+	data.NewUserRepo,
+	data.NewUserCredentialRepo,
+	data.NewUserOrgUnitRepo,
+	data.NewUserPositionRepo,
+	data.NewUserRoleRepo,
+
+	data.NewRoleRepo,
+	data.NewRoleMetadataRepo,
 	data.NewRolePermissionRepo,
 
 	data.NewMembershipRepo,
 	data.NewMembershipOrgUnitRepo,
 	data.NewMembershipPositionRepo,
 	data.NewMembershipRoleRepo,
-
-	data.NewUserOrgUnitRepo,
-	data.NewUserPositionRepo,
-	data.NewUserRoleRepo,
 
 	data.NewApiRepo,
 	data.NewMenuRepo,

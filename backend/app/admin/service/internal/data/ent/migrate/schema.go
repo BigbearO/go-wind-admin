@@ -1709,8 +1709,48 @@ var (
 			},
 		},
 	}
-	// SysRolePermissionsColumns holds the columns for the "sys_role_permissions" table.
-	SysRolePermissionsColumns = []*schema.Column{
+	// SysRoleMetadataColumns holds the columns for the "sys_role_metadata" table.
+	SysRoleMetadataColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUint32, Increment: true, Comment: "id"},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "更新时间"},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true, Comment: "删除时间"},
+		{Name: "created_by", Type: field.TypeUint32, Nullable: true, Comment: "创建者ID"},
+		{Name: "updated_by", Type: field.TypeUint32, Nullable: true, Comment: "更新者ID"},
+		{Name: "deleted_by", Type: field.TypeUint32, Nullable: true, Comment: "删除者ID"},
+		{Name: "role_id", Type: field.TypeUint32, Nullable: true, Comment: "角色ID"},
+		{Name: "is_template", Type: field.TypeBool, Nullable: true, Comment: "是否是模版", Default: false},
+		{Name: "template_for", Type: field.TypeString, Nullable: true, Comment: "模板适用对象"},
+		{Name: "template_version", Type: field.TypeInt32, Nullable: true, Comment: "模板版本号", Default: 1},
+		{Name: "last_synced_version", Type: field.TypeInt32, Nullable: true, Comment: "上次同步的版本号", Default: 0},
+		{Name: "custom_overrides", Type: field.TypeJSON, Comment: "自定义覆盖项"},
+	}
+	// SysRoleMetadataTable holds the schema information for the "sys_role_metadata" table.
+	SysRoleMetadataTable = &schema.Table{
+		Name:       "sys_role_metadata",
+		Comment:    "角色元数据",
+		Columns:    SysRoleMetadataColumns,
+		PrimaryKey: []*schema.Column{SysRoleMetadataColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "rolemetadata_role_id",
+				Unique:  true,
+				Columns: []*schema.Column{SysRoleMetadataColumns[7]},
+			},
+			{
+				Name:    "rolemetadata_is_template_template_for",
+				Unique:  false,
+				Columns: []*schema.Column{SysRoleMetadataColumns[8], SysRoleMetadataColumns[9]},
+			},
+			{
+				Name:    "rolemetadata_template_for_template_version",
+				Unique:  false,
+				Columns: []*schema.Column{SysRoleMetadataColumns[9], SysRoleMetadataColumns[10]},
+			},
+		},
+	}
+	// RpColumns holds the columns for the "rp" table.
+	RpColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUint32, Increment: true, Comment: "id"},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "更新时间"},
@@ -1719,108 +1759,63 @@ var (
 		{Name: "updated_by", Type: field.TypeUint32, Nullable: true, Comment: "更新者ID"},
 		{Name: "deleted_by", Type: field.TypeUint32, Nullable: true, Comment: "删除者ID"},
 		{Name: "tenant_id", Type: field.TypeUint32, Nullable: true, Comment: "租户ID"},
+		{Name: "status", Type: field.TypeEnum, Comment: "状态", Enums: []string{"OFF", "ON"}, Default: "ON"},
 		{Name: "role_id", Type: field.TypeUint32, Comment: "API资源ID（关联sys_apis.id）"},
 		{Name: "permission_id", Type: field.TypeUint32, Comment: "权限ID（关联sys_permissions.id）"},
+		{Name: "effect", Type: field.TypeEnum, Nullable: true, Comment: "生效方式", Enums: []string{"ALLOW", "DENY"}, Default: "ALLOW"},
+		{Name: "priority", Type: field.TypeInt32, Nullable: true, Comment: "优先级（-100~100，值越大优先级越高）", Default: 0},
 	}
-	// SysRolePermissionsTable holds the schema information for the "sys_role_permissions" table.
-	SysRolePermissionsTable = &schema.Table{
-		Name:       "sys_role_permissions",
+	// RpTable holds the schema information for the "rp" table.
+	RpTable = &schema.Table{
+		Name:       "rp",
 		Comment:    "角色与权限关联表",
-		Columns:    SysRolePermissionsColumns,
-		PrimaryKey: []*schema.Column{SysRolePermissionsColumns[0]},
+		Columns:    RpColumns,
+		PrimaryKey: []*schema.Column{RpColumns[0]},
 		Indexes: []*schema.Index{
 			{
-				Name:    "uix_sys_role_permissions_tenant_role_permission",
+				Name:    "uix_rp_tenant_role_permission",
 				Unique:  true,
-				Columns: []*schema.Column{SysRolePermissionsColumns[7], SysRolePermissionsColumns[8], SysRolePermissionsColumns[9]},
+				Columns: []*schema.Column{RpColumns[7], RpColumns[9], RpColumns[10]},
 			},
 			{
-				Name:    "uix_sys_role_permissions_role_permission",
+				Name:    "uix_rp_role_permission",
 				Unique:  true,
-				Columns: []*schema.Column{SysRolePermissionsColumns[8], SysRolePermissionsColumns[9]},
+				Columns: []*schema.Column{RpColumns[9], RpColumns[10]},
 			},
 			{
-				Name:    "idx_sys_role_permissions_tenant_role",
+				Name:    "idx_rp_tenant_role",
 				Unique:  false,
-				Columns: []*schema.Column{SysRolePermissionsColumns[7], SysRolePermissionsColumns[8]},
+				Columns: []*schema.Column{RpColumns[7], RpColumns[9]},
 			},
 			{
-				Name:    "idx_sys_role_permissions_tenant_permission",
+				Name:    "idx_rp_tenant_permission",
 				Unique:  false,
-				Columns: []*schema.Column{SysRolePermissionsColumns[7], SysRolePermissionsColumns[9]},
+				Columns: []*schema.Column{RpColumns[7], RpColumns[10]},
 			},
 			{
-				Name:    "idx_sys_role_permissions_role_id",
+				Name:    "idx_rp_role_id",
 				Unique:  false,
-				Columns: []*schema.Column{SysRolePermissionsColumns[8]},
+				Columns: []*schema.Column{RpColumns[9]},
 			},
 			{
-				Name:    "idx_sys_role_permissions_permission_id",
+				Name:    "idx_rp_permission_id",
 				Unique:  false,
-				Columns: []*schema.Column{SysRolePermissionsColumns[9]},
+				Columns: []*schema.Column{RpColumns[10]},
 			},
 			{
-				Name:    "idx_sys_role_permissions_tenant_id",
+				Name:    "idx_rp_tenant_id",
 				Unique:  false,
-				Columns: []*schema.Column{SysRolePermissionsColumns[7]},
+				Columns: []*schema.Column{RpColumns[7]},
 			},
 			{
-				Name:    "idx_sys_role_permissions_created_at",
+				Name:    "idx_rp_created_at",
 				Unique:  false,
-				Columns: []*schema.Column{SysRolePermissionsColumns[1]},
+				Columns: []*schema.Column{RpColumns[1]},
 			},
 			{
-				Name:    "idx_sys_role_permissions_created_by",
+				Name:    "idx_rp_created_by",
 				Unique:  false,
-				Columns: []*schema.Column{SysRolePermissionsColumns[4]},
-			},
-		},
-	}
-	// SysRoleTemplatesColumns holds the columns for the "sys_role_templates" table.
-	SysRoleTemplatesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeUint32, Increment: true, Comment: "id"},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "更新时间"},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true, Comment: "删除时间"},
-		{Name: "created_by", Type: field.TypeUint32, Nullable: true, Comment: "创建者ID"},
-		{Name: "updated_by", Type: field.TypeUint32, Nullable: true, Comment: "更新者ID"},
-		{Name: "deleted_by", Type: field.TypeUint32, Nullable: true, Comment: "删除者ID"},
-		{Name: "description", Type: field.TypeString, Nullable: true, Comment: "描述"},
-		{Name: "status", Type: field.TypeEnum, Comment: "状态", Enums: []string{"OFF", "ON"}, Default: "ON"},
-		{Name: "sort_order", Type: field.TypeUint32, Nullable: true, Comment: "排序值（越小越靠前）", Default: 0},
-		{Name: "name", Type: field.TypeString, Comment: "角色名称"},
-		{Name: "code", Type: field.TypeString, Comment: "角色编码"},
-		{Name: "category", Type: field.TypeString, Nullable: true, Comment: "模板分类"},
-		{Name: "permissions", Type: field.TypeJSON, Nullable: true, Comment: "角色权限列表"},
-		{Name: "is_default", Type: field.TypeBool, Comment: "是否是默认模板", Default: false},
-		{Name: "is_system", Type: field.TypeBool, Comment: "是否是系统模板（不可删除）", Default: false},
-	}
-	// SysRoleTemplatesTable holds the schema information for the "sys_role_templates" table.
-	SysRoleTemplatesTable = &schema.Table{
-		Name:       "sys_role_templates",
-		Comment:    "角色模板",
-		Columns:    SysRoleTemplatesColumns,
-		PrimaryKey: []*schema.Column{SysRoleTemplatesColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "idx_sys_role_tpl_name",
-				Unique:  true,
-				Columns: []*schema.Column{SysRoleTemplatesColumns[10]},
-			},
-			{
-				Name:    "idx_sys_role_tpl_code",
-				Unique:  true,
-				Columns: []*schema.Column{SysRoleTemplatesColumns[11]},
-			},
-			{
-				Name:    "idx_sys_role_tpl_category",
-				Unique:  false,
-				Columns: []*schema.Column{SysRoleTemplatesColumns[12]},
-			},
-			{
-				Name:    "idx_sys_role_tpl_is_system",
-				Unique:  false,
-				Columns: []*schema.Column{SysRoleTemplatesColumns[15]},
+				Columns: []*schema.Column{RpColumns[4]},
 			},
 		},
 	}
@@ -2408,8 +2403,8 @@ var (
 		SysPolicyEvaluationLogsTable,
 		SysPositionsTable,
 		SysRolesTable,
-		SysRolePermissionsTable,
-		SysRoleTemplatesTable,
+		SysRoleMetadataTable,
+		RpTable,
 		SysTasksTable,
 		SysTenantsTable,
 		SysUsersTable,
@@ -2555,13 +2550,13 @@ func init() {
 		Charset:   "utf8mb4",
 		Collation: "utf8mb4_bin",
 	}
-	SysRolePermissionsTable.Annotation = &entsql.Annotation{
-		Table:     "sys_role_permissions",
+	SysRoleMetadataTable.Annotation = &entsql.Annotation{
+		Table:     "sys_role_metadata",
 		Charset:   "utf8mb4",
 		Collation: "utf8mb4_bin",
 	}
-	SysRoleTemplatesTable.Annotation = &entsql.Annotation{
-		Table:     "sys_role_templates",
+	RpTable.Annotation = &entsql.Annotation{
+		Table:     "rp",
 		Charset:   "utf8mb4",
 		Collation: "utf8mb4_bin",
 	}

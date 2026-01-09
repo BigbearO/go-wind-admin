@@ -272,6 +272,56 @@ func (r *RoleRepo) Get(ctx context.Context, req *userV1.GetRoleRequest) (*userV1
 	return dto, err
 }
 
+// GetTemplateRole 获取角色模板信息
+func (r *RoleRepo) GetTemplateRole(ctx context.Context, templateCode string) (*userV1.Role, error) {
+	if templateCode == "" {
+		return nil, userV1.ErrorBadRequest("invalid parameter")
+	}
+
+	code := "template:" + templateCode
+	builder := r.entClient.Client().Role.Query().
+		Where(
+			role.CodeEQ(code),
+			role.StatusEQ(role.StatusOn),
+			role.IsProtectedEQ(true),
+			role.Or(
+				role.TenantIDIsNil(),
+				role.TenantIDEQ(0),
+			),
+		)
+
+	dto, err := r.repository.Get(ctx, builder, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	_ = r.fillPermissionIDs(ctx, dto)
+
+	return dto, err
+}
+
+// CopyPermissions 复制角色权限
+func (r *RoleRepo) CopyPermissions(ctx context.Context, tx *ent.Tx, sourceRoleID, targetRoleID uint32, operatorID uint32) (err error) {
+	// 获取源角色权限列表
+	rolePermissions, err := r.rolePermissionRepo.ListPermissionsByRoleID(ctx, sourceRoleID)
+	if err != nil {
+		r.log.Errorf("list source role permissions failed: %s", err.Error())
+		return userV1.ErrorInternalServerError("list source role permissions failed")
+	}
+
+	if len(rolePermissions) == 0 {
+		return nil
+	}
+
+	// 清理目标角色旧权限（避免重复）
+	if err = r.rolePermissionRepo.CleanPermissions(ctx, tx, targetRoleID); err != nil {
+		return err
+	}
+
+	// 分配权限到目标角色
+	return r.rolePermissionRepo.BatchCreate(ctx, tx, rolePermissions)
+}
+
 // Create 创建角色
 func (r *RoleRepo) Create(ctx context.Context, req *userV1.CreateRoleRequest) (err error) {
 	if req == nil || req.Data == nil {

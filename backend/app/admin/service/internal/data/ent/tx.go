@@ -64,10 +64,10 @@ type Tx struct {
 	Position *PositionClient
 	// Role is the client for interacting with the Role builders.
 	Role *RoleClient
+	// RoleMetadata is the client for interacting with the RoleMetadata builders.
+	RoleMetadata *RoleMetadataClient
 	// RolePermission is the client for interacting with the RolePermission builders.
 	RolePermission *RolePermissionClient
-	// RoleTemplate is the client for interacting with the RoleTemplate builders.
-	RoleTemplate *RoleTemplateClient
 	// Task is the client for interacting with the Task builders.
 	Task *TaskClient
 	// Tenant is the client for interacting with the Tenant builders.
@@ -239,8 +239,8 @@ func (tx *Tx) init() {
 	tx.PolicyEvaluationLog = NewPolicyEvaluationLogClient(tx.config)
 	tx.Position = NewPositionClient(tx.config)
 	tx.Role = NewRoleClient(tx.config)
+	tx.RoleMetadata = NewRoleMetadataClient(tx.config)
 	tx.RolePermission = NewRolePermissionClient(tx.config)
-	tx.RoleTemplate = NewRoleTemplateClient(tx.config)
 	tx.Task = NewTaskClient(tx.config)
 	tx.Tenant = NewTenantClient(tx.config)
 	tx.User = NewUserClient(tx.config)

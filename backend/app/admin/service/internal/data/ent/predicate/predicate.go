@@ -84,11 +84,11 @@ type Position func(*sql.Selector)
 // Role is the predicate function for role builders.
 type Role func(*sql.Selector)
 
+// RoleMetadata is the predicate function for rolemetadata builders.
+type RoleMetadata func(*sql.Selector)
+
 // RolePermission is the predicate function for rolepermission builders.
 type RolePermission func(*sql.Selector)
-
-// RoleTemplate is the predicate function for roletemplate builders.
-type RoleTemplate func(*sql.Selector)
 
 // Task is the predicate function for task builders.
 type Task func(*sql.Selector)

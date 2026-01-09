@@ -91,6 +91,25 @@ var DefaultRoles = []*userV1.Role{
 		IsProtected: trans.Ptr(true),
 		Permissions: []uint32{1},
 	},
+	{
+		Id:          trans.Ptr(uint32(2)),
+		Name:        trans.Ptr("租户管理员模板"),
+		Code:        trans.Ptr("template:tenant_admin"),
+		Status:      trans.Ptr(userV1.Role_ON),
+		Description: trans.Ptr("租户管理员角色，拥有租户内所有功能的操作权限，可管理用户、角色及租户内所有资源"),
+		IsProtected: trans.Ptr(true),
+		Permissions: []uint32{1},
+	},
+}
+
+var DefaultRoleMetadata = []*userV1.RoleMetadata{
+	{
+		Id:              trans.Ptr(uint32(1)),
+		RoleId:          trans.Ptr(uint32(1)),
+		IsTemplate:      trans.Ptr(true),
+		TemplateFor:     trans.Ptr("tenant_admin"),
+		TemplateVersion: trans.Ptr(int32(1)),
+	},
 }
 
 // DefaultUsers 系统初始化默认用户数据

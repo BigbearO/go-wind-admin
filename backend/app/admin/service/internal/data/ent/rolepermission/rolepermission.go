@@ -3,6 +3,8 @@
 package rolepermission
 
 import (
+	"fmt"
+
 	"entgo.io/ent/dialect/sql"
 )
 
@@ -25,12 +27,18 @@ const (
 	FieldDeletedBy = "deleted_by"
 	// FieldTenantID holds the string denoting the tenant_id field in the database.
 	FieldTenantID = "tenant_id"
+	// FieldStatus holds the string denoting the status field in the database.
+	FieldStatus = "status"
 	// FieldRoleID holds the string denoting the role_id field in the database.
 	FieldRoleID = "role_id"
 	// FieldPermissionID holds the string denoting the permission_id field in the database.
 	FieldPermissionID = "permission_id"
+	// FieldEffect holds the string denoting the effect field in the database.
+	FieldEffect = "effect"
+	// FieldPriority holds the string denoting the priority field in the database.
+	FieldPriority = "priority"
 	// Table holds the table name of the rolepermission in the database.
-	Table = "sys_role_permissions"
+	Table = "rp"
 )
 
 // Columns holds all SQL columns for rolepermission fields.
@@ -43,8 +51,11 @@ var Columns = []string{
 	FieldUpdatedBy,
 	FieldDeletedBy,
 	FieldTenantID,
+	FieldStatus,
 	FieldRoleID,
 	FieldPermissionID,
+	FieldEffect,
+	FieldPriority,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -58,9 +69,63 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// DefaultPriority holds the default value on creation for the "priority" field.
+	DefaultPriority int32
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.
 	IDValidator func(uint32) error
 )
+
+// Status defines the type for the "status" enum field.
+type Status string
+
+// StatusOn is the default value of the Status enum.
+const DefaultStatus = StatusOn
+
+// Status values.
+const (
+	StatusOff Status = "OFF"
+	StatusOn  Status = "ON"
+)
+
+func (s Status) String() string {
+	return string(s)
+}
+
+// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
+func StatusValidator(s Status) error {
+	switch s {
+	case StatusOff, StatusOn:
+		return nil
+	default:
+		return fmt.Errorf("rolepermission: invalid enum value for status field: %q", s)
+	}
+}
+
+// Effect defines the type for the "effect" enum field.
+type Effect string
+
+// EffectAllow is the default value of the Effect enum.
+const DefaultEffect = EffectAllow
+
+// Effect values.
+const (
+	EffectAllow Effect = "ALLOW"
+	EffectDeny  Effect = "DENY"
+)
+
+func (e Effect) String() string {
+	return string(e)
+}
+
+// EffectValidator is a validator for the "effect" field enum values. It is called by the builders before save.
+func EffectValidator(e Effect) error {
+	switch e {
+	case EffectAllow, EffectDeny:
+		return nil
+	default:
+		return fmt.Errorf("rolepermission: invalid enum value for effect field: %q", e)
+	}
+}
 
 // OrderOption defines the ordering options for the RolePermission queries.
 type OrderOption func(*sql.Selector)
@@ -105,6 +170,11 @@ func ByTenantID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTenantID, opts...).ToFunc()
 }
 
+// ByStatus orders the results by the status field.
+func ByStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
 // ByRoleID orders the results by the role_id field.
 func ByRoleID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRoleID, opts...).ToFunc()
@@ -113,4 +183,14 @@ func ByRoleID(opts ...sql.OrderTermOption) OrderOption {
 // ByPermissionID orders the results by the permission_id field.
 func ByPermissionID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPermissionID, opts...).ToFunc()
+}
+
+// ByEffect orders the results by the effect field.
+func ByEffect(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEffect, opts...).ToFunc()
+}
+
+// ByPriority orders the results by the priority field.
+func ByPriority(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPriority, opts...).ToFunc()
 }

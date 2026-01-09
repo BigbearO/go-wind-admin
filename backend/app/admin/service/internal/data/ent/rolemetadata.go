@@ -3,8 +3,9 @@
 package ent
 
 import (
+	"encoding/json"
 	"fmt"
-	"go-wind-admin/app/admin/service/internal/data/ent/rolepermission"
+	"go-wind-admin/app/admin/service/internal/data/ent/rolemetadata"
 	"strings"
 	"time"
 
@@ -12,8 +13,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
-// 角色与权限关联表
-type RolePermission struct {
+// 角色元数据
+type RoleMetadata struct {
 	config `json:"-"`
 	// ID of the ent.
 	// id
@@ -30,31 +31,35 @@ type RolePermission struct {
 	UpdatedBy *uint32 `json:"updated_by,omitempty"`
 	// 删除者ID
 	DeletedBy *uint32 `json:"deleted_by,omitempty"`
-	// 租户ID
-	TenantID *uint32 `json:"tenant_id,omitempty"`
-	// 状态
-	Status *rolepermission.Status `json:"status,omitempty"`
-	// API资源ID（关联sys_apis.id）
+	// 角色ID
 	RoleID *uint32 `json:"role_id,omitempty"`
-	// 权限ID（关联sys_permissions.id）
-	PermissionID *uint32 `json:"permission_id,omitempty"`
-	// 生效方式
-	Effect *rolepermission.Effect `json:"effect,omitempty"`
-	// 优先级（-100~100，值越大优先级越高）
-	Priority     *int32 `json:"priority,omitempty"`
-	selectValues sql.SelectValues
+	// 是否是模版
+	IsTemplate *bool `json:"is_template,omitempty"`
+	// 模板适用对象
+	TemplateFor *string `json:"template_for,omitempty"`
+	// 模板版本号
+	TemplateVersion *int32 `json:"template_version,omitempty"`
+	// 上次同步的版本号
+	LastSyncedVersion *int32 `json:"last_synced_version,omitempty"`
+	// 自定义覆盖项
+	CustomOverrides []string `json:"custom_overrides,omitempty"`
+	selectValues    sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
-func (*RolePermission) scanValues(columns []string) ([]any, error) {
+func (*RoleMetadata) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case rolepermission.FieldID, rolepermission.FieldCreatedBy, rolepermission.FieldUpdatedBy, rolepermission.FieldDeletedBy, rolepermission.FieldTenantID, rolepermission.FieldRoleID, rolepermission.FieldPermissionID, rolepermission.FieldPriority:
+		case rolemetadata.FieldCustomOverrides:
+			values[i] = new([]byte)
+		case rolemetadata.FieldIsTemplate:
+			values[i] = new(sql.NullBool)
+		case rolemetadata.FieldID, rolemetadata.FieldCreatedBy, rolemetadata.FieldUpdatedBy, rolemetadata.FieldDeletedBy, rolemetadata.FieldRoleID, rolemetadata.FieldTemplateVersion, rolemetadata.FieldLastSyncedVersion:
 			values[i] = new(sql.NullInt64)
-		case rolepermission.FieldStatus, rolepermission.FieldEffect:
+		case rolemetadata.FieldTemplateFor:
 			values[i] = new(sql.NullString)
-		case rolepermission.FieldCreatedAt, rolepermission.FieldUpdatedAt, rolepermission.FieldDeletedAt:
+		case rolemetadata.FieldCreatedAt, rolemetadata.FieldUpdatedAt, rolemetadata.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -64,102 +69,103 @@ func (*RolePermission) scanValues(columns []string) ([]any, error) {
 }
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
-// to the RolePermission fields.
-func (_m *RolePermission) assignValues(columns []string, values []any) error {
+// to the RoleMetadata fields.
+func (_m *RoleMetadata) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
 	for i := range columns {
 		switch columns[i] {
-		case rolepermission.FieldID:
+		case rolemetadata.FieldID:
 			value, ok := values[i].(*sql.NullInt64)
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			_m.ID = uint32(value.Int64)
-		case rolepermission.FieldCreatedAt:
+		case rolemetadata.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
 				_m.CreatedAt = new(time.Time)
 				*_m.CreatedAt = value.Time
 			}
-		case rolepermission.FieldUpdatedAt:
+		case rolemetadata.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
 				_m.UpdatedAt = new(time.Time)
 				*_m.UpdatedAt = value.Time
 			}
-		case rolepermission.FieldDeletedAt:
+		case rolemetadata.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
 				_m.DeletedAt = new(time.Time)
 				*_m.DeletedAt = value.Time
 			}
-		case rolepermission.FieldCreatedBy:
+		case rolemetadata.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
 				_m.CreatedBy = new(uint32)
 				*_m.CreatedBy = uint32(value.Int64)
 			}
-		case rolepermission.FieldUpdatedBy:
+		case rolemetadata.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = new(uint32)
 				*_m.UpdatedBy = uint32(value.Int64)
 			}
-		case rolepermission.FieldDeletedBy:
+		case rolemetadata.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
 				_m.DeletedBy = new(uint32)
 				*_m.DeletedBy = uint32(value.Int64)
 			}
-		case rolepermission.FieldTenantID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field tenant_id", values[i])
-			} else if value.Valid {
-				_m.TenantID = new(uint32)
-				*_m.TenantID = uint32(value.Int64)
-			}
-		case rolepermission.FieldStatus:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field status", values[i])
-			} else if value.Valid {
-				_m.Status = new(rolepermission.Status)
-				*_m.Status = rolepermission.Status(value.String)
-			}
-		case rolepermission.FieldRoleID:
+		case rolemetadata.FieldRoleID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field role_id", values[i])
 			} else if value.Valid {
 				_m.RoleID = new(uint32)
 				*_m.RoleID = uint32(value.Int64)
 			}
-		case rolepermission.FieldPermissionID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field permission_id", values[i])
+		case rolemetadata.FieldIsTemplate:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_template", values[i])
 			} else if value.Valid {
-				_m.PermissionID = new(uint32)
-				*_m.PermissionID = uint32(value.Int64)
+				_m.IsTemplate = new(bool)
+				*_m.IsTemplate = value.Bool
 			}
-		case rolepermission.FieldEffect:
+		case rolemetadata.FieldTemplateFor:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field effect", values[i])
+				return fmt.Errorf("unexpected type %T for field template_for", values[i])
 			} else if value.Valid {
-				_m.Effect = new(rolepermission.Effect)
-				*_m.Effect = rolepermission.Effect(value.String)
+				_m.TemplateFor = new(string)
+				*_m.TemplateFor = value.String
 			}
-		case rolepermission.FieldPriority:
+		case rolemetadata.FieldTemplateVersion:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field priority", values[i])
+				return fmt.Errorf("unexpected type %T for field template_version", values[i])
 			} else if value.Valid {
-				_m.Priority = new(int32)
-				*_m.Priority = int32(value.Int64)
+				_m.TemplateVersion = new(int32)
+				*_m.TemplateVersion = int32(value.Int64)
+			}
+		case rolemetadata.FieldLastSyncedVersion:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field last_synced_version", values[i])
+			} else if value.Valid {
+				_m.LastSyncedVersion = new(int32)
+				*_m.LastSyncedVersion = int32(value.Int64)
+			}
+		case rolemetadata.FieldCustomOverrides:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field custom_overrides", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.CustomOverrides); err != nil {
+					return fmt.Errorf("unmarshal field custom_overrides: %w", err)
+				}
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -168,34 +174,34 @@ func (_m *RolePermission) assignValues(columns []string, values []any) error {
 	return nil
 }
 
-// Value returns the ent.Value that was dynamically selected and assigned to the RolePermission.
+// Value returns the ent.Value that was dynamically selected and assigned to the RoleMetadata.
 // This includes values selected through modifiers, order, etc.
-func (_m *RolePermission) Value(name string) (ent.Value, error) {
+func (_m *RoleMetadata) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
 }
 
-// Update returns a builder for updating this RolePermission.
-// Note that you need to call RolePermission.Unwrap() before calling this method if this RolePermission
+// Update returns a builder for updating this RoleMetadata.
+// Note that you need to call RoleMetadata.Unwrap() before calling this method if this RoleMetadata
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (_m *RolePermission) Update() *RolePermissionUpdateOne {
-	return NewRolePermissionClient(_m.config).UpdateOne(_m)
+func (_m *RoleMetadata) Update() *RoleMetadataUpdateOne {
+	return NewRoleMetadataClient(_m.config).UpdateOne(_m)
 }
 
-// Unwrap unwraps the RolePermission entity that was returned from a transaction after it was closed,
+// Unwrap unwraps the RoleMetadata entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (_m *RolePermission) Unwrap() *RolePermission {
+func (_m *RoleMetadata) Unwrap() *RoleMetadata {
 	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
-		panic("ent: RolePermission is not a transactional entity")
+		panic("ent: RoleMetadata is not a transactional entity")
 	}
 	_m.config.driver = _tx.drv
 	return _m
 }
 
 // String implements the fmt.Stringer.
-func (_m *RolePermission) String() string {
+func (_m *RoleMetadata) String() string {
 	var builder strings.Builder
-	builder.WriteString("RolePermission(")
+	builder.WriteString("RoleMetadata(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	if v := _m.CreatedAt; v != nil {
 		builder.WriteString("created_at=")
@@ -227,38 +233,36 @@ func (_m *RolePermission) String() string {
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
-	if v := _m.TenantID; v != nil {
-		builder.WriteString("tenant_id=")
-		builder.WriteString(fmt.Sprintf("%v", *v))
-	}
-	builder.WriteString(", ")
-	if v := _m.Status; v != nil {
-		builder.WriteString("status=")
-		builder.WriteString(fmt.Sprintf("%v", *v))
-	}
-	builder.WriteString(", ")
 	if v := _m.RoleID; v != nil {
 		builder.WriteString("role_id=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
-	if v := _m.PermissionID; v != nil {
-		builder.WriteString("permission_id=")
+	if v := _m.IsTemplate; v != nil {
+		builder.WriteString("is_template=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
-	if v := _m.Effect; v != nil {
-		builder.WriteString("effect=")
+	if v := _m.TemplateFor; v != nil {
+		builder.WriteString("template_for=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.TemplateVersion; v != nil {
+		builder.WriteString("template_version=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
-	if v := _m.Priority; v != nil {
-		builder.WriteString("priority=")
+	if v := _m.LastSyncedVersion; v != nil {
+		builder.WriteString("last_synced_version=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
+	builder.WriteString(", ")
+	builder.WriteString("custom_overrides=")
+	builder.WriteString(fmt.Sprintf("%v", _m.CustomOverrides))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
-// RolePermissions is a parsable slice of RolePermission.
-type RolePermissions []*RolePermission
+// RoleMetadataSlice is a parsable slice of RoleMetadata.
+type RoleMetadataSlice []*RoleMetadata

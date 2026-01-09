@@ -5,33 +5,33 @@ package ent
 import (
 	"context"
 	"go-wind-admin/app/admin/service/internal/data/ent/predicate"
-	"go-wind-admin/app/admin/service/internal/data/ent/roletemplate"
+	"go-wind-admin/app/admin/service/internal/data/ent/rolemetadata"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 )
 
-// RoleTemplateDelete is the builder for deleting a RoleTemplate entity.
-type RoleTemplateDelete struct {
+// RoleMetadataDelete is the builder for deleting a RoleMetadata entity.
+type RoleMetadataDelete struct {
 	config
 	hooks    []Hook
-	mutation *RoleTemplateMutation
+	mutation *RoleMetadataMutation
 }
 
-// Where appends a list predicates to the RoleTemplateDelete builder.
-func (_d *RoleTemplateDelete) Where(ps ...predicate.RoleTemplate) *RoleTemplateDelete {
+// Where appends a list predicates to the RoleMetadataDelete builder.
+func (_d *RoleMetadataDelete) Where(ps ...predicate.RoleMetadata) *RoleMetadataDelete {
 	_d.mutation.Where(ps...)
 	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (_d *RoleTemplateDelete) Exec(ctx context.Context) (int, error) {
+func (_d *RoleMetadataDelete) Exec(ctx context.Context) (int, error) {
 	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (_d *RoleTemplateDelete) ExecX(ctx context.Context) int {
+func (_d *RoleMetadataDelete) ExecX(ctx context.Context) int {
 	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
@@ -39,8 +39,8 @@ func (_d *RoleTemplateDelete) ExecX(ctx context.Context) int {
 	return n
 }
 
-func (_d *RoleTemplateDelete) sqlExec(ctx context.Context) (int, error) {
-	_spec := sqlgraph.NewDeleteSpec(roletemplate.Table, sqlgraph.NewFieldSpec(roletemplate.FieldID, field.TypeUint32))
+func (_d *RoleMetadataDelete) sqlExec(ctx context.Context) (int, error) {
+	_spec := sqlgraph.NewDeleteSpec(rolemetadata.Table, sqlgraph.NewFieldSpec(rolemetadata.FieldID, field.TypeUint32))
 	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -56,32 +56,32 @@ func (_d *RoleTemplateDelete) sqlExec(ctx context.Context) (int, error) {
 	return affected, err
 }
 
-// RoleTemplateDeleteOne is the builder for deleting a single RoleTemplate entity.
-type RoleTemplateDeleteOne struct {
-	_d *RoleTemplateDelete
+// RoleMetadataDeleteOne is the builder for deleting a single RoleMetadata entity.
+type RoleMetadataDeleteOne struct {
+	_d *RoleMetadataDelete
 }
 
-// Where appends a list predicates to the RoleTemplateDelete builder.
-func (_d *RoleTemplateDeleteOne) Where(ps ...predicate.RoleTemplate) *RoleTemplateDeleteOne {
+// Where appends a list predicates to the RoleMetadataDelete builder.
+func (_d *RoleMetadataDeleteOne) Where(ps ...predicate.RoleMetadata) *RoleMetadataDeleteOne {
 	_d._d.mutation.Where(ps...)
 	return _d
 }
 
 // Exec executes the deletion query.
-func (_d *RoleTemplateDeleteOne) Exec(ctx context.Context) error {
+func (_d *RoleMetadataDeleteOne) Exec(ctx context.Context) error {
 	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
 	case n == 0:
-		return &NotFoundError{roletemplate.Label}
+		return &NotFoundError{rolemetadata.Label}
 	default:
 		return nil
 	}
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (_d *RoleTemplateDeleteOne) ExecX(ctx context.Context) {
+func (_d *RoleMetadataDeleteOne) ExecX(ctx context.Context) {
 	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}

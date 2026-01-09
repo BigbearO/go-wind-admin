@@ -29,8 +29,8 @@ import (
 	"go-wind-admin/app/admin/service/internal/data/ent/policyevaluationlog"
 	"go-wind-admin/app/admin/service/internal/data/ent/position"
 	"go-wind-admin/app/admin/service/internal/data/ent/role"
+	"go-wind-admin/app/admin/service/internal/data/ent/rolemetadata"
 	"go-wind-admin/app/admin/service/internal/data/ent/rolepermission"
-	"go-wind-admin/app/admin/service/internal/data/ent/roletemplate"
 	"go-wind-admin/app/admin/service/internal/data/ent/schema"
 	"go-wind-admin/app/admin/service/internal/data/ent/task"
 	"go-wind-admin/app/admin/service/internal/data/ent/tenant"
@@ -491,48 +491,42 @@ func init() {
 	roleDescID := roleMixinFields0[0].Descriptor()
 	// role.IDValidator is a validator for the "id" field. It is called by the builders before save.
 	role.IDValidator = roleDescID.Validators[0].(func(uint32) error)
+	rolemetadataMixin := schema.RoleMetadata{}.Mixin()
+	rolemetadataMixinFields0 := rolemetadataMixin[0].Fields()
+	_ = rolemetadataMixinFields0
+	rolemetadataFields := schema.RoleMetadata{}.Fields()
+	_ = rolemetadataFields
+	// rolemetadataDescIsTemplate is the schema descriptor for is_template field.
+	rolemetadataDescIsTemplate := rolemetadataFields[1].Descriptor()
+	// rolemetadata.DefaultIsTemplate holds the default value on creation for the is_template field.
+	rolemetadata.DefaultIsTemplate = rolemetadataDescIsTemplate.Default.(bool)
+	// rolemetadataDescTemplateVersion is the schema descriptor for template_version field.
+	rolemetadataDescTemplateVersion := rolemetadataFields[3].Descriptor()
+	// rolemetadata.DefaultTemplateVersion holds the default value on creation for the template_version field.
+	rolemetadata.DefaultTemplateVersion = rolemetadataDescTemplateVersion.Default.(int32)
+	// rolemetadataDescLastSyncedVersion is the schema descriptor for last_synced_version field.
+	rolemetadataDescLastSyncedVersion := rolemetadataFields[4].Descriptor()
+	// rolemetadata.DefaultLastSyncedVersion holds the default value on creation for the last_synced_version field.
+	rolemetadata.DefaultLastSyncedVersion = rolemetadataDescLastSyncedVersion.Default.(int32)
+	// rolemetadataDescID is the schema descriptor for id field.
+	rolemetadataDescID := rolemetadataMixinFields0[0].Descriptor()
+	// rolemetadata.IDValidator is a validator for the "id" field. It is called by the builders before save.
+	rolemetadata.IDValidator = rolemetadataDescID.Validators[0].(func(uint32) error)
 	rolepermissionMixin := schema.RolePermission{}.Mixin()
 	rolepermissionMixinFields0 := rolepermissionMixin[0].Fields()
 	_ = rolepermissionMixinFields0
+	rolepermissionMixinFields4 := rolepermissionMixin[4].Fields()
+	_ = rolepermissionMixinFields4
 	rolepermissionFields := schema.RolePermission{}.Fields()
 	_ = rolepermissionFields
+	// rolepermissionDescPriority is the schema descriptor for priority field.
+	rolepermissionDescPriority := rolepermissionFields[3].Descriptor()
+	// rolepermission.DefaultPriority holds the default value on creation for the priority field.
+	rolepermission.DefaultPriority = rolepermissionDescPriority.Default.(int32)
 	// rolepermissionDescID is the schema descriptor for id field.
 	rolepermissionDescID := rolepermissionMixinFields0[0].Descriptor()
 	// rolepermission.IDValidator is a validator for the "id" field. It is called by the builders before save.
 	rolepermission.IDValidator = rolepermissionDescID.Validators[0].(func(uint32) error)
-	roletemplateMixin := schema.RoleTemplate{}.Mixin()
-	roletemplateMixinFields0 := roletemplateMixin[0].Fields()
-	_ = roletemplateMixinFields0
-	roletemplateMixinFields4 := roletemplateMixin[4].Fields()
-	_ = roletemplateMixinFields4
-	roletemplateMixinFields5 := roletemplateMixin[5].Fields()
-	_ = roletemplateMixinFields5
-	roletemplateFields := schema.RoleTemplate{}.Fields()
-	_ = roletemplateFields
-	// roletemplateDescSortOrder is the schema descriptor for sort_order field.
-	roletemplateDescSortOrder := roletemplateMixinFields5[0].Descriptor()
-	// roletemplate.DefaultSortOrder holds the default value on creation for the sort_order field.
-	roletemplate.DefaultSortOrder = roletemplateDescSortOrder.Default.(uint32)
-	// roletemplateDescName is the schema descriptor for name field.
-	roletemplateDescName := roletemplateFields[0].Descriptor()
-	// roletemplate.NameValidator is a validator for the "name" field. It is called by the builders before save.
-	roletemplate.NameValidator = roletemplateDescName.Validators[0].(func(string) error)
-	// roletemplateDescCode is the schema descriptor for code field.
-	roletemplateDescCode := roletemplateFields[1].Descriptor()
-	// roletemplate.CodeValidator is a validator for the "code" field. It is called by the builders before save.
-	roletemplate.CodeValidator = roletemplateDescCode.Validators[0].(func(string) error)
-	// roletemplateDescIsDefault is the schema descriptor for is_default field.
-	roletemplateDescIsDefault := roletemplateFields[4].Descriptor()
-	// roletemplate.DefaultIsDefault holds the default value on creation for the is_default field.
-	roletemplate.DefaultIsDefault = roletemplateDescIsDefault.Default.(bool)
-	// roletemplateDescIsSystem is the schema descriptor for is_system field.
-	roletemplateDescIsSystem := roletemplateFields[5].Descriptor()
-	// roletemplate.DefaultIsSystem holds the default value on creation for the is_system field.
-	roletemplate.DefaultIsSystem = roletemplateDescIsSystem.Default.(bool)
-	// roletemplateDescID is the schema descriptor for id field.
-	roletemplateDescID := roletemplateMixinFields0[0].Descriptor()
-	// roletemplate.IDValidator is a validator for the "id" field. It is called by the builders before save.
-	roletemplate.IDValidator = roletemplateDescID.Validators[0].(func(uint32) error)
 	taskMixin := schema.Task{}.Mixin()
 	taskMixinFields0 := taskMixin[0].Fields()
 	_ = taskMixinFields0

@@ -99,6 +99,11 @@ func PermissionID(v uint32) predicate.RolePermission {
 	return predicate.RolePermission(sql.FieldEQ(FieldPermissionID, v))
 }
 
+// Priority applies equality check predicate on the "priority" field. It's identical to PriorityEQ.
+func Priority(v int32) predicate.RolePermission {
+	return predicate.RolePermission(sql.FieldEQ(FieldPriority, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.RolePermission {
 	return predicate.RolePermission(sql.FieldEQ(FieldCreatedAt, v))
@@ -449,6 +454,26 @@ func TenantIDNotNil() predicate.RolePermission {
 	return predicate.RolePermission(sql.FieldNotNull(FieldTenantID))
 }
 
+// StatusEQ applies the EQ predicate on the "status" field.
+func StatusEQ(v Status) predicate.RolePermission {
+	return predicate.RolePermission(sql.FieldEQ(FieldStatus, v))
+}
+
+// StatusNEQ applies the NEQ predicate on the "status" field.
+func StatusNEQ(v Status) predicate.RolePermission {
+	return predicate.RolePermission(sql.FieldNEQ(FieldStatus, v))
+}
+
+// StatusIn applies the In predicate on the "status" field.
+func StatusIn(vs ...Status) predicate.RolePermission {
+	return predicate.RolePermission(sql.FieldIn(FieldStatus, vs...))
+}
+
+// StatusNotIn applies the NotIn predicate on the "status" field.
+func StatusNotIn(vs ...Status) predicate.RolePermission {
+	return predicate.RolePermission(sql.FieldNotIn(FieldStatus, vs...))
+}
+
 // RoleIDEQ applies the EQ predicate on the "role_id" field.
 func RoleIDEQ(v uint32) predicate.RolePermission {
 	return predicate.RolePermission(sql.FieldEQ(FieldRoleID, v))
@@ -527,6 +552,86 @@ func PermissionIDLT(v uint32) predicate.RolePermission {
 // PermissionIDLTE applies the LTE predicate on the "permission_id" field.
 func PermissionIDLTE(v uint32) predicate.RolePermission {
 	return predicate.RolePermission(sql.FieldLTE(FieldPermissionID, v))
+}
+
+// EffectEQ applies the EQ predicate on the "effect" field.
+func EffectEQ(v Effect) predicate.RolePermission {
+	return predicate.RolePermission(sql.FieldEQ(FieldEffect, v))
+}
+
+// EffectNEQ applies the NEQ predicate on the "effect" field.
+func EffectNEQ(v Effect) predicate.RolePermission {
+	return predicate.RolePermission(sql.FieldNEQ(FieldEffect, v))
+}
+
+// EffectIn applies the In predicate on the "effect" field.
+func EffectIn(vs ...Effect) predicate.RolePermission {
+	return predicate.RolePermission(sql.FieldIn(FieldEffect, vs...))
+}
+
+// EffectNotIn applies the NotIn predicate on the "effect" field.
+func EffectNotIn(vs ...Effect) predicate.RolePermission {
+	return predicate.RolePermission(sql.FieldNotIn(FieldEffect, vs...))
+}
+
+// EffectIsNil applies the IsNil predicate on the "effect" field.
+func EffectIsNil() predicate.RolePermission {
+	return predicate.RolePermission(sql.FieldIsNull(FieldEffect))
+}
+
+// EffectNotNil applies the NotNil predicate on the "effect" field.
+func EffectNotNil() predicate.RolePermission {
+	return predicate.RolePermission(sql.FieldNotNull(FieldEffect))
+}
+
+// PriorityEQ applies the EQ predicate on the "priority" field.
+func PriorityEQ(v int32) predicate.RolePermission {
+	return predicate.RolePermission(sql.FieldEQ(FieldPriority, v))
+}
+
+// PriorityNEQ applies the NEQ predicate on the "priority" field.
+func PriorityNEQ(v int32) predicate.RolePermission {
+	return predicate.RolePermission(sql.FieldNEQ(FieldPriority, v))
+}
+
+// PriorityIn applies the In predicate on the "priority" field.
+func PriorityIn(vs ...int32) predicate.RolePermission {
+	return predicate.RolePermission(sql.FieldIn(FieldPriority, vs...))
+}
+
+// PriorityNotIn applies the NotIn predicate on the "priority" field.
+func PriorityNotIn(vs ...int32) predicate.RolePermission {
+	return predicate.RolePermission(sql.FieldNotIn(FieldPriority, vs...))
+}
+
+// PriorityGT applies the GT predicate on the "priority" field.
+func PriorityGT(v int32) predicate.RolePermission {
+	return predicate.RolePermission(sql.FieldGT(FieldPriority, v))
+}
+
+// PriorityGTE applies the GTE predicate on the "priority" field.
+func PriorityGTE(v int32) predicate.RolePermission {
+	return predicate.RolePermission(sql.FieldGTE(FieldPriority, v))
+}
+
+// PriorityLT applies the LT predicate on the "priority" field.
+func PriorityLT(v int32) predicate.RolePermission {
+	return predicate.RolePermission(sql.FieldLT(FieldPriority, v))
+}
+
+// PriorityLTE applies the LTE predicate on the "priority" field.
+func PriorityLTE(v int32) predicate.RolePermission {
+	return predicate.RolePermission(sql.FieldLTE(FieldPriority, v))
+}
+
+// PriorityIsNil applies the IsNil predicate on the "priority" field.
+func PriorityIsNil() predicate.RolePermission {
+	return predicate.RolePermission(sql.FieldIsNull(FieldPriority))
+}
+
+// PriorityNotNil applies the NotNil predicate on the "priority" field.
+func PriorityNotNil() predicate.RolePermission {
+	return predicate.RolePermission(sql.FieldNotNull(FieldPriority))
 }
 
 // And groups predicates with the AND operator between them.

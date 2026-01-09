@@ -30,8 +30,8 @@ import (
 	"go-wind-admin/app/admin/service/internal/data/ent/position"
 	"go-wind-admin/app/admin/service/internal/data/ent/predicate"
 	"go-wind-admin/app/admin/service/internal/data/ent/role"
+	"go-wind-admin/app/admin/service/internal/data/ent/rolemetadata"
 	"go-wind-admin/app/admin/service/internal/data/ent/rolepermission"
-	"go-wind-admin/app/admin/service/internal/data/ent/roletemplate"
 	"go-wind-admin/app/admin/service/internal/data/ent/task"
 	"go-wind-admin/app/admin/service/internal/data/ent/tenant"
 	"go-wind-admin/app/admin/service/internal/data/ent/user"
@@ -777,6 +777,31 @@ var schemaGraph = func() *sqlgraph.Schema {
 	}
 	graph.Nodes[26] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
+			Table:   rolemetadata.Table,
+			Columns: rolemetadata.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeUint32,
+				Column: rolemetadata.FieldID,
+			},
+		},
+		Type: "RoleMetadata",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			rolemetadata.FieldCreatedAt:         {Type: field.TypeTime, Column: rolemetadata.FieldCreatedAt},
+			rolemetadata.FieldUpdatedAt:         {Type: field.TypeTime, Column: rolemetadata.FieldUpdatedAt},
+			rolemetadata.FieldDeletedAt:         {Type: field.TypeTime, Column: rolemetadata.FieldDeletedAt},
+			rolemetadata.FieldCreatedBy:         {Type: field.TypeUint32, Column: rolemetadata.FieldCreatedBy},
+			rolemetadata.FieldUpdatedBy:         {Type: field.TypeUint32, Column: rolemetadata.FieldUpdatedBy},
+			rolemetadata.FieldDeletedBy:         {Type: field.TypeUint32, Column: rolemetadata.FieldDeletedBy},
+			rolemetadata.FieldRoleID:            {Type: field.TypeUint32, Column: rolemetadata.FieldRoleID},
+			rolemetadata.FieldIsTemplate:        {Type: field.TypeBool, Column: rolemetadata.FieldIsTemplate},
+			rolemetadata.FieldTemplateFor:       {Type: field.TypeString, Column: rolemetadata.FieldTemplateFor},
+			rolemetadata.FieldTemplateVersion:   {Type: field.TypeInt32, Column: rolemetadata.FieldTemplateVersion},
+			rolemetadata.FieldLastSyncedVersion: {Type: field.TypeInt32, Column: rolemetadata.FieldLastSyncedVersion},
+			rolemetadata.FieldCustomOverrides:   {Type: field.TypeJSON, Column: rolemetadata.FieldCustomOverrides},
+		},
+	}
+	graph.Nodes[27] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
 			Table:   rolepermission.Table,
 			Columns: rolepermission.Columns,
 			ID: &sqlgraph.FieldSpec{
@@ -793,36 +818,11 @@ var schemaGraph = func() *sqlgraph.Schema {
 			rolepermission.FieldUpdatedBy:    {Type: field.TypeUint32, Column: rolepermission.FieldUpdatedBy},
 			rolepermission.FieldDeletedBy:    {Type: field.TypeUint32, Column: rolepermission.FieldDeletedBy},
 			rolepermission.FieldTenantID:     {Type: field.TypeUint32, Column: rolepermission.FieldTenantID},
+			rolepermission.FieldStatus:       {Type: field.TypeEnum, Column: rolepermission.FieldStatus},
 			rolepermission.FieldRoleID:       {Type: field.TypeUint32, Column: rolepermission.FieldRoleID},
 			rolepermission.FieldPermissionID: {Type: field.TypeUint32, Column: rolepermission.FieldPermissionID},
-		},
-	}
-	graph.Nodes[27] = &sqlgraph.Node{
-		NodeSpec: sqlgraph.NodeSpec{
-			Table:   roletemplate.Table,
-			Columns: roletemplate.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeUint32,
-				Column: roletemplate.FieldID,
-			},
-		},
-		Type: "RoleTemplate",
-		Fields: map[string]*sqlgraph.FieldSpec{
-			roletemplate.FieldCreatedAt:   {Type: field.TypeTime, Column: roletemplate.FieldCreatedAt},
-			roletemplate.FieldUpdatedAt:   {Type: field.TypeTime, Column: roletemplate.FieldUpdatedAt},
-			roletemplate.FieldDeletedAt:   {Type: field.TypeTime, Column: roletemplate.FieldDeletedAt},
-			roletemplate.FieldCreatedBy:   {Type: field.TypeUint32, Column: roletemplate.FieldCreatedBy},
-			roletemplate.FieldUpdatedBy:   {Type: field.TypeUint32, Column: roletemplate.FieldUpdatedBy},
-			roletemplate.FieldDeletedBy:   {Type: field.TypeUint32, Column: roletemplate.FieldDeletedBy},
-			roletemplate.FieldDescription: {Type: field.TypeString, Column: roletemplate.FieldDescription},
-			roletemplate.FieldStatus:      {Type: field.TypeEnum, Column: roletemplate.FieldStatus},
-			roletemplate.FieldSortOrder:   {Type: field.TypeUint32, Column: roletemplate.FieldSortOrder},
-			roletemplate.FieldName:        {Type: field.TypeString, Column: roletemplate.FieldName},
-			roletemplate.FieldCode:        {Type: field.TypeString, Column: roletemplate.FieldCode},
-			roletemplate.FieldCategory:    {Type: field.TypeString, Column: roletemplate.FieldCategory},
-			roletemplate.FieldPermissions: {Type: field.TypeJSON, Column: roletemplate.FieldPermissions},
-			roletemplate.FieldIsDefault:   {Type: field.TypeBool, Column: roletemplate.FieldIsDefault},
-			roletemplate.FieldIsSystem:    {Type: field.TypeBool, Column: roletemplate.FieldIsSystem},
+			rolepermission.FieldEffect:       {Type: field.TypeEnum, Column: rolepermission.FieldEffect},
+			rolepermission.FieldPriority:     {Type: field.TypeInt32, Column: rolepermission.FieldPriority},
 		},
 	}
 	graph.Nodes[28] = &sqlgraph.Node{
@@ -4239,6 +4239,106 @@ func (f *RoleFilter) WhereIsProtected(p entql.BoolP) {
 }
 
 // addPredicate implements the predicateAdder interface.
+func (_q *RoleMetadataQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the RoleMetadataQuery builder.
+func (_q *RoleMetadataQuery) Filter() *RoleMetadataFilter {
+	return &RoleMetadataFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *RoleMetadataMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the RoleMetadataMutation builder.
+func (m *RoleMetadataMutation) Filter() *RoleMetadataFilter {
+	return &RoleMetadataFilter{config: m.config, predicateAdder: m}
+}
+
+// RoleMetadataFilter provides a generic filtering capability at runtime for RoleMetadataQuery.
+type RoleMetadataFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *RoleMetadataFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[26].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql uint32 predicate on the id field.
+func (f *RoleMetadataFilter) WhereID(p entql.Uint32P) {
+	f.Where(p.Field(rolemetadata.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *RoleMetadataFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(rolemetadata.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *RoleMetadataFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(rolemetadata.FieldUpdatedAt))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *RoleMetadataFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(rolemetadata.FieldDeletedAt))
+}
+
+// WhereCreatedBy applies the entql uint32 predicate on the created_by field.
+func (f *RoleMetadataFilter) WhereCreatedBy(p entql.Uint32P) {
+	f.Where(p.Field(rolemetadata.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql uint32 predicate on the updated_by field.
+func (f *RoleMetadataFilter) WhereUpdatedBy(p entql.Uint32P) {
+	f.Where(p.Field(rolemetadata.FieldUpdatedBy))
+}
+
+// WhereDeletedBy applies the entql uint32 predicate on the deleted_by field.
+func (f *RoleMetadataFilter) WhereDeletedBy(p entql.Uint32P) {
+	f.Where(p.Field(rolemetadata.FieldDeletedBy))
+}
+
+// WhereRoleID applies the entql uint32 predicate on the role_id field.
+func (f *RoleMetadataFilter) WhereRoleID(p entql.Uint32P) {
+	f.Where(p.Field(rolemetadata.FieldRoleID))
+}
+
+// WhereIsTemplate applies the entql bool predicate on the is_template field.
+func (f *RoleMetadataFilter) WhereIsTemplate(p entql.BoolP) {
+	f.Where(p.Field(rolemetadata.FieldIsTemplate))
+}
+
+// WhereTemplateFor applies the entql string predicate on the template_for field.
+func (f *RoleMetadataFilter) WhereTemplateFor(p entql.StringP) {
+	f.Where(p.Field(rolemetadata.FieldTemplateFor))
+}
+
+// WhereTemplateVersion applies the entql int32 predicate on the template_version field.
+func (f *RoleMetadataFilter) WhereTemplateVersion(p entql.Int32P) {
+	f.Where(p.Field(rolemetadata.FieldTemplateVersion))
+}
+
+// WhereLastSyncedVersion applies the entql int32 predicate on the last_synced_version field.
+func (f *RoleMetadataFilter) WhereLastSyncedVersion(p entql.Int32P) {
+	f.Where(p.Field(rolemetadata.FieldLastSyncedVersion))
+}
+
+// WhereCustomOverrides applies the entql json.RawMessage predicate on the custom_overrides field.
+func (f *RoleMetadataFilter) WhereCustomOverrides(p entql.BytesP) {
+	f.Where(p.Field(rolemetadata.FieldCustomOverrides))
+}
+
+// addPredicate implements the predicateAdder interface.
 func (_q *RolePermissionQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
 }
@@ -4267,7 +4367,7 @@ type RolePermissionFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *RolePermissionFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[26].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[27].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -4313,6 +4413,11 @@ func (f *RolePermissionFilter) WhereTenantID(p entql.Uint32P) {
 	f.Where(p.Field(rolepermission.FieldTenantID))
 }
 
+// WhereStatus applies the entql string predicate on the status field.
+func (f *RolePermissionFilter) WhereStatus(p entql.StringP) {
+	f.Where(p.Field(rolepermission.FieldStatus))
+}
+
 // WhereRoleID applies the entql uint32 predicate on the role_id field.
 func (f *RolePermissionFilter) WhereRoleID(p entql.Uint32P) {
 	f.Where(p.Field(rolepermission.FieldRoleID))
@@ -4323,119 +4428,14 @@ func (f *RolePermissionFilter) WherePermissionID(p entql.Uint32P) {
 	f.Where(p.Field(rolepermission.FieldPermissionID))
 }
 
-// addPredicate implements the predicateAdder interface.
-func (_q *RoleTemplateQuery) addPredicate(pred func(s *sql.Selector)) {
-	_q.predicates = append(_q.predicates, pred)
+// WhereEffect applies the entql string predicate on the effect field.
+func (f *RolePermissionFilter) WhereEffect(p entql.StringP) {
+	f.Where(p.Field(rolepermission.FieldEffect))
 }
 
-// Filter returns a Filter implementation to apply filters on the RoleTemplateQuery builder.
-func (_q *RoleTemplateQuery) Filter() *RoleTemplateFilter {
-	return &RoleTemplateFilter{config: _q.config, predicateAdder: _q}
-}
-
-// addPredicate implements the predicateAdder interface.
-func (m *RoleTemplateMutation) addPredicate(pred func(s *sql.Selector)) {
-	m.predicates = append(m.predicates, pred)
-}
-
-// Filter returns an entql.Where implementation to apply filters on the RoleTemplateMutation builder.
-func (m *RoleTemplateMutation) Filter() *RoleTemplateFilter {
-	return &RoleTemplateFilter{config: m.config, predicateAdder: m}
-}
-
-// RoleTemplateFilter provides a generic filtering capability at runtime for RoleTemplateQuery.
-type RoleTemplateFilter struct {
-	predicateAdder
-	config
-}
-
-// Where applies the entql predicate on the query filter.
-func (f *RoleTemplateFilter) Where(p entql.P) {
-	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[27].Type, p, s); err != nil {
-			s.AddError(err)
-		}
-	})
-}
-
-// WhereID applies the entql uint32 predicate on the id field.
-func (f *RoleTemplateFilter) WhereID(p entql.Uint32P) {
-	f.Where(p.Field(roletemplate.FieldID))
-}
-
-// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
-func (f *RoleTemplateFilter) WhereCreatedAt(p entql.TimeP) {
-	f.Where(p.Field(roletemplate.FieldCreatedAt))
-}
-
-// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
-func (f *RoleTemplateFilter) WhereUpdatedAt(p entql.TimeP) {
-	f.Where(p.Field(roletemplate.FieldUpdatedAt))
-}
-
-// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
-func (f *RoleTemplateFilter) WhereDeletedAt(p entql.TimeP) {
-	f.Where(p.Field(roletemplate.FieldDeletedAt))
-}
-
-// WhereCreatedBy applies the entql uint32 predicate on the created_by field.
-func (f *RoleTemplateFilter) WhereCreatedBy(p entql.Uint32P) {
-	f.Where(p.Field(roletemplate.FieldCreatedBy))
-}
-
-// WhereUpdatedBy applies the entql uint32 predicate on the updated_by field.
-func (f *RoleTemplateFilter) WhereUpdatedBy(p entql.Uint32P) {
-	f.Where(p.Field(roletemplate.FieldUpdatedBy))
-}
-
-// WhereDeletedBy applies the entql uint32 predicate on the deleted_by field.
-func (f *RoleTemplateFilter) WhereDeletedBy(p entql.Uint32P) {
-	f.Where(p.Field(roletemplate.FieldDeletedBy))
-}
-
-// WhereDescription applies the entql string predicate on the description field.
-func (f *RoleTemplateFilter) WhereDescription(p entql.StringP) {
-	f.Where(p.Field(roletemplate.FieldDescription))
-}
-
-// WhereStatus applies the entql string predicate on the status field.
-func (f *RoleTemplateFilter) WhereStatus(p entql.StringP) {
-	f.Where(p.Field(roletemplate.FieldStatus))
-}
-
-// WhereSortOrder applies the entql uint32 predicate on the sort_order field.
-func (f *RoleTemplateFilter) WhereSortOrder(p entql.Uint32P) {
-	f.Where(p.Field(roletemplate.FieldSortOrder))
-}
-
-// WhereName applies the entql string predicate on the name field.
-func (f *RoleTemplateFilter) WhereName(p entql.StringP) {
-	f.Where(p.Field(roletemplate.FieldName))
-}
-
-// WhereCode applies the entql string predicate on the code field.
-func (f *RoleTemplateFilter) WhereCode(p entql.StringP) {
-	f.Where(p.Field(roletemplate.FieldCode))
-}
-
-// WhereCategory applies the entql string predicate on the category field.
-func (f *RoleTemplateFilter) WhereCategory(p entql.StringP) {
-	f.Where(p.Field(roletemplate.FieldCategory))
-}
-
-// WherePermissions applies the entql json.RawMessage predicate on the permissions field.
-func (f *RoleTemplateFilter) WherePermissions(p entql.BytesP) {
-	f.Where(p.Field(roletemplate.FieldPermissions))
-}
-
-// WhereIsDefault applies the entql bool predicate on the is_default field.
-func (f *RoleTemplateFilter) WhereIsDefault(p entql.BoolP) {
-	f.Where(p.Field(roletemplate.FieldIsDefault))
-}
-
-// WhereIsSystem applies the entql bool predicate on the is_system field.
-func (f *RoleTemplateFilter) WhereIsSystem(p entql.BoolP) {
-	f.Where(p.Field(roletemplate.FieldIsSystem))
+// WherePriority applies the entql int32 predicate on the priority field.
+func (f *RolePermissionFilter) WherePriority(p entql.Int32P) {
+	f.Where(p.Field(rolepermission.FieldPriority))
 }
 
 // addPredicate implements the predicateAdder interface.

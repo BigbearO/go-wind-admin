@@ -17,7 +17,7 @@ type RolePermission struct {
 func (RolePermission) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entsql.Annotation{
-			Table:     "sys_role_permissions",
+			Table:     "rp",
 			Charset:   "utf8mb4",
 			Collation: "utf8mb4_bin",
 		},
@@ -37,6 +37,22 @@ func (RolePermission) Fields() []ent.Field {
 		field.Uint32("permission_id").
 			Comment("权限ID（关联sys_permissions.id）").
 			Nillable(),
+
+		field.Enum("effect").
+			NamedValues(
+				"Allow", "ALLOW",
+				"Deny", "DENY",
+			).
+			Default("ALLOW").
+			Comment("生效方式").
+			Optional().
+			Nillable(),
+
+		field.Int32("priority").
+			Comment("优先级（-100~100，值越大优先级越高）").
+			Default(0).
+			Optional().
+			Nillable(),
 	}
 }
 
@@ -47,6 +63,7 @@ func (RolePermission) Mixin() []ent.Mixin {
 		mixin.TimeAt{},
 		mixin.OperatorID{},
 		mixin.TenantID{},
+		mixin.SwitchStatus{},
 	}
 }
 
@@ -56,29 +73,29 @@ func (RolePermission) Indexes() []ent.Index {
 		// 租户维度唯一：同一租户内 role + permission 唯一
 		index.Fields("tenant_id", "role_id", "permission_id").
 			Unique().
-			StorageKey("uix_sys_role_permissions_tenant_role_permission"),
+			StorageKey("uix_rp_tenant_role_permission"),
 
 		// 全局 role + permission 唯一（可选，防止跨租户重复）
 		index.Fields("role_id", "permission_id").
 			Unique().
-			StorageKey("uix_sys_role_permissions_role_permission"),
+			StorageKey("uix_rp_role_permission"),
 
 		// 常用组合/单列索引，优化按租户/角色/权限的查询
 		index.Fields("tenant_id", "role_id").
-			StorageKey("idx_sys_role_permissions_tenant_role"),
+			StorageKey("idx_rp_tenant_role"),
 		index.Fields("tenant_id", "permission_id").
-			StorageKey("idx_sys_role_permissions_tenant_permission"),
+			StorageKey("idx_rp_tenant_permission"),
 		index.Fields("role_id").
-			StorageKey("idx_sys_role_permissions_role_id"),
+			StorageKey("idx_rp_role_id"),
 		index.Fields("permission_id").
-			StorageKey("idx_sys_role_permissions_permission_id"),
+			StorageKey("idx_rp_permission_id"),
 		index.Fields("tenant_id").
-			StorageKey("idx_sys_role_permissions_tenant_id"),
+			StorageKey("idx_rp_tenant_id"),
 
 		// 审计/时间相关索引
 		index.Fields("created_at").
-			StorageKey("idx_sys_role_permissions_created_at"),
+			StorageKey("idx_rp_created_at"),
 		index.Fields("created_by").
-			StorageKey("idx_sys_role_permissions_created_by"),
+			StorageKey("idx_rp_created_by"),
 	}
 }
