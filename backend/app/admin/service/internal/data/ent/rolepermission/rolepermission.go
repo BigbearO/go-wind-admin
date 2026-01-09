@@ -38,7 +38,7 @@ const (
 	// FieldPriority holds the string denoting the priority field in the database.
 	FieldPriority = "priority"
 	// Table holds the table name of the rolepermission in the database.
-	Table = "rp"
+	Table = "sys_role_permissions"
 )
 
 // Columns holds all SQL columns for rolepermission fields.

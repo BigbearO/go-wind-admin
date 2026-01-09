@@ -17,7 +17,7 @@ type MembershipPosition struct {
 func (MembershipPosition) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entsql.Annotation{
-			Table:     "mps",
+			Table:     "sys_membership_positions",
 			Charset:   "utf8mb4",
 			Collation: "utf8mb4_bin",
 		},

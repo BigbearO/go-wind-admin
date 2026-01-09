@@ -13,6 +13,8 @@ const (
 	DefaultAdminUserName = "admin"
 	// DefaultAdminPassword 系统初始化默认管理员用户密码
 	DefaultAdminPassword = "admin"
+
+	PlatformTenantID = uint32(0)
 )
 
 // DefaultPermissionGroups 系统初始化默认权限组数据

@@ -17,7 +17,7 @@ type RolePermission struct {
 func (RolePermission) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entsql.Annotation{
-			Table:     "rp",
+			Table:     "sys_role_permissions",
 			Charset:   "utf8mb4",
 			Collation: "utf8mb4_bin",
 		},

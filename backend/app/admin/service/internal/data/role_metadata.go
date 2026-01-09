@@ -2,7 +2,6 @@ package data
 
 import (
 	"context"
-	"go-wind-admin/app/admin/service/internal/data/ent/rolemetadata"
 	"time"
 
 	"github.com/go-kratos/kratos/v2/log"
@@ -13,6 +12,7 @@ import (
 
 	"go-wind-admin/app/admin/service/internal/data/ent"
 	"go-wind-admin/app/admin/service/internal/data/ent/predicate"
+	"go-wind-admin/app/admin/service/internal/data/ent/rolemetadata"
 
 	userV1 "go-wind-admin/api/gen/go/user/service/v1"
 )
@@ -62,21 +62,37 @@ func (r *RoleMetadataRepo) init() {
 	r.mapper.AppendConverters(copierutil.NewTimeTimestamppbConverterPair())
 }
 
-// Upsert 插入或更新角色元数据
-func (r *RoleMetadataRepo) Upsert(ctx context.Context, data *userV1.RoleMetadata) error {
+func (r *RoleMetadataRepo) Create(ctx context.Context, data *userV1.RoleMetadata, operatorID uint32) error {
 	err := r.entClient.Client().RoleMetadata.Create().
 		SetRoleID(data.GetRoleId()).
 		SetNillableIsTemplate(data.IsTemplate).
 		SetNillableTemplateFor(data.TemplateFor).
-		//SetNillableTemplateVersion(data.TemplateVersion).
+		SetNillableTemplateVersion(data.TemplateVersion).
 		SetNillableLastSyncedVersion(data.LastSyncedVersion).
 		SetCustomOverrides(data.CustomOverrides).
 		SetCreatedAt(time.Now()).
+		SetCreatedBy(operatorID).
+		Exec(ctx)
+	return err
+}
+
+// Upsert 插入或更新角色元数据
+func (r *RoleMetadataRepo) Upsert(ctx context.Context, data *userV1.RoleMetadata, operatorID uint32) error {
+	err := r.entClient.Client().RoleMetadata.Create().
+		SetRoleID(data.GetRoleId()).
+		SetNillableIsTemplate(data.IsTemplate).
+		SetNillableTemplateFor(data.TemplateFor).
+		SetNillableTemplateVersion(data.TemplateVersion).
+		SetNillableLastSyncedVersion(data.LastSyncedVersion).
+		SetCustomOverrides(data.CustomOverrides).
+		SetCreatedAt(time.Now()).
+		SetCreatedBy(operatorID).
 		OnConflictColumns(
 			rolemetadata.FieldRoleID,
 		).
 		AddTemplateVersion(1).
 		SetUpdatedAt(time.Now()).
+		SetUpdatedBy(operatorID).
 		Exec(ctx)
 	return err
 }

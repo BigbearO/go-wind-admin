@@ -802,8 +802,8 @@ var (
 			},
 		},
 	}
-	// MpsColumns holds the columns for the "mps" table.
-	MpsColumns = []*schema.Column{
+	// SysMembershipPositionsColumns holds the columns for the "sys_membership_positions" table.
+	SysMembershipPositionsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUint32, Increment: true, Comment: "id"},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "更新时间"},
@@ -822,67 +822,67 @@ var (
 		{Name: "assigned_by", Type: field.TypeUint32, Nullable: true, Comment: "分配者用户 ID"},
 		{Name: "status", Type: field.TypeEnum, Comment: "岗位状态", Enums: []string{"PROBATION", "ACTIVE", "LEAVE", "TERMINATED", "EXPIRED"}, Default: "ACTIVE"},
 	}
-	// MpsTable holds the schema information for the "mps" table.
-	MpsTable = &schema.Table{
-		Name:       "mps",
+	// SysMembershipPositionsTable holds the schema information for the "sys_membership_positions" table.
+	SysMembershipPositionsTable = &schema.Table{
+		Name:       "sys_membership_positions",
 		Comment:    "成员与岗位关联表",
-		Columns:    MpsColumns,
-		PrimaryKey: []*schema.Column{MpsColumns[0]},
+		Columns:    SysMembershipPositionsColumns,
+		PrimaryKey: []*schema.Column{SysMembershipPositionsColumns[0]},
 		Indexes: []*schema.Index{
 			{
 				Name:    "uix_mp_tenant_membership_pos",
 				Unique:  true,
-				Columns: []*schema.Column{MpsColumns[7], MpsColumns[9], MpsColumns[10]},
+				Columns: []*schema.Column{SysMembershipPositionsColumns[7], SysMembershipPositionsColumns[9], SysMembershipPositionsColumns[10]},
 			},
 			{
 				Name:    "idx_mp_tenant_membership",
 				Unique:  false,
-				Columns: []*schema.Column{MpsColumns[7], MpsColumns[9]},
+				Columns: []*schema.Column{SysMembershipPositionsColumns[7], SysMembershipPositionsColumns[9]},
 			},
 			{
 				Name:    "idx_mp_tenant_position",
 				Unique:  false,
-				Columns: []*schema.Column{MpsColumns[7], MpsColumns[10]},
+				Columns: []*schema.Column{SysMembershipPositionsColumns[7], SysMembershipPositionsColumns[10]},
 			},
 			{
 				Name:    "idx_mp_tenant_membership_primary",
 				Unique:  false,
-				Columns: []*schema.Column{MpsColumns[7], MpsColumns[9], MpsColumns[11]},
+				Columns: []*schema.Column{SysMembershipPositionsColumns[7], SysMembershipPositionsColumns[9], SysMembershipPositionsColumns[11]},
 			},
 			{
 				Name:    "idx_mp_tenant_assigned_by",
 				Unique:  false,
-				Columns: []*schema.Column{MpsColumns[7], MpsColumns[15]},
+				Columns: []*schema.Column{SysMembershipPositionsColumns[7], SysMembershipPositionsColumns[15]},
 			},
 			{
 				Name:    "idx_mp_assigned_by",
 				Unique:  false,
-				Columns: []*schema.Column{MpsColumns[15]},
+				Columns: []*schema.Column{SysMembershipPositionsColumns[15]},
 			},
 			{
 				Name:    "idx_mp_membership_id",
 				Unique:  false,
-				Columns: []*schema.Column{MpsColumns[9]},
+				Columns: []*schema.Column{SysMembershipPositionsColumns[9]},
 			},
 			{
 				Name:    "idx_mp_position_id",
 				Unique:  false,
-				Columns: []*schema.Column{MpsColumns[10]},
+				Columns: []*schema.Column{SysMembershipPositionsColumns[10]},
 			},
 			{
 				Name:    "idx_mp_tenant_id",
 				Unique:  false,
-				Columns: []*schema.Column{MpsColumns[7]},
+				Columns: []*schema.Column{SysMembershipPositionsColumns[7]},
 			},
 			{
 				Name:    "idx_mp_is_primary",
 				Unique:  false,
-				Columns: []*schema.Column{MpsColumns[11]},
+				Columns: []*schema.Column{SysMembershipPositionsColumns[11]},
 			},
 			{
 				Name:    "idx_mp_status",
 				Unique:  false,
-				Columns: []*schema.Column{MpsColumns[16]},
+				Columns: []*schema.Column{SysMembershipPositionsColumns[16]},
 			},
 		},
 	}
@@ -1749,8 +1749,8 @@ var (
 			},
 		},
 	}
-	// RpColumns holds the columns for the "rp" table.
-	RpColumns = []*schema.Column{
+	// SysRolePermissionsColumns holds the columns for the "sys_role_permissions" table.
+	SysRolePermissionsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUint32, Increment: true, Comment: "id"},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "更新时间"},
@@ -1765,57 +1765,57 @@ var (
 		{Name: "effect", Type: field.TypeEnum, Nullable: true, Comment: "生效方式", Enums: []string{"ALLOW", "DENY"}, Default: "ALLOW"},
 		{Name: "priority", Type: field.TypeInt32, Nullable: true, Comment: "优先级（-100~100，值越大优先级越高）", Default: 0},
 	}
-	// RpTable holds the schema information for the "rp" table.
-	RpTable = &schema.Table{
-		Name:       "rp",
+	// SysRolePermissionsTable holds the schema information for the "sys_role_permissions" table.
+	SysRolePermissionsTable = &schema.Table{
+		Name:       "sys_role_permissions",
 		Comment:    "角色与权限关联表",
-		Columns:    RpColumns,
-		PrimaryKey: []*schema.Column{RpColumns[0]},
+		Columns:    SysRolePermissionsColumns,
+		PrimaryKey: []*schema.Column{SysRolePermissionsColumns[0]},
 		Indexes: []*schema.Index{
 			{
 				Name:    "uix_rp_tenant_role_permission",
 				Unique:  true,
-				Columns: []*schema.Column{RpColumns[7], RpColumns[9], RpColumns[10]},
+				Columns: []*schema.Column{SysRolePermissionsColumns[7], SysRolePermissionsColumns[9], SysRolePermissionsColumns[10]},
 			},
 			{
 				Name:    "uix_rp_role_permission",
 				Unique:  true,
-				Columns: []*schema.Column{RpColumns[9], RpColumns[10]},
+				Columns: []*schema.Column{SysRolePermissionsColumns[9], SysRolePermissionsColumns[10]},
 			},
 			{
 				Name:    "idx_rp_tenant_role",
 				Unique:  false,
-				Columns: []*schema.Column{RpColumns[7], RpColumns[9]},
+				Columns: []*schema.Column{SysRolePermissionsColumns[7], SysRolePermissionsColumns[9]},
 			},
 			{
 				Name:    "idx_rp_tenant_permission",
 				Unique:  false,
-				Columns: []*schema.Column{RpColumns[7], RpColumns[10]},
+				Columns: []*schema.Column{SysRolePermissionsColumns[7], SysRolePermissionsColumns[10]},
 			},
 			{
 				Name:    "idx_rp_role_id",
 				Unique:  false,
-				Columns: []*schema.Column{RpColumns[9]},
+				Columns: []*schema.Column{SysRolePermissionsColumns[9]},
 			},
 			{
 				Name:    "idx_rp_permission_id",
 				Unique:  false,
-				Columns: []*schema.Column{RpColumns[10]},
+				Columns: []*schema.Column{SysRolePermissionsColumns[10]},
 			},
 			{
 				Name:    "idx_rp_tenant_id",
 				Unique:  false,
-				Columns: []*schema.Column{RpColumns[7]},
+				Columns: []*schema.Column{SysRolePermissionsColumns[7]},
 			},
 			{
 				Name:    "idx_rp_created_at",
 				Unique:  false,
-				Columns: []*schema.Column{RpColumns[1]},
+				Columns: []*schema.Column{SysRolePermissionsColumns[1]},
 			},
 			{
 				Name:    "idx_rp_created_by",
 				Unique:  false,
-				Columns: []*schema.Column{RpColumns[4]},
+				Columns: []*schema.Column{SysRolePermissionsColumns[4]},
 			},
 		},
 	}
@@ -2390,7 +2390,7 @@ var (
 		SysLanguagesTable,
 		SysMembershipsTable,
 		SysMembershipOrgUnitsTable,
-		MpsTable,
+		SysMembershipPositionsTable,
 		SysMembershipRolesTable,
 		SysMenusTable,
 		SysOrgUnitsTable,
@@ -2404,7 +2404,7 @@ var (
 		SysPositionsTable,
 		SysRolesTable,
 		SysRoleMetadataTable,
-		RpTable,
+		SysRolePermissionsTable,
 		SysTasksTable,
 		SysTenantsTable,
 		SysUsersTable,
@@ -2482,8 +2482,8 @@ func init() {
 		Charset:   "utf8mb4",
 		Collation: "utf8mb4_bin",
 	}
-	MpsTable.Annotation = &entsql.Annotation{
-		Table:     "mps",
+	SysMembershipPositionsTable.Annotation = &entsql.Annotation{
+		Table:     "sys_membership_positions",
 		Charset:   "utf8mb4",
 		Collation: "utf8mb4_bin",
 	}
@@ -2555,8 +2555,8 @@ func init() {
 		Charset:   "utf8mb4",
 		Collation: "utf8mb4_bin",
 	}
-	RpTable.Annotation = &entsql.Annotation{
-		Table:     "rp",
+	SysRolePermissionsTable.Annotation = &entsql.Annotation{
+		Table:     "sys_role_permissions",
 		Charset:   "utf8mb4",
 		Collation: "utf8mb4_bin",
 	}
