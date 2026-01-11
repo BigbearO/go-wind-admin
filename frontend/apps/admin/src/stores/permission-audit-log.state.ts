@@ -1,13 +1,13 @@
 import { defineStore } from 'pinia';
 
-import { createAdminLoginLogServiceClient } from '#/generated/api/admin/service/v1';
+import { createLoginAuditLogServiceClient } from '#/generated/api/admin/service/v1';
 import { makeQueryString } from '#/utils/query';
 import { type Paging, requestClientRequestHandler } from '#/utils/request';
 
 export const usePermissionAuditLogStore = defineStore(
   'permission-audit-log',
   () => {
-    const service = createAdminLoginLogServiceClient(
+    const service = createLoginAuditLogServiceClient(
       requestClientRequestHandler,
     );
 

@@ -11,9 +11,6 @@ import (
 
 	"go-wind-admin/app/admin/service/internal/data/ent/migrate"
 
-	"go-wind-admin/app/admin/service/internal/data/ent/adminloginlog"
-	"go-wind-admin/app/admin/service/internal/data/ent/adminloginrestriction"
-	"go-wind-admin/app/admin/service/internal/data/ent/adminoperationlog"
 	"go-wind-admin/app/admin/service/internal/data/ent/api"
 	"go-wind-admin/app/admin/service/internal/data/ent/dictentry"
 	"go-wind-admin/app/admin/service/internal/data/ent/dicttype"
@@ -22,11 +19,14 @@ import (
 	"go-wind-admin/app/admin/service/internal/data/ent/internalmessagecategory"
 	"go-wind-admin/app/admin/service/internal/data/ent/internalmessagerecipient"
 	"go-wind-admin/app/admin/service/internal/data/ent/language"
+	"go-wind-admin/app/admin/service/internal/data/ent/loginauditlog"
+	"go-wind-admin/app/admin/service/internal/data/ent/loginpolicy"
 	"go-wind-admin/app/admin/service/internal/data/ent/membership"
 	"go-wind-admin/app/admin/service/internal/data/ent/membershiporgunit"
 	"go-wind-admin/app/admin/service/internal/data/ent/membershipposition"
 	"go-wind-admin/app/admin/service/internal/data/ent/membershiprole"
 	"go-wind-admin/app/admin/service/internal/data/ent/menu"
+	"go-wind-admin/app/admin/service/internal/data/ent/operationauditlog"
 	"go-wind-admin/app/admin/service/internal/data/ent/orgunit"
 	"go-wind-admin/app/admin/service/internal/data/ent/permission"
 	"go-wind-admin/app/admin/service/internal/data/ent/permissionapi"
@@ -58,12 +58,6 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
-	// AdminLoginLog is the client for interacting with the AdminLoginLog builders.
-	AdminLoginLog *AdminLoginLogClient
-	// AdminLoginRestriction is the client for interacting with the AdminLoginRestriction builders.
-	AdminLoginRestriction *AdminLoginRestrictionClient
-	// AdminOperationLog is the client for interacting with the AdminOperationLog builders.
-	AdminOperationLog *AdminOperationLogClient
 	// Api is the client for interacting with the Api builders.
 	Api *APIClient
 	// DictEntry is the client for interacting with the DictEntry builders.
@@ -80,6 +74,10 @@ type Client struct {
 	InternalMessageRecipient *InternalMessageRecipientClient
 	// Language is the client for interacting with the Language builders.
 	Language *LanguageClient
+	// LoginAuditLog is the client for interacting with the LoginAuditLog builders.
+	LoginAuditLog *LoginAuditLogClient
+	// LoginPolicy is the client for interacting with the LoginPolicy builders.
+	LoginPolicy *LoginPolicyClient
 	// Membership is the client for interacting with the Membership builders.
 	Membership *MembershipClient
 	// MembershipOrgUnit is the client for interacting with the MembershipOrgUnit builders.
@@ -90,6 +88,8 @@ type Client struct {
 	MembershipRole *MembershipRoleClient
 	// Menu is the client for interacting with the Menu builders.
 	Menu *MenuClient
+	// OperationAuditLog is the client for interacting with the OperationAuditLog builders.
+	OperationAuditLog *OperationAuditLogClient
 	// OrgUnit is the client for interacting with the OrgUnit builders.
 	OrgUnit *OrgUnitClient
 	// Permission is the client for interacting with the Permission builders.
@@ -139,9 +139,6 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
-	c.AdminLoginLog = NewAdminLoginLogClient(c.config)
-	c.AdminLoginRestriction = NewAdminLoginRestrictionClient(c.config)
-	c.AdminOperationLog = NewAdminOperationLogClient(c.config)
 	c.Api = NewAPIClient(c.config)
 	c.DictEntry = NewDictEntryClient(c.config)
 	c.DictType = NewDictTypeClient(c.config)
@@ -150,11 +147,14 @@ func (c *Client) init() {
 	c.InternalMessageCategory = NewInternalMessageCategoryClient(c.config)
 	c.InternalMessageRecipient = NewInternalMessageRecipientClient(c.config)
 	c.Language = NewLanguageClient(c.config)
+	c.LoginAuditLog = NewLoginAuditLogClient(c.config)
+	c.LoginPolicy = NewLoginPolicyClient(c.config)
 	c.Membership = NewMembershipClient(c.config)
 	c.MembershipOrgUnit = NewMembershipOrgUnitClient(c.config)
 	c.MembershipPosition = NewMembershipPositionClient(c.config)
 	c.MembershipRole = NewMembershipRoleClient(c.config)
 	c.Menu = NewMenuClient(c.config)
+	c.OperationAuditLog = NewOperationAuditLogClient(c.config)
 	c.OrgUnit = NewOrgUnitClient(c.config)
 	c.Permission = NewPermissionClient(c.config)
 	c.PermissionApi = NewPermissionApiClient(c.config)
@@ -266,9 +266,6 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	return &Tx{
 		ctx:                      ctx,
 		config:                   cfg,
-		AdminLoginLog:            NewAdminLoginLogClient(cfg),
-		AdminLoginRestriction:    NewAdminLoginRestrictionClient(cfg),
-		AdminOperationLog:        NewAdminOperationLogClient(cfg),
 		Api:                      NewAPIClient(cfg),
 		DictEntry:                NewDictEntryClient(cfg),
 		DictType:                 NewDictTypeClient(cfg),
@@ -277,11 +274,14 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		InternalMessageCategory:  NewInternalMessageCategoryClient(cfg),
 		InternalMessageRecipient: NewInternalMessageRecipientClient(cfg),
 		Language:                 NewLanguageClient(cfg),
+		LoginAuditLog:            NewLoginAuditLogClient(cfg),
+		LoginPolicy:              NewLoginPolicyClient(cfg),
 		Membership:               NewMembershipClient(cfg),
 		MembershipOrgUnit:        NewMembershipOrgUnitClient(cfg),
 		MembershipPosition:       NewMembershipPositionClient(cfg),
 		MembershipRole:           NewMembershipRoleClient(cfg),
 		Menu:                     NewMenuClient(cfg),
+		OperationAuditLog:        NewOperationAuditLogClient(cfg),
 		OrgUnit:                  NewOrgUnitClient(cfg),
 		Permission:               NewPermissionClient(cfg),
 		PermissionApi:            NewPermissionApiClient(cfg),
@@ -320,9 +320,6 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	return &Tx{
 		ctx:                      ctx,
 		config:                   cfg,
-		AdminLoginLog:            NewAdminLoginLogClient(cfg),
-		AdminLoginRestriction:    NewAdminLoginRestrictionClient(cfg),
-		AdminOperationLog:        NewAdminOperationLogClient(cfg),
 		Api:                      NewAPIClient(cfg),
 		DictEntry:                NewDictEntryClient(cfg),
 		DictType:                 NewDictTypeClient(cfg),
@@ -331,11 +328,14 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		InternalMessageCategory:  NewInternalMessageCategoryClient(cfg),
 		InternalMessageRecipient: NewInternalMessageRecipientClient(cfg),
 		Language:                 NewLanguageClient(cfg),
+		LoginAuditLog:            NewLoginAuditLogClient(cfg),
+		LoginPolicy:              NewLoginPolicyClient(cfg),
 		Membership:               NewMembershipClient(cfg),
 		MembershipOrgUnit:        NewMembershipOrgUnitClient(cfg),
 		MembershipPosition:       NewMembershipPositionClient(cfg),
 		MembershipRole:           NewMembershipRoleClient(cfg),
 		Menu:                     NewMenuClient(cfg),
+		OperationAuditLog:        NewOperationAuditLogClient(cfg),
 		OrgUnit:                  NewOrgUnitClient(cfg),
 		Permission:               NewPermissionClient(cfg),
 		PermissionApi:            NewPermissionApiClient(cfg),
@@ -361,7 +361,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		AdminLoginLog.
+//		Api.
 //		Query().
 //		Count(ctx)
 func (c *Client) Debug() *Client {
@@ -384,14 +384,14 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.AdminLoginLog, c.AdminLoginRestriction, c.AdminOperationLog, c.Api,
-		c.DictEntry, c.DictType, c.File, c.InternalMessage, c.InternalMessageCategory,
-		c.InternalMessageRecipient, c.Language, c.Membership, c.MembershipOrgUnit,
-		c.MembershipPosition, c.MembershipRole, c.Menu, c.OrgUnit, c.Permission,
-		c.PermissionApi, c.PermissionAuditLog, c.PermissionGroup, c.PermissionMenu,
-		c.PermissionPolicy, c.PolicyEvaluationLog, c.Position, c.Role, c.RoleMetadata,
-		c.RolePermission, c.Task, c.Tenant, c.User, c.UserCredential, c.UserOrgUnit,
-		c.UserPosition, c.UserRole,
+		c.Api, c.DictEntry, c.DictType, c.File, c.InternalMessage,
+		c.InternalMessageCategory, c.InternalMessageRecipient, c.Language,
+		c.LoginAuditLog, c.LoginPolicy, c.Membership, c.MembershipOrgUnit,
+		c.MembershipPosition, c.MembershipRole, c.Menu, c.OperationAuditLog, c.OrgUnit,
+		c.Permission, c.PermissionApi, c.PermissionAuditLog, c.PermissionGroup,
+		c.PermissionMenu, c.PermissionPolicy, c.PolicyEvaluationLog, c.Position,
+		c.Role, c.RoleMetadata, c.RolePermission, c.Task, c.Tenant, c.User,
+		c.UserCredential, c.UserOrgUnit, c.UserPosition, c.UserRole,
 	} {
 		n.Use(hooks...)
 	}
@@ -401,14 +401,14 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.AdminLoginLog, c.AdminLoginRestriction, c.AdminOperationLog, c.Api,
-		c.DictEntry, c.DictType, c.File, c.InternalMessage, c.InternalMessageCategory,
-		c.InternalMessageRecipient, c.Language, c.Membership, c.MembershipOrgUnit,
-		c.MembershipPosition, c.MembershipRole, c.Menu, c.OrgUnit, c.Permission,
-		c.PermissionApi, c.PermissionAuditLog, c.PermissionGroup, c.PermissionMenu,
-		c.PermissionPolicy, c.PolicyEvaluationLog, c.Position, c.Role, c.RoleMetadata,
-		c.RolePermission, c.Task, c.Tenant, c.User, c.UserCredential, c.UserOrgUnit,
-		c.UserPosition, c.UserRole,
+		c.Api, c.DictEntry, c.DictType, c.File, c.InternalMessage,
+		c.InternalMessageCategory, c.InternalMessageRecipient, c.Language,
+		c.LoginAuditLog, c.LoginPolicy, c.Membership, c.MembershipOrgUnit,
+		c.MembershipPosition, c.MembershipRole, c.Menu, c.OperationAuditLog, c.OrgUnit,
+		c.Permission, c.PermissionApi, c.PermissionAuditLog, c.PermissionGroup,
+		c.PermissionMenu, c.PermissionPolicy, c.PolicyEvaluationLog, c.Position,
+		c.Role, c.RoleMetadata, c.RolePermission, c.Task, c.Tenant, c.User,
+		c.UserCredential, c.UserOrgUnit, c.UserPosition, c.UserRole,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -417,12 +417,6 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 // Mutate implements the ent.Mutator interface.
 func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
-	case *AdminLoginLogMutation:
-		return c.AdminLoginLog.mutate(ctx, m)
-	case *AdminLoginRestrictionMutation:
-		return c.AdminLoginRestriction.mutate(ctx, m)
-	case *AdminOperationLogMutation:
-		return c.AdminOperationLog.mutate(ctx, m)
 	case *APIMutation:
 		return c.Api.mutate(ctx, m)
 	case *DictEntryMutation:
@@ -439,6 +433,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.InternalMessageRecipient.mutate(ctx, m)
 	case *LanguageMutation:
 		return c.Language.mutate(ctx, m)
+	case *LoginAuditLogMutation:
+		return c.LoginAuditLog.mutate(ctx, m)
+	case *LoginPolicyMutation:
+		return c.LoginPolicy.mutate(ctx, m)
 	case *MembershipMutation:
 		return c.Membership.mutate(ctx, m)
 	case *MembershipOrgUnitMutation:
@@ -449,6 +447,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.MembershipRole.mutate(ctx, m)
 	case *MenuMutation:
 		return c.Menu.mutate(ctx, m)
+	case *OperationAuditLogMutation:
+		return c.OperationAuditLog.mutate(ctx, m)
 	case *OrgUnitMutation:
 		return c.OrgUnit.mutate(ctx, m)
 	case *PermissionMutation:
@@ -489,405 +489,6 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.UserRole.mutate(ctx, m)
 	default:
 		return nil, fmt.Errorf("ent: unknown mutation type %T", m)
-	}
-}
-
-// AdminLoginLogClient is a client for the AdminLoginLog schema.
-type AdminLoginLogClient struct {
-	config
-}
-
-// NewAdminLoginLogClient returns a client for the AdminLoginLog from the given config.
-func NewAdminLoginLogClient(c config) *AdminLoginLogClient {
-	return &AdminLoginLogClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `adminloginlog.Hooks(f(g(h())))`.
-func (c *AdminLoginLogClient) Use(hooks ...Hook) {
-	c.hooks.AdminLoginLog = append(c.hooks.AdminLoginLog, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `adminloginlog.Intercept(f(g(h())))`.
-func (c *AdminLoginLogClient) Intercept(interceptors ...Interceptor) {
-	c.inters.AdminLoginLog = append(c.inters.AdminLoginLog, interceptors...)
-}
-
-// Create returns a builder for creating a AdminLoginLog entity.
-func (c *AdminLoginLogClient) Create() *AdminLoginLogCreate {
-	mutation := newAdminLoginLogMutation(c.config, OpCreate)
-	return &AdminLoginLogCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of AdminLoginLog entities.
-func (c *AdminLoginLogClient) CreateBulk(builders ...*AdminLoginLogCreate) *AdminLoginLogCreateBulk {
-	return &AdminLoginLogCreateBulk{config: c.config, builders: builders}
-}
-
-// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
-// a builder and applies setFunc on it.
-func (c *AdminLoginLogClient) MapCreateBulk(slice any, setFunc func(*AdminLoginLogCreate, int)) *AdminLoginLogCreateBulk {
-	rv := reflect.ValueOf(slice)
-	if rv.Kind() != reflect.Slice {
-		return &AdminLoginLogCreateBulk{err: fmt.Errorf("calling to AdminLoginLogClient.MapCreateBulk with wrong type %T, need slice", slice)}
-	}
-	builders := make([]*AdminLoginLogCreate, rv.Len())
-	for i := 0; i < rv.Len(); i++ {
-		builders[i] = c.Create()
-		setFunc(builders[i], i)
-	}
-	return &AdminLoginLogCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for AdminLoginLog.
-func (c *AdminLoginLogClient) Update() *AdminLoginLogUpdate {
-	mutation := newAdminLoginLogMutation(c.config, OpUpdate)
-	return &AdminLoginLogUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *AdminLoginLogClient) UpdateOne(_m *AdminLoginLog) *AdminLoginLogUpdateOne {
-	mutation := newAdminLoginLogMutation(c.config, OpUpdateOne, withAdminLoginLog(_m))
-	return &AdminLoginLogUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *AdminLoginLogClient) UpdateOneID(id uint32) *AdminLoginLogUpdateOne {
-	mutation := newAdminLoginLogMutation(c.config, OpUpdateOne, withAdminLoginLogID(id))
-	return &AdminLoginLogUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for AdminLoginLog.
-func (c *AdminLoginLogClient) Delete() *AdminLoginLogDelete {
-	mutation := newAdminLoginLogMutation(c.config, OpDelete)
-	return &AdminLoginLogDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *AdminLoginLogClient) DeleteOne(_m *AdminLoginLog) *AdminLoginLogDeleteOne {
-	return c.DeleteOneID(_m.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *AdminLoginLogClient) DeleteOneID(id uint32) *AdminLoginLogDeleteOne {
-	builder := c.Delete().Where(adminloginlog.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &AdminLoginLogDeleteOne{builder}
-}
-
-// Query returns a query builder for AdminLoginLog.
-func (c *AdminLoginLogClient) Query() *AdminLoginLogQuery {
-	return &AdminLoginLogQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeAdminLoginLog},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a AdminLoginLog entity by its id.
-func (c *AdminLoginLogClient) Get(ctx context.Context, id uint32) (*AdminLoginLog, error) {
-	return c.Query().Where(adminloginlog.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *AdminLoginLogClient) GetX(ctx context.Context, id uint32) *AdminLoginLog {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// Hooks returns the client hooks.
-func (c *AdminLoginLogClient) Hooks() []Hook {
-	return c.hooks.AdminLoginLog
-}
-
-// Interceptors returns the client interceptors.
-func (c *AdminLoginLogClient) Interceptors() []Interceptor {
-	return c.inters.AdminLoginLog
-}
-
-func (c *AdminLoginLogClient) mutate(ctx context.Context, m *AdminLoginLogMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&AdminLoginLogCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&AdminLoginLogUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&AdminLoginLogUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&AdminLoginLogDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("ent: unknown AdminLoginLog mutation op: %q", m.Op())
-	}
-}
-
-// AdminLoginRestrictionClient is a client for the AdminLoginRestriction schema.
-type AdminLoginRestrictionClient struct {
-	config
-}
-
-// NewAdminLoginRestrictionClient returns a client for the AdminLoginRestriction from the given config.
-func NewAdminLoginRestrictionClient(c config) *AdminLoginRestrictionClient {
-	return &AdminLoginRestrictionClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `adminloginrestriction.Hooks(f(g(h())))`.
-func (c *AdminLoginRestrictionClient) Use(hooks ...Hook) {
-	c.hooks.AdminLoginRestriction = append(c.hooks.AdminLoginRestriction, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `adminloginrestriction.Intercept(f(g(h())))`.
-func (c *AdminLoginRestrictionClient) Intercept(interceptors ...Interceptor) {
-	c.inters.AdminLoginRestriction = append(c.inters.AdminLoginRestriction, interceptors...)
-}
-
-// Create returns a builder for creating a AdminLoginRestriction entity.
-func (c *AdminLoginRestrictionClient) Create() *AdminLoginRestrictionCreate {
-	mutation := newAdminLoginRestrictionMutation(c.config, OpCreate)
-	return &AdminLoginRestrictionCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of AdminLoginRestriction entities.
-func (c *AdminLoginRestrictionClient) CreateBulk(builders ...*AdminLoginRestrictionCreate) *AdminLoginRestrictionCreateBulk {
-	return &AdminLoginRestrictionCreateBulk{config: c.config, builders: builders}
-}
-
-// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
-// a builder and applies setFunc on it.
-func (c *AdminLoginRestrictionClient) MapCreateBulk(slice any, setFunc func(*AdminLoginRestrictionCreate, int)) *AdminLoginRestrictionCreateBulk {
-	rv := reflect.ValueOf(slice)
-	if rv.Kind() != reflect.Slice {
-		return &AdminLoginRestrictionCreateBulk{err: fmt.Errorf("calling to AdminLoginRestrictionClient.MapCreateBulk with wrong type %T, need slice", slice)}
-	}
-	builders := make([]*AdminLoginRestrictionCreate, rv.Len())
-	for i := 0; i < rv.Len(); i++ {
-		builders[i] = c.Create()
-		setFunc(builders[i], i)
-	}
-	return &AdminLoginRestrictionCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for AdminLoginRestriction.
-func (c *AdminLoginRestrictionClient) Update() *AdminLoginRestrictionUpdate {
-	mutation := newAdminLoginRestrictionMutation(c.config, OpUpdate)
-	return &AdminLoginRestrictionUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *AdminLoginRestrictionClient) UpdateOne(_m *AdminLoginRestriction) *AdminLoginRestrictionUpdateOne {
-	mutation := newAdminLoginRestrictionMutation(c.config, OpUpdateOne, withAdminLoginRestriction(_m))
-	return &AdminLoginRestrictionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *AdminLoginRestrictionClient) UpdateOneID(id uint32) *AdminLoginRestrictionUpdateOne {
-	mutation := newAdminLoginRestrictionMutation(c.config, OpUpdateOne, withAdminLoginRestrictionID(id))
-	return &AdminLoginRestrictionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for AdminLoginRestriction.
-func (c *AdminLoginRestrictionClient) Delete() *AdminLoginRestrictionDelete {
-	mutation := newAdminLoginRestrictionMutation(c.config, OpDelete)
-	return &AdminLoginRestrictionDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *AdminLoginRestrictionClient) DeleteOne(_m *AdminLoginRestriction) *AdminLoginRestrictionDeleteOne {
-	return c.DeleteOneID(_m.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *AdminLoginRestrictionClient) DeleteOneID(id uint32) *AdminLoginRestrictionDeleteOne {
-	builder := c.Delete().Where(adminloginrestriction.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &AdminLoginRestrictionDeleteOne{builder}
-}
-
-// Query returns a query builder for AdminLoginRestriction.
-func (c *AdminLoginRestrictionClient) Query() *AdminLoginRestrictionQuery {
-	return &AdminLoginRestrictionQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeAdminLoginRestriction},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a AdminLoginRestriction entity by its id.
-func (c *AdminLoginRestrictionClient) Get(ctx context.Context, id uint32) (*AdminLoginRestriction, error) {
-	return c.Query().Where(adminloginrestriction.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *AdminLoginRestrictionClient) GetX(ctx context.Context, id uint32) *AdminLoginRestriction {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// Hooks returns the client hooks.
-func (c *AdminLoginRestrictionClient) Hooks() []Hook {
-	return c.hooks.AdminLoginRestriction
-}
-
-// Interceptors returns the client interceptors.
-func (c *AdminLoginRestrictionClient) Interceptors() []Interceptor {
-	return c.inters.AdminLoginRestriction
-}
-
-func (c *AdminLoginRestrictionClient) mutate(ctx context.Context, m *AdminLoginRestrictionMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&AdminLoginRestrictionCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&AdminLoginRestrictionUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&AdminLoginRestrictionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&AdminLoginRestrictionDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("ent: unknown AdminLoginRestriction mutation op: %q", m.Op())
-	}
-}
-
-// AdminOperationLogClient is a client for the AdminOperationLog schema.
-type AdminOperationLogClient struct {
-	config
-}
-
-// NewAdminOperationLogClient returns a client for the AdminOperationLog from the given config.
-func NewAdminOperationLogClient(c config) *AdminOperationLogClient {
-	return &AdminOperationLogClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `adminoperationlog.Hooks(f(g(h())))`.
-func (c *AdminOperationLogClient) Use(hooks ...Hook) {
-	c.hooks.AdminOperationLog = append(c.hooks.AdminOperationLog, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `adminoperationlog.Intercept(f(g(h())))`.
-func (c *AdminOperationLogClient) Intercept(interceptors ...Interceptor) {
-	c.inters.AdminOperationLog = append(c.inters.AdminOperationLog, interceptors...)
-}
-
-// Create returns a builder for creating a AdminOperationLog entity.
-func (c *AdminOperationLogClient) Create() *AdminOperationLogCreate {
-	mutation := newAdminOperationLogMutation(c.config, OpCreate)
-	return &AdminOperationLogCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of AdminOperationLog entities.
-func (c *AdminOperationLogClient) CreateBulk(builders ...*AdminOperationLogCreate) *AdminOperationLogCreateBulk {
-	return &AdminOperationLogCreateBulk{config: c.config, builders: builders}
-}
-
-// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
-// a builder and applies setFunc on it.
-func (c *AdminOperationLogClient) MapCreateBulk(slice any, setFunc func(*AdminOperationLogCreate, int)) *AdminOperationLogCreateBulk {
-	rv := reflect.ValueOf(slice)
-	if rv.Kind() != reflect.Slice {
-		return &AdminOperationLogCreateBulk{err: fmt.Errorf("calling to AdminOperationLogClient.MapCreateBulk with wrong type %T, need slice", slice)}
-	}
-	builders := make([]*AdminOperationLogCreate, rv.Len())
-	for i := 0; i < rv.Len(); i++ {
-		builders[i] = c.Create()
-		setFunc(builders[i], i)
-	}
-	return &AdminOperationLogCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for AdminOperationLog.
-func (c *AdminOperationLogClient) Update() *AdminOperationLogUpdate {
-	mutation := newAdminOperationLogMutation(c.config, OpUpdate)
-	return &AdminOperationLogUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *AdminOperationLogClient) UpdateOne(_m *AdminOperationLog) *AdminOperationLogUpdateOne {
-	mutation := newAdminOperationLogMutation(c.config, OpUpdateOne, withAdminOperationLog(_m))
-	return &AdminOperationLogUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *AdminOperationLogClient) UpdateOneID(id uint32) *AdminOperationLogUpdateOne {
-	mutation := newAdminOperationLogMutation(c.config, OpUpdateOne, withAdminOperationLogID(id))
-	return &AdminOperationLogUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for AdminOperationLog.
-func (c *AdminOperationLogClient) Delete() *AdminOperationLogDelete {
-	mutation := newAdminOperationLogMutation(c.config, OpDelete)
-	return &AdminOperationLogDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *AdminOperationLogClient) DeleteOne(_m *AdminOperationLog) *AdminOperationLogDeleteOne {
-	return c.DeleteOneID(_m.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *AdminOperationLogClient) DeleteOneID(id uint32) *AdminOperationLogDeleteOne {
-	builder := c.Delete().Where(adminoperationlog.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &AdminOperationLogDeleteOne{builder}
-}
-
-// Query returns a query builder for AdminOperationLog.
-func (c *AdminOperationLogClient) Query() *AdminOperationLogQuery {
-	return &AdminOperationLogQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeAdminOperationLog},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a AdminOperationLog entity by its id.
-func (c *AdminOperationLogClient) Get(ctx context.Context, id uint32) (*AdminOperationLog, error) {
-	return c.Query().Where(adminoperationlog.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *AdminOperationLogClient) GetX(ctx context.Context, id uint32) *AdminOperationLog {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// Hooks returns the client hooks.
-func (c *AdminOperationLogClient) Hooks() []Hook {
-	return c.hooks.AdminOperationLog
-}
-
-// Interceptors returns the client interceptors.
-func (c *AdminOperationLogClient) Interceptors() []Interceptor {
-	return c.inters.AdminOperationLog
-}
-
-func (c *AdminOperationLogClient) mutate(ctx context.Context, m *AdminOperationLogMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&AdminOperationLogCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&AdminOperationLogUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&AdminOperationLogUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&AdminOperationLogDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("ent: unknown AdminOperationLog mutation op: %q", m.Op())
 	}
 }
 
@@ -1987,6 +1588,272 @@ func (c *LanguageClient) mutate(ctx context.Context, m *LanguageMutation) (Value
 	}
 }
 
+// LoginAuditLogClient is a client for the LoginAuditLog schema.
+type LoginAuditLogClient struct {
+	config
+}
+
+// NewLoginAuditLogClient returns a client for the LoginAuditLog from the given config.
+func NewLoginAuditLogClient(c config) *LoginAuditLogClient {
+	return &LoginAuditLogClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `loginauditlog.Hooks(f(g(h())))`.
+func (c *LoginAuditLogClient) Use(hooks ...Hook) {
+	c.hooks.LoginAuditLog = append(c.hooks.LoginAuditLog, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `loginauditlog.Intercept(f(g(h())))`.
+func (c *LoginAuditLogClient) Intercept(interceptors ...Interceptor) {
+	c.inters.LoginAuditLog = append(c.inters.LoginAuditLog, interceptors...)
+}
+
+// Create returns a builder for creating a LoginAuditLog entity.
+func (c *LoginAuditLogClient) Create() *LoginAuditLogCreate {
+	mutation := newLoginAuditLogMutation(c.config, OpCreate)
+	return &LoginAuditLogCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of LoginAuditLog entities.
+func (c *LoginAuditLogClient) CreateBulk(builders ...*LoginAuditLogCreate) *LoginAuditLogCreateBulk {
+	return &LoginAuditLogCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *LoginAuditLogClient) MapCreateBulk(slice any, setFunc func(*LoginAuditLogCreate, int)) *LoginAuditLogCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &LoginAuditLogCreateBulk{err: fmt.Errorf("calling to LoginAuditLogClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*LoginAuditLogCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &LoginAuditLogCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for LoginAuditLog.
+func (c *LoginAuditLogClient) Update() *LoginAuditLogUpdate {
+	mutation := newLoginAuditLogMutation(c.config, OpUpdate)
+	return &LoginAuditLogUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *LoginAuditLogClient) UpdateOne(_m *LoginAuditLog) *LoginAuditLogUpdateOne {
+	mutation := newLoginAuditLogMutation(c.config, OpUpdateOne, withLoginAuditLog(_m))
+	return &LoginAuditLogUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *LoginAuditLogClient) UpdateOneID(id uint32) *LoginAuditLogUpdateOne {
+	mutation := newLoginAuditLogMutation(c.config, OpUpdateOne, withLoginAuditLogID(id))
+	return &LoginAuditLogUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for LoginAuditLog.
+func (c *LoginAuditLogClient) Delete() *LoginAuditLogDelete {
+	mutation := newLoginAuditLogMutation(c.config, OpDelete)
+	return &LoginAuditLogDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *LoginAuditLogClient) DeleteOne(_m *LoginAuditLog) *LoginAuditLogDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *LoginAuditLogClient) DeleteOneID(id uint32) *LoginAuditLogDeleteOne {
+	builder := c.Delete().Where(loginauditlog.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &LoginAuditLogDeleteOne{builder}
+}
+
+// Query returns a query builder for LoginAuditLog.
+func (c *LoginAuditLogClient) Query() *LoginAuditLogQuery {
+	return &LoginAuditLogQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeLoginAuditLog},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a LoginAuditLog entity by its id.
+func (c *LoginAuditLogClient) Get(ctx context.Context, id uint32) (*LoginAuditLog, error) {
+	return c.Query().Where(loginauditlog.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *LoginAuditLogClient) GetX(ctx context.Context, id uint32) *LoginAuditLog {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *LoginAuditLogClient) Hooks() []Hook {
+	return c.hooks.LoginAuditLog
+}
+
+// Interceptors returns the client interceptors.
+func (c *LoginAuditLogClient) Interceptors() []Interceptor {
+	return c.inters.LoginAuditLog
+}
+
+func (c *LoginAuditLogClient) mutate(ctx context.Context, m *LoginAuditLogMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&LoginAuditLogCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&LoginAuditLogUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&LoginAuditLogUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&LoginAuditLogDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown LoginAuditLog mutation op: %q", m.Op())
+	}
+}
+
+// LoginPolicyClient is a client for the LoginPolicy schema.
+type LoginPolicyClient struct {
+	config
+}
+
+// NewLoginPolicyClient returns a client for the LoginPolicy from the given config.
+func NewLoginPolicyClient(c config) *LoginPolicyClient {
+	return &LoginPolicyClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `loginpolicy.Hooks(f(g(h())))`.
+func (c *LoginPolicyClient) Use(hooks ...Hook) {
+	c.hooks.LoginPolicy = append(c.hooks.LoginPolicy, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `loginpolicy.Intercept(f(g(h())))`.
+func (c *LoginPolicyClient) Intercept(interceptors ...Interceptor) {
+	c.inters.LoginPolicy = append(c.inters.LoginPolicy, interceptors...)
+}
+
+// Create returns a builder for creating a LoginPolicy entity.
+func (c *LoginPolicyClient) Create() *LoginPolicyCreate {
+	mutation := newLoginPolicyMutation(c.config, OpCreate)
+	return &LoginPolicyCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of LoginPolicy entities.
+func (c *LoginPolicyClient) CreateBulk(builders ...*LoginPolicyCreate) *LoginPolicyCreateBulk {
+	return &LoginPolicyCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *LoginPolicyClient) MapCreateBulk(slice any, setFunc func(*LoginPolicyCreate, int)) *LoginPolicyCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &LoginPolicyCreateBulk{err: fmt.Errorf("calling to LoginPolicyClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*LoginPolicyCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &LoginPolicyCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for LoginPolicy.
+func (c *LoginPolicyClient) Update() *LoginPolicyUpdate {
+	mutation := newLoginPolicyMutation(c.config, OpUpdate)
+	return &LoginPolicyUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *LoginPolicyClient) UpdateOne(_m *LoginPolicy) *LoginPolicyUpdateOne {
+	mutation := newLoginPolicyMutation(c.config, OpUpdateOne, withLoginPolicy(_m))
+	return &LoginPolicyUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *LoginPolicyClient) UpdateOneID(id uint32) *LoginPolicyUpdateOne {
+	mutation := newLoginPolicyMutation(c.config, OpUpdateOne, withLoginPolicyID(id))
+	return &LoginPolicyUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for LoginPolicy.
+func (c *LoginPolicyClient) Delete() *LoginPolicyDelete {
+	mutation := newLoginPolicyMutation(c.config, OpDelete)
+	return &LoginPolicyDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *LoginPolicyClient) DeleteOne(_m *LoginPolicy) *LoginPolicyDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *LoginPolicyClient) DeleteOneID(id uint32) *LoginPolicyDeleteOne {
+	builder := c.Delete().Where(loginpolicy.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &LoginPolicyDeleteOne{builder}
+}
+
+// Query returns a query builder for LoginPolicy.
+func (c *LoginPolicyClient) Query() *LoginPolicyQuery {
+	return &LoginPolicyQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeLoginPolicy},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a LoginPolicy entity by its id.
+func (c *LoginPolicyClient) Get(ctx context.Context, id uint32) (*LoginPolicy, error) {
+	return c.Query().Where(loginpolicy.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *LoginPolicyClient) GetX(ctx context.Context, id uint32) *LoginPolicy {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *LoginPolicyClient) Hooks() []Hook {
+	return c.hooks.LoginPolicy
+}
+
+// Interceptors returns the client interceptors.
+func (c *LoginPolicyClient) Interceptors() []Interceptor {
+	return c.inters.LoginPolicy
+}
+
+func (c *LoginPolicyClient) mutate(ctx context.Context, m *LoginPolicyMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&LoginPolicyCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&LoginPolicyUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&LoginPolicyUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&LoginPolicyDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown LoginPolicy mutation op: %q", m.Op())
+	}
+}
+
 // MembershipClient is a client for the Membership schema.
 type MembershipClient struct {
 	config
@@ -2681,6 +2548,139 @@ func (c *MenuClient) mutate(ctx context.Context, m *MenuMutation) (Value, error)
 		return (&MenuDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown Menu mutation op: %q", m.Op())
+	}
+}
+
+// OperationAuditLogClient is a client for the OperationAuditLog schema.
+type OperationAuditLogClient struct {
+	config
+}
+
+// NewOperationAuditLogClient returns a client for the OperationAuditLog from the given config.
+func NewOperationAuditLogClient(c config) *OperationAuditLogClient {
+	return &OperationAuditLogClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `operationauditlog.Hooks(f(g(h())))`.
+func (c *OperationAuditLogClient) Use(hooks ...Hook) {
+	c.hooks.OperationAuditLog = append(c.hooks.OperationAuditLog, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `operationauditlog.Intercept(f(g(h())))`.
+func (c *OperationAuditLogClient) Intercept(interceptors ...Interceptor) {
+	c.inters.OperationAuditLog = append(c.inters.OperationAuditLog, interceptors...)
+}
+
+// Create returns a builder for creating a OperationAuditLog entity.
+func (c *OperationAuditLogClient) Create() *OperationAuditLogCreate {
+	mutation := newOperationAuditLogMutation(c.config, OpCreate)
+	return &OperationAuditLogCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of OperationAuditLog entities.
+func (c *OperationAuditLogClient) CreateBulk(builders ...*OperationAuditLogCreate) *OperationAuditLogCreateBulk {
+	return &OperationAuditLogCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *OperationAuditLogClient) MapCreateBulk(slice any, setFunc func(*OperationAuditLogCreate, int)) *OperationAuditLogCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &OperationAuditLogCreateBulk{err: fmt.Errorf("calling to OperationAuditLogClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*OperationAuditLogCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &OperationAuditLogCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for OperationAuditLog.
+func (c *OperationAuditLogClient) Update() *OperationAuditLogUpdate {
+	mutation := newOperationAuditLogMutation(c.config, OpUpdate)
+	return &OperationAuditLogUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *OperationAuditLogClient) UpdateOne(_m *OperationAuditLog) *OperationAuditLogUpdateOne {
+	mutation := newOperationAuditLogMutation(c.config, OpUpdateOne, withOperationAuditLog(_m))
+	return &OperationAuditLogUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *OperationAuditLogClient) UpdateOneID(id uint32) *OperationAuditLogUpdateOne {
+	mutation := newOperationAuditLogMutation(c.config, OpUpdateOne, withOperationAuditLogID(id))
+	return &OperationAuditLogUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for OperationAuditLog.
+func (c *OperationAuditLogClient) Delete() *OperationAuditLogDelete {
+	mutation := newOperationAuditLogMutation(c.config, OpDelete)
+	return &OperationAuditLogDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *OperationAuditLogClient) DeleteOne(_m *OperationAuditLog) *OperationAuditLogDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *OperationAuditLogClient) DeleteOneID(id uint32) *OperationAuditLogDeleteOne {
+	builder := c.Delete().Where(operationauditlog.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &OperationAuditLogDeleteOne{builder}
+}
+
+// Query returns a query builder for OperationAuditLog.
+func (c *OperationAuditLogClient) Query() *OperationAuditLogQuery {
+	return &OperationAuditLogQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeOperationAuditLog},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a OperationAuditLog entity by its id.
+func (c *OperationAuditLogClient) Get(ctx context.Context, id uint32) (*OperationAuditLog, error) {
+	return c.Query().Where(operationauditlog.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *OperationAuditLogClient) GetX(ctx context.Context, id uint32) *OperationAuditLog {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *OperationAuditLogClient) Hooks() []Hook {
+	return c.hooks.OperationAuditLog
+}
+
+// Interceptors returns the client interceptors.
+func (c *OperationAuditLogClient) Interceptors() []Interceptor {
+	return c.inters.OperationAuditLog
+}
+
+func (c *OperationAuditLogClient) mutate(ctx context.Context, m *OperationAuditLogMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&OperationAuditLogCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&OperationAuditLogUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&OperationAuditLogUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&OperationAuditLogDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown OperationAuditLog mutation op: %q", m.Op())
 	}
 }
 
@@ -5278,22 +5278,21 @@ func (c *UserRoleClient) mutate(ctx context.Context, m *UserRoleMutation) (Value
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		AdminLoginLog, AdminLoginRestriction, AdminOperationLog, Api, DictEntry,
-		DictType, File, InternalMessage, InternalMessageCategory,
-		InternalMessageRecipient, Language, Membership, MembershipOrgUnit,
-		MembershipPosition, MembershipRole, Menu, OrgUnit, Permission, PermissionApi,
-		PermissionAuditLog, PermissionGroup, PermissionMenu, PermissionPolicy,
-		PolicyEvaluationLog, Position, Role, RoleMetadata, RolePermission, Task,
-		Tenant, User, UserCredential, UserOrgUnit, UserPosition, UserRole []ent.Hook
+		Api, DictEntry, DictType, File, InternalMessage, InternalMessageCategory,
+		InternalMessageRecipient, Language, LoginAuditLog, LoginPolicy, Membership,
+		MembershipOrgUnit, MembershipPosition, MembershipRole, Menu, OperationAuditLog,
+		OrgUnit, Permission, PermissionApi, PermissionAuditLog, PermissionGroup,
+		PermissionMenu, PermissionPolicy, PolicyEvaluationLog, Position, Role,
+		RoleMetadata, RolePermission, Task, Tenant, User, UserCredential, UserOrgUnit,
+		UserPosition, UserRole []ent.Hook
 	}
 	inters struct {
-		AdminLoginLog, AdminLoginRestriction, AdminOperationLog, Api, DictEntry,
-		DictType, File, InternalMessage, InternalMessageCategory,
-		InternalMessageRecipient, Language, Membership, MembershipOrgUnit,
-		MembershipPosition, MembershipRole, Menu, OrgUnit, Permission, PermissionApi,
-		PermissionAuditLog, PermissionGroup, PermissionMenu, PermissionPolicy,
-		PolicyEvaluationLog, Position, Role, RoleMetadata, RolePermission, Task,
-		Tenant, User, UserCredential, UserOrgUnit, UserPosition,
-		UserRole []ent.Interceptor
+		Api, DictEntry, DictType, File, InternalMessage, InternalMessageCategory,
+		InternalMessageRecipient, Language, LoginAuditLog, LoginPolicy, Membership,
+		MembershipOrgUnit, MembershipPosition, MembershipRole, Menu, OperationAuditLog,
+		OrgUnit, Permission, PermissionApi, PermissionAuditLog, PermissionGroup,
+		PermissionMenu, PermissionPolicy, PolicyEvaluationLog, Position, Role,
+		RoleMetadata, RolePermission, Task, Tenant, User, UserCredential, UserOrgUnit,
+		UserPosition, UserRole []ent.Interceptor
 	}
 )

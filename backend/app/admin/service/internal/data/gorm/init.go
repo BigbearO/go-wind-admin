@@ -13,9 +13,9 @@ func init() {
 // RegisterMigrateModels registers all GORM models for migration.
 func RegisterMigrateModels() {
 	gorm.RegisterMigrateModels(
-		&models.AdminLoginLog{},
-		&models.AdminLoginRestriction{},
-		&models.AdminOperationLog{},
+		&models.LoginAuditLog{},
+		&models.LoginPolicy{},
+		&models.OperationAuditLog{},
 		&models.Api{},
 		&models.Department{},
 		&models.DictEntry{},

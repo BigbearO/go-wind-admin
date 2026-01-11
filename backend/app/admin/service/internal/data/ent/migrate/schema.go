@@ -9,102 +9,6 @@ import (
 )
 
 var (
-	// SysAdminLoginLogsColumns holds the columns for the "sys_admin_login_logs" table.
-	SysAdminLoginLogsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeUint32, Increment: true, Comment: "id"},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
-		{Name: "tenant_id", Type: field.TypeUint32, Nullable: true, Comment: "租户ID"},
-		{Name: "login_ip", Type: field.TypeString, Nullable: true, Comment: "登录IP地址"},
-		{Name: "login_mac", Type: field.TypeString, Nullable: true, Comment: "登录MAC地址"},
-		{Name: "login_time", Type: field.TypeTime, Nullable: true, Comment: "登录时间"},
-		{Name: "user_agent", Type: field.TypeString, Nullable: true, Comment: "浏览器的用户代理信息"},
-		{Name: "browser_name", Type: field.TypeString, Nullable: true, Comment: "浏览器名称"},
-		{Name: "browser_version", Type: field.TypeString, Nullable: true, Comment: "浏览器版本"},
-		{Name: "client_id", Type: field.TypeString, Nullable: true, Comment: "客户端ID"},
-		{Name: "client_name", Type: field.TypeString, Nullable: true, Comment: "客户端名称"},
-		{Name: "os_name", Type: field.TypeString, Nullable: true, Comment: "操作系统名称"},
-		{Name: "os_version", Type: field.TypeString, Nullable: true, Comment: "操作系统版本"},
-		{Name: "user_id", Type: field.TypeUint32, Nullable: true, Comment: "操作者用户ID"},
-		{Name: "username", Type: field.TypeString, Nullable: true, Comment: "操作者账号名"},
-		{Name: "status_code", Type: field.TypeInt32, Nullable: true, Comment: "状态码"},
-		{Name: "success", Type: field.TypeBool, Nullable: true, Comment: "操作成功"},
-		{Name: "reason", Type: field.TypeString, Nullable: true, Comment: "登录失败原因"},
-		{Name: "location", Type: field.TypeString, Nullable: true, Comment: "登录地理位置"},
-	}
-	// SysAdminLoginLogsTable holds the schema information for the "sys_admin_login_logs" table.
-	SysAdminLoginLogsTable = &schema.Table{
-		Name:       "sys_admin_login_logs",
-		Comment:    "后台登录日志表",
-		Columns:    SysAdminLoginLogsColumns,
-		PrimaryKey: []*schema.Column{SysAdminLoginLogsColumns[0]},
-	}
-	// SysAdminLoginRestrictionsColumns holds the columns for the "sys_admin_login_restrictions" table.
-	SysAdminLoginRestrictionsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeUint32, Increment: true, Comment: "id"},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "更新时间"},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true, Comment: "删除时间"},
-		{Name: "created_by", Type: field.TypeUint32, Nullable: true, Comment: "创建者ID"},
-		{Name: "updated_by", Type: field.TypeUint32, Nullable: true, Comment: "更新者ID"},
-		{Name: "deleted_by", Type: field.TypeUint32, Nullable: true, Comment: "删除者ID"},
-		{Name: "tenant_id", Type: field.TypeUint32, Nullable: true, Comment: "租户ID"},
-		{Name: "target_id", Type: field.TypeUint32, Nullable: true, Comment: "目标用户ID"},
-		{Name: "value", Type: field.TypeString, Nullable: true, Comment: "限制值（如IP地址、MAC地址或地区代码）"},
-		{Name: "reason", Type: field.TypeString, Nullable: true, Comment: "限制原因"},
-		{Name: "type", Type: field.TypeEnum, Nullable: true, Comment: "限制类型", Enums: []string{"BLACK_LIST", "WHITE_LIST"}, Default: "BLACK_LIST"},
-		{Name: "method", Type: field.TypeEnum, Nullable: true, Comment: "限制方式", Enums: []string{"IP", "MAC", "REGION", "TIME", "DEVICE"}, Default: "IP"},
-	}
-	// SysAdminLoginRestrictionsTable holds the schema information for the "sys_admin_login_restrictions" table.
-	SysAdminLoginRestrictionsTable = &schema.Table{
-		Name:       "sys_admin_login_restrictions",
-		Comment:    "后台登录限制表",
-		Columns:    SysAdminLoginRestrictionsColumns,
-		PrimaryKey: []*schema.Column{SysAdminLoginRestrictionsColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "idx_sys_admin_login_restriction_target_type_method",
-				Unique:  true,
-				Columns: []*schema.Column{SysAdminLoginRestrictionsColumns[8], SysAdminLoginRestrictionsColumns[11], SysAdminLoginRestrictionsColumns[12]},
-			},
-		},
-	}
-	// SysAdminOperationLogsColumns holds the columns for the "sys_admin_operation_logs" table.
-	SysAdminOperationLogsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeUint32, Increment: true, Comment: "id"},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
-		{Name: "tenant_id", Type: field.TypeUint32, Nullable: true, Comment: "租户ID"},
-		{Name: "request_id", Type: field.TypeString, Nullable: true, Comment: "请求ID"},
-		{Name: "method", Type: field.TypeString, Nullable: true, Comment: "请求方法"},
-		{Name: "operation", Type: field.TypeString, Nullable: true, Comment: "操作方法"},
-		{Name: "path", Type: field.TypeString, Nullable: true, Comment: "请求路径"},
-		{Name: "referer", Type: field.TypeString, Nullable: true, Comment: "请求源"},
-		{Name: "request_uri", Type: field.TypeString, Nullable: true, Comment: "请求URI"},
-		{Name: "request_body", Type: field.TypeString, Nullable: true, Comment: "请求体"},
-		{Name: "request_header", Type: field.TypeString, Nullable: true, Comment: "请求头"},
-		{Name: "response", Type: field.TypeString, Nullable: true, Comment: "响应信息"},
-		{Name: "cost_time", Type: field.TypeFloat64, Nullable: true, Comment: "操作耗时"},
-		{Name: "user_id", Type: field.TypeUint32, Nullable: true, Comment: "操作者用户ID"},
-		{Name: "username", Type: field.TypeString, Nullable: true, Comment: "操作者账号名"},
-		{Name: "client_ip", Type: field.TypeString, Nullable: true, Comment: "操作者IP"},
-		{Name: "status_code", Type: field.TypeInt32, Nullable: true, Comment: "状态码"},
-		{Name: "reason", Type: field.TypeString, Nullable: true, Comment: "操作失败原因"},
-		{Name: "success", Type: field.TypeBool, Nullable: true, Comment: "操作成功"},
-		{Name: "location", Type: field.TypeString, Nullable: true, Comment: "操作地理位置"},
-		{Name: "user_agent", Type: field.TypeString, Nullable: true, Comment: "浏览器的用户代理信息"},
-		{Name: "browser_name", Type: field.TypeString, Nullable: true, Comment: "浏览器名称"},
-		{Name: "browser_version", Type: field.TypeString, Nullable: true, Comment: "浏览器版本"},
-		{Name: "client_id", Type: field.TypeString, Nullable: true, Comment: "客户端ID"},
-		{Name: "client_name", Type: field.TypeString, Nullable: true, Comment: "客户端名称"},
-		{Name: "os_name", Type: field.TypeString, Nullable: true, Comment: "操作系统名称"},
-		{Name: "os_version", Type: field.TypeString, Nullable: true, Comment: "操作系统版本"},
-	}
-	// SysAdminOperationLogsTable holds the schema information for the "sys_admin_operation_logs" table.
-	SysAdminOperationLogsTable = &schema.Table{
-		Name:       "sys_admin_operation_logs",
-		Comment:    "后台操作日志表",
-		Columns:    SysAdminOperationLogsColumns,
-		PrimaryKey: []*schema.Column{SysAdminOperationLogsColumns[0]},
-	}
 	// SysApisColumns holds the columns for the "sys_apis" table.
 	SysApisColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUint32, Increment: true, Comment: "id"},
@@ -584,6 +488,65 @@ var (
 			},
 		},
 	}
+	// SysLoginAuditLogsColumns holds the columns for the "sys_login_audit_logs" table.
+	SysLoginAuditLogsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUint32, Increment: true, Comment: "id"},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
+		{Name: "tenant_id", Type: field.TypeUint32, Nullable: true, Comment: "租户ID"},
+		{Name: "login_ip", Type: field.TypeString, Nullable: true, Comment: "登录IP地址"},
+		{Name: "login_mac", Type: field.TypeString, Nullable: true, Comment: "登录MAC地址"},
+		{Name: "login_time", Type: field.TypeTime, Nullable: true, Comment: "登录时间"},
+		{Name: "user_agent", Type: field.TypeString, Nullable: true, Comment: "浏览器的用户代理信息"},
+		{Name: "browser_name", Type: field.TypeString, Nullable: true, Comment: "浏览器名称"},
+		{Name: "browser_version", Type: field.TypeString, Nullable: true, Comment: "浏览器版本"},
+		{Name: "client_id", Type: field.TypeString, Nullable: true, Comment: "客户端ID"},
+		{Name: "client_name", Type: field.TypeString, Nullable: true, Comment: "客户端名称"},
+		{Name: "os_name", Type: field.TypeString, Nullable: true, Comment: "操作系统名称"},
+		{Name: "os_version", Type: field.TypeString, Nullable: true, Comment: "操作系统版本"},
+		{Name: "user_id", Type: field.TypeUint32, Nullable: true, Comment: "操作者用户ID"},
+		{Name: "username", Type: field.TypeString, Nullable: true, Comment: "操作者账号名"},
+		{Name: "status_code", Type: field.TypeInt32, Nullable: true, Comment: "状态码"},
+		{Name: "success", Type: field.TypeBool, Nullable: true, Comment: "操作成功"},
+		{Name: "reason", Type: field.TypeString, Nullable: true, Comment: "登录失败原因"},
+		{Name: "location", Type: field.TypeString, Nullable: true, Comment: "登录地理位置"},
+	}
+	// SysLoginAuditLogsTable holds the schema information for the "sys_login_audit_logs" table.
+	SysLoginAuditLogsTable = &schema.Table{
+		Name:       "sys_login_audit_logs",
+		Comment:    "登录审计日志表",
+		Columns:    SysLoginAuditLogsColumns,
+		PrimaryKey: []*schema.Column{SysLoginAuditLogsColumns[0]},
+	}
+	// SysLoginPoliciesColumns holds the columns for the "sys_login_policies" table.
+	SysLoginPoliciesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUint32, Increment: true, Comment: "id"},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "更新时间"},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true, Comment: "删除时间"},
+		{Name: "created_by", Type: field.TypeUint32, Nullable: true, Comment: "创建者ID"},
+		{Name: "updated_by", Type: field.TypeUint32, Nullable: true, Comment: "更新者ID"},
+		{Name: "deleted_by", Type: field.TypeUint32, Nullable: true, Comment: "删除者ID"},
+		{Name: "tenant_id", Type: field.TypeUint32, Nullable: true, Comment: "租户ID"},
+		{Name: "target_id", Type: field.TypeUint32, Nullable: true, Comment: "目标用户ID"},
+		{Name: "value", Type: field.TypeString, Nullable: true, Comment: "限制值（如IP地址、MAC地址或地区代码）"},
+		{Name: "reason", Type: field.TypeString, Nullable: true, Comment: "限制原因"},
+		{Name: "type", Type: field.TypeEnum, Nullable: true, Comment: "限制类型", Enums: []string{"BLACK_LIST", "WHITE_LIST"}, Default: "BLACK_LIST"},
+		{Name: "method", Type: field.TypeEnum, Nullable: true, Comment: "限制方式", Enums: []string{"IP", "MAC", "REGION", "TIME", "DEVICE"}, Default: "IP"},
+	}
+	// SysLoginPoliciesTable holds the schema information for the "sys_login_policies" table.
+	SysLoginPoliciesTable = &schema.Table{
+		Name:       "sys_login_policies",
+		Comment:    "登录策略表",
+		Columns:    SysLoginPoliciesColumns,
+		PrimaryKey: []*schema.Column{SysLoginPoliciesColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "idx_sys_login_policy_target_type_method",
+				Unique:  true,
+				Columns: []*schema.Column{SysLoginPoliciesColumns[8], SysLoginPoliciesColumns[11], SysLoginPoliciesColumns[12]},
+			},
+		},
+	}
 	// SysMembershipsColumns holds the columns for the "sys_memberships" table.
 	SysMembershipsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUint32, Increment: true, Comment: "id"},
@@ -1055,6 +1018,43 @@ var (
 				Columns: []*schema.Column{SysMenusColumns[1]},
 			},
 		},
+	}
+	// SysOperationAuditLogsColumns holds the columns for the "sys_operation_audit_logs" table.
+	SysOperationAuditLogsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUint32, Increment: true, Comment: "id"},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
+		{Name: "tenant_id", Type: field.TypeUint32, Nullable: true, Comment: "租户ID"},
+		{Name: "request_id", Type: field.TypeString, Nullable: true, Comment: "请求ID"},
+		{Name: "method", Type: field.TypeString, Nullable: true, Comment: "请求方法"},
+		{Name: "operation", Type: field.TypeString, Nullable: true, Comment: "操作方法"},
+		{Name: "path", Type: field.TypeString, Nullable: true, Comment: "请求路径"},
+		{Name: "referer", Type: field.TypeString, Nullable: true, Comment: "请求源"},
+		{Name: "request_uri", Type: field.TypeString, Nullable: true, Comment: "请求URI"},
+		{Name: "request_body", Type: field.TypeString, Nullable: true, Comment: "请求体"},
+		{Name: "request_header", Type: field.TypeString, Nullable: true, Comment: "请求头"},
+		{Name: "response", Type: field.TypeString, Nullable: true, Comment: "响应信息"},
+		{Name: "cost_time", Type: field.TypeFloat64, Nullable: true, Comment: "操作耗时"},
+		{Name: "user_id", Type: field.TypeUint32, Nullable: true, Comment: "操作者用户ID"},
+		{Name: "username", Type: field.TypeString, Nullable: true, Comment: "操作者账号名"},
+		{Name: "client_ip", Type: field.TypeString, Nullable: true, Comment: "操作者IP"},
+		{Name: "status_code", Type: field.TypeInt32, Nullable: true, Comment: "状态码"},
+		{Name: "reason", Type: field.TypeString, Nullable: true, Comment: "操作失败原因"},
+		{Name: "success", Type: field.TypeBool, Nullable: true, Comment: "操作成功"},
+		{Name: "location", Type: field.TypeString, Nullable: true, Comment: "操作地理位置"},
+		{Name: "user_agent", Type: field.TypeString, Nullable: true, Comment: "浏览器的用户代理信息"},
+		{Name: "browser_name", Type: field.TypeString, Nullable: true, Comment: "浏览器名称"},
+		{Name: "browser_version", Type: field.TypeString, Nullable: true, Comment: "浏览器版本"},
+		{Name: "client_id", Type: field.TypeString, Nullable: true, Comment: "客户端ID"},
+		{Name: "client_name", Type: field.TypeString, Nullable: true, Comment: "客户端名称"},
+		{Name: "os_name", Type: field.TypeString, Nullable: true, Comment: "操作系统名称"},
+		{Name: "os_version", Type: field.TypeString, Nullable: true, Comment: "操作系统版本"},
+	}
+	// SysOperationAuditLogsTable holds the schema information for the "sys_operation_audit_logs" table.
+	SysOperationAuditLogsTable = &schema.Table{
+		Name:       "sys_operation_audit_logs",
+		Comment:    "操作审计日志表",
+		Columns:    SysOperationAuditLogsColumns,
+		PrimaryKey: []*schema.Column{SysOperationAuditLogsColumns[0]},
 	}
 	// SysOrgUnitsColumns holds the columns for the "sys_org_units" table.
 	SysOrgUnitsColumns = []*schema.Column{
@@ -2378,9 +2378,6 @@ var (
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
-		SysAdminLoginLogsTable,
-		SysAdminLoginRestrictionsTable,
-		SysAdminOperationLogsTable,
 		SysApisTable,
 		SysDictEntriesTable,
 		SysDictTypesTable,
@@ -2389,11 +2386,14 @@ var (
 		InternalMessageCategoriesTable,
 		InternalMessageRecipientsTable,
 		SysLanguagesTable,
+		SysLoginAuditLogsTable,
+		SysLoginPoliciesTable,
 		SysMembershipsTable,
 		SysMembershipOrgUnitsTable,
 		SysMembershipPositionsTable,
 		SysMembershipRolesTable,
 		SysMenusTable,
+		SysOperationAuditLogsTable,
 		SysOrgUnitsTable,
 		SysPermissionsTable,
 		SysPermissionApisTable,
@@ -2417,21 +2417,6 @@ var (
 )
 
 func init() {
-	SysAdminLoginLogsTable.Annotation = &entsql.Annotation{
-		Table:     "sys_admin_login_logs",
-		Charset:   "utf8mb4",
-		Collation: "utf8mb4_bin",
-	}
-	SysAdminLoginRestrictionsTable.Annotation = &entsql.Annotation{
-		Table:     "sys_admin_login_restrictions",
-		Charset:   "utf8mb4",
-		Collation: "utf8mb4_bin",
-	}
-	SysAdminOperationLogsTable.Annotation = &entsql.Annotation{
-		Table:     "sys_admin_operation_logs",
-		Charset:   "utf8mb4",
-		Collation: "utf8mb4_bin",
-	}
 	SysApisTable.Annotation = &entsql.Annotation{
 		Table:     "sys_apis",
 		Charset:   "utf8mb4",
@@ -2473,6 +2458,16 @@ func init() {
 		Charset:   "utf8mb4",
 		Collation: "utf8mb4_bin",
 	}
+	SysLoginAuditLogsTable.Annotation = &entsql.Annotation{
+		Table:     "sys_login_audit_logs",
+		Charset:   "utf8mb4",
+		Collation: "utf8mb4_bin",
+	}
+	SysLoginPoliciesTable.Annotation = &entsql.Annotation{
+		Table:     "sys_login_policies",
+		Charset:   "utf8mb4",
+		Collation: "utf8mb4_bin",
+	}
 	SysMembershipsTable.Annotation = &entsql.Annotation{
 		Table:     "sys_memberships",
 		Charset:   "utf8mb4",
@@ -2496,6 +2491,11 @@ func init() {
 	SysMenusTable.ForeignKeys[0].RefTable = SysMenusTable
 	SysMenusTable.Annotation = &entsql.Annotation{
 		Table:     "sys_menus",
+		Charset:   "utf8mb4",
+		Collation: "utf8mb4_bin",
+	}
+	SysOperationAuditLogsTable.Annotation = &entsql.Annotation{
+		Table:     "sys_operation_audit_logs",
 		Charset:   "utf8mb4",
 		Collation: "utf8mb4_bin",
 	}

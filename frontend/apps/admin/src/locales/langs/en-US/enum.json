@@ -34,11 +34,11 @@
     "MALE": "Male",
     "FEMALE": "Female"
   },
-  "adminLoginRestrictionType": {
+  "loginPolicyType": {
     "BLACKLIST": "Blacklist",
     "WHITELIST": "Whitelist"
   },
-  "adminLoginRestrictionMethod": {
+  "loginPolicyMethod": {
     "IP": "IP Address",
     "MAC": "MAC Address",
     "REGION": "Region",

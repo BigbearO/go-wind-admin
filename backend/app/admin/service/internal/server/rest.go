@@ -34,20 +34,20 @@ func newRestMiddleware(
 	logger log.Logger,
 	authenticator authnEngine.Authenticator,
 	authorizer *data.Authorizer,
-	operationLogRepo *data.AdminOperationLogRepo,
-	loginLogRepo *data.AdminLoginLogRepo,
+	operationLogRepo *data.OperationAuditLogRepo,
+	loginLogRepo *data.LoginAuditLogRepo,
 ) []middleware.Middleware {
 	var ms []middleware.Middleware
 	ms = append(ms, logging.Server(logger))
 
 	ms = append(ms, applogging.Server(
-		applogging.WithWriteOperationLogFunc(func(ctx context.Context, data *adminV1.AdminOperationLog) error {
+		applogging.WithWriteOperationLogFunc(func(ctx context.Context, data *adminV1.OperationAuditLog) error {
 			// TODO 如果系统的负载比较小，可以同步写入数据库，否则，建议使用异步方式，即投递进队列。
-			return operationLogRepo.Create(ctx, &adminV1.CreateAdminOperationLogRequest{Data: data})
+			return operationLogRepo.Create(ctx, &adminV1.CreateOperationAuditLogRequest{Data: data})
 		}),
-		applogging.WithWriteLoginLogFunc(func(ctx context.Context, data *adminV1.AdminLoginLog) error {
+		applogging.WithWriteLoginLogFunc(func(ctx context.Context, data *adminV1.LoginAuditLog) error {
 			// TODO 如果系统的负载比较小，可以同步写入数据库，否则，建议使用异步方式，即投递进队列。
-			return loginLogRepo.Create(ctx, &adminV1.CreateAdminLoginLogRequest{Data: data})
+			return loginLogRepo.Create(ctx, &adminV1.CreateLoginAuditLogRequest{Data: data})
 		}),
 	))
 
@@ -71,8 +71,8 @@ func NewRestServer(
 
 	authenticator authnEngine.Authenticator, authorizer *data.Authorizer,
 
-	operationLogRepo *data.AdminOperationLogRepo,
-	loginLogRepo *data.AdminLoginLogRepo,
+	operationLogRepo *data.OperationAuditLogRepo,
+	loginLogRepo *data.LoginAuditLogRepo,
 
 	authenticationService *service.AuthenticationService,
 	userService *service.UserService,
@@ -82,8 +82,8 @@ func NewRestServer(
 	roleService *service.RoleService,
 	positionService *service.PositionService,
 	dictService *service.DictService,
-	adminLoginLogService *service.AdminLoginLogService,
-	adminOperationLogService *service.AdminOperationLogService,
+	loginAuditLogService *service.LoginAuditLogService,
+	operationAuditLogService *service.OperationAuditLogService,
 	ossService *service.OssService,
 	uEditorService *service.UEditorService,
 	fileService *service.FileService,
@@ -92,7 +92,7 @@ func NewRestServer(
 	internalMessageService *service.InternalMessageService,
 	internalMessageCategoryService *service.InternalMessageCategoryService,
 	internalMessageRecipientService *service.InternalMessageRecipientService,
-	adminLoginRestrictionService *service.AdminLoginRestrictionService,
+	loginPolicyService *service.LoginPolicyService,
 	userProfileService *service.UserProfileService,
 	apiService *service.ApiService,
 	permissionService *service.PermissionService,
@@ -122,7 +122,7 @@ func NewRestServer(
 	adminV1.RegisterRouterServiceHTTPServer(srv, routerService)
 	adminV1.RegisterDictServiceHTTPServer(srv, dictService)
 	adminV1.RegisterTaskServiceHTTPServer(srv, taskService)
-	adminV1.RegisterAdminLoginRestrictionServiceHTTPServer(srv, adminLoginRestrictionService)
+	adminV1.RegisterLoginPolicyServiceHTTPServer(srv, loginPolicyService)
 
 	adminV1.RegisterApiServiceHTTPServer(srv, apiService)
 	adminV1.RegisterMenuServiceHTTPServer(srv, menuService)
@@ -137,8 +137,8 @@ func NewRestServer(
 	adminV1.RegisterPositionServiceHTTPServer(srv, positionService)
 	adminV1.RegisterTenantServiceHTTPServer(srv, tenantService)
 
-	adminV1.RegisterAdminLoginLogServiceHTTPServer(srv, adminLoginLogService)
-	adminV1.RegisterAdminOperationLogServiceHTTPServer(srv, adminOperationLogService)
+	adminV1.RegisterLoginAuditLogServiceHTTPServer(srv, loginAuditLogService)
+	adminV1.RegisterOperationAuditLogServiceHTTPServer(srv, operationAuditLogService)
 
 	adminV1.RegisterOssServiceHTTPServer(srv, ossService)
 	adminV1.RegisterFileServiceHTTPServer(srv, fileService)

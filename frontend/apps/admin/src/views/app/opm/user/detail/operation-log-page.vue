@@ -6,20 +6,20 @@ import { Page, type VbenFormProps } from '@vben/common-ui';
 import dayjs from 'dayjs';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { type AdminOperationLog } from '#/generated/api/admin/service/v1';
+import { type OperationAuditLog } from '#/generated/api/admin/service/v1';
 import { $t } from '#/locales';
 import {
   methodList,
   successToColor,
   successToName,
-  useAdminOperationLogStore,
+  useOperationAuditLogStore,
 } from '#/stores';
 
 const props = defineProps({
   userId: { type: Number, default: undefined },
 });
 
-const adminOperationLogStore = useAdminOperationLogStore();
+const operationAuditLogStore = useOperationAuditLogStore();
 
 const formOptions: VbenFormProps = {
   // 默认展开
@@ -32,7 +32,7 @@ const formOptions: VbenFormProps = {
     {
       component: 'RangePicker',
       fieldName: 'createdAt',
-      label: $t('page.adminOperationLog.createdAt'),
+      label: $t('page.operationAuditLog.createdAt'),
       componentProps: {
         showTime: true,
         allowClear: true,
@@ -41,7 +41,7 @@ const formOptions: VbenFormProps = {
     {
       component: 'Select',
       fieldName: 'method',
-      label: $t('page.adminOperationLog.method'),
+      label: $t('page.operationAuditLog.method'),
       componentProps: {
         options: methodList,
         placeholder: $t('ui.placeholder.select'),
@@ -54,7 +54,7 @@ const formOptions: VbenFormProps = {
     {
       component: 'Input',
       fieldName: 'path',
-      label: $t('page.adminOperationLog.path'),
+      label: $t('page.operationAuditLog.path'),
       componentProps: {
         placeholder: $t('ui.placeholder.input'),
         allowClear: true,
@@ -63,7 +63,7 @@ const formOptions: VbenFormProps = {
   ],
 };
 
-const gridOptions: VxeGridProps<AdminOperationLog> = {
+const gridOptions: VxeGridProps<OperationAuditLog> = {
   stripe: true,
   height: 'auto',
   exportConfig: {},
@@ -92,7 +92,7 @@ const gridOptions: VxeGridProps<AdminOperationLog> = {
           console.log(startTime, endTime);
         }
 
-        return await adminOperationLogStore.listAdminOperationLog(
+        return await operationAuditLogStore.listOperationAuditLog(
           {
             page: page.currentPage,
             pageSize: page.pageSize,
@@ -112,33 +112,33 @@ const gridOptions: VxeGridProps<AdminOperationLog> = {
 
   columns: [
     { title: $t('ui.table.seq'), type: 'seq', width: 50 },
-    { title: $t('page.adminOperationLog.username'), field: 'username' },
+    { title: $t('page.operationAuditLog.username'), field: 'username' },
     {
-      title: $t('page.adminOperationLog.success'),
+      title: $t('page.operationAuditLog.success'),
       field: 'success',
       slots: { default: 'success' },
       width: 80,
     },
     {
-      title: $t('page.adminOperationLog.createdAt'),
+      title: $t('page.operationAuditLog.createdAt'),
       field: 'createdAt',
       formatter: 'formatDateTime',
       width: 140,
     },
     {
-      title: $t('page.adminOperationLog.method'),
+      title: $t('page.operationAuditLog.method'),
       field: 'method',
       width: 80,
     },
-    { title: $t('page.adminOperationLog.path'), field: 'path' },
-    { title: $t('page.adminOperationLog.location'), field: 'location' },
+    { title: $t('page.operationAuditLog.path'), field: 'path' },
+    { title: $t('page.operationAuditLog.location'), field: 'location' },
     {
-      title: $t('page.adminOperationLog.clientName'),
+      title: $t('page.operationAuditLog.clientName'),
       field: 'clientName',
       slots: { default: 'platform' },
     },
     {
-      title: $t('page.adminOperationLog.clientIp'),
+      title: $t('page.operationAuditLog.clientIp'),
       field: 'clientIp',
       width: 140,
     },

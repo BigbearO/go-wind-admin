@@ -8,42 +8,6 @@ import (
 	"go-wind-admin/app/admin/service/internal/data/ent"
 )
 
-// The AdminLoginLogFunc type is an adapter to allow the use of ordinary
-// function as AdminLoginLog mutator.
-type AdminLoginLogFunc func(context.Context, *ent.AdminLoginLogMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f AdminLoginLogFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.AdminLoginLogMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.AdminLoginLogMutation", m)
-}
-
-// The AdminLoginRestrictionFunc type is an adapter to allow the use of ordinary
-// function as AdminLoginRestriction mutator.
-type AdminLoginRestrictionFunc func(context.Context, *ent.AdminLoginRestrictionMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f AdminLoginRestrictionFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.AdminLoginRestrictionMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.AdminLoginRestrictionMutation", m)
-}
-
-// The AdminOperationLogFunc type is an adapter to allow the use of ordinary
-// function as AdminOperationLog mutator.
-type AdminOperationLogFunc func(context.Context, *ent.AdminOperationLogMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f AdminOperationLogFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.AdminOperationLogMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.AdminOperationLogMutation", m)
-}
-
 // The ApiFunc type is an adapter to allow the use of ordinary
 // function as Api mutator.
 type ApiFunc func(context.Context, *ent.APIMutation) (ent.Value, error)
@@ -140,6 +104,30 @@ func (f LanguageFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, er
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.LanguageMutation", m)
 }
 
+// The LoginAuditLogFunc type is an adapter to allow the use of ordinary
+// function as LoginAuditLog mutator.
+type LoginAuditLogFunc func(context.Context, *ent.LoginAuditLogMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f LoginAuditLogFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.LoginAuditLogMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.LoginAuditLogMutation", m)
+}
+
+// The LoginPolicyFunc type is an adapter to allow the use of ordinary
+// function as LoginPolicy mutator.
+type LoginPolicyFunc func(context.Context, *ent.LoginPolicyMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f LoginPolicyFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.LoginPolicyMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.LoginPolicyMutation", m)
+}
+
 // The MembershipFunc type is an adapter to allow the use of ordinary
 // function as Membership mutator.
 type MembershipFunc func(context.Context, *ent.MembershipMutation) (ent.Value, error)
@@ -198,6 +186,18 @@ func (f MenuFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error)
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MenuMutation", m)
+}
+
+// The OperationAuditLogFunc type is an adapter to allow the use of ordinary
+// function as OperationAuditLog mutator.
+type OperationAuditLogFunc func(context.Context, *ent.OperationAuditLogMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f OperationAuditLogFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.OperationAuditLogMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.OperationAuditLogMutation", m)
 }
 
 // The OrgUnitFunc type is an adapter to allow the use of ordinary

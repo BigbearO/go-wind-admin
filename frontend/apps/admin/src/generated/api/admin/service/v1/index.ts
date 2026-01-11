@@ -99,733 +99,6 @@ export type AdminErrorReason =
   | "NETWORK_READ_TIMEOUT_ERROR"
   // 599
   | "NETWORK_CONNECT_TIMEOUT_ERROR";
-// 后台登录日志
-export type AdminLoginLog = {
-  //
-  // Behaviors: OPTIONAL
-  id?: number;
-  loginIp?: string;
-  loginMac?: string;
-  loginTime?: wellKnownTimestamp;
-  statusCode?: number;
-  success?: boolean;
-  reason?: string;
-  location?: string;
-  userAgent?: string;
-  browserName?: string;
-  browserVersion?: string;
-  clientId?: string;
-  clientName?: string;
-  osName?: string;
-  osVersion?: string;
-  userId?: number;
-  username?: string;
-  createdAt?: wellKnownTimestamp;
-};
-
-// Encoded using RFC 3339, where generated output will always be Z-normalized
-// and uses 0, 3, 6 or 9 fractional digits.
-// Offsets other than "Z" are also accepted.
-type wellKnownTimestamp = string;
-
-// 查询后台登录日志列表 - 回应
-export type ListAdminLoginLogResponse = {
-  items: AdminLoginLog[] | undefined;
-  total: number | undefined;
-};
-
-// 查询后台登录日志详情 - 请求
-export type GetAdminLoginLogRequest = {
-  id?: number;
-  viewMask?: wellKnownFieldMask;
-};
-
-// In JSON, a field mask is encoded as a single string where paths are
-// separated by a comma. Fields name in each path are converted
-// to/from lower-camel naming conventions.
-// As an example, consider the following message declarations:
-//
-//     message Profile {
-//       User user = 1;
-//       Photo photo = 2;
-//     }
-//     message User {
-//       string display_name = 1;
-//       string address = 2;
-//     }
-//
-// In proto a field mask for `Profile` may look as such:
-//
-//     mask {
-//       paths: "user.display_name"
-//       paths: "photo"
-//     }
-//
-// In JSON, the same mask is represented as below:
-//
-//     {
-//       mask: "user.displayName,photo"
-//     }
-type wellKnownFieldMask = string;
-
-// 创建后台登录日志 - 请求
-export type CreateAdminLoginLogRequest = {
-  data: AdminLoginLog | undefined;
-};
-
-// 更新后台登录日志 - 请求
-export type UpdateAdminLoginLogRequest = {
-  id: number | undefined;
-  data: AdminLoginLog | undefined;
-  updateMask: wellKnownFieldMask | undefined;
-  allowMissing?: boolean;
-};
-
-// 删除后台登录日志 - 请求
-export type DeleteAdminLoginLogRequest = {
-  id: number | undefined;
-};
-
-// 后台登录日志管理服务
-export interface AdminLoginLogService {
-  // 查询后台登录日志列表
-  List(request: pagination_PagingRequest): Promise<ListAdminLoginLogResponse>;
-  // 查询后台登录日志详情
-  Get(request: GetAdminLoginLogRequest): Promise<AdminLoginLog>;
-}
-
-type RequestType = {
-  path: string;
-  method: string;
-  body: string | null;
-};
-
-type RequestHandler = (request: RequestType, meta: { service: string, method: string }) => Promise<unknown>;
-
-export function createAdminLoginLogServiceClient(
-  handler: RequestHandler
-): AdminLoginLogService {
-  return {
-    List(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
-      const path = `admin/v1/admin-login-logs`; // eslint-disable-line quotes
-      const body = null;
-      const queryParams: string[] = [];
-      if (request.page) {
-        queryParams.push(`page=${encodeURIComponent(request.page.toString())}`)
-      }
-      if (request.pageSize) {
-        queryParams.push(`pageSize=${encodeURIComponent(request.pageSize.toString())}`)
-      }
-      if (request.offset) {
-        queryParams.push(`offset=${encodeURIComponent(request.offset.toString())}`)
-      }
-      if (request.limit) {
-        queryParams.push(`limit=${encodeURIComponent(request.limit.toString())}`)
-      }
-      if (request.token) {
-        queryParams.push(`token=${encodeURIComponent(request.token.toString())}`)
-      }
-      if (request.noPaging) {
-        queryParams.push(`noPaging=${encodeURIComponent(request.noPaging.toString())}`)
-      }
-      if (request.orderBy) {
-        request.orderBy.forEach((x) => {
-          queryParams.push(`orderBy=${encodeURIComponent(x.toString())}`)
-        })
-      }
-      if (request.sorting?.field) {
-        queryParams.push(`sorting.field=${encodeURIComponent(request.sorting.field.toString())}`)
-      }
-      if (request.sorting?.order) {
-        queryParams.push(`sorting.order=${encodeURIComponent(request.sorting.order.toString())}`)
-      }
-      if (request.query) {
-        queryParams.push(`query=${encodeURIComponent(request.query.toString())}`)
-      }
-      if (request.or) {
-        queryParams.push(`or=${encodeURIComponent(request.or.toString())}`)
-      }
-      if (request.filterExpr?.type) {
-        queryParams.push(`filterExpr.type=${encodeURIComponent(request.filterExpr.type.toString())}`)
-      }
-      if (request.filterExpr?.conditions?.field) {
-        queryParams.push(`filterExpr.conditions.field=${encodeURIComponent(request.filterExpr.conditions.field.toString())}`)
-      }
-      if (request.filterExpr?.conditions?.op) {
-        queryParams.push(`filterExpr.conditions.op=${encodeURIComponent(request.filterExpr.conditions.op.toString())}`)
-      }
-      if (request.filterExpr?.conditions?.value) {
-        queryParams.push(`filterExpr.conditions.value=${encodeURIComponent(request.filterExpr.conditions.value.toString())}`)
-      }
-      if (request.filterExpr?.conditions?.values) {
-        request.filterExpr.conditions.values.forEach((x) => {
-          queryParams.push(`filterExpr.conditions.values=${encodeURIComponent(x.toString())}`)
-        })
-      }
-      if (request.fieldMask) {
-        queryParams.push(`fieldMask=${encodeURIComponent(request.fieldMask.toString())}`)
-      }
-      let uri = path;
-      if (queryParams.length > 0) {
-        uri += `?${queryParams.join("&")}`
-      }
-      return handler({
-        path: uri,
-        method: "GET",
-        body,
-      }, {
-        service: "AdminLoginLogService",
-        method: "List",
-      }) as Promise<ListAdminLoginLogResponse>;
-    },
-    Get(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
-      if (!request.id) {
-        throw new Error("missing required field request.id");
-      }
-      const path = `admin/v1/admin-login-logs/${request.id}`; // eslint-disable-line quotes
-      const body = null;
-      const queryParams: string[] = [];
-      if (request.viewMask) {
-        queryParams.push(`viewMask=${encodeURIComponent(request.viewMask.toString())}`)
-      }
-      let uri = path;
-      if (queryParams.length > 0) {
-        uri += `?${queryParams.join("&")}`
-      }
-      return handler({
-        path: uri,
-        method: "GET",
-        body,
-      }, {
-        service: "AdminLoginLogService",
-        method: "Get",
-      }) as Promise<AdminLoginLog>;
-    },
-  };
-}
-// ------------------------------
-// 分页通用请求
-// ------------------------------
-export type pagination_PagingRequest = {
-  // 当前页码（从1开始，默认1）
-  page?: number;
-  // 每页条数（默认10，建议设置上限如100）
-  pageSize?: number;
-  // 跳过的记录数（从0开始，默认0）
-  offset?: number;
-  // 最多返回的记录数（默认10，建议设置上限如100）
-  limit?: number;
-  // 上一页最后一条记录的游标（如ID/时间戳+ID，首次请求为空）
-  token?: string;
-  // 是否不分页，如果为true，则page和pageSize参数无效。
-  noPaging?: boolean;
-  // 排序条件，其语法为JSON字符串，例如：{"val1", "-val2"}。字段名前加'-'为降序，否则为升序。
-  orderBy: string[] | undefined;
-  // 排序规则（可选，建议必传以保证分页结果稳定）
-  sorting: pagination_Sorting[] | undefined;
-  // AND过滤参数，其语法为json格式的字符串，如：{"key1":"val1","key2":"val2"}，具体请参见：https://github.com/tx7do/go-utils/tree/main/entgo/query/README.md
-  query?: string;
-  // OR过滤参数，语法同AND过滤参数。
-  or?: string;
-  // 复杂过滤表达式
-  filterExpr?: pagination_FilterExpr;
-  // 字段掩码，其作用为SELECT中的字段，其语法为使用逗号分隔字段名，例如：id,realName,userName。如果为空则选中所有字段，即SELECT *。
-  fieldMask?: wellKnownFieldMask;
-};
-
-// 排序规则（分页场景通常需配合排序保证结果稳定）
-export type pagination_Sorting = {
-  // 排序字段（如"id"、"create_time"）
-  field: string | undefined;
-  order: pagination_Sorting_Order | undefined;
-};
-
-// 排序方向（ASC/DESC，默认ASC）
-export type pagination_Sorting_Order =
-  | "ASC"
-  | "DESC";
-// 过滤表达式
-export type pagination_FilterExpr = {
-  // 过滤表达式类型
-  type: pagination_ExprType | undefined;
-  // 条件列表
-  conditions: pagination_Condition[] | undefined;
-  // 子表达式列表
-  groups: pagination_FilterExpr[] | undefined;
-};
-
-// 过滤表达式类型
-export type pagination_ExprType =
-  | "EXPR_TYPE_UNSPECIFIED"
-  | "AND"
-  | "OR";
-// 单个条件
-export type pagination_Condition = {
-  // 过滤字段名
-  field: string | undefined;
-  // 过滤操作符
-  op: pagination_Operator | undefined;
-  // 过滤值（单值）
-  value?: string;
-  // 过滤值（多值，如IN操作符）
-  values: string[] | undefined;
-};
-
-// 操作符枚举
-export type pagination_Operator =
-  // 未指定
-  | "OPERATOR_UNSPECIFIED"
-  // 基本比较
-  | "EQ"
-  | "NEQ"
-  | "GT"
-  | "GTE"
-  | "LT"
-  | "LTE"
-  // 模糊 / 大小写不敏感模糊 / 非模糊
-  | "LIKE"
-  | "ILIKE"
-  | "NOT_LIKE"
-  // 集合操作
-  | "IN"
-  | "NIN"
-  // 空值判断
-  | "IS_NULL"
-  | "IS_NOT_NULL"
-  // 范围与正则
-  | "BETWEEN"
-  | "REGEXP"
-  | "IREGEXP"
-  // 语义化的字符串操作
-  | "CONTAINS"
-  | "STARTS_WITH"
-  | "ENDS_WITH"
-  | "ICONTAINS"
-  | "ISTARTS_WITH"
-  | "IENDS_WITH"
-  // JSON / 数组 / 集合相关（按需在服务端映射为具体 DB 运算）
-  | "JSON_CONTAINS"
-  | "ARRAY_CONTAINS"
-  | "EXISTS"
-  | "SEARCH"
-  | "EXACT"
-  | "IEXACT";
-// 后台登录限制
-export type AdminLoginRestriction = {
-  //
-  // Behaviors: OPTIONAL
-  id?: number;
-  targetId?: number;
-  type?: AdminLoginRestriction_Type;
-  method?: AdminLoginRestriction_Method;
-  value?: string;
-  reason?: string;
-  createdBy?: number;
-  updatedBy?: number;
-  deletedBy?: number;
-  createdAt?: wellKnownTimestamp;
-  updatedAt?: wellKnownTimestamp;
-  deletedAt?: wellKnownTimestamp;
-};
-
-// 后台登录限制类型
-export type AdminLoginRestriction_Type =
-  | "LOGIN_RESTRICTION_TYPE_UNSPECIFIED"
-  | "BLACKLIST"
-  | "WHITELIST";
-// 后台登录限制方式
-export type AdminLoginRestriction_Method =
-  | "LOGIN_RESTRICTION_METHOD_UNSPECIFIED"
-  | "IP"
-  | "MAC"
-  | "REGION"
-  | "TIME"
-  | "DEVICE";
-// 查询后台登录限制列表 - 回应
-export type ListAdminLoginRestrictionResponse = {
-  items: AdminLoginRestriction[] | undefined;
-  total: number | undefined;
-};
-
-// 查询后台登录限制详情 - 请求
-export type GetAdminLoginRestrictionRequest = {
-  id?: number;
-  viewMask?: wellKnownFieldMask;
-};
-
-// 创建后台登录限制 - 请求
-export type CreateAdminLoginRestrictionRequest = {
-  data: AdminLoginRestriction | undefined;
-};
-
-// 更新后台登录限制 - 请求
-export type UpdateAdminLoginRestrictionRequest = {
-  id: number | undefined;
-  data: AdminLoginRestriction | undefined;
-  updateMask: wellKnownFieldMask | undefined;
-  allowMissing?: boolean;
-};
-
-// 删除后台登录限制 - 请求
-export type DeleteAdminLoginRestrictionRequest = {
-  id: number | undefined;
-};
-
-// 后台登录限制管理服务
-export interface AdminLoginRestrictionService {
-  // 查询后台登录限制列表
-  List(request: pagination_PagingRequest): Promise<ListAdminLoginRestrictionResponse>;
-  // 查询后台登录限制详情
-  Get(request: GetAdminLoginRestrictionRequest): Promise<AdminLoginRestriction>;
-  // 创建后台登录限制
-  Create(request: CreateAdminLoginRestrictionRequest): Promise<wellKnownEmpty>;
-  // 更新后台登录限制
-  Update(request: UpdateAdminLoginRestrictionRequest): Promise<wellKnownEmpty>;
-  // 删除后台登录限制
-  Delete(request: DeleteAdminLoginRestrictionRequest): Promise<wellKnownEmpty>;
-}
-
-export function createAdminLoginRestrictionServiceClient(
-  handler: RequestHandler
-): AdminLoginRestrictionService {
-  return {
-    List(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
-      const path = `admin/v1/login-restrictions`; // eslint-disable-line quotes
-      const body = null;
-      const queryParams: string[] = [];
-      if (request.page) {
-        queryParams.push(`page=${encodeURIComponent(request.page.toString())}`)
-      }
-      if (request.pageSize) {
-        queryParams.push(`pageSize=${encodeURIComponent(request.pageSize.toString())}`)
-      }
-      if (request.offset) {
-        queryParams.push(`offset=${encodeURIComponent(request.offset.toString())}`)
-      }
-      if (request.limit) {
-        queryParams.push(`limit=${encodeURIComponent(request.limit.toString())}`)
-      }
-      if (request.token) {
-        queryParams.push(`token=${encodeURIComponent(request.token.toString())}`)
-      }
-      if (request.noPaging) {
-        queryParams.push(`noPaging=${encodeURIComponent(request.noPaging.toString())}`)
-      }
-      if (request.orderBy) {
-        request.orderBy.forEach((x) => {
-          queryParams.push(`orderBy=${encodeURIComponent(x.toString())}`)
-        })
-      }
-      if (request.sorting?.field) {
-        queryParams.push(`sorting.field=${encodeURIComponent(request.sorting.field.toString())}`)
-      }
-      if (request.sorting?.order) {
-        queryParams.push(`sorting.order=${encodeURIComponent(request.sorting.order.toString())}`)
-      }
-      if (request.query) {
-        queryParams.push(`query=${encodeURIComponent(request.query.toString())}`)
-      }
-      if (request.or) {
-        queryParams.push(`or=${encodeURIComponent(request.or.toString())}`)
-      }
-      if (request.filterExpr?.type) {
-        queryParams.push(`filterExpr.type=${encodeURIComponent(request.filterExpr.type.toString())}`)
-      }
-      if (request.filterExpr?.conditions?.field) {
-        queryParams.push(`filterExpr.conditions.field=${encodeURIComponent(request.filterExpr.conditions.field.toString())}`)
-      }
-      if (request.filterExpr?.conditions?.op) {
-        queryParams.push(`filterExpr.conditions.op=${encodeURIComponent(request.filterExpr.conditions.op.toString())}`)
-      }
-      if (request.filterExpr?.conditions?.value) {
-        queryParams.push(`filterExpr.conditions.value=${encodeURIComponent(request.filterExpr.conditions.value.toString())}`)
-      }
-      if (request.filterExpr?.conditions?.values) {
-        request.filterExpr.conditions.values.forEach((x) => {
-          queryParams.push(`filterExpr.conditions.values=${encodeURIComponent(x.toString())}`)
-        })
-      }
-      if (request.fieldMask) {
-        queryParams.push(`fieldMask=${encodeURIComponent(request.fieldMask.toString())}`)
-      }
-      let uri = path;
-      if (queryParams.length > 0) {
-        uri += `?${queryParams.join("&")}`
-      }
-      return handler({
-        path: uri,
-        method: "GET",
-        body,
-      }, {
-        service: "AdminLoginRestrictionService",
-        method: "List",
-      }) as Promise<ListAdminLoginRestrictionResponse>;
-    },
-    Get(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
-      if (!request.id) {
-        throw new Error("missing required field request.id");
-      }
-      const path = `admin/v1/login-restrictions/${request.id}`; // eslint-disable-line quotes
-      const body = null;
-      const queryParams: string[] = [];
-      if (request.viewMask) {
-        queryParams.push(`viewMask=${encodeURIComponent(request.viewMask.toString())}`)
-      }
-      let uri = path;
-      if (queryParams.length > 0) {
-        uri += `?${queryParams.join("&")}`
-      }
-      return handler({
-        path: uri,
-        method: "GET",
-        body,
-      }, {
-        service: "AdminLoginRestrictionService",
-        method: "Get",
-      }) as Promise<AdminLoginRestriction>;
-    },
-    Create(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
-      const path = `admin/v1/login-restrictions`; // eslint-disable-line quotes
-      const body = JSON.stringify(request);
-      const queryParams: string[] = [];
-      let uri = path;
-      if (queryParams.length > 0) {
-        uri += `?${queryParams.join("&")}`
-      }
-      return handler({
-        path: uri,
-        method: "POST",
-        body,
-      }, {
-        service: "AdminLoginRestrictionService",
-        method: "Create",
-      }) as Promise<wellKnownEmpty>;
-    },
-    Update(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
-      if (!request.id) {
-        throw new Error("missing required field request.id");
-      }
-      const path = `admin/v1/login-restrictions/${request.id}`; // eslint-disable-line quotes
-      const body = JSON.stringify(request);
-      const queryParams: string[] = [];
-      let uri = path;
-      if (queryParams.length > 0) {
-        uri += `?${queryParams.join("&")}`
-      }
-      return handler({
-        path: uri,
-        method: "PUT",
-        body,
-      }, {
-        service: "AdminLoginRestrictionService",
-        method: "Update",
-      }) as Promise<wellKnownEmpty>;
-    },
-    Delete(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
-      if (!request.id) {
-        throw new Error("missing required field request.id");
-      }
-      const path = `admin/v1/login-restrictions/${request.id}`; // eslint-disable-line quotes
-      const body = null;
-      const queryParams: string[] = [];
-      let uri = path;
-      if (queryParams.length > 0) {
-        uri += `?${queryParams.join("&")}`
-      }
-      return handler({
-        path: uri,
-        method: "DELETE",
-        body,
-      }, {
-        service: "AdminLoginRestrictionService",
-        method: "Delete",
-      }) as Promise<wellKnownEmpty>;
-    },
-  };
-}
-// An empty JSON object
-type wellKnownEmpty = Record<never, never>;
-
-// 后台操作日志
-export type AdminOperationLog = {
-  //
-  // Behaviors: OPTIONAL
-  id?: number;
-  costTime?: wellKnownDuration;
-  success?: boolean;
-  requestId?: string;
-  statusCode?: number;
-  reason?: string;
-  location?: string;
-  operation?: string;
-  method?: string;
-  path?: string;
-  apiModule?: string;
-  apiDescription?: string;
-  referer?: string;
-  requestUri?: string;
-  requestHeader?: string;
-  requestBody?: string;
-  response?: string;
-  userId?: number;
-  username?: string;
-  clientIp?: string;
-  userAgent?: string;
-  browserName?: string;
-  browserVersion?: string;
-  clientId?: string;
-  clientName?: string;
-  osName?: string;
-  osVersion?: string;
-  tenantId?: number;
-  createdAt?: wellKnownTimestamp;
-};
-
-// Generated output always contains 0, 3, 6, or 9 fractional digits,
-// depending on required precision, followed by the suffix "s".
-// Accepted are any fractional digits (also none) as long as they fit
-// into nano-seconds precision and the suffix "s" is required.
-type wellKnownDuration = string;
-
-// 查询后台操作日志列表 - 回应
-export type ListAdminOperationLogResponse = {
-  items: AdminOperationLog[] | undefined;
-  total: number | undefined;
-};
-
-// 查询后台操作日志详情 - 请求
-export type GetAdminOperationLogRequest = {
-  id?: number;
-  viewMask?: wellKnownFieldMask;
-};
-
-// 创建后台操作日志 - 请求
-export type CreateAdminOperationLogRequest = {
-  data: AdminOperationLog | undefined;
-};
-
-// 更新后台操作日志 - 请求
-export type UpdateAdminOperationLogRequest = {
-  id: number | undefined;
-  data: AdminOperationLog | undefined;
-  updateMask: wellKnownFieldMask | undefined;
-  allowMissing?: boolean;
-};
-
-// 删除后台操作日志 - 请求
-export type DeleteAdminOperationLogRequest = {
-  id: number | undefined;
-};
-
-// 后台操作日志管理服务
-export interface AdminOperationLogService {
-  // 查询后台操作日志列表
-  List(request: pagination_PagingRequest): Promise<ListAdminOperationLogResponse>;
-  // 查询后台操作日志详情
-  Get(request: GetAdminOperationLogRequest): Promise<AdminOperationLog>;
-}
-
-export function createAdminOperationLogServiceClient(
-  handler: RequestHandler
-): AdminOperationLogService {
-  return {
-    List(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
-      const path = `admin/v1/admin-operation-logs`; // eslint-disable-line quotes
-      const body = null;
-      const queryParams: string[] = [];
-      if (request.page) {
-        queryParams.push(`page=${encodeURIComponent(request.page.toString())}`)
-      }
-      if (request.pageSize) {
-        queryParams.push(`pageSize=${encodeURIComponent(request.pageSize.toString())}`)
-      }
-      if (request.offset) {
-        queryParams.push(`offset=${encodeURIComponent(request.offset.toString())}`)
-      }
-      if (request.limit) {
-        queryParams.push(`limit=${encodeURIComponent(request.limit.toString())}`)
-      }
-      if (request.token) {
-        queryParams.push(`token=${encodeURIComponent(request.token.toString())}`)
-      }
-      if (request.noPaging) {
-        queryParams.push(`noPaging=${encodeURIComponent(request.noPaging.toString())}`)
-      }
-      if (request.orderBy) {
-        request.orderBy.forEach((x) => {
-          queryParams.push(`orderBy=${encodeURIComponent(x.toString())}`)
-        })
-      }
-      if (request.sorting?.field) {
-        queryParams.push(`sorting.field=${encodeURIComponent(request.sorting.field.toString())}`)
-      }
-      if (request.sorting?.order) {
-        queryParams.push(`sorting.order=${encodeURIComponent(request.sorting.order.toString())}`)
-      }
-      if (request.query) {
-        queryParams.push(`query=${encodeURIComponent(request.query.toString())}`)
-      }
-      if (request.or) {
-        queryParams.push(`or=${encodeURIComponent(request.or.toString())}`)
-      }
-      if (request.filterExpr?.type) {
-        queryParams.push(`filterExpr.type=${encodeURIComponent(request.filterExpr.type.toString())}`)
-      }
-      if (request.filterExpr?.conditions?.field) {
-        queryParams.push(`filterExpr.conditions.field=${encodeURIComponent(request.filterExpr.conditions.field.toString())}`)
-      }
-      if (request.filterExpr?.conditions?.op) {
-        queryParams.push(`filterExpr.conditions.op=${encodeURIComponent(request.filterExpr.conditions.op.toString())}`)
-      }
-      if (request.filterExpr?.conditions?.value) {
-        queryParams.push(`filterExpr.conditions.value=${encodeURIComponent(request.filterExpr.conditions.value.toString())}`)
-      }
-      if (request.filterExpr?.conditions?.values) {
-        request.filterExpr.conditions.values.forEach((x) => {
-          queryParams.push(`filterExpr.conditions.values=${encodeURIComponent(x.toString())}`)
-        })
-      }
-      if (request.fieldMask) {
-        queryParams.push(`fieldMask=${encodeURIComponent(request.fieldMask.toString())}`)
-      }
-      let uri = path;
-      if (queryParams.length > 0) {
-        uri += `?${queryParams.join("&")}`
-      }
-      return handler({
-        path: uri,
-        method: "GET",
-        body,
-      }, {
-        service: "AdminOperationLogService",
-        method: "List",
-      }) as Promise<ListAdminOperationLogResponse>;
-    },
-    Get(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
-      if (!request.id) {
-        throw new Error("missing required field request.id");
-      }
-      const path = `admin/v1/admin-operation-logs/${request.id}`; // eslint-disable-line quotes
-      const body = null;
-      const queryParams: string[] = [];
-      if (request.viewMask) {
-        queryParams.push(`viewMask=${encodeURIComponent(request.viewMask.toString())}`)
-      }
-      let uri = path;
-      if (queryParams.length > 0) {
-        uri += `?${queryParams.join("&")}`
-      }
-      return handler({
-        path: uri,
-        method: "GET",
-        body,
-      }, {
-        service: "AdminOperationLogService",
-        method: "Get",
-      }) as Promise<AdminOperationLog>;
-    },
-  };
-}
 // API资源管理服务
 export interface ApiService {
   // 查询API资源列表
@@ -843,6 +116,14 @@ export interface ApiService {
   // 查询路由数据
   GetWalkRouteData(request: wellKnownEmpty): Promise<permissionservicev1_ListApiResponse>;
 }
+
+type RequestType = {
+  path: string;
+  method: string;
+  body: string | null;
+};
+
+type RequestHandler = (request: RequestType, meta: { service: string, method: string }) => Promise<unknown>;
 
 export function createApiServiceClient(
   handler: RequestHandler
@@ -1036,6 +317,141 @@ export function createApiServiceClient(
     },
   };
 }
+// ------------------------------
+// 分页通用请求
+// ------------------------------
+export type pagination_PagingRequest = {
+  // 当前页码（从1开始，默认1）
+  page?: number;
+  // 每页条数（默认10，建议设置上限如100）
+  pageSize?: number;
+  // 跳过的记录数（从0开始，默认0）
+  offset?: number;
+  // 最多返回的记录数（默认10，建议设置上限如100）
+  limit?: number;
+  // 上一页最后一条记录的游标（如ID/时间戳+ID，首次请求为空）
+  token?: string;
+  // 是否不分页，如果为true，则page和pageSize参数无效。
+  noPaging?: boolean;
+  // 排序条件，其语法为JSON字符串，例如：{"val1", "-val2"}。字段名前加'-'为降序，否则为升序。
+  orderBy: string[] | undefined;
+  // 排序规则（可选，建议必传以保证分页结果稳定）
+  sorting: pagination_Sorting[] | undefined;
+  // AND过滤参数，其语法为json格式的字符串，如：{"key1":"val1","key2":"val2"}，具体请参见：https://github.com/tx7do/go-utils/tree/main/entgo/query/README.md
+  query?: string;
+  // OR过滤参数，语法同AND过滤参数。
+  or?: string;
+  // 复杂过滤表达式
+  filterExpr?: pagination_FilterExpr;
+  // 字段掩码，其作用为SELECT中的字段，其语法为使用逗号分隔字段名，例如：id,realName,userName。如果为空则选中所有字段，即SELECT *。
+  fieldMask?: wellKnownFieldMask;
+};
+
+// 排序规则（分页场景通常需配合排序保证结果稳定）
+export type pagination_Sorting = {
+  // 排序字段（如"id"、"create_time"）
+  field: string | undefined;
+  order: pagination_Sorting_Order | undefined;
+};
+
+// 排序方向（ASC/DESC，默认ASC）
+export type pagination_Sorting_Order =
+  | "ASC"
+  | "DESC";
+// 过滤表达式
+export type pagination_FilterExpr = {
+  // 过滤表达式类型
+  type: pagination_ExprType | undefined;
+  // 条件列表
+  conditions: pagination_Condition[] | undefined;
+  // 子表达式列表
+  groups: pagination_FilterExpr[] | undefined;
+};
+
+// 过滤表达式类型
+export type pagination_ExprType =
+  | "EXPR_TYPE_UNSPECIFIED"
+  | "AND"
+  | "OR";
+// 单个条件
+export type pagination_Condition = {
+  // 过滤字段名
+  field: string | undefined;
+  // 过滤操作符
+  op: pagination_Operator | undefined;
+  // 过滤值（单值）
+  value?: string;
+  // 过滤值（多值，如IN操作符）
+  values: string[] | undefined;
+};
+
+// 操作符枚举
+export type pagination_Operator =
+  // 未指定
+  | "OPERATOR_UNSPECIFIED"
+  // 基本比较
+  | "EQ"
+  | "NEQ"
+  | "GT"
+  | "GTE"
+  | "LT"
+  | "LTE"
+  // 模糊 / 大小写不敏感模糊 / 非模糊
+  | "LIKE"
+  | "ILIKE"
+  | "NOT_LIKE"
+  // 集合操作
+  | "IN"
+  | "NIN"
+  // 空值判断
+  | "IS_NULL"
+  | "IS_NOT_NULL"
+  // 范围与正则
+  | "BETWEEN"
+  | "REGEXP"
+  | "IREGEXP"
+  // 语义化的字符串操作
+  | "CONTAINS"
+  | "STARTS_WITH"
+  | "ENDS_WITH"
+  | "ICONTAINS"
+  | "ISTARTS_WITH"
+  | "IENDS_WITH"
+  // JSON / 数组 / 集合相关（按需在服务端映射为具体 DB 运算）
+  | "JSON_CONTAINS"
+  | "ARRAY_CONTAINS"
+  | "EXISTS"
+  | "SEARCH"
+  | "EXACT"
+  | "IEXACT";
+// In JSON, a field mask is encoded as a single string where paths are
+// separated by a comma. Fields name in each path are converted
+// to/from lower-camel naming conventions.
+// As an example, consider the following message declarations:
+//
+//     message Profile {
+//       User user = 1;
+//       Photo photo = 2;
+//     }
+//     message User {
+//       string display_name = 1;
+//       string address = 2;
+//     }
+//
+// In proto a field mask for `Profile` may look as such:
+//
+//     mask {
+//       paths: "user.display_name"
+//       paths: "photo"
+//     }
+//
+// In JSON, the same mask is represented as below:
+//
+//     {
+//       mask: "user.displayName,photo"
+//     }
+type wellKnownFieldMask = string;
+
 // 查询列表 - 回应
 export type permissionservicev1_ListApiResponse = {
   items: permissionservicev1_Api[] | undefined;
@@ -1070,6 +486,11 @@ export type permissionservicev1_Api_Scope =
 export type permissionservicev1_Api_Status =
   | "OFF"
   | "ON";
+// Encoded using RFC 3339, where generated output will always be Z-normalized
+// and uses 0, 3, 6 or 9 fractional digits.
+// Offsets other than "Z" are also accepted.
+type wellKnownTimestamp = string;
+
 // 查询 - 请求
 export type permissionservicev1_GetApiRequest = {
   id?: number;
@@ -1080,6 +501,9 @@ export type permissionservicev1_GetApiRequest = {
 export type permissionservicev1_CreateApiRequest = {
   data: permissionservicev1_Api | undefined;
 };
+
+// An empty JSON object
+type wellKnownEmpty = Record<never, never>;
 
 // 更新 - 请求
 export type permissionservicev1_UpdateApiRequest = {
@@ -2493,6 +1917,402 @@ export type internal_messageservicev1_MarkNotificationAsReadRequest = {
   recipientIds: number[] | undefined;
 };
 
+// 登录审计日志
+export type LoginAuditLog = {
+  //
+  // Behaviors: OPTIONAL
+  id?: number;
+  loginIp?: string;
+  loginMac?: string;
+  loginTime?: wellKnownTimestamp;
+  statusCode?: number;
+  success?: boolean;
+  reason?: string;
+  location?: string;
+  userAgent?: string;
+  browserName?: string;
+  browserVersion?: string;
+  clientId?: string;
+  clientName?: string;
+  osName?: string;
+  osVersion?: string;
+  userId?: number;
+  username?: string;
+  createdAt?: wellKnownTimestamp;
+};
+
+// 查询登录审计日志列表 - 回应
+export type ListLoginAuditLogResponse = {
+  items: LoginAuditLog[] | undefined;
+  total: number | undefined;
+};
+
+// 查询登录审计日志详情 - 请求
+export type GetLoginAuditLogRequest = {
+  id?: number;
+  viewMask?: wellKnownFieldMask;
+};
+
+// 创建登录审计日志 - 请求
+export type CreateLoginAuditLogRequest = {
+  data: LoginAuditLog | undefined;
+};
+
+// 更新登录审计日志 - 请求
+export type UpdateLoginAuditLogRequest = {
+  id: number | undefined;
+  data: LoginAuditLog | undefined;
+  updateMask: wellKnownFieldMask | undefined;
+  allowMissing?: boolean;
+};
+
+// 删除登录审计日志 - 请求
+export type DeleteLoginAuditLogRequest = {
+  id: number | undefined;
+};
+
+// 登录审计日志管理服务
+export interface LoginAuditLogService {
+  // 查询登录审计日志列表
+  List(request: pagination_PagingRequest): Promise<ListLoginAuditLogResponse>;
+  // 查询登录审计日志详情
+  Get(request: GetLoginAuditLogRequest): Promise<LoginAuditLog>;
+}
+
+export function createLoginAuditLogServiceClient(
+  handler: RequestHandler
+): LoginAuditLogService {
+  return {
+    List(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      const path = `admin/v1/login-audit-logs`; // eslint-disable-line quotes
+      const body = null;
+      const queryParams: string[] = [];
+      if (request.page) {
+        queryParams.push(`page=${encodeURIComponent(request.page.toString())}`)
+      }
+      if (request.pageSize) {
+        queryParams.push(`pageSize=${encodeURIComponent(request.pageSize.toString())}`)
+      }
+      if (request.offset) {
+        queryParams.push(`offset=${encodeURIComponent(request.offset.toString())}`)
+      }
+      if (request.limit) {
+        queryParams.push(`limit=${encodeURIComponent(request.limit.toString())}`)
+      }
+      if (request.token) {
+        queryParams.push(`token=${encodeURIComponent(request.token.toString())}`)
+      }
+      if (request.noPaging) {
+        queryParams.push(`noPaging=${encodeURIComponent(request.noPaging.toString())}`)
+      }
+      if (request.orderBy) {
+        request.orderBy.forEach((x) => {
+          queryParams.push(`orderBy=${encodeURIComponent(x.toString())}`)
+        })
+      }
+      if (request.sorting?.field) {
+        queryParams.push(`sorting.field=${encodeURIComponent(request.sorting.field.toString())}`)
+      }
+      if (request.sorting?.order) {
+        queryParams.push(`sorting.order=${encodeURIComponent(request.sorting.order.toString())}`)
+      }
+      if (request.query) {
+        queryParams.push(`query=${encodeURIComponent(request.query.toString())}`)
+      }
+      if (request.or) {
+        queryParams.push(`or=${encodeURIComponent(request.or.toString())}`)
+      }
+      if (request.filterExpr?.type) {
+        queryParams.push(`filterExpr.type=${encodeURIComponent(request.filterExpr.type.toString())}`)
+      }
+      if (request.filterExpr?.conditions?.field) {
+        queryParams.push(`filterExpr.conditions.field=${encodeURIComponent(request.filterExpr.conditions.field.toString())}`)
+      }
+      if (request.filterExpr?.conditions?.op) {
+        queryParams.push(`filterExpr.conditions.op=${encodeURIComponent(request.filterExpr.conditions.op.toString())}`)
+      }
+      if (request.filterExpr?.conditions?.value) {
+        queryParams.push(`filterExpr.conditions.value=${encodeURIComponent(request.filterExpr.conditions.value.toString())}`)
+      }
+      if (request.filterExpr?.conditions?.values) {
+        request.filterExpr.conditions.values.forEach((x) => {
+          queryParams.push(`filterExpr.conditions.values=${encodeURIComponent(x.toString())}`)
+        })
+      }
+      if (request.fieldMask) {
+        queryParams.push(`fieldMask=${encodeURIComponent(request.fieldMask.toString())}`)
+      }
+      let uri = path;
+      if (queryParams.length > 0) {
+        uri += `?${queryParams.join("&")}`
+      }
+      return handler({
+        path: uri,
+        method: "GET",
+        body,
+      }, {
+        service: "LoginAuditLogService",
+        method: "List",
+      }) as Promise<ListLoginAuditLogResponse>;
+    },
+    Get(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      if (!request.id) {
+        throw new Error("missing required field request.id");
+      }
+      const path = `admin/v1/login-audit-logs/${request.id}`; // eslint-disable-line quotes
+      const body = null;
+      const queryParams: string[] = [];
+      if (request.viewMask) {
+        queryParams.push(`viewMask=${encodeURIComponent(request.viewMask.toString())}`)
+      }
+      let uri = path;
+      if (queryParams.length > 0) {
+        uri += `?${queryParams.join("&")}`
+      }
+      return handler({
+        path: uri,
+        method: "GET",
+        body,
+      }, {
+        service: "LoginAuditLogService",
+        method: "Get",
+      }) as Promise<LoginAuditLog>;
+    },
+  };
+}
+// 登录策略
+export type LoginPolicy = {
+  //
+  // Behaviors: OPTIONAL
+  id?: number;
+  targetId?: number;
+  type?: LoginPolicy_Type;
+  method?: LoginPolicy_Method;
+  value?: string;
+  reason?: string;
+  createdBy?: number;
+  updatedBy?: number;
+  deletedBy?: number;
+  createdAt?: wellKnownTimestamp;
+  updatedAt?: wellKnownTimestamp;
+  deletedAt?: wellKnownTimestamp;
+};
+
+// 登录策略类型
+export type LoginPolicy_Type =
+  | "LOGIN_RESTRICTION_TYPE_UNSPECIFIED"
+  | "BLACKLIST"
+  | "WHITELIST";
+// 登录策略方式
+export type LoginPolicy_Method =
+  | "LOGIN_RESTRICTION_METHOD_UNSPECIFIED"
+  | "IP"
+  | "MAC"
+  | "REGION"
+  | "TIME"
+  | "DEVICE";
+// 查询登录策略列表 - 回应
+export type ListLoginPolicyResponse = {
+  items: LoginPolicy[] | undefined;
+  total: number | undefined;
+};
+
+// 查询登录策略详情 - 请求
+export type GetLoginPolicyRequest = {
+  id?: number;
+  viewMask?: wellKnownFieldMask;
+};
+
+// 创建登录策略 - 请求
+export type CreateLoginPolicyRequest = {
+  data: LoginPolicy | undefined;
+};
+
+// 更新登录策略 - 请求
+export type UpdateLoginPolicyRequest = {
+  id: number | undefined;
+  data: LoginPolicy | undefined;
+  updateMask: wellKnownFieldMask | undefined;
+  allowMissing?: boolean;
+};
+
+// 删除登录策略 - 请求
+export type DeleteLoginPolicyRequest = {
+  id: number | undefined;
+};
+
+// 登录策略管理服务
+export interface LoginPolicyService {
+  // 查询登录策略列表
+  List(request: pagination_PagingRequest): Promise<ListLoginPolicyResponse>;
+  // 查询登录策略详情
+  Get(request: GetLoginPolicyRequest): Promise<LoginPolicy>;
+  // 创建登录策略
+  Create(request: CreateLoginPolicyRequest): Promise<wellKnownEmpty>;
+  // 更新登录策略
+  Update(request: UpdateLoginPolicyRequest): Promise<wellKnownEmpty>;
+  // 删除登录策略
+  Delete(request: DeleteLoginPolicyRequest): Promise<wellKnownEmpty>;
+}
+
+export function createLoginPolicyServiceClient(
+  handler: RequestHandler
+): LoginPolicyService {
+  return {
+    List(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      const path = `admin/v1/login-policies`; // eslint-disable-line quotes
+      const body = null;
+      const queryParams: string[] = [];
+      if (request.page) {
+        queryParams.push(`page=${encodeURIComponent(request.page.toString())}`)
+      }
+      if (request.pageSize) {
+        queryParams.push(`pageSize=${encodeURIComponent(request.pageSize.toString())}`)
+      }
+      if (request.offset) {
+        queryParams.push(`offset=${encodeURIComponent(request.offset.toString())}`)
+      }
+      if (request.limit) {
+        queryParams.push(`limit=${encodeURIComponent(request.limit.toString())}`)
+      }
+      if (request.token) {
+        queryParams.push(`token=${encodeURIComponent(request.token.toString())}`)
+      }
+      if (request.noPaging) {
+        queryParams.push(`noPaging=${encodeURIComponent(request.noPaging.toString())}`)
+      }
+      if (request.orderBy) {
+        request.orderBy.forEach((x) => {
+          queryParams.push(`orderBy=${encodeURIComponent(x.toString())}`)
+        })
+      }
+      if (request.sorting?.field) {
+        queryParams.push(`sorting.field=${encodeURIComponent(request.sorting.field.toString())}`)
+      }
+      if (request.sorting?.order) {
+        queryParams.push(`sorting.order=${encodeURIComponent(request.sorting.order.toString())}`)
+      }
+      if (request.query) {
+        queryParams.push(`query=${encodeURIComponent(request.query.toString())}`)
+      }
+      if (request.or) {
+        queryParams.push(`or=${encodeURIComponent(request.or.toString())}`)
+      }
+      if (request.filterExpr?.type) {
+        queryParams.push(`filterExpr.type=${encodeURIComponent(request.filterExpr.type.toString())}`)
+      }
+      if (request.filterExpr?.conditions?.field) {
+        queryParams.push(`filterExpr.conditions.field=${encodeURIComponent(request.filterExpr.conditions.field.toString())}`)
+      }
+      if (request.filterExpr?.conditions?.op) {
+        queryParams.push(`filterExpr.conditions.op=${encodeURIComponent(request.filterExpr.conditions.op.toString())}`)
+      }
+      if (request.filterExpr?.conditions?.value) {
+        queryParams.push(`filterExpr.conditions.value=${encodeURIComponent(request.filterExpr.conditions.value.toString())}`)
+      }
+      if (request.filterExpr?.conditions?.values) {
+        request.filterExpr.conditions.values.forEach((x) => {
+          queryParams.push(`filterExpr.conditions.values=${encodeURIComponent(x.toString())}`)
+        })
+      }
+      if (request.fieldMask) {
+        queryParams.push(`fieldMask=${encodeURIComponent(request.fieldMask.toString())}`)
+      }
+      let uri = path;
+      if (queryParams.length > 0) {
+        uri += `?${queryParams.join("&")}`
+      }
+      return handler({
+        path: uri,
+        method: "GET",
+        body,
+      }, {
+        service: "LoginPolicyService",
+        method: "List",
+      }) as Promise<ListLoginPolicyResponse>;
+    },
+    Get(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      if (!request.id) {
+        throw new Error("missing required field request.id");
+      }
+      const path = `admin/v1/login-policies/${request.id}`; // eslint-disable-line quotes
+      const body = null;
+      const queryParams: string[] = [];
+      if (request.viewMask) {
+        queryParams.push(`viewMask=${encodeURIComponent(request.viewMask.toString())}`)
+      }
+      let uri = path;
+      if (queryParams.length > 0) {
+        uri += `?${queryParams.join("&")}`
+      }
+      return handler({
+        path: uri,
+        method: "GET",
+        body,
+      }, {
+        service: "LoginPolicyService",
+        method: "Get",
+      }) as Promise<LoginPolicy>;
+    },
+    Create(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      const path = `admin/v1/login-policies`; // eslint-disable-line quotes
+      const body = JSON.stringify(request);
+      const queryParams: string[] = [];
+      let uri = path;
+      if (queryParams.length > 0) {
+        uri += `?${queryParams.join("&")}`
+      }
+      return handler({
+        path: uri,
+        method: "POST",
+        body,
+      }, {
+        service: "LoginPolicyService",
+        method: "Create",
+      }) as Promise<wellKnownEmpty>;
+    },
+    Update(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      if (!request.id) {
+        throw new Error("missing required field request.id");
+      }
+      const path = `admin/v1/login-policies/${request.id}`; // eslint-disable-line quotes
+      const body = JSON.stringify(request);
+      const queryParams: string[] = [];
+      let uri = path;
+      if (queryParams.length > 0) {
+        uri += `?${queryParams.join("&")}`
+      }
+      return handler({
+        path: uri,
+        method: "PUT",
+        body,
+      }, {
+        service: "LoginPolicyService",
+        method: "Update",
+      }) as Promise<wellKnownEmpty>;
+    },
+    Delete(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      if (!request.id) {
+        throw new Error("missing required field request.id");
+      }
+      const path = `admin/v1/login-policies/${request.id}`; // eslint-disable-line quotes
+      const body = null;
+      const queryParams: string[] = [];
+      let uri = path;
+      if (queryParams.length > 0) {
+        uri += `?${queryParams.join("&")}`
+      }
+      return handler({
+        path: uri,
+        method: "DELETE",
+        body,
+      }, {
+        service: "LoginPolicyService",
+        method: "Delete",
+      }) as Promise<wellKnownEmpty>;
+    },
+  };
+}
 // 后台菜单管理服务
 export interface MenuService {
   // 查询菜单列表
@@ -2818,6 +2638,186 @@ export type permissionservicev1_DeleteMenuRequest = {
   id: number | undefined;
 };
 
+// 操作审计日志
+export type OperationAuditLog = {
+  //
+  // Behaviors: OPTIONAL
+  id?: number;
+  costTime?: wellKnownDuration;
+  success?: boolean;
+  requestId?: string;
+  statusCode?: number;
+  reason?: string;
+  location?: string;
+  operation?: string;
+  method?: string;
+  path?: string;
+  apiModule?: string;
+  apiDescription?: string;
+  referer?: string;
+  requestUri?: string;
+  requestHeader?: string;
+  requestBody?: string;
+  response?: string;
+  userId?: number;
+  username?: string;
+  clientIp?: string;
+  userAgent?: string;
+  browserName?: string;
+  browserVersion?: string;
+  clientId?: string;
+  clientName?: string;
+  osName?: string;
+  osVersion?: string;
+  tenantId?: number;
+  createdAt?: wellKnownTimestamp;
+};
+
+// Generated output always contains 0, 3, 6, or 9 fractional digits,
+// depending on required precision, followed by the suffix "s".
+// Accepted are any fractional digits (also none) as long as they fit
+// into nano-seconds precision and the suffix "s" is required.
+type wellKnownDuration = string;
+
+// 查询操作审计日志列表 - 回应
+export type ListOperationAuditLogResponse = {
+  items: OperationAuditLog[] | undefined;
+  total: number | undefined;
+};
+
+// 查询操作审计日志详情 - 请求
+export type GetOperationAuditLogRequest = {
+  id?: number;
+  viewMask?: wellKnownFieldMask;
+};
+
+// 创建操作审计日志 - 请求
+export type CreateOperationAuditLogRequest = {
+  data: OperationAuditLog | undefined;
+};
+
+// 更新操作审计日志 - 请求
+export type UpdateOperationAuditLogRequest = {
+  id: number | undefined;
+  data: OperationAuditLog | undefined;
+  updateMask: wellKnownFieldMask | undefined;
+  allowMissing?: boolean;
+};
+
+// 删除操作审计日志 - 请求
+export type DeleteOperationAuditLogRequest = {
+  id: number | undefined;
+};
+
+// 操作审计日志管理服务
+export interface OperationAuditLogService {
+  // 查询操作审计日志列表
+  List(request: pagination_PagingRequest): Promise<ListOperationAuditLogResponse>;
+  // 查询操作审计日志详情
+  Get(request: GetOperationAuditLogRequest): Promise<OperationAuditLog>;
+}
+
+export function createOperationAuditLogServiceClient(
+  handler: RequestHandler
+): OperationAuditLogService {
+  return {
+    List(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      const path = `admin/v1/operation-audit-logs`; // eslint-disable-line quotes
+      const body = null;
+      const queryParams: string[] = [];
+      if (request.page) {
+        queryParams.push(`page=${encodeURIComponent(request.page.toString())}`)
+      }
+      if (request.pageSize) {
+        queryParams.push(`pageSize=${encodeURIComponent(request.pageSize.toString())}`)
+      }
+      if (request.offset) {
+        queryParams.push(`offset=${encodeURIComponent(request.offset.toString())}`)
+      }
+      if (request.limit) {
+        queryParams.push(`limit=${encodeURIComponent(request.limit.toString())}`)
+      }
+      if (request.token) {
+        queryParams.push(`token=${encodeURIComponent(request.token.toString())}`)
+      }
+      if (request.noPaging) {
+        queryParams.push(`noPaging=${encodeURIComponent(request.noPaging.toString())}`)
+      }
+      if (request.orderBy) {
+        request.orderBy.forEach((x) => {
+          queryParams.push(`orderBy=${encodeURIComponent(x.toString())}`)
+        })
+      }
+      if (request.sorting?.field) {
+        queryParams.push(`sorting.field=${encodeURIComponent(request.sorting.field.toString())}`)
+      }
+      if (request.sorting?.order) {
+        queryParams.push(`sorting.order=${encodeURIComponent(request.sorting.order.toString())}`)
+      }
+      if (request.query) {
+        queryParams.push(`query=${encodeURIComponent(request.query.toString())}`)
+      }
+      if (request.or) {
+        queryParams.push(`or=${encodeURIComponent(request.or.toString())}`)
+      }
+      if (request.filterExpr?.type) {
+        queryParams.push(`filterExpr.type=${encodeURIComponent(request.filterExpr.type.toString())}`)
+      }
+      if (request.filterExpr?.conditions?.field) {
+        queryParams.push(`filterExpr.conditions.field=${encodeURIComponent(request.filterExpr.conditions.field.toString())}`)
+      }
+      if (request.filterExpr?.conditions?.op) {
+        queryParams.push(`filterExpr.conditions.op=${encodeURIComponent(request.filterExpr.conditions.op.toString())}`)
+      }
+      if (request.filterExpr?.conditions?.value) {
+        queryParams.push(`filterExpr.conditions.value=${encodeURIComponent(request.filterExpr.conditions.value.toString())}`)
+      }
+      if (request.filterExpr?.conditions?.values) {
+        request.filterExpr.conditions.values.forEach((x) => {
+          queryParams.push(`filterExpr.conditions.values=${encodeURIComponent(x.toString())}`)
+        })
+      }
+      if (request.fieldMask) {
+        queryParams.push(`fieldMask=${encodeURIComponent(request.fieldMask.toString())}`)
+      }
+      let uri = path;
+      if (queryParams.length > 0) {
+        uri += `?${queryParams.join("&")}`
+      }
+      return handler({
+        path: uri,
+        method: "GET",
+        body,
+      }, {
+        service: "OperationAuditLogService",
+        method: "List",
+      }) as Promise<ListOperationAuditLogResponse>;
+    },
+    Get(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      if (!request.id) {
+        throw new Error("missing required field request.id");
+      }
+      const path = `admin/v1/operation-audit-logs/${request.id}`; // eslint-disable-line quotes
+      const body = null;
+      const queryParams: string[] = [];
+      if (request.viewMask) {
+        queryParams.push(`viewMask=${encodeURIComponent(request.viewMask.toString())}`)
+      }
+      let uri = path;
+      if (queryParams.length > 0) {
+        uri += `?${queryParams.join("&")}`
+      }
+      return handler({
+        path: uri,
+        method: "GET",
+        body,
+      }, {
+        service: "OperationAuditLogService",
+        method: "Get",
+      }) as Promise<OperationAuditLog>;
+    },
+  };
+}
 // 组织单元服务
 export interface OrgUnitService {
   // 查询组织单元列表

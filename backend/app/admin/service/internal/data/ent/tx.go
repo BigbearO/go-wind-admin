@@ -12,12 +12,6 @@ import (
 // Tx is a transactional client that is created by calling Client.Tx().
 type Tx struct {
 	config
-	// AdminLoginLog is the client for interacting with the AdminLoginLog builders.
-	AdminLoginLog *AdminLoginLogClient
-	// AdminLoginRestriction is the client for interacting with the AdminLoginRestriction builders.
-	AdminLoginRestriction *AdminLoginRestrictionClient
-	// AdminOperationLog is the client for interacting with the AdminOperationLog builders.
-	AdminOperationLog *AdminOperationLogClient
 	// Api is the client for interacting with the Api builders.
 	Api *APIClient
 	// DictEntry is the client for interacting with the DictEntry builders.
@@ -34,6 +28,10 @@ type Tx struct {
 	InternalMessageRecipient *InternalMessageRecipientClient
 	// Language is the client for interacting with the Language builders.
 	Language *LanguageClient
+	// LoginAuditLog is the client for interacting with the LoginAuditLog builders.
+	LoginAuditLog *LoginAuditLogClient
+	// LoginPolicy is the client for interacting with the LoginPolicy builders.
+	LoginPolicy *LoginPolicyClient
 	// Membership is the client for interacting with the Membership builders.
 	Membership *MembershipClient
 	// MembershipOrgUnit is the client for interacting with the MembershipOrgUnit builders.
@@ -44,6 +42,8 @@ type Tx struct {
 	MembershipRole *MembershipRoleClient
 	// Menu is the client for interacting with the Menu builders.
 	Menu *MenuClient
+	// OperationAuditLog is the client for interacting with the OperationAuditLog builders.
+	OperationAuditLog *OperationAuditLogClient
 	// OrgUnit is the client for interacting with the OrgUnit builders.
 	OrgUnit *OrgUnitClient
 	// Permission is the client for interacting with the Permission builders.
@@ -213,9 +213,6 @@ func (tx *Tx) Client() *Client {
 }
 
 func (tx *Tx) init() {
-	tx.AdminLoginLog = NewAdminLoginLogClient(tx.config)
-	tx.AdminLoginRestriction = NewAdminLoginRestrictionClient(tx.config)
-	tx.AdminOperationLog = NewAdminOperationLogClient(tx.config)
 	tx.Api = NewAPIClient(tx.config)
 	tx.DictEntry = NewDictEntryClient(tx.config)
 	tx.DictType = NewDictTypeClient(tx.config)
@@ -224,11 +221,14 @@ func (tx *Tx) init() {
 	tx.InternalMessageCategory = NewInternalMessageCategoryClient(tx.config)
 	tx.InternalMessageRecipient = NewInternalMessageRecipientClient(tx.config)
 	tx.Language = NewLanguageClient(tx.config)
+	tx.LoginAuditLog = NewLoginAuditLogClient(tx.config)
+	tx.LoginPolicy = NewLoginPolicyClient(tx.config)
 	tx.Membership = NewMembershipClient(tx.config)
 	tx.MembershipOrgUnit = NewMembershipOrgUnitClient(tx.config)
 	tx.MembershipPosition = NewMembershipPositionClient(tx.config)
 	tx.MembershipRole = NewMembershipRoleClient(tx.config)
 	tx.Menu = NewMenuClient(tx.config)
+	tx.OperationAuditLog = NewOperationAuditLogClient(tx.config)
 	tx.OrgUnit = NewOrgUnitClient(tx.config)
 	tx.Permission = NewPermissionClient(tx.config)
 	tx.PermissionApi = NewPermissionApiClient(tx.config)
@@ -257,7 +257,7 @@ func (tx *Tx) init() {
 // of them in order to commit or rollback the transaction.
 //
 // If a closed transaction is embedded in one of the generated entities, and the entity
-// applies a query, for example: AdminLoginLog.QueryXXX(), the query will be executed
+// applies a query, for example: Api.QueryXXX(), the query will be executed
 // through the driver which created this transaction.
 //
 // Note that txDriver is not goroutine safe.

@@ -6,7 +6,7 @@ import (
 	"github.com/tx7do/go-crud/gorm/mixin"
 )
 
-type AdminLoginLog struct {
+type LoginAuditLog struct {
 	mixin.AutoIncrementID
 	mixin.CreatedAt
 
@@ -28,6 +28,6 @@ type AdminLoginLog struct {
 	Location       *string    `gorm:"column:location;type:varchar(255);comment:登录地理位置"`
 }
 
-func (AdminLoginLog) TableName() string {
-	return "sys_admin_login_logs"
+func (LoginAuditLog) TableName() string {
+	return "sys_login-audit-logs"
 }

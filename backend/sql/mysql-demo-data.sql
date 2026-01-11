@@ -61,7 +61,7 @@ INSERT INTO `sys_tasks`(type, type_name, task_payload, cron_spec, enable, create
 VALUES
     ('PERIODIC', 'backup', '{ "name": "test"}', '0 * * * *', 1, NOW());
 
--- 后台登录限制
+-- 登录策略
 TRUNCATE TABLE `sys_admin_login_restrictions`;
 INSERT INTO `sys_admin_login_restrictions`(id, target_id, type, method, value, reason, created_at)
 VALUES

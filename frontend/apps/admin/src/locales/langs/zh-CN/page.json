@@ -306,8 +306,8 @@
       "create": "创建私信"
     }
   },
-  "adminLoginLog": {
-    "moduleName": "登录日志",
+  "loginAuditLog": {
+    "moduleName": "登录审计日志",
     "username": "登录名",
     "success": "登录状态",
     "loginTime": "登录时间",
@@ -315,7 +315,7 @@
     "clientName": "登录平台",
     "loginIp": "登录地址"
   },
-  "adminOperationLog": {
+  "operationAuditLog": {
     "moduleName": "操作日志",
     "username": "操作者名",
     "success": "操作状态",
@@ -338,8 +338,8 @@
       "sync": "同步API"
     }
   },
-  "adminLoginRestriction": {
-    "moduleName": "登录限制",
+  "loginPolicy": {
+    "moduleName": "登录策略",
     "targetId": "目标用户ID",
     "type": "限制类型",
     "method": "限制方式",

@@ -138,7 +138,7 @@ VALUES
 ;
 SELECT setval('sys_tasks_id_seq', (SELECT MAX(id) FROM sys_tasks));
 
--- 后台登录限制
+-- 登录策略
 INSERT INTO public.sys_admin_login_restrictions(id, target_id, type, method, value, reason, created_at)
 VALUES
 (1, 1, 'BLACKLIST', 'IP', '127.0.0.1', '无理由', now()),

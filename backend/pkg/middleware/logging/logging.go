@@ -34,8 +34,8 @@ func Server(opts ...Option) middleware.Middleware {
 			// 统计耗时
 			latency := time.Since(startTime).Seconds()
 
-			var operationLogData *adminV1.AdminOperationLog
-			var loginLogData *adminV1.AdminLoginLog
+			var operationLogData *adminV1.OperationAuditLog
+			var loginLogData *adminV1.LoginAuditLog
 
 			if tr, ok := transport.FromServerContext(ctx); ok {
 				var htr *http.Transport
@@ -73,12 +73,12 @@ func Server(opts ...Option) middleware.Middleware {
 }
 
 // fillLoginLog 填充登录日志
-func fillLoginLog(htr *http.Transport) *adminV1.AdminLoginLog {
+func fillLoginLog(htr *http.Transport) *adminV1.LoginAuditLog {
 	if htr.Operation() != adminV1.OperationAuthenticationServiceLogin {
 		return nil
 	}
 
-	loginLogData := &adminV1.AdminLoginLog{}
+	loginLogData := &adminV1.LoginAuditLog{}
 
 	clientIp := getClientRealIP(htr.Request())
 
@@ -118,12 +118,12 @@ func fillLoginLog(htr *http.Transport) *adminV1.AdminLoginLog {
 }
 
 // fillOperationLog 填充操作日志
-func fillOperationLog(htr *http.Transport) *adminV1.AdminOperationLog {
+func fillOperationLog(htr *http.Transport) *adminV1.OperationAuditLog {
 	if htr.Operation() == adminV1.OperationAuthenticationServiceLogin {
 		return nil
 	}
 
-	operationLogData := &adminV1.AdminOperationLog{}
+	operationLogData := &adminV1.OperationAuditLog{}
 
 	clientIp := getClientRealIP(htr.Request())
 	referer, _ := url.QueryUnescape(htr.RequestHeader().Get(HeaderKeyReferer))

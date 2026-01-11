@@ -4,8 +4,8 @@ import (
 	"github.com/tx7do/go-crud/gorm/mixin"
 )
 
-// AdminLoginRestriction 对应表 sys_admin_login_restrictions
-type AdminLoginRestriction struct {
+// LoginPolicy 对应表 sys_admin_login_restrictions
+type LoginPolicy struct {
 	mixin.AutoIncrementID
 	mixin.TimeAt
 	mixin.OperatorID
@@ -19,6 +19,6 @@ type AdminLoginRestriction struct {
 	Method *string `gorm:"column:method;type:varchar(32);default:IP;comment:限制方式"`
 }
 
-func (AdminLoginRestriction) TableName() string {
+func (LoginPolicy) TableName() string {
 	return "sys_admin_login_restrictions"
 }

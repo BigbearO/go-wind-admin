@@ -18,26 +18,26 @@ const log: RouteRecordRaw[] = [
     },
     children: [
       {
-        path: 'admin-login-log',
-        name: 'AdminLoginLog',
+        path: 'login-audit-logs',
+        name: 'LoginAuditLog',
         meta: {
           icon: 'lucide:user-lock',
-          title: $t('menu.log.adminLoginLog'),
+          title: $t('menu.log.loginAuditLog'),
           authority: ['platform_admin'],
         },
-        component: () => import('#/views/app/log/admin_login_log/index.vue'),
+        component: () => import('#/views/app/log/login_audit_log/index.vue'),
       },
 
       {
-        path: 'admin-operation-log',
-        name: 'AdminOperationLog',
+        path: 'operation-audit-logs',
+        name: 'OperationAuditLog',
         meta: {
           icon: 'lucide:file-clock',
-          title: $t('menu.log.adminOperationLog'),
+          title: $t('menu.log.operationAuditLog'),
           authority: ['platform_admin'],
         },
         component: () =>
-          import('#/views/app/log/admin_operation_log/index.vue'),
+          import('#/views/app/log/operation_audit_log/index.vue'),
       },
     ],
   },

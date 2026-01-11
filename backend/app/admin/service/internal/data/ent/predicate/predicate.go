@@ -6,15 +6,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
-// AdminLoginLog is the predicate function for adminloginlog builders.
-type AdminLoginLog func(*sql.Selector)
-
-// AdminLoginRestriction is the predicate function for adminloginrestriction builders.
-type AdminLoginRestriction func(*sql.Selector)
-
-// AdminOperationLog is the predicate function for adminoperationlog builders.
-type AdminOperationLog func(*sql.Selector)
-
 // Api is the predicate function for api builders.
 type Api func(*sql.Selector)
 
@@ -39,6 +30,12 @@ type InternalMessageRecipient func(*sql.Selector)
 // Language is the predicate function for language builders.
 type Language func(*sql.Selector)
 
+// LoginAuditLog is the predicate function for loginauditlog builders.
+type LoginAuditLog func(*sql.Selector)
+
+// LoginPolicy is the predicate function for loginpolicy builders.
+type LoginPolicy func(*sql.Selector)
+
 // Membership is the predicate function for membership builders.
 type Membership func(*sql.Selector)
 
@@ -53,6 +50,9 @@ type MembershipRole func(*sql.Selector)
 
 // Menu is the predicate function for menu builders.
 type Menu func(*sql.Selector)
+
+// OperationAuditLog is the predicate function for operationauditlog builders.
+type OperationAuditLog func(*sql.Selector)
 
 // OrgUnit is the predicate function for orgunit builders.
 type OrgUnit func(*sql.Selector)

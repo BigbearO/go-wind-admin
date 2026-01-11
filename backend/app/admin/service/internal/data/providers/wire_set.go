@@ -32,7 +32,7 @@ var ProviderSet = wire.NewSet(
 	data.NewDictTypeRepo,
 	data.NewDictEntryRepo,
 	data.NewTaskRepo,
-	data.NewAdminLoginRestrictionRepo,
+	data.NewLoginPolicyRepo,
 
 	data.NewOrgUnitRepo,
 	data.NewPositionRepo,
@@ -63,8 +63,8 @@ var ProviderSet = wire.NewSet(
 	data.NewPermissionAuditLogRepo,
 	data.NewPolicyEvaluationLogRepo,
 
-	data.NewAdminLoginLogRepo,
-	data.NewAdminOperationLogRepo,
+	data.NewLoginAuditLogRepo,
+	data.NewOperationAuditLogRepo,
 
 	data.NewFileRepo,
 

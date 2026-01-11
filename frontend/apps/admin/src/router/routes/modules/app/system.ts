@@ -51,15 +51,14 @@ const system: RouteRecordRaw[] = [
       },
 
       {
-        path: 'admin-login-restrictions',
-        name: 'AdminLoginRestrictionManagement',
+        path: 'login-policies',
+        name: 'LoginPolicyManagement',
         meta: {
           icon: 'lucide:shield-x',
-          title: $t('menu.system.adminLoginRestriction'),
+          title: $t('menu.system.loginPolicy'),
           authority: ['platform_admin'],
         },
-        component: () =>
-          import('#/views/app/system/admin_login_restriction/index.vue'),
+        component: () => import('#/views/app/system/login_policy/index.vue'),
       },
     ],
   },

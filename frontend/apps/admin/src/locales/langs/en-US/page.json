@@ -234,7 +234,7 @@
       "create": "Create"
     }
   },
-  "adminLoginLog": {
+  "loginAuditLog": {
     "moduleName": "Login Log",
     "username": "User Name",
     "success": "Success",
@@ -243,7 +243,7 @@
     "clientName": "Platform",
     "loginIp": "Login IP"
   },
-  "adminOperationLog": {
+  "operationAuditLog": {
     "moduleName": "Operation Log",
     "username": "User Name",
     "success": "Success",
@@ -265,7 +265,7 @@
       "sync": "Sync API"
     }
   },
-  "adminLoginRestriction": {
+  "loginPolicy": {
     "moduleName": "Login Restriction",
     "targetId": "Target User ID",
     "type": "Restriction Type",

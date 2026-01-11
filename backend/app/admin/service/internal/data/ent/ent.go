@@ -6,9 +6,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"go-wind-admin/app/admin/service/internal/data/ent/adminloginlog"
-	"go-wind-admin/app/admin/service/internal/data/ent/adminloginrestriction"
-	"go-wind-admin/app/admin/service/internal/data/ent/adminoperationlog"
 	"go-wind-admin/app/admin/service/internal/data/ent/api"
 	"go-wind-admin/app/admin/service/internal/data/ent/dictentry"
 	"go-wind-admin/app/admin/service/internal/data/ent/dicttype"
@@ -17,11 +14,14 @@ import (
 	"go-wind-admin/app/admin/service/internal/data/ent/internalmessagecategory"
 	"go-wind-admin/app/admin/service/internal/data/ent/internalmessagerecipient"
 	"go-wind-admin/app/admin/service/internal/data/ent/language"
+	"go-wind-admin/app/admin/service/internal/data/ent/loginauditlog"
+	"go-wind-admin/app/admin/service/internal/data/ent/loginpolicy"
 	"go-wind-admin/app/admin/service/internal/data/ent/membership"
 	"go-wind-admin/app/admin/service/internal/data/ent/membershiporgunit"
 	"go-wind-admin/app/admin/service/internal/data/ent/membershipposition"
 	"go-wind-admin/app/admin/service/internal/data/ent/membershiprole"
 	"go-wind-admin/app/admin/service/internal/data/ent/menu"
+	"go-wind-admin/app/admin/service/internal/data/ent/operationauditlog"
 	"go-wind-admin/app/admin/service/internal/data/ent/orgunit"
 	"go-wind-admin/app/admin/service/internal/data/ent/permission"
 	"go-wind-admin/app/admin/service/internal/data/ent/permissionapi"
@@ -107,9 +107,6 @@ var (
 func checkColumn(t, c string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			adminloginlog.Table:            adminloginlog.ValidColumn,
-			adminloginrestriction.Table:    adminloginrestriction.ValidColumn,
-			adminoperationlog.Table:        adminoperationlog.ValidColumn,
 			api.Table:                      api.ValidColumn,
 			dictentry.Table:                dictentry.ValidColumn,
 			dicttype.Table:                 dicttype.ValidColumn,
@@ -118,11 +115,14 @@ func checkColumn(t, c string) error {
 			internalmessagecategory.Table:  internalmessagecategory.ValidColumn,
 			internalmessagerecipient.Table: internalmessagerecipient.ValidColumn,
 			language.Table:                 language.ValidColumn,
+			loginauditlog.Table:            loginauditlog.ValidColumn,
+			loginpolicy.Table:              loginpolicy.ValidColumn,
 			membership.Table:               membership.ValidColumn,
 			membershiporgunit.Table:        membershiporgunit.ValidColumn,
 			membershipposition.Table:       membershipposition.ValidColumn,
 			membershiprole.Table:           membershiprole.ValidColumn,
 			menu.Table:                     menu.ValidColumn,
+			operationauditlog.Table:        operationauditlog.ValidColumn,
 			orgunit.Table:                  orgunit.ValidColumn,
 			permission.Table:               permission.ValidColumn,
 			permissionapi.Table:            permissionapi.ValidColumn,

@@ -29,12 +29,12 @@
     "dict": "数据字典",
     "task": "任务调度",
     "file": "文件管理",
-    "adminLoginRestriction": "登录限制"
+    "loginPolicy": "登录策略"
   },
   "log": {
     "moduleName": "日志审计",
-    "adminLoginLog": "登录日志",
-    "adminOperationLog": "操作日志"
+    "loginAuditLog": "登录日志",
+    "operationAuditLog": "操作日志"
   },
   "internalMessage": {
     "moduleName": "站内消息",

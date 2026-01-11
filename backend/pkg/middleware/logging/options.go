@@ -6,8 +6,8 @@ import (
 	adminV1 "go-wind-admin/api/gen/go/admin/service/v1"
 )
 
-type WriteOperationLogFunc func(ctx context.Context, data *adminV1.AdminOperationLog) error
-type WriteLoginLogFunc func(ctx context.Context, data *adminV1.AdminLoginLog) error
+type WriteOperationLogFunc func(ctx context.Context, data *adminV1.OperationAuditLog) error
+type WriteLoginLogFunc func(ctx context.Context, data *adminV1.LoginAuditLog) error
 
 type options struct {
 	writeOperationLogFunc WriteOperationLogFunc
