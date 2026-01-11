@@ -18,8 +18,8 @@ func NewMenuPermissionConverter() *MenuPermissionConverter {
 }
 
 // ConvertCode 将菜单的完整路径和类型转换为权限代码
-func (c *MenuPermissionConverter) ConvertCode(fullPath, title string, typ permissionV1.Menu_Type) string {
-	path := strings.TrimSpace(fullPath)
+func (c *MenuPermissionConverter) ConvertCode(path, title string, typ permissionV1.Menu_Type) string {
+	path = strings.TrimSpace(path)
 	if path == "" {
 		return ""
 	}
@@ -35,14 +35,26 @@ func (c *MenuPermissionConverter) ConvertCode(fullPath, title string, typ permis
 		return ""
 	}
 
-	for i, p := range paths {
-		paths[i] = strings.TrimSpace(p)
-		paths[i] = inflection.Singular(p)
+	if len(paths) > 1 {
+		paths = paths[1:]
 	}
+
+	newPaths := paths[:0]
+	for _, p := range paths {
+		p = strings.TrimSpace(p)
+		p = inflection.Singular(p)
+		if p == "" {
+			continue
+		}
+		if strings.HasPrefix(p, ":") {
+			continue
+		}
+		newPaths = append(newPaths, p)
+	}
+	paths = newPaths
 
 	// 将路径段用 ':' 连接，作为权限主体
 	permBase := strings.Join(paths, ":")
-	permBase = inflection.Singular(permBase)
 
 	// 根据菜单类型，决定是否添加动作后缀
 	action := c.typeToAction(title, typ)
@@ -90,7 +102,6 @@ func (c *MenuPermissionConverter) ComposeMenuPaths(menus []*permissionV1.Menu) {
 		seen[id] = true
 		defer delete(seen, id)
 
-		//part := strings.Trim(menu.GetPath(), "/")
 		part := menu.GetPath()
 		parentId := menu.GetParentId()
 		// 根节点或无父节点
@@ -135,7 +146,7 @@ func (c *MenuPermissionConverter) typeToAction(title string, typ permissionV1.Me
 	case permissionV1.Menu_CATALOG:
 		return "dir"
 	case permissionV1.Menu_MENU:
-		return "access"
+		return "view"
 	case permissionV1.Menu_BUTTON:
 		return c.buttonAction(title)
 	case permissionV1.Menu_EMBEDDED:
@@ -210,7 +221,7 @@ func (c *MenuPermissionConverter) buttonAction(title string) string {
 	}
 
 	if matchAnyKeyword(title, addKeys) {
-		return "add"
+		return "create"
 	}
 	if matchAnyKeyword(title, editKeys) {
 		return "edit"

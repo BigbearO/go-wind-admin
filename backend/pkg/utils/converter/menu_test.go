@@ -37,11 +37,11 @@ func TestMenuPermissionConverter_ConvertCode(t *testing.T) {
 			want:     permBaseFromPath("/users") + ":dir",
 		},
 		{
-			name:     "menu access",
+			name:     "menu view",
 			fullPath: "/orders/",
 			title:    "",
 			typ:      permissionV1.Menu_MENU,
-			want:     permBaseFromPath("/orders/") + ":access",
+			want:     permBaseFromPath("/orders/") + ":view",
 		},
 		{
 			name:     "embedded view",
@@ -55,35 +55,35 @@ func TestMenuPermissionConverter_ConvertCode(t *testing.T) {
 			fullPath: "/admin/settings",
 			title:    "",
 			typ:      permissionV1.Menu_LINK,
-			want:     permBaseFromPath("/admin/settings") + ":jump",
+			want:     "setting:jump",
 		},
 		{
 			name:     "button default act",
 			fullPath: "admin/button",
 			title:    "",
 			typ:      permissionV1.Menu_BUTTON,
-			want:     permBaseFromPath("admin/button") + ":act",
+			want:     "button:act",
 		},
 		{
-			name:     "button add (中文)",
+			name:     "button create (中文)",
 			fullPath: "/users",
 			title:    "新增",
 			typ:      permissionV1.Menu_BUTTON,
-			want:     permBaseFromPath("/users") + ":add",
+			want:     permBaseFromPath("/users") + ":create",
 		},
 		{
 			name:     "button export (中文)",
 			fullPath: "/reports",
 			title:    "导出",
 			typ:      permissionV1.Menu_BUTTON,
-			want:     permBaseFromPath("/reports") + ":export",
+			want:     "report:export",
 		},
 		{
-			name:     "complex keep v2",
-			fullPath: "/admin/v2/inner",
+			name:     "complex keep",
+			fullPath: "/admin/inner",
 			title:    "",
 			typ:      permissionV1.Menu_MENU,
-			want:     permBaseFromPath("/admin/v2/inner") + ":access",
+			want:     "inner:view",
 		},
 	}
 
@@ -107,7 +107,7 @@ func TestMenuPermissionConverter_typeToAction(t *testing.T) {
 		want  string
 	}{
 		{name: "catalog -> dir", typ: permissionV1.Menu_CATALOG, title: "", want: "dir"},
-		{name: "menu -> access", typ: permissionV1.Menu_MENU, title: "", want: "access"},
+		{name: "menu -> access", typ: permissionV1.Menu_MENU, title: "", want: "view"},
 		{name: "embedded -> view", typ: permissionV1.Menu_EMBEDDED, title: "", want: "view"},
 		{name: "link -> jump", typ: permissionV1.Menu_LINK, title: "", want: "jump"},
 		{name: "unknown type -> empty", typ: permissionV1.Menu_Type(999), title: "", want: ""},
@@ -115,14 +115,14 @@ func TestMenuPermissionConverter_typeToAction(t *testing.T) {
 		// Button cases: 不同 title 映射到不同 action
 		{name: "button empty -> act", typ: permissionV1.Menu_BUTTON, title: "", want: "act"},
 		{name: "button trim space -> act", typ: permissionV1.Menu_BUTTON, title: "   ", want: "act"},
-		{name: "button add chinese -> add", typ: permissionV1.Menu_BUTTON, title: "新增", want: "add"},
-		{name: "button add english -> add", typ: permissionV1.Menu_BUTTON, title: "Add User", want: "add"},
+		{name: "button add Chinese -> add", typ: permissionV1.Menu_BUTTON, title: "新增", want: "create"},
+		{name: "button add English -> add", typ: permissionV1.Menu_BUTTON, title: "Add User", want: "create"},
 		{name: "button edit -> edit", typ: permissionV1.Menu_BUTTON, title: "编辑", want: "edit"},
 		{name: "button save -> edit", typ: permissionV1.Menu_BUTTON, title: "Save", want: "edit"},
 		{name: "button delete -> delete", typ: permissionV1.Menu_BUTTON, title: "删除", want: "delete"},
 		{name: "button import -> import", typ: permissionV1.Menu_BUTTON, title: "导入", want: "import"},
 		{name: "button export -> export", typ: permissionV1.Menu_BUTTON, title: "导出", want: "export"},
-		{name: "button mixed -> add (prefix match)", typ: permissionV1.Menu_BUTTON, title: "Add-to-list", want: "add"},
+		{name: "button mixed -> add (prefix match)", typ: permissionV1.Menu_BUTTON, title: "Add-to-list", want: "create"},
 		{name: "button substring fallback -> export", typ: permissionV1.Menu_BUTTON, title: "一键导出为Excel", want: "export"},
 	}
 
@@ -134,4 +134,9 @@ func TestMenuPermissionConverter_typeToAction(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestMenuPermissionConverte1(t *testing.T) {
+	c := NewMenuPermissionConverter()
+	t.Log(c.ConvertCode("/opa/users/:id", "", permissionV1.Menu_MENU))
 }

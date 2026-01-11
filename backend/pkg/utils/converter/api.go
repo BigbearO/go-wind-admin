@@ -35,7 +35,19 @@ func (c *ApiPermissionConverter) ConvertCodeByOperationID(operationID string) st
 		resource = resource + ":" + stringcase.KebabCase(name)
 	}
 
-	return resource + ":" + stringcase.KebabCase(action)
+	action = stringcase.KebabCase(action)
+	switch action {
+	case "list", "get", "retrieve", "query", "exist":
+		action = "view"
+	case "create", "add", "new":
+		action = "create"
+	case "update", "edit", "modify", "change":
+		action = "edit"
+	case "delete", "remove", "del":
+		action = "delete"
+	}
+
+	return resource + ":" + action
 }
 
 // ConvertCodeByPath 通过 HTTP 方法和路径生成 resource:action 风格的 code（如 users:delete, users:list）

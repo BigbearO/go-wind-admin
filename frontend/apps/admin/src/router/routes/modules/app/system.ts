@@ -8,7 +8,7 @@ const system: RouteRecordRaw[] = [
     path: '/system',
     name: 'System',
     component: BasicLayout,
-    redirect: '/system/dictionaries',
+    redirect: '/system/dict',
     meta: {
       order: 2005,
       icon: 'lucide:settings',
@@ -18,7 +18,7 @@ const system: RouteRecordRaw[] = [
     },
     children: [
       {
-        path: 'dictionaries',
+        path: 'dict',
         name: 'DictManagement',
         meta: {
           icon: 'lucide:library-big',

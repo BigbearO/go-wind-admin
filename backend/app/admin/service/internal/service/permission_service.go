@@ -328,30 +328,25 @@ func (s *PermissionService) appendAPis(ctx context.Context, permissions []*permi
 		return a.GetOperation() > b.GetOperation()
 	})
 
-	var unmatchedApis []*permissionV1.Api
+	codes := make(map[string][]uint32)
 	for _, api := range apis.Items {
-		code := s.apiPermissionConverter.ConvertCodeByOperationID(api.GetOperation())
-		if code == "" {
-			continue
-		}
-
-		for _, perm := range permissions {
-			if perm.GetCode() == code {
-				perm.ApiIds = append(perm.ApiIds, api.GetId())
-				break
-			} else {
-				unmatchedApis = append(unmatchedApis, api)
-			}
-		}
-	}
-
-	for _, api := range unmatchedApis {
+		//code := s.apiPermissionConverter.ConvertCodeByOperationID(api.GetOperation())
 		code := s.apiPermissionConverter.ConvertCodeByPath(api.GetMethod(), api.GetPath())
 		if code == "" {
 			continue
 		}
-		s.log.Debugf("appendAPis: try to match API %s - %s by path code %s", api.GetOperation(), api.GetPath(), code)
+		codes[code] = append(codes[code], api.GetId())
 	}
+
+	for _, perm := range permissions {
+		permIds, exist := codes[perm.GetCode()]
+		if exist {
+			perm.ApiIds = append(perm.ApiIds, permIds...)
+			delete(codes, perm.GetCode())
+		}
+	}
+
+	s.log.Debugf("appendAPis: unmatched permission codes: %v", codes)
 
 	return nil
 }
@@ -423,8 +418,6 @@ func (s *PermissionService) SyncMenus(ctx context.Context, _ *emptypb.Empty) (*e
 			//s.log.Debugf("SyncMenus: created permission group for menu %s - %s", menu.GetName(), permissionCode)
 		}
 
-		s.appendAPis(ctx, permissions)
-
 		perm := &permissionV1.Permission{
 			Name:      trans.Ptr(title),
 			Code:      trans.Ptr(permissionCode),
@@ -438,6 +431,8 @@ func (s *PermissionService) SyncMenus(ctx context.Context, _ *emptypb.Empty) (*e
 
 		mapPermissions[module] = append(mapPermissions[module], perm)
 	}
+
+	s.appendAPis(ctx, permissions)
 
 	var finalPermissionGroups []*permissionV1.PermissionGroup
 	if finalPermissionGroups, err = s.permissionGroupRepo.BatchCreate(ctx, permissionGroups); err != nil {

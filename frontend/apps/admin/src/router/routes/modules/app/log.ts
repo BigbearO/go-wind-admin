@@ -5,10 +5,10 @@ import { $t } from '#/locales';
 
 const log: RouteRecordRaw[] = [
   {
-    path: '/logs',
+    path: '/log',
     name: 'LogAuditManagement',
     component: BasicLayout,
-    redirect: '/logs/login',
+    redirect: '/log/login',
     meta: {
       order: 2004,
       icon: 'lucide:activity',
@@ -18,7 +18,7 @@ const log: RouteRecordRaw[] = [
     },
     children: [
       {
-        path: 'login',
+        path: 'admin-login-log',
         name: 'AdminLoginLog',
         meta: {
           icon: 'lucide:user-lock',
@@ -29,7 +29,7 @@ const log: RouteRecordRaw[] = [
       },
 
       {
-        path: 'operation',
+        path: 'admin-operation-log',
         name: 'AdminOperationLog',
         meta: {
           icon: 'lucide:file-clock',

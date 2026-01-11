@@ -17,7 +17,7 @@ const tenant: RouteRecordRaw[] = [
     },
     children: [
       {
-        path: 'members',
+        path: 'tenant',
         name: 'TenantMemberManagement',
         meta: {
           icon: 'lucide:building-2',
