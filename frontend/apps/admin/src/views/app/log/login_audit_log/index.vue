@@ -150,6 +150,8 @@ const gridOptions: VxeGridProps<LoginAuditLog> = {
             created_at__gte: startTime,
             created_at__lte: endTime,
           },
+          null,
+          ['-created_at'],
         );
       },
     },

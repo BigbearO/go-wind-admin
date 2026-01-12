@@ -141,6 +141,8 @@ const gridOptions: VxeGridProps<ApiAuditLog> = {
             created_at__gte: startTime,
             created_at__lte: endTime,
           },
+          null,
+          ['-created_at'],
         );
       },
     },

@@ -65,7 +65,7 @@ func (l *LoginAuditLogMiddleware) Handle(ctx context.Context, htr *http.Transpor
 
 	loginAuditLog.GeoLocation = fillGeoLocation(clientIp)
 
-	if username, err := extractUsernameFromRequest(htr.Request()); err == nil {
+	if username, _ := extractUsernameFromRequest(htr.Request()); username != "" {
 		loginAuditLog.Username = trans.Ptr(username)
 	}
 
