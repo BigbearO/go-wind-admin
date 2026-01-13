@@ -161,8 +161,8 @@ VALUES (1, null, 'CATALOG', 'Dashboard', '/dashboard', null, 'BasicLayout', 'ON'
        (63, 60, 'MENU', 'TaskManagement', 'tasks', null, 'app/system/task/index.vue', 'ON', now(),
         '{"order":3, "title":"menu.system.task", "icon":"lucide:list-todo", "keepAlive":false, "hideInBreadcrumb":false, "hideInMenu":false, "hideInTab":false}'),
        (64, 60, 'MENU', 'LoginPolicyManagement', 'login-policies', null,
-        'app/system/admin_login_restriction/index.vue', 'ON', now(),
-        '{"order":5, "title":"menu.system.adminLoginRestriction", "icon":"lucide:shield-x", "keepAlive":false, "hideInBreadcrumb":false, "hideInMenu":false, "hideInTab":false}')
+        'app/system/login_policy/index.vue', 'ON', now(),
+        '{"order":5, "title":"menu.system.loginPolicy", "icon":"lucide:shield-x", "keepAlive":false, "hideInBreadcrumb":false, "hideInMenu":false, "hideInTab":false}')
 ;
 SELECT setval('sys_menus_id_seq', (SELECT MAX(id) FROM sys_menus));
 

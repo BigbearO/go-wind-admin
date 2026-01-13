@@ -104,8 +104,7 @@
     "description": "权限描述",
     "button": {
       "create": "创建权限",
-      "syncApi": "同步API",
-      "syncMenu": "同步菜单"
+      "syncPermissions": "同步权限"
     }
   },
   "permissionGroup": {

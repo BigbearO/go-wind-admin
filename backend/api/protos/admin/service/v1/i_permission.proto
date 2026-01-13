@@ -54,18 +54,10 @@ service PermissionService {
     };
   }
 
-  // 同步API资源
-  rpc SyncApis (google.protobuf.Empty) returns (google.protobuf.Empty) {
+  // 同步权限点
+  rpc SyncPermissions (google.protobuf.Empty) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/admin/v1/permissions/sync:apis"
-      body: "*"
-    };
-  }
-
-  // 同步菜单资源
-  rpc SyncMenus (google.protobuf.Empty) returns (google.protobuf.Empty) {
-    option (google.api.http) = {
-      post: "/admin/v1/permissions/sync:menus"
+      post: "/admin/v1/permissions/sync:perms"
       body: "*"
     };
   }

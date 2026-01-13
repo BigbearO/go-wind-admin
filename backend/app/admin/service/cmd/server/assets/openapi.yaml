@@ -2597,26 +2597,12 @@ paths:
                 "200":
                     description: OK
                     content: {}
-    /admin/v1/permissions/sync:apis:
+    /admin/v1/permissions/sync:perms:
         post:
             tags:
                 - PermissionService
-            description: 同步API资源
-            operationId: PermissionService_SyncApis
-            requestBody:
-                content:
-                    application/json: {}
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content: {}
-    /admin/v1/permissions/sync:menus:
-        post:
-            tags:
-                - PermissionService
-            description: 同步菜单资源
-            operationId: PermissionService_SyncMenus
+            description: 同步权限点
+            operationId: PermissionService_SyncPermissions
             requestBody:
                 content:
                     application/json: {}

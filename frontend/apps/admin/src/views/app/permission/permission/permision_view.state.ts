@@ -119,7 +119,9 @@ export const usePermissionViewStore = defineStore('permission-view', {
     },
 
     reloadGroupList() {
-      this.currentGroupId = null;
+      this.groupList = { items: [], total: 0 };
+      this.permList = { items: [], total: 0 };
+      this.currentGroupId = 0;
       this.needReloadGroupList = true;
     },
   },

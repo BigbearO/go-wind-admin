@@ -6,7 +6,7 @@ import { Page, type VbenFormProps } from '@vben/common-ui';
 import dayjs from 'dayjs';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { type ApiAuditLog } from '#/generated/api/admin/service/v1';
+import { type auditservicev1_ApiAuditLog as ApiAuditLog } from '#/generated/api/admin/service/v1';
 import { $t } from '#/locales';
 import {
   methodList,

@@ -80,7 +80,7 @@ const gridOptions: VxeGridProps<PermissionGroup> = {
   },
   rowConfig: {
     isHover: true,
-    isCurrent: false,
+    isCurrent: true,
   },
   treeConfig: {
     parentField: 'parentId',

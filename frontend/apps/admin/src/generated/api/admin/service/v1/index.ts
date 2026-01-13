@@ -3548,10 +3548,8 @@ export interface PermissionService {
   Update(request: permissionservicev1_UpdatePermissionRequest): Promise<wellKnownEmpty>;
   // 删除权限点
   Delete(request: permissionservicev1_DeletePermissionRequest): Promise<wellKnownEmpty>;
-  // 同步API资源
-  SyncApis(request: wellKnownEmpty): Promise<wellKnownEmpty>;
-  // 同步菜单资源
-  SyncMenus(request: wellKnownEmpty): Promise<wellKnownEmpty>;
+  // 同步权限点
+  SyncPermissions(request: wellKnownEmpty): Promise<wellKnownEmpty>;
 }
 
 export function createPermissionServiceClient(
@@ -3719,8 +3717,8 @@ export function createPermissionServiceClient(
         method: "Delete",
       }) as Promise<wellKnownEmpty>;
     },
-    SyncApis(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
-      const path = `admin/v1/permissions/sync:apis`; // eslint-disable-line quotes
+    SyncPermissions(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      const path = `admin/v1/permissions/sync:perms`; // eslint-disable-line quotes
       const body = JSON.stringify(request);
       const queryParams: string[] = [];
       let uri = path;
@@ -3733,24 +3731,7 @@ export function createPermissionServiceClient(
         body,
       }, {
         service: "PermissionService",
-        method: "SyncApis",
-      }) as Promise<wellKnownEmpty>;
-    },
-    SyncMenus(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
-      const path = `admin/v1/permissions/sync:menus`; // eslint-disable-line quotes
-      const body = JSON.stringify(request);
-      const queryParams: string[] = [];
-      let uri = path;
-      if (queryParams.length > 0) {
-        uri += `?${queryParams.join("&")}`
-      }
-      return handler({
-        path: uri,
-        method: "POST",
-        body,
-      }, {
-        service: "PermissionService",
-        method: "SyncMenus",
+        method: "SyncPermissions",
       }) as Promise<wellKnownEmpty>;
     },
   };

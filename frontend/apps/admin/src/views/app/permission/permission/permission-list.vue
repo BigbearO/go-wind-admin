@@ -185,35 +185,16 @@ async function handleDelete(row: any) {
   }
 }
 
-async function handleSyncApis() {
+async function handleSyncPermissions() {
   console.log('同步');
 
   try {
-    await permissionStore.syncApis();
-
-    notification.success({
-      message: $t('ui.notification.sync_success'),
-    });
-
-    await gridApi.reload();
-  } catch {
-    notification.error({
-      message: $t('ui.notification.sync_failed'),
-    });
-  }
-}
-
-async function handleSyncMenus() {
-  console.log('同步');
-
-  try {
-    await permissionStore.syncMenus();
-
-    notification.success({
-      message: $t('ui.notification.sync_success'),
-    });
-
+    await permissionStore.syncPermissions();
     permissionViewStore.reloadGroupList();
+
+    notification.success({
+      message: $t('ui.notification.sync_success'),
+    });
   } catch {
     notification.error({
       message: $t('ui.notification.sync_failed'),
@@ -247,24 +228,10 @@ watch(
             moduleName: $t('page.permission.moduleName'),
           })
         "
-        @confirm="() => handleSyncApis()"
+        @confirm="() => handleSyncPermissions()"
       >
         <a-button type="primary" danger class="mr-2">
-          {{ $t('page.permission.button.syncApi') }}
-        </a-button>
-      </a-popconfirm>
-      <a-popconfirm
-        :cancel-text="$t('ui.button.cancel')"
-        :ok-text="$t('ui.button.ok')"
-        :title="
-          $t('ui.text.do_you_want_sync_api', {
-            moduleName: $t('page.permission.moduleName'),
-          })
-        "
-        @confirm="() => handleSyncMenus()"
-      >
-        <a-button type="primary" danger class="mr-2">
-          {{ $t('page.permission.button.syncMenu') }}
+          {{ $t('page.permission.button.syncPermissions') }}
         </a-button>
       </a-popconfirm>
     </template>

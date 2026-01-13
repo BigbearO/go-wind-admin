@@ -27,4 +27,6 @@ const (
 
 	// TenantAdminRoleCode 租户管理员角色代码
 	TenantAdminRoleCode = "tenant_admin"
+
+	UncategorizedPermissionGroup = "uncategorized"
 )
