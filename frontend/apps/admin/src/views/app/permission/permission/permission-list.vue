@@ -89,7 +89,11 @@ const gridOptions: VxeGridProps<Permission> = {
   proxyConfig: {
     ajax: {
       query: async ({ page }, formValues) => {
-        console.log('query:', formValues);
+        console.log(
+          'permission list query:',
+          formValues,
+          permissionViewStore.currentGroupId,
+        );
 
         return await permissionViewStore.fetchPermissionList(
           permissionViewStore.currentGroupId,
@@ -185,6 +189,7 @@ async function handleDelete(row: any) {
   }
 }
 
+/* 同步权限 */
 async function handleSyncPermissions() {
   console.log('同步');
 
@@ -224,7 +229,7 @@ watch(
         :cancel-text="$t('ui.button.cancel')"
         :ok-text="$t('ui.button.ok')"
         :title="
-          $t('ui.text.do_you_want_sync_api', {
+          $t('ui.text.do_you_want_sync_permissions', {
             moduleName: $t('page.permission.moduleName'),
           })
         "

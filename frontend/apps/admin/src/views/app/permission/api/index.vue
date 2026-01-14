@@ -201,7 +201,7 @@ async function handleSync() {
           :cancel-text="$t('ui.button.cancel')"
           :ok-text="$t('ui.button.ok')"
           :title="
-            $t('ui.text.do_you_want_sync_api', {
+            $t('ui.text.do_you_want_sync_permissions', {
               moduleName: $t('page.api.moduleName'),
             })
           "

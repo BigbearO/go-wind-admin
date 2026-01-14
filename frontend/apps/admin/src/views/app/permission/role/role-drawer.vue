@@ -149,11 +149,11 @@ const [Drawer, drawerApi] = useVbenDrawer({
     const finalValues = deepClone(values);
 
     if (
-      finalValues.apis !== null &&
-      Array.isArray(finalValues.apis) &&
-      finalValues.apis.length > 0
+      finalValues.permissions !== null &&
+      Array.isArray(finalValues.permissions) &&
+      finalValues.permissions.length > 0
     ) {
-      finalValues.apis = filterNumbers(values.apis);
+      finalValues.permissions = filterNumbers(values.permissions);
     }
 
     console.log(getTitle.value, finalValues, data.value.row);
