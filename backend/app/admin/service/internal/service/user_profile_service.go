@@ -62,17 +62,6 @@ func (s *UserProfileService) GetUser(ctx context.Context, _ *emptypb.Empty) (*us
 		return nil, authenticationV1.ErrorNotFound("user not found")
 	}
 
-	// 获取用户角色、岗位、组织单元等信息
-	roleIDs, positionIDs, orgUnitIDs, err := s.userRepo.ListUserRelationIDs(ctx, user.GetId())
-	if err != nil {
-		s.log.Errorf("list user [%d] membership ids failed [%s]", user.GetId(), err.Error())
-		return nil, authenticationV1.ErrorServiceUnavailable("获取用户角色失败")
-	}
-
-	user.RoleIds = roleIDs
-	user.PositionIds = positionIDs
-	user.OrgUnitIds = orgUnitIDs
-
 	roleCodes, err := s.roleRepo.ListRoleCodesByRoleIds(ctx, user.GetRoleIds())
 	if err != nil {
 		s.log.Errorf("get user role codes failed [%s]", err.Error())

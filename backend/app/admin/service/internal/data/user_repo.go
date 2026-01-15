@@ -424,10 +424,23 @@ func (r *userRepo) List(ctx context.Context, req *paginationV1.PagingRequest) (*
 		return &userV1.ListUserResponse{Total: 0, Items: nil}, nil
 	}
 
-	return &userV1.ListUserResponse{
+	resp := &userV1.ListUserResponse{
 		Total: ret.Total,
 		Items: ret.Items,
-	}, nil
+	}
+
+	for _, item := range resp.Items {
+		roleIDs, positionIDs, orgUnitIDs, err = r.ListUserRelationIDs(ctx, item.GetId())
+		if err != nil {
+			r.log.Errorf("list user relation ids failed: %s", err.Error())
+			continue
+		}
+		item.RoleIds = roleIDs
+		item.PositionIds = positionIDs
+		item.OrgUnitIds = orgUnitIDs
+	}
+
+	return resp, nil
 }
 
 func (r *userRepo) Get(ctx context.Context, req *userV1.GetUserRequest) (*userV1.User, error) {
@@ -451,6 +464,14 @@ func (r *userRepo) Get(ctx context.Context, req *userV1.GetUserRequest) (*userV1
 	if err != nil {
 		return nil, err
 	}
+
+	roleIDs, positionIDs, orgUnitIDs, err := r.ListUserRelationIDs(ctx, dto.GetId())
+	if err != nil {
+		r.log.Errorf("list user relation ids failed: %s", err.Error())
+	}
+	dto.RoleIds = roleIDs
+	dto.PositionIds = positionIDs
+	dto.OrgUnitIds = orgUnitIDs
 
 	return dto, err
 }
