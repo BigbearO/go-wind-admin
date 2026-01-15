@@ -408,7 +408,7 @@ func (s *UserService) createDefaultUser(ctx context.Context) error {
 		}
 	}
 
-	switch constants.DefaultUserTenantRelation {
+	switch constants.DefaultUserTenantRelationType {
 	default:
 		fallthrough
 	case constants.UserTenantRelationOneToOne:

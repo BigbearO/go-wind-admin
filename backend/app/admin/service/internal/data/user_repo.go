@@ -179,7 +179,7 @@ func (r *userRepo) queryUserIDsByRelationIDs(ctx context.Context, roleIDs []uint
 		return nil, nil
 	}
 
-	switch constants.DefaultUserTenantRelation {
+	switch constants.DefaultUserTenantRelationType {
 	default:
 		fallthrough
 	case constants.UserTenantRelationOneToOne:
@@ -831,7 +831,7 @@ func (r *userRepo) ListUserRelationIDs(ctx context.Context, userID uint32) (role
 		return
 	}
 
-	switch constants.DefaultUserTenantRelation {
+	switch constants.DefaultUserTenantRelationType {
 	default:
 		fallthrough
 	case constants.UserTenantRelationOneToOne:

@@ -86,15 +86,17 @@ const gridOptions: VxeGridProps<Api> = {
             pageSize: page.pageSize,
           },
           formValues,
+          null,
+          ['path'],
         );
       },
     },
   },
 
   columns: [
+    { title: $t('ui.table.description'), field: 'description', align: 'left' },
     { title: $t('page.api.path'), field: 'path', align: 'left' },
     { title: $t('page.api.method'), field: 'method', width: 80 },
-    { title: $t('ui.table.description'), field: 'description' },
     { title: $t('page.api.module'), field: 'module' },
     {
       title: $t('page.api.moduleDescription'),

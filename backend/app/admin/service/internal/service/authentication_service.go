@@ -304,7 +304,7 @@ func (s *AuthenticationService) authorizeAndEnrichUserTokenPayloadUserTenantRela
 
 // authorizeAndEnrichUserTokenPayload 授权并丰富用户令牌载荷
 func (s *AuthenticationService) authorizeAndEnrichUserTokenPayload(ctx context.Context, userID, tenantID uint32, tokenPayload *authenticationV1.UserTokenPayload) error {
-	switch constants.DefaultUserTenantRelation {
+	switch constants.DefaultUserTenantRelationType {
 	case constants.UserTenantRelationOneToOne:
 		return s.authorizeAndEnrichUserTokenPayloadUserTenantRelationOneToOne(ctx, userID, tenantID, tokenPayload)
 
@@ -312,7 +312,7 @@ func (s *AuthenticationService) authorizeAndEnrichUserTokenPayload(ctx context.C
 		return s.authorizeAndEnrichUserTokenPayloadUserTenantRelationOneToMany(ctx, userID, tenantID, tokenPayload)
 
 	default:
-		s.log.Errorf("unsupported user-tenant relation type: %d", constants.DefaultUserTenantRelation)
+		s.log.Errorf("unsupported user-tenant relation type: %d", constants.DefaultUserTenantRelationType)
 		return authenticationV1.ErrorServiceUnavailable("unsupported user-tenant relation type")
 	}
 }
