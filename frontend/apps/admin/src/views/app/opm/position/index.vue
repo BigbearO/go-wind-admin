@@ -208,14 +208,6 @@ async function handleDelete(row: any) {
     });
   }
 }
-
-const expandAll = () => {
-  gridApi.grid?.setAllTreeExpand(true);
-};
-
-const collapseAll = () => {
-  gridApi.grid?.setAllTreeExpand(false);
-};
 </script>
 
 <template>
@@ -224,12 +216,6 @@ const collapseAll = () => {
       <template #toolbar-tools>
         <a-button class="mr-2" type="primary" @click="handleCreate">
           {{ $t('page.position.button.create') }}
-        </a-button>
-        <a-button type="default" class="mr-2" @click="expandAll">
-          {{ $t('ui.tree.expand_all') }}
-        </a-button>
-        <a-button type="default" class="mr-2" @click="collapseAll">
-          {{ $t('ui.tree.collapse_all') }}
         </a-button>
       </template>
       <template #status="{ row }">
