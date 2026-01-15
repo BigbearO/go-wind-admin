@@ -2,6 +2,7 @@ import { acceptHMRUpdate, defineStore } from 'pinia';
 
 interface BasicUserInfo {
   [key: string]: any;
+
   /**
    * 头像
    */
@@ -10,6 +11,7 @@ interface BasicUserInfo {
    * 用户id
    */
   id: number;
+
   /**
    * 用户昵称
    */
@@ -22,6 +24,10 @@ interface BasicUserInfo {
    * 用户角色
    */
   roles?: string[];
+  /**
+   * 租户id
+   */
+  tenantId: number;
   /**
    * 用户名
    */

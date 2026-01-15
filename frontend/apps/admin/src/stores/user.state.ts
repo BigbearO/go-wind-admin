@@ -11,7 +11,7 @@ import {
 import { makeQueryString, makeUpdateMask } from '#/utils/query';
 import { type Paging, requestClientRequestHandler } from '#/utils/request';
 
-export const useUserStore = defineStore('user', () => {
+export const useUserListStore = defineStore('user-list', () => {
   const service = createUserServiceClient(requestClientRequestHandler);
 
   /**

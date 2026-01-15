@@ -13,11 +13,11 @@ import {
   tenantTypeList,
   useRoleStore,
   useTenantStore,
-  useUserStore,
+  useUserListStore,
 } from '#/stores';
 
 const tenantStore = useTenantStore();
-const userStore = useUserStore();
+const userListStore = useUserListStore();
 const roleStore = useRoleStore();
 
 const data = ref();
@@ -339,7 +339,7 @@ async function createTenantWithAdminUser(values: any) {
 
   // 检查用户名是否存在
   try {
-    await userStore.userExists(values.user.username);
+    await userListStore.userExists(values.user.username);
   } catch {
     notification.error({
       message: $t('page.tenant.notification.user_username_exists'),

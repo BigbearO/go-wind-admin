@@ -5335,9 +5335,11 @@ export type userservicev1_User = {
   orgUnitId?: number;
   orgUnitIds: number[] | undefined;
   orgUnitName?: string;
+  orgUnitNames: string[] | undefined;
   positionId?: number;
   positionIds: number[] | undefined;
   positionName?: string;
+  positionNames: string[] | undefined;
   roleId?: number;
   roleIds: number[] | undefined;
   roles: string[] | undefined;

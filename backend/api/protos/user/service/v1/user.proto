@@ -59,27 +59,61 @@ message User {
     (gnostic.openapi.v3.property) = {description: "用户ID"}
   ];  // 用户ID
 
-  optional uint32 tenant_id = 2 [json_name = "tenantId", (gnostic.openapi.v3.property) = {description: "租户ID"}];  // 租户ID
-  optional string tenant_name = 3 [json_name = "tenantName", (gnostic.openapi.v3.property) = {description: "租户名称"}];  // 租户名称
+  optional uint32 tenant_id = 2 [
+    json_name = "tenantId",
+    (gnostic.openapi.v3.property) = {description: "租户ID"}
+  ];  // 租户ID
+  optional string tenant_name = 3 [
+    json_name = "tenantName",
+    (gnostic.openapi.v3.property) = {description: "租户名称"}
+  ];  // 租户名称
 
-  optional uint32 org_unit_id = 4 [json_name = "orgUnitId", (gnostic.openapi.v3.property) = {description: "组织ID"}];  // 组织ID
-  repeated uint32 org_unit_ids = 5 [json_name = "orgUnitIds"]; // 归属列表
-  optional string org_unit_name = 6 [json_name = "orgUnitName", (gnostic.openapi.v3.property) = {description: "组织名称"}];  // 组织名称
+  optional uint32 org_unit_id = 4 [
+    json_name = "orgUnitId",
+    (gnostic.openapi.v3.property) = {description: "组织ID"}
+  ]; // 组织ID
+  repeated uint32 org_unit_ids = 5 [
+    json_name = "orgUnitIds",
+    (gnostic.openapi.v3.property) = {description: "归属组织ID列表"}
+  ]; // 归属组织ID列表
+  optional string org_unit_name = 6 [
+    json_name = "orgUnitName",
+    (gnostic.openapi.v3.property) = {description: "组织名称"}
+  ]; // 组织名称
+  repeated string org_unit_names = 7 [
+    json_name = "orgUnitNames",
+    (gnostic.openapi.v3.property) = {description: "组织名称列表"}
+  ]; // 组织名称列表
 
-  optional uint32 position_id = 7 [
+  optional uint32 position_id = 8 [
     json_name = "positionId",
     (gnostic.openapi.v3.property) = {description: "职位ID"}
   ];  // 职位ID
-  repeated uint32 position_ids = 8 [
+  repeated uint32 position_ids = 9 [
     json_name = "positionIds",
     (gnostic.openapi.v3.property) = {description: "职位列表"}
   ]; // 职位列表
-  optional string position_name = 9 [json_name = "positionName", (gnostic.openapi.v3.property) = {description: "职位名称"}];  // 职位名称
+  optional string position_name = 10 [
+    json_name = "positionName",
+    (gnostic.openapi.v3.property) = {description: "职位名称"}
+  ];  // 职位名称
+  repeated string position_names = 11 [
+    json_name = "positionNames",
+    (gnostic.openapi.v3.property) = {description: "职位名称列表"}
+  ];  // 职位名称列表
 
-  optional uint32 role_id = 10 [json_name = "roleId", (gnostic.openapi.v3.property) = {description: "角色ID"}];  // 角色ID
-  repeated uint32 role_ids = 11 [json_name = "roleIds", (gnostic.openapi.v3.property) = {description: "角色ID列表"}];  // 角色ID列表
-  repeated string roles = 12 [(gnostic.openapi.v3.property) = {description: "角色码列表"}]; // 角色码列表
-  repeated string role_names = 13 [
+  optional uint32 role_id = 12 [
+    json_name = "roleId",
+    (gnostic.openapi.v3.property) = {description: "角色ID"}
+  ];  // 角色ID
+  repeated uint32 role_ids = 13 [
+    json_name = "roleIds",
+    (gnostic.openapi.v3.property) = {description: "角色ID列表"}
+  ];  // 角色ID列表
+  repeated string roles = 14 [
+    (gnostic.openapi.v3.property) = {description: "角色码列表"}
+  ]; // 角色码列表
+  repeated string role_names = 15 [
     json_name = "roleNames",
     (gnostic.openapi.v3.property) = { description: "角色名称列表"}
   ]; // 角色名称列表

@@ -105,7 +105,7 @@ export const useAuthStore = defineStore('auth', () => {
 
         if (refresh_token) {
           accessStore.setRefreshToken(refresh_token);
-          startRefreshTimer(refreshToken);
+          _startRefreshTimer(refreshToken);
         }
 
         // 获取用户信息并存储到 accessStore 中
@@ -189,7 +189,7 @@ export const useAuthStore = defineStore('auth', () => {
     console.log('_doLogout');
 
     // 停止定时刷新
-    stopRefreshTimer();
+    _stopRefreshTimer();
 
     resetAllStores();
 
@@ -254,7 +254,7 @@ export const useAuthStore = defineStore('auth', () => {
       console.warn('Access token or refresh token is invalid or expired.');
 
       // 停止定时刷新并清理回调，防止继续触发刷新请求
-      stopRefreshTimer();
+      _stopRefreshTimer();
 
       accessStore.setAccessToken(null);
       accessStore.setRefreshToken(null);
@@ -298,11 +298,11 @@ export const useAuthStore = defineStore('auth', () => {
    * 启动定时刷新
    * @param cb 刷新回调函数
    */
-  function startRefreshTimer(cb?: RefreshTokenFunc): void {
+  function _startRefreshTimer(cb?: RefreshTokenFunc): void {
     if (cb) refreshCallback = cb;
 
     // 先停止已存在的调度
-    stopRefreshTimer();
+    _stopRefreshTimer();
 
     if (!refreshCallback) return;
 
@@ -334,7 +334,7 @@ export const useAuthStore = defineStore('auth', () => {
   /**
    * 停止定时器
    */
-  function stopRefreshTimer(): void {
+  function _stopRefreshTimer(): void {
     if (refreshTimer !== null) {
       globalThis.clearTimeout(refreshTimer);
       refreshTimer = null;
@@ -345,7 +345,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   function $reset() {
     loginLoading.value = false;
-    stopRefreshTimer();
+    _stopRefreshTimer();
   }
 
   return {
@@ -356,7 +356,5 @@ export const useAuthStore = defineStore('auth', () => {
     logout,
     refreshToken,
     reauthenticate,
-    startRefreshTimer,
-    stopRefreshTimer,
   };
 });

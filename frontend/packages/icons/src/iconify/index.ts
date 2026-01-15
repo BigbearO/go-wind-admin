@@ -44,3 +44,7 @@ export const LucideRotateCcw = createIconifyIcon('lucide:rotate-ccw');
 
 export const LucidePlus = createIconifyIcon('lucide:plus');
 export const LucideCirclePlus = createIconifyIcon('lucide:circle-plus');
+
+export const LucideBuilding = createIconifyIcon('lucide:building');
+
+export const LucideRefreshCw = createIconifyIcon('lucide:refresh-cw');

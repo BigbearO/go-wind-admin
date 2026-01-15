@@ -17,7 +17,7 @@ import {
   statusToName,
   usePermissionGroupStore,
 } from '#/stores';
-import { usePermissionViewStore } from '#/views/app/permission/permission/permision_view.state';
+import { usePermissionViewStore } from '#/views/app/permission/permission/permission-view.state';
 
 import PermissionGroupDrawer from './permission-group-drawer.vue';
 

@@ -15,7 +15,7 @@ import {
 } from '#/generated/api/admin/service/v1';
 import { $t } from '#/locales';
 import { enableBoolToColor, enableBoolToName, useDictStore } from '#/stores';
-import { useDictViewStore } from '#/views/app/system/dict/dict_view.state';
+import { useDictViewStore } from '#/views/app/system/dict/dict-view.state';
 
 import DictTypeDrawer from './dict-type-drawer.vue';
 

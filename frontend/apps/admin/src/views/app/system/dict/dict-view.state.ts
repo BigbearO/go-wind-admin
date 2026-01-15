@@ -8,10 +8,13 @@ import { useDictStore } from '#/stores';
 
 const dictStore = useDictStore();
 
+/**
+ * 字典视图状态接口
+ */
 interface DictViewState {
-  currentTypeId: null | number; // 当前选中的字典类型ID
   loading: boolean; // 加载状态
 
+  currentTypeId: null | number; // 当前选中的字典类型ID
   typeList: ListDictTypeResponse; // 字典类型列表
   entryList: ListDictEntryResponse; // 字典条目列表
 }

@@ -160,7 +160,7 @@
     }
   },
   "orgUnit": {
-    "moduleName": "组织",
+    "moduleName": "组织列表",
     "name": "组织名称",
     "code": "唯一编码",
     "parentId": "上级组织",

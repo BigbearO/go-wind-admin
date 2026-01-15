@@ -17,10 +17,10 @@ import {
   useOrgUnitStore,
   usePositionStore,
   useRoleStore,
-  useUserStore,
+  useUserListStore,
 } from '#/stores';
 
-const userStore = useUserStore();
+const userListStore = useUserListStore();
 const roleStore = useRoleStore();
 const orgUnitStore = useOrgUnitStore();
 const positionStore = usePositionStore();
@@ -262,8 +262,8 @@ const [Drawer, drawerApi] = useVbenDrawer({
 
     try {
       await (data.value?.create
-        ? userStore.createUser(values)
-        : userStore.updateUser(data.value.row.id, values));
+        ? userListStore.createUser(values)
+        : userListStore.updateUser(data.value.row.id, values));
 
       notification.success({
         message: data.value?.create

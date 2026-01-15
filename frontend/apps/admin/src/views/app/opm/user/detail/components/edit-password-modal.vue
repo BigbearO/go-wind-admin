@@ -7,11 +7,11 @@ import { $t } from '@vben/locales';
 import { notification } from 'ant-design-vue';
 
 import { useVbenForm } from '#/adapter/form';
-import { useUserStore } from '#/stores';
+import { useUserListStore } from '#/stores';
 
 const data = ref();
 
-const userStore = useUserStore();
+const userListStore = useUserListStore();
 
 const [BaseForm, baseFormApi] = useVbenForm({
   showDefaultActions: false,
@@ -74,7 +74,10 @@ const [Modal, modalApi] = useVbenModal({
     }
 
     try {
-      await userStore.editUserPassword(data.value?.userId, values.new_password);
+      await userListStore.editUserPassword(
+        data.value?.userId,
+        values.new_password,
+      );
 
       notification.success({
         message: $t('ui.notification.update_status_success'),

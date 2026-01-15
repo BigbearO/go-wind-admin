@@ -9,12 +9,15 @@ import { usePermissionGroupStore, usePermissionStore } from '#/stores';
 const permissionStore = usePermissionStore();
 const permissionGroupStore = usePermissionGroupStore();
 
+/**
+ * 权限视图状态接口
+ */
 interface PermissionViewState {
-  currentGroupId: null | number; // 当前选中的分组ID
   loading: boolean; // 加载状态
   needReloadGroupList: boolean; // 是否需要重新加载分组列表
   needReloadPermissionList: boolean; // 是否需要重新加载权限列表
 
+  currentGroupId: null | number; // 当前选中的分组ID
   groupList: ListPermissionGroupResponse; // 权限分组列表
   permList: ListPermissionResponse; // 权限列表
 }

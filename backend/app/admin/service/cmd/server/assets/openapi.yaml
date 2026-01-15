@@ -7130,9 +7130,15 @@ components:
                     items:
                         type: integer
                         format: uint32
+                    description: 归属组织ID列表
                 orgUnitName:
                     type: string
                     description: 组织名称
+                orgUnitNames:
+                    type: array
+                    items:
+                        type: string
+                    description: 组织名称列表
                 positionId:
                     type: integer
                     description: 职位ID
@@ -7146,6 +7152,11 @@ components:
                 positionName:
                     type: string
                     description: 职位名称
+                positionNames:
+                    type: array
+                    items:
+                        type: string
+                    description: 职位名称列表
                 roleId:
                     type: integer
                     description: 角色ID

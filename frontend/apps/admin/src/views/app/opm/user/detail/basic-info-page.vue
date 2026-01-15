@@ -8,14 +8,14 @@ import { formatDateTime } from '@vben/utils';
 import { Avatar, Descriptions, DescriptionsItem } from 'ant-design-vue';
 
 import { type userservicev1_User as User } from '#/generated/api/admin/service/v1';
-import { genderToColor, genderToName, useUserStore } from '#/stores';
+import { genderToColor, genderToName, useUserListStore } from '#/stores';
 import { getCharColor, getRandomColor } from '#/utils/color';
 
 const props = defineProps({
   userId: { type: Number, default: undefined },
 });
 
-const userStore = useUserStore();
+const userListStore = useUserListStore();
 
 const data = ref<User>();
 
@@ -35,7 +35,7 @@ const getAvatarColor = () => {
  */
 async function reload() {
   if (props.userId) {
-    data.value = await userStore.getUser(props.userId);
+    data.value = await userListStore.getUser(props.userId);
   }
 }
 

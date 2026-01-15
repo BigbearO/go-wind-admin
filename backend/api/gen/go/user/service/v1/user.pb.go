@@ -144,15 +144,17 @@ type User struct {
 	TenantId      *uint32                `protobuf:"varint,2,opt,name=tenant_id,json=tenantId,proto3,oneof" json:"tenant_id,omitempty"`               // 租户ID
 	TenantName    *string                `protobuf:"bytes,3,opt,name=tenant_name,json=tenantName,proto3,oneof" json:"tenant_name,omitempty"`          // 租户名称
 	OrgUnitId     *uint32                `protobuf:"varint,4,opt,name=org_unit_id,json=orgUnitId,proto3,oneof" json:"org_unit_id,omitempty"`          // 组织ID
-	OrgUnitIds    []uint32               `protobuf:"varint,5,rep,packed,name=org_unit_ids,json=orgUnitIds,proto3" json:"org_unit_ids,omitempty"`      // 归属列表
+	OrgUnitIds    []uint32               `protobuf:"varint,5,rep,packed,name=org_unit_ids,json=orgUnitIds,proto3" json:"org_unit_ids,omitempty"`      // 归属组织ID列表
 	OrgUnitName   *string                `protobuf:"bytes,6,opt,name=org_unit_name,json=orgUnitName,proto3,oneof" json:"org_unit_name,omitempty"`     // 组织名称
-	PositionId    *uint32                `protobuf:"varint,7,opt,name=position_id,json=positionId,proto3,oneof" json:"position_id,omitempty"`         // 职位ID
-	PositionIds   []uint32               `protobuf:"varint,8,rep,packed,name=position_ids,json=positionIds,proto3" json:"position_ids,omitempty"`     // 职位列表
-	PositionName  *string                `protobuf:"bytes,9,opt,name=position_name,json=positionName,proto3,oneof" json:"position_name,omitempty"`    // 职位名称
-	RoleId        *uint32                `protobuf:"varint,10,opt,name=role_id,json=roleId,proto3,oneof" json:"role_id,omitempty"`                    // 角色ID
-	RoleIds       []uint32               `protobuf:"varint,11,rep,packed,name=role_ids,json=roleIds,proto3" json:"role_ids,omitempty"`                // 角色ID列表
-	Roles         []string               `protobuf:"bytes,12,rep,name=roles,proto3" json:"roles,omitempty"`                                           // 角色码列表
-	RoleNames     []string               `protobuf:"bytes,13,rep,name=role_names,json=roleNames,proto3" json:"role_names,omitempty"`                  // 角色名称列表
+	OrgUnitNames  []string               `protobuf:"bytes,7,rep,name=org_unit_names,json=orgUnitNames,proto3" json:"org_unit_names,omitempty"`        // 组织名称列表
+	PositionId    *uint32                `protobuf:"varint,8,opt,name=position_id,json=positionId,proto3,oneof" json:"position_id,omitempty"`         // 职位ID
+	PositionIds   []uint32               `protobuf:"varint,9,rep,packed,name=position_ids,json=positionIds,proto3" json:"position_ids,omitempty"`     // 职位列表
+	PositionName  *string                `protobuf:"bytes,10,opt,name=position_name,json=positionName,proto3,oneof" json:"position_name,omitempty"`   // 职位名称
+	PositionNames []string               `protobuf:"bytes,11,rep,name=position_names,json=positionNames,proto3" json:"position_names,omitempty"`      // 职位名称列表
+	RoleId        *uint32                `protobuf:"varint,12,opt,name=role_id,json=roleId,proto3,oneof" json:"role_id,omitempty"`                    // 角色ID
+	RoleIds       []uint32               `protobuf:"varint,13,rep,packed,name=role_ids,json=roleIds,proto3" json:"role_ids,omitempty"`                // 角色ID列表
+	Roles         []string               `protobuf:"bytes,14,rep,name=roles,proto3" json:"roles,omitempty"`                                           // 角色码列表
+	RoleNames     []string               `protobuf:"bytes,15,rep,name=role_names,json=roleNames,proto3" json:"role_names,omitempty"`                  // 角色名称列表
 	Username      *string                `protobuf:"bytes,20,opt,name=username,proto3,oneof" json:"username,omitempty"`                               // 用户名
 	Nickname      *string                `protobuf:"bytes,21,opt,name=nickname,proto3,oneof" json:"nickname,omitempty"`                               // 昵称
 	Realname      *string                `protobuf:"bytes,22,opt,name=realname,proto3,oneof" json:"realname,omitempty"`                               // 真实姓名
@@ -251,6 +253,13 @@ func (x *User) GetOrgUnitName() string {
 	return ""
 }
 
+func (x *User) GetOrgUnitNames() []string {
+	if x != nil {
+		return x.OrgUnitNames
+	}
+	return nil
+}
+
 func (x *User) GetPositionId() uint32 {
 	if x != nil && x.PositionId != nil {
 		return *x.PositionId
@@ -270,6 +279,13 @@ func (x *User) GetPositionName() string {
 		return *x.PositionName
 	}
 	return ""
+}
+
+func (x *User) GetPositionNames() []string {
+	if x != nil {
+		return x.PositionNames
+	}
+	return nil
 }
 
 func (x *User) GetRoleId() uint32 {
@@ -1690,26 +1706,28 @@ var File_user_service_v1_user_proto protoreflect.FileDescriptor
 
 const file_user_service_v1_user_proto_rawDesc = "" +
 	"\n" +
-	"\x1auser/service/v1/user.proto\x12\x0fuser.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a google/protobuf/field_mask.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x16redact/v3/redact.proto\x1a\x1epagination/v1/pagination.proto\"\x94\x14\n" +
+	"\x1auser/service/v1/user.proto\x12\x0fuser.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a google/protobuf/field_mask.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x16redact/v3/redact.proto\x1a\x1epagination/v1/pagination.proto\"\xb1\x15\n" +
 	"\x04User\x12#\n" +
 	"\x02id\x18\x01 \x01(\rB\x0e\xbaG\v\x92\x02\b用户IDH\x00R\x02id\x88\x01\x01\x120\n" +
 	"\ttenant_id\x18\x02 \x01(\rB\x0e\xbaG\v\x92\x02\b租户IDH\x01R\btenantId\x88\x01\x01\x128\n" +
 	"\vtenant_name\x18\x03 \x01(\tB\x12\xbaG\x0f\x92\x02\f租户名称H\x02R\n" +
 	"tenantName\x88\x01\x01\x123\n" +
-	"\vorg_unit_id\x18\x04 \x01(\rB\x0e\xbaG\v\x92\x02\b组织IDH\x03R\torgUnitId\x88\x01\x01\x12 \n" +
-	"\forg_unit_ids\x18\x05 \x03(\rR\n" +
+	"\vorg_unit_id\x18\x04 \x01(\rB\x0e\xbaG\v\x92\x02\b组织IDH\x03R\torgUnitId\x88\x01\x01\x12<\n" +
+	"\forg_unit_ids\x18\x05 \x03(\rB\x1a\xbaG\x17\x92\x02\x14归属组织ID列表R\n" +
 	"orgUnitIds\x12;\n" +
-	"\rorg_unit_name\x18\x06 \x01(\tB\x12\xbaG\x0f\x92\x02\f组织名称H\x04R\vorgUnitName\x88\x01\x01\x124\n" +
-	"\vposition_id\x18\a \x01(\rB\x0e\xbaG\v\x92\x02\b职位IDH\x05R\n" +
+	"\rorg_unit_name\x18\x06 \x01(\tB\x12\xbaG\x0f\x92\x02\f组织名称H\x04R\vorgUnitName\x88\x01\x01\x12>\n" +
+	"\x0eorg_unit_names\x18\a \x03(\tB\x18\xbaG\x15\x92\x02\x12组织名称列表R\forgUnitNames\x124\n" +
+	"\vposition_id\x18\b \x01(\rB\x0e\xbaG\v\x92\x02\b职位IDH\x05R\n" +
 	"positionId\x88\x01\x01\x125\n" +
-	"\fposition_ids\x18\b \x03(\rB\x12\xbaG\x0f\x92\x02\f职位列表R\vpositionIds\x12<\n" +
-	"\rposition_name\x18\t \x01(\tB\x12\xbaG\x0f\x92\x02\f职位名称H\x06R\fpositionName\x88\x01\x01\x12,\n" +
-	"\arole_id\x18\n" +
-	" \x01(\rB\x0e\xbaG\v\x92\x02\b角色IDH\aR\x06roleId\x88\x01\x01\x12/\n" +
-	"\brole_ids\x18\v \x03(\rB\x14\xbaG\x11\x92\x02\x0e角色ID列表R\aroleIds\x12+\n" +
-	"\x05roles\x18\f \x03(\tB\x15\xbaG\x12\x92\x02\x0f角色码列表R\x05roles\x127\n" +
+	"\fposition_ids\x18\t \x03(\rB\x12\xbaG\x0f\x92\x02\f职位列表R\vpositionIds\x12<\n" +
+	"\rposition_name\x18\n" +
+	" \x01(\tB\x12\xbaG\x0f\x92\x02\f职位名称H\x06R\fpositionName\x88\x01\x01\x12?\n" +
+	"\x0eposition_names\x18\v \x03(\tB\x18\xbaG\x15\x92\x02\x12职位名称列表R\rpositionNames\x12,\n" +
+	"\arole_id\x18\f \x01(\rB\x0e\xbaG\v\x92\x02\b角色IDH\aR\x06roleId\x88\x01\x01\x12/\n" +
+	"\brole_ids\x18\r \x03(\rB\x14\xbaG\x11\x92\x02\x0e角色ID列表R\aroleIds\x12+\n" +
+	"\x05roles\x18\x0e \x03(\tB\x15\xbaG\x12\x92\x02\x0f角色码列表R\x05roles\x127\n" +
 	"\n" +
-	"role_names\x18\r \x03(\tB\x18\xbaG\x15\x92\x02\x12角色名称列表R\troleNames\x120\n" +
+	"role_names\x18\x0f \x03(\tB\x18\xbaG\x15\x92\x02\x12角色名称列表R\troleNames\x120\n" +
 	"\busername\x18\x14 \x01(\tB\x0f\xbaG\f\x92\x02\t用户名H\bR\busername\x88\x01\x01\x12-\n" +
 	"\bnickname\x18\x15 \x01(\tB\f\xbaG\t\x92\x02\x06昵称H\tR\bnickname\x88\x01\x01\x123\n" +
 	"\brealname\x18\x16 \x01(\tB\x12\xbaG\x0f\x92\x02\f真实姓名H\n" +

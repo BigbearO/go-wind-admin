@@ -144,11 +144,15 @@ func (x *User) Redact() string {
 
 	// Safe field: OrgUnitName
 
+	// Safe field: OrgUnitNames
+
 	// Safe field: PositionId
 
 	// Safe field: PositionIds
 
 	// Safe field: PositionName
+
+	// Safe field: PositionNames
 
 	// Safe field: RoleId
 

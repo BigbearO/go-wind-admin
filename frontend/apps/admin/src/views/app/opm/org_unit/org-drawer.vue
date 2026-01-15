@@ -11,11 +11,11 @@ import {
   orgUnitStatusList,
   orgUnitTypeList,
   useOrgUnitStore,
-  useUserStore,
+  useUserListStore,
 } from '#/stores';
 
 const orgUnitStore = useOrgUnitStore();
-const userStore = useUserStore();
+const userListStore = useUserListStore();
 
 const data = ref();
 
@@ -96,7 +96,7 @@ const [BaseForm, baseFormApi] = useVbenForm({
           }));
         },
         api: async () => {
-          const result = await userStore.listUser(undefined, {
+          const result = await userListStore.listUser(undefined, {
             // parent_id: 0,
           });
           return result.items;

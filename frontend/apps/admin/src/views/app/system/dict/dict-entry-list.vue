@@ -12,7 +12,7 @@ import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { type dictservicev1_DictEntry as DictEntry } from '#/generated/api/admin/service/v1';
 import { $t } from '#/locales';
 import { enableBoolToColor, enableBoolToName, useDictStore } from '#/stores';
-import { useDictViewStore } from '#/views/app/system/dict/dict_view.state';
+import { useDictViewStore } from '#/views/app/system/dict/dict-view.state';
 
 import DictEntryDrawer from './dict-entry-drawer.vue';
 
