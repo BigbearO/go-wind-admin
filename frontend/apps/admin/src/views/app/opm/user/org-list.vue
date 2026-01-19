@@ -2,7 +2,7 @@
 import type { TreeProps } from 'ant-design-vue';
 import type { DefaultOptionType } from 'ant-design-vue/es/select';
 
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 
 import { LucideEllipsisVertical } from '@vben/icons';
 import { $t } from '@vben/locales';
@@ -192,6 +192,43 @@ function clearSelection() {
   handleSelectOrgUnit(null);
 }
 
+watch(searchValue, (val) => {
+  const q = String(val ?? '').trim();
+  if (!q) {
+    // 搜索为空时清除展开（按需可改为保留原 expandedKeys）
+    expandedKeys.value = [];
+    autoExpandParent.value = false;
+    return;
+  }
+
+  const parentKeys = new Set<number | string>();
+  const collect = (
+    nodes: any[] | undefined,
+    parents: (number | string)[] = [],
+  ) => {
+    if (!nodes || nodes.length === 0) return;
+    for (const node of nodes) {
+      const title = String(node.title ?? '');
+      const key =
+        node.key ??
+        (node.id === undefined
+          ? undefined
+          : `${node.parentId ?? ''}-${node.id}`);
+      if (title.toLowerCase().includes(q.toLowerCase())) {
+        // 将所有祖先 key 收集起来以便展开
+        parents.forEach((p) => {
+          if (p !== undefined && p !== null) parentKeys.add(p);
+        });
+      }
+      collect(node.children, [...parents, key as number | string]);
+    }
+  };
+
+  collect(treeData.value as any[]);
+  expandedKeys.value = [...parentKeys];
+  autoExpandParent.value = true;
+});
+
 onMounted(async () => {
   if (!userViewStore.isTenantUser()) {
     await userViewStore.fetchTenantList({ status: 'ON' });
@@ -248,7 +285,7 @@ onMounted(async () => {
       :expanded-keys="expandedKeys"
       :auto-expand-parent="autoExpandParent"
       :tree-data="treeData"
-      :blockNode="true"
+      :block-node="true"
       :selected-keys="selectedKeys"
       @expand="handleExpandNode"
       @select="handleSelectNode"

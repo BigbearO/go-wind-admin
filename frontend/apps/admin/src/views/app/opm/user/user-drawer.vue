@@ -13,10 +13,10 @@ import {
 } from '#/generated/api/admin/service/v1';
 import {
   genderList,
-  statusList,
   useOrgUnitStore,
   usePositionStore,
   useRoleStore,
+  userStatusList,
   useUserListStore,
 } from '#/stores';
 
@@ -98,12 +98,13 @@ const [BaseForm, baseFormApi] = useVbenForm({
     },
     {
       component: 'ApiTreeSelect',
-      fieldName: 'orgUnitId',
+      fieldName: 'orgUnitIds',
       label: $t('page.user.form.orgUnit'),
       componentProps: {
         placeholder: $t('ui.placeholder.select'),
         numberToString: true,
         showSearch: true,
+        multiple: true,
         treeDefaultExpandAll: true,
         allowClear: true,
         childrenField: 'children',
@@ -133,13 +134,14 @@ const [BaseForm, baseFormApi] = useVbenForm({
       },
     },
     {
-      component: 'ApiSelect',
-      fieldName: 'positionId',
+      component: 'ApiTreeSelect',
+      fieldName: 'positionIds',
       label: $t('page.user.form.position'),
       componentProps: {
         placeholder: $t('ui.placeholder.select'),
         showSearch: true,
         allowClear: true,
+        multiple: true,
         api: async () => {
           const result = await positionStore.listPosition(undefined, {
             status: 'ON',
@@ -216,13 +218,13 @@ const [BaseForm, baseFormApi] = useVbenForm({
       component: 'RadioGroup',
       fieldName: 'status',
       label: $t('ui.table.status'),
-      defaultValue: 'ON',
+      defaultValue: 'NORMAL',
       rules: 'selectRequired',
       componentProps: {
         optionType: 'button',
         buttonStyle: 'solid',
         class: 'flex flex-wrap', // 如果选项过多，可以添加class来自动折叠
-        options: statusList,
+        options: userStatusList,
       },
     },
 

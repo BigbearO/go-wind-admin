@@ -16,10 +16,10 @@ import { router } from '#/router';
 import {
   genderToColor,
   genderToName,
-  statusToColor,
-  statusToName,
   usePositionStore,
   useRoleStore,
+  userStatusToColor,
+  userStatusToName,
   useUserListStore,
 } from '#/stores';
 import { getRandomColor } from '#/utils/color';
@@ -99,6 +99,8 @@ const formOptions: VbenFormProps = {
         placeholder: $t('ui.placeholder.select'),
         allowClear: true,
         showSearch: true,
+        alwaysLoad: true,
+        immediate: true,
         filterOption: (input: string, option: any) =>
           option.label.toLowerCase().includes(input.toLowerCase()),
         afterFetch: (data: { name: string; path: string }[]) => {
@@ -110,6 +112,7 @@ const formOptions: VbenFormProps = {
         api: async () => {
           const result = await positionStore.listPosition(undefined, {
             status: 'ON',
+            org_unit_id: userViewStore.currentOrgUnitId,
           });
           return result.items;
         },
@@ -185,8 +188,14 @@ const gridOptions: VxeGridProps<User> = {
       title: $t('page.user.table.roleId'),
       field: 'roleNames',
       slots: { default: 'role' },
-      width: 130,
+      width: 100,
       showOverflow: 'tooltip',
+    },
+    {
+      title: $t('page.user.table.status'),
+      field: 'status',
+      width: 95,
+      slots: { default: 'status' },
     },
     {
       title: $t('page.user.table.lastLoginAt'),
@@ -303,8 +312,8 @@ watch(
       </a-button>
     </template>
     <template #status="{ row }">
-      <a-tag :color="statusToColor(row.status)">
-        {{ statusToName(row.status) }}
+      <a-tag :color="userStatusToColor(row.status)">
+        {{ userStatusToName(row.status) }}
       </a-tag>
     </template>
     <template #gender="{ row }">

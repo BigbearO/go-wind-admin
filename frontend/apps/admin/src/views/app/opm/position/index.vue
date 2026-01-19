@@ -12,6 +12,9 @@ import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { type userservicev1_Position as Position } from '#/generated/api/admin/service/v1';
 import { $t } from '#/locales';
 import {
+  positionTypeList,
+  positionTypeToColor,
+  positionTypeToName,
   statusList,
   statusToColor,
   statusToName,
@@ -56,6 +59,19 @@ const formOptions: VbenFormProps = {
       label: $t('ui.table.status'),
       componentProps: {
         options: statusList,
+        placeholder: $t('ui.placeholder.select'),
+        filterOption: (input: string, option: any) =>
+          option.label.toLowerCase().includes(input.toLowerCase()),
+        allowClear: true,
+        showSearch: true,
+      },
+    },
+    {
+      component: 'Select',
+      fieldName: 'type',
+      label: $t('page.position.type'),
+      componentProps: {
+        options: positionTypeList,
         placeholder: $t('ui.placeholder.select'),
         filterOption: (input: string, option: any) =>
           option.label.toLowerCase().includes(input.toLowerCase()),
@@ -124,6 +140,12 @@ const gridOptions: VxeGridProps<Position> = {
   columns: [
     { title: $t('page.position.name'), field: 'name' },
     { title: $t('page.position.code'), field: 'code' },
+    {
+      title: $t('page.position.type'),
+      field: 'type',
+      slots: { default: 'type' },
+      width: 95,
+    },
     { title: $t('page.position.description'), field: 'description' },
     {
       title: $t('page.position.orgUnitName'),
@@ -221,6 +243,11 @@ async function handleDelete(row: any) {
       <template #status="{ row }">
         <a-tag :color="statusToColor(row.status)">
           {{ statusToName(row.status) }}
+        </a-tag>
+      </template>
+      <template #type="{ row }">
+        <a-tag :color="positionTypeToColor(row.type)">
+          {{ positionTypeToName(row.type) }}
         </a-tag>
       </template>
       <template #action="{ row }">

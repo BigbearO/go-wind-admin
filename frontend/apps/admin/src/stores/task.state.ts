@@ -7,7 +7,7 @@ import { defineStore } from 'pinia';
 
 import {
   createTaskServiceClient,
-  type Task_Type,
+  type taskservicev1_Task_Type as Task_Type,
 } from '#/generated/api/admin/service/v1';
 import { makeOrderBy, makeQueryString, makeUpdateMask } from '#/utils/query';
 import { type Paging, requestClientRequestHandler } from '#/utils/request';

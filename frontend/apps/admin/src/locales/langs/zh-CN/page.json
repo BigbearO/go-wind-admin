@@ -47,7 +47,8 @@
       "tenantId": "所属租户",
       "orgUnitId": "所属组织",
       "positionId": "所属岗位",
-      "workId": "工号"
+      "workId": "工号",
+      "status": "状态"
     },
     "button": {
       "create": "创建账号",
@@ -192,6 +193,7 @@
     "orgUnitId": "所属组织ID",
     "orgUnitName": "所属组织名称",
     "description": "职责描述",
+    "type": "职位类型",
     "code": "唯一编码",
     "headcount": "编制人数",
     "button": {

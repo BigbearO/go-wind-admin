@@ -16,6 +16,16 @@
     "success": "成功",
     "failed": "失败"
   },
+  "user": {
+    "status": {
+      "DISABLED": "禁用",
+      "NORMAL": "正常",
+      "PENDING": "待激活",
+      "LOCKED": "锁定",
+      "EXPIRED": "过期",
+      "CLOSED": "注销"
+    }
+  },
   "menu": {
     "type": {
       "CATALOG": "目录",
@@ -96,7 +106,7 @@
       "SELF": "仅本人"
     }
   },
-  "memberPosition": {
+  "membershipPosition": {
     "status": {
       "PROBATION": "试用期",
       "ACTIVE": "在职",

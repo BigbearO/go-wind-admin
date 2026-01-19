@@ -7,7 +7,12 @@ import { $t } from '@vben/locales';
 import { notification } from 'ant-design-vue';
 
 import { useVbenForm } from '#/adapter/form';
-import { statusList, useOrgUnitStore, usePositionStore } from '#/stores';
+import {
+  positionTypeList,
+  statusList,
+  useOrgUnitStore,
+  usePositionStore,
+} from '#/stores';
 
 const positionStore = usePositionStore();
 const orgUnitStore = useOrgUnitStore();
@@ -50,6 +55,21 @@ const [BaseForm, baseFormApi] = useVbenForm({
         allowClear: true,
       },
       rules: 'required',
+    },
+    {
+      component: 'Select',
+      fieldName: 'type',
+      label: $t('page.position.type'),
+      defaultValue: 'REGULAR',
+      rules: 'selectRequired',
+      componentProps: {
+        options: positionTypeList,
+        placeholder: $t('ui.placeholder.select'),
+        filterOption: (input: string, option: any) =>
+          option.label.toLowerCase().includes(input.toLowerCase()),
+        allowClear: true,
+        showSearch: true,
+      },
     },
     {
       component: 'ApiTreeSelect',

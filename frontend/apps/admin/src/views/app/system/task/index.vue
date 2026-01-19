@@ -16,8 +16,8 @@ import { notification } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import {
-  type ControlTaskRequest_ControlType,
-  type Task,
+  type taskservicev1_ControlTaskRequest_ControlType as ControlTaskRequest_ControlType,
+  type taskservicev1_Task as Task,
 } from '#/generated/api/admin/service/v1';
 import { $t } from '#/locales';
 import {

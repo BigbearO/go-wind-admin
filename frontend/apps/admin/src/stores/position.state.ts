@@ -90,27 +90,27 @@ export const usePositionStore = defineStore('position', () => {
   };
 });
 
-export const memberPositionStatusList = computed(() => [
-  { value: 'PROBATION', label: $t('enum.position.status.PROBATION') },
+export const membershipPositionStatusList = computed(() => [
+  { value: 'PROBATION', label: $t('enum.membershipPosition.status.PROBATION') },
   {
     value: 'ACTIVE',
-    label: $t('enum.memberPosition.status.ACTIVE'),
+    label: $t('enum.membershipPosition.status.ACTIVE'),
   },
   {
     value: 'LEAVE',
-    label: $t('enum.memberPosition.status.LEAVE'),
+    label: $t('enum.membershipPosition.status.LEAVE'),
   },
   {
     value: 'RESIGNED',
-    label: $t('enum.memberPosition.status.RESIGNED'),
+    label: $t('enum.membershipPosition.status.RESIGNED'),
   },
   {
     value: 'TERMINATED',
-    label: $t('enum.memberPosition.status.TERMINATED'),
+    label: $t('enum.membershipPosition.status.TERMINATED'),
   },
   {
     value: 'EXPIRED',
-    label: $t('enum.memberPosition.status.EXPIRED'),
+    label: $t('enum.membershipPosition.status.EXPIRED'),
   },
 ]);
 
@@ -118,14 +118,14 @@ export const memberPositionStatusList = computed(() => [
  * 状态转名称
  * @param status 状态值
  */
-export function memberPositionStatusToName(status: Position_Status) {
-  const values = memberPositionStatusList.value;
+export function membershipPositionStatusToName(status: any) {
+  const values = membershipPositionStatusList.value;
   const matchedItem = values.find((item) => item.value === status);
   return matchedItem ? matchedItem.label : '';
 }
 
 // 职位状态-颜色映射常量
-const MEMBER_POSITION_STATUS_COLOR_MAP = {
+const MEMBERSHIP_POSITION_STATUS_COLOR_MAP = {
   PROBATION: '#4096FF', // 试用期：浅蓝（过渡状态，正向但未完全激活）
   ACTIVE: '#00B42A', // 在职/激活：企业绿（核心正向状态，醒目且无视觉冲击）
   LEAVE: '#FF9A2E', // 休假/离岗（临时）：暖橙黄（临时状态，非激活但非负面）
@@ -140,13 +140,43 @@ const MEMBER_POSITION_STATUS_COLOR_MAP = {
  * @param status 职位状态（INACTIVE/ACTIVE/ON_LEAVE）
  * @returns 标准化十六进制颜色值
  */
-export function memberPositionStatusToColor(status: Position_Status) {
+export function membershipPositionStatusToColor(status: Position_Status) {
   // 优先匹配状态，无匹配则返回默认色
   return (
-    MEMBER_POSITION_STATUS_COLOR_MAP[
-      status as keyof typeof MEMBER_POSITION_STATUS_COLOR_MAP
-    ] || MEMBER_POSITION_STATUS_COLOR_MAP.DEFAULT
+    MEMBERSHIP_POSITION_STATUS_COLOR_MAP[
+      status as keyof typeof MEMBERSHIP_POSITION_STATUS_COLOR_MAP
+    ] || MEMBERSHIP_POSITION_STATUS_COLOR_MAP.DEFAULT
   );
+}
+
+export const positionTypeList = computed(() => [
+  { value: 'REGULAR', label: $t('enum.position.type.REGULAR') },
+  {
+    value: 'LEADER',
+    label: $t('enum.position.type.LEADER'),
+  },
+  {
+    value: 'MANAGER',
+    label: $t('enum.position.type.MANAGER'),
+  },
+  {
+    value: 'INTERN',
+    label: $t('enum.position.type.INTERN'),
+  },
+  {
+    value: 'CONTRACT',
+    label: $t('enum.position.type.CONTRACT'),
+  },
+  {
+    value: 'OTHER',
+    label: $t('enum.position.type.OTHER'),
+  },
+]);
+
+export function positionTypeToName(status: Position_Status) {
+  const values = positionTypeList.value;
+  const matchedItem = values.find((item) => item.value === status);
+  return matchedItem ? matchedItem.label : '';
 }
 
 // 多主题职位类型颜色映射

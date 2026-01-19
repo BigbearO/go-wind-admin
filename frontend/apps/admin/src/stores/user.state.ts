@@ -8,6 +8,7 @@ import { defineStore } from 'pinia';
 import {
   createUserServiceClient,
   type userservicev1_User_Gender as User_Gender,
+  type userservicev1_User_Status as User_Status,
 } from '#/generated/api/admin/service/v1';
 import { makeOrderBy, makeQueryString, makeUpdateMask } from '#/utils/query';
 import { type Paging, requestClientRequestHandler } from '#/utils/request';
@@ -118,10 +119,46 @@ export const useUserListStore = defineStore('user-list', () => {
   };
 });
 
-export const statusList = computed(() => [
-  { value: 'ON', label: $t('enum.status.ON') },
-  { value: 'OFF', label: $t('enum.status.OFF') },
+export const userStatusList = computed(() => [
+  { value: 'NORMAL', label: $t('enum.user.status.NORMAL') },
+  { value: 'DISABLED', label: $t('enum.user.status.DISABLED') },
+  { value: 'PENDING', label: $t('enum.user.status.PENDING') },
+  { value: 'LOCKED', label: $t('enum.user.status.LOCKED') },
+  { value: 'EXPIRED', label: $t('enum.user.status.EXPIRED') },
+  { value: 'CLOSED', label: $t('enum.user.status.CLOSED') },
 ]);
+
+const USER_STATUS_COLOR_MAP = {
+  // 正常态：蓝色（活跃/正常使用）
+  NORMAL: '#4096FF',
+  // 禁用态：中性灰（非活跃但未删除，区别于锁定/终止）
+  DISABLED: '#909399',
+  // 待审核/待激活：警告橙（需处理但非风险）
+  PENDING: '#FF9A2E',
+  // 锁定态：警示红（临时锁定，可解锁）
+  LOCKED: '#F56C6C',
+  // 终止/离职：危险红（永久失效，高风险）
+  TERMINATED: '#F53F3F',
+  // 过期态：浅灰（权限/账号过期，非核心风险）
+  EXPIRED: '#C9CDD4',
+  // 关闭态：深灰（已注销，完全失效）
+  CLOSED: '#86909C',
+  // 默认值：兜底色（未知状态）
+  DEFAULT: '#86909C',
+} as const;
+
+export function userStatusToColor(status: User_Status) {
+  return (
+    USER_STATUS_COLOR_MAP[status as keyof typeof USER_STATUS_COLOR_MAP] ||
+    USER_STATUS_COLOR_MAP.DEFAULT
+  );
+}
+
+export function userStatusToName(status?: User_Status) {
+  const values = userStatusList.value;
+  const matchedItem = values.find((item) => item.value === status);
+  return matchedItem ? matchedItem.label : '';
+}
 
 export const genderList = computed(() => [
   { value: 'SECRET', label: $t('enum.gender.SECRET') },
