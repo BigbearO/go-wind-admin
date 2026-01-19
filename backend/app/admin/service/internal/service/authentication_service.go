@@ -185,7 +185,7 @@ func (s *AuthenticationService) authorizeAndEnrichUserTokenPayloadUserTenantRela
 	}
 
 	// 获取权限 ID 列表
-	permissionIDs, err := s.roleRepo.GetPermissionsByRoleIDs(ctx, roleIDs)
+	permissionIDs, err := s.roleRepo.ListPermissionIDsByRoleIDs(ctx, roleIDs)
 	if err != nil || len(permissionIDs) == 0 {
 		s.log.Errorf("get permissions by role ids failed [%v]", err)
 		return authenticationV1.ErrorForbidden("insufficient authority")
@@ -263,7 +263,7 @@ func (s *AuthenticationService) authorizeAndEnrichUserTokenPayloadUserTenantRela
 		}
 
 		// 获取权限 ID 列表
-		permissionIDs, err := s.roleRepo.GetPermissionsByRoleIDs(ctx, roleIDs)
+		permissionIDs, err := s.roleRepo.ListPermissionIDsByRoleIDs(ctx, roleIDs)
 		if err != nil || len(permissionIDs) == 0 {
 			s.log.Errorf("get permissions by role ids failed [%v]", err)
 			continue

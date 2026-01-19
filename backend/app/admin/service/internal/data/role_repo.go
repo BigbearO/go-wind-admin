@@ -580,9 +580,19 @@ func (r *RoleRepo) Delete(ctx context.Context, req *userV1.DeleteRoleRequest) (e
 	return nil
 }
 
-// GetPermissionsByRoleIDs 通过角色ID列表获取权限ID列表
-func (r *RoleRepo) GetPermissionsByRoleIDs(ctx context.Context, roleIDs []uint32) ([]uint32, error) {
-	return r.rolePermissionRepo.GetPermissionsByRoleIDs(ctx, roleIDs)
+// ListPermissionIDsByRoleIDs 通过角色ID列表获取权限ID列表
+func (r *RoleRepo) ListPermissionIDsByRoleIDs(ctx context.Context, roleIDs []uint32) ([]uint32, error) {
+	return r.rolePermissionRepo.ListPermissionIDsByRoleIDs(ctx, roleIDs)
+}
+
+// ListPermissionIDsByRoleCodes 通过角色编码列表获取权限ID列表
+func (r *RoleRepo) ListPermissionIDsByRoleCodes(ctx context.Context, roleCodes []string) ([]uint32, error) {
+	roleIDs, err := r.ListRoleIDsByRoleCodes(ctx, roleCodes)
+	if err != nil {
+		return nil, err
+	}
+
+	return r.rolePermissionRepo.ListPermissionIDsByRoleIDs(ctx, roleIDs)
 }
 
 // assignPermissionCodesToRole 分配权限编码给角色
@@ -640,7 +650,7 @@ func (r *RoleRepo) GetRolePermissionMenuIDs(ctx context.Context, roleID uint32) 
 
 // GetRolesPermissionMenuIDs 获取多个角色关联的权限菜单ID列表
 func (r *RoleRepo) GetRolesPermissionMenuIDs(ctx context.Context, roleIDs []uint32) ([]uint32, error) {
-	permissionIDs, err := r.rolePermissionRepo.GetPermissionsByRoleIDs(ctx, roleIDs)
+	permissionIDs, err := r.rolePermissionRepo.ListPermissionIDsByRoleIDs(ctx, roleIDs)
 	if err != nil {
 		return nil, err
 	}

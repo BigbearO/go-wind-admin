@@ -37,6 +37,8 @@ type PermissionService struct {
 	menuRepo *data.MenuRepo
 	apiRepo  *data.ApiRepo
 
+	roleRepo *data.RoleRepo
+
 	authorizer *data.Authorizer
 
 	menuPermissionConverter *converter.MenuPermissionConverter
@@ -49,6 +51,7 @@ func NewPermissionService(
 	permissionGroupRepo *data.PermissionGroupRepo,
 	menuRepo *data.MenuRepo,
 	apiRepo *data.ApiRepo,
+	roleRepo *data.RoleRepo,
 	authorizer *data.Authorizer,
 ) *PermissionService {
 	svc := &PermissionService{
@@ -57,6 +60,7 @@ func NewPermissionService(
 		permissionGroupRepo:     permissionGroupRepo,
 		menuRepo:                menuRepo,
 		apiRepo:                 apiRepo,
+		roleRepo:                roleRepo,
 		authorizer:              authorizer,
 		menuPermissionConverter: converter.NewMenuPermissionConverter(),
 		apiPermissionConverter:  converter.NewApiPermissionConverter(),
@@ -112,7 +116,29 @@ func (s *PermissionService) queryGroupInfoFromRepo(ctx context.Context, groupSet
 }
 
 func (s *PermissionService) List(ctx context.Context, req *paginationV1.PagingRequest) (*permissionV1.ListPermissionResponse, error) {
-	resp, err := s.permissionRepo.List(ctx, req)
+	// 获取操作人信息
+	operator, err := auth.FromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var limitPermissionIDs []uint32
+	if operator.GetTenantId() > 0 {
+		limitPermissionIDs, err = s.roleRepo.ListPermissionIDsByRoleCodes(ctx, operator.GetRoles())
+		if err != nil {
+			return nil, err
+		}
+
+		// 没有任何 permission 可访问，直接返回空列表
+		if len(limitPermissionIDs) == 0 {
+			return &permissionV1.ListPermissionResponse{
+				Items: []*permissionV1.Permission{},
+				Total: 0,
+			}, nil
+		}
+	}
+
+	resp, err := s.permissionRepo.List(ctx, req, limitPermissionIDs)
 	if err != nil {
 		return nil, err
 	}
@@ -133,9 +159,33 @@ func (s *PermissionService) List(ctx context.Context, req *paginationV1.PagingRe
 }
 
 func (s *PermissionService) Get(ctx context.Context, req *permissionV1.GetPermissionRequest) (*permissionV1.Permission, error) {
+	// 获取操作人信息
+	operator, err := auth.FromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	resp, err := s.permissionRepo.Get(ctx, req)
 	if err != nil {
 		return nil, err
+	}
+
+	if operator.GetTenantId() > 0 {
+		permissionIDs, err := s.roleRepo.ListPermissionIDsByRoleCodes(ctx, operator.GetRoles())
+		if err != nil {
+			return nil, err
+		}
+
+		found := false
+		for _, pid := range permissionIDs {
+			if pid == resp.GetId() {
+				found = true
+				break
+			}
+		}
+		if !found {
+			return nil, adminV1.ErrorForbidden("no access to the permission")
+		}
 	}
 
 	if resp.GroupId != nil {

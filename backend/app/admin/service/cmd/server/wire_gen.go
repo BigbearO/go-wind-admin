@@ -87,7 +87,7 @@ func initApp(context *bootstrap.Context) (*kratos.App, func(), error) {
 	menuService := service.NewMenuService(context, menuRepo)
 	apiService := service.NewApiService(context, apiRepo, authorizer)
 	permissionGroupRepo := data.NewPermissionGroupRepo(context, entClient)
-	permissionService := service.NewPermissionService(context, permissionRepo, permissionGroupRepo, menuRepo, apiRepo, authorizer)
+	permissionService := service.NewPermissionService(context, permissionRepo, permissionGroupRepo, menuRepo, apiRepo, roleRepo, authorizer)
 	permissionGroupService := service.NewPermissionGroupService(context, permissionGroupRepo, permissionRepo)
 	permissionAuditLogRepo := data.NewPermissionAuditLogRepo(context, entClient)
 	permissionAuditLogService := service.NewPermissionAuditLogService(context, permissionAuditLogRepo)

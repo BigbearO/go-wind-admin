@@ -2,6 +2,7 @@ package data
 
 import (
 	"context"
+	"strconv"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -96,12 +97,64 @@ func (r *PermissionRepo) Count(ctx context.Context, whereCond []func(s *sql.Sele
 	return count, nil
 }
 
-func (r *PermissionRepo) List(ctx context.Context, req *paginationV1.PagingRequest) (*permissionV1.ListPermissionResponse, error) {
+func clearFilterExprByFieldNames(expr *paginationV1.FilterExpr, fieldName string) {
+	if expr == nil {
+		return
+	}
+
+	for i := len(expr.GetConditions()) - 1; i >= 0; i-- {
+		cond := expr.GetConditions()[i]
+		if cond.GetField() == fieldName {
+			expr.Conditions = append(expr.Conditions[:i], expr.Conditions[i+1:]...)
+		}
+	}
+
+	for _, subExpr := range expr.GetGroups() {
+		clearFilterExprByFieldNames(subExpr, fieldName)
+	}
+}
+
+func (r *PermissionRepo) List(ctx context.Context, req *paginationV1.PagingRequest, limitPermissionIDs []uint32) (*permissionV1.ListPermissionResponse, error) {
 	if req == nil {
 		return nil, permissionV1.ErrorBadRequest("invalid parameter")
 	}
 
 	builder := r.entClient.Client().Permission.Query()
+
+	if len(limitPermissionIDs) > 0 {
+		filterExpr, err := r.repository.ConvertFilterByPagingRequest(req)
+		if err != nil {
+			return nil, err
+		}
+		if filterExpr != nil {
+			clearFilterExprByFieldNames(filterExpr, "id")
+			req.FilteringType = &paginationV1.PagingRequest_FilterExpr{FilterExpr: filterExpr}
+		}
+
+		var strIDs []string
+		for _, id := range limitPermissionIDs {
+			strIDs = append(strIDs, strconv.FormatUint(uint64(id), 10))
+		}
+
+		condition := &paginationV1.FilterCondition{
+			Field:  "id",
+			Op:     paginationV1.Operator_IN,
+			Values: strIDs,
+		}
+
+		if req.FilteringType == nil {
+			req.FilteringType = &paginationV1.PagingRequest_FilterExpr{
+				FilterExpr: &paginationV1.FilterExpr{
+					Type: paginationV1.ExprType_AND,
+					Conditions: []*paginationV1.FilterCondition{
+						condition,
+					},
+				},
+			}
+		} else {
+			req.GetFilterExpr().Conditions = append(req.GetFilterExpr().GetConditions(), condition)
+		}
+	}
 
 	ret, err := r.repository.ListWithPaging(ctx, builder, builder.Clone(), req)
 	if err != nil {

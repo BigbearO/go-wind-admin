@@ -223,8 +223,8 @@ func (r *RolePermissionRepo) ListPermissionIDs(ctx context.Context, roleID uint3
 	return ids, nil
 }
 
-// GetPermissionsByRoleIDs 根据角色ID列表获取权限ID列表
-func (r *RolePermissionRepo) GetPermissionsByRoleIDs(ctx context.Context, roleIDs []uint32) ([]uint32, error) {
+// ListPermissionIDsByRoleIDs 根据角色ID列表获取权限ID列表
+func (r *RolePermissionRepo) ListPermissionIDsByRoleIDs(ctx context.Context, roleIDs []uint32) ([]uint32, error) {
 	q := r.entClient.Client().RolePermission.Query().
 		Where(
 			rolepermission.RoleIDIn(roleIDs...),
