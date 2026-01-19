@@ -8,7 +8,8 @@ import { notification } from 'ant-design-vue';
 
 import { useVbenForm } from '#/adapter/form';
 import {
-  buildMenuTree, buildPermissionGroupTree,
+  buildMenuTree,
+  buildPermissionGroupTree,
   convertApiToTree,
   statusList,
   useApiStore,

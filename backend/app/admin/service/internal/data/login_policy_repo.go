@@ -20,15 +20,16 @@ import (
 	"go-wind-admin/app/admin/service/internal/data/ent/predicate"
 
 	adminV1 "go-wind-admin/api/gen/go/admin/service/v1"
+	authenticationV1 "go-wind-admin/api/gen/go/authentication/service/v1"
 )
 
 type LoginPolicyRepo struct {
 	entClient *entCrud.EntClient[*ent.Client]
 	log       *log.Helper
 
-	mapper          *mapper.CopierMapper[adminV1.LoginPolicy, ent.LoginPolicy]
-	typeConverter   *mapper.EnumTypeConverter[adminV1.LoginPolicy_Type, loginpolicy.Type]
-	methodConverter *mapper.EnumTypeConverter[adminV1.LoginPolicy_Method, loginpolicy.Method]
+	mapper          *mapper.CopierMapper[authenticationV1.LoginPolicy, ent.LoginPolicy]
+	typeConverter   *mapper.EnumTypeConverter[authenticationV1.LoginPolicy_Type, loginpolicy.Type]
+	methodConverter *mapper.EnumTypeConverter[authenticationV1.LoginPolicy_Method, loginpolicy.Method]
 
 	repository *entCrud.Repository[
 		ent.LoginPolicyQuery, ent.LoginPolicySelect,
@@ -36,17 +37,21 @@ type LoginPolicyRepo struct {
 		ent.LoginPolicyUpdate, ent.LoginPolicyUpdateOne,
 		ent.LoginPolicyDelete,
 		predicate.LoginPolicy,
-		adminV1.LoginPolicy, ent.LoginPolicy,
+		authenticationV1.LoginPolicy, ent.LoginPolicy,
 	]
 }
 
 func NewLoginPolicyRepo(ctx *bootstrap.Context, entClient *entCrud.EntClient[*ent.Client]) *LoginPolicyRepo {
 	repo := &LoginPolicyRepo{
-		log:             ctx.NewLoggerHelper("login-policy/repo/admin-service"),
-		entClient:       entClient,
-		mapper:          mapper.NewCopierMapper[adminV1.LoginPolicy, ent.LoginPolicy](),
-		typeConverter:   mapper.NewEnumTypeConverter[adminV1.LoginPolicy_Type, loginpolicy.Type](adminV1.LoginPolicy_Type_name, adminV1.LoginPolicy_Type_value),
-		methodConverter: mapper.NewEnumTypeConverter[adminV1.LoginPolicy_Method, loginpolicy.Method](adminV1.LoginPolicy_Method_name, adminV1.LoginPolicy_Method_value),
+		log:       ctx.NewLoggerHelper("login-policy/repo/admin-service"),
+		entClient: entClient,
+		mapper:    mapper.NewCopierMapper[authenticationV1.LoginPolicy, ent.LoginPolicy](),
+		typeConverter: mapper.NewEnumTypeConverter[authenticationV1.LoginPolicy_Type, loginpolicy.Type](
+			authenticationV1.LoginPolicy_Type_name, authenticationV1.LoginPolicy_Type_value,
+		),
+		methodConverter: mapper.NewEnumTypeConverter[authenticationV1.LoginPolicy_Method, loginpolicy.Method](
+			authenticationV1.LoginPolicy_Method_name, authenticationV1.LoginPolicy_Method_value,
+		),
 	}
 
 	repo.init()
@@ -61,7 +66,7 @@ func (r *LoginPolicyRepo) init() {
 		ent.LoginPolicyUpdate, ent.LoginPolicyUpdateOne,
 		ent.LoginPolicyDelete,
 		predicate.LoginPolicy,
-		adminV1.LoginPolicy, ent.LoginPolicy,
+		authenticationV1.LoginPolicy, ent.LoginPolicy,
 	](r.mapper)
 
 	r.mapper.AppendConverters(copierutil.NewTimeStringConverterPair())
@@ -86,7 +91,7 @@ func (r *LoginPolicyRepo) Count(ctx context.Context, whereCond []func(s *sql.Sel
 	return count, nil
 }
 
-func (r *LoginPolicyRepo) List(ctx context.Context, req *paginationV1.PagingRequest) (*adminV1.ListLoginPolicyResponse, error) {
+func (r *LoginPolicyRepo) List(ctx context.Context, req *paginationV1.PagingRequest) (*authenticationV1.ListLoginPolicyResponse, error) {
 	if req == nil {
 		return nil, adminV1.ErrorBadRequest("invalid parameter")
 	}
@@ -98,10 +103,10 @@ func (r *LoginPolicyRepo) List(ctx context.Context, req *paginationV1.PagingRequ
 		return nil, err
 	}
 	if ret == nil {
-		return &adminV1.ListLoginPolicyResponse{Total: 0, Items: nil}, nil
+		return &authenticationV1.ListLoginPolicyResponse{Total: 0, Items: nil}, nil
 	}
 
-	return &adminV1.ListLoginPolicyResponse{
+	return &authenticationV1.ListLoginPolicyResponse{
 		Total: ret.Total,
 		Items: ret.Items,
 	}, nil
@@ -118,7 +123,7 @@ func (r *LoginPolicyRepo) IsExist(ctx context.Context, id uint32) (bool, error) 
 	return exist, nil
 }
 
-func (r *LoginPolicyRepo) Get(ctx context.Context, req *adminV1.GetLoginPolicyRequest) (*adminV1.LoginPolicy, error) {
+func (r *LoginPolicyRepo) Get(ctx context.Context, req *authenticationV1.GetLoginPolicyRequest) (*authenticationV1.LoginPolicy, error) {
 	if req == nil {
 		return nil, adminV1.ErrorBadRequest("invalid parameter")
 	}
@@ -128,7 +133,7 @@ func (r *LoginPolicyRepo) Get(ctx context.Context, req *adminV1.GetLoginPolicyRe
 	var whereCond []func(s *sql.Selector)
 	switch req.QueryBy.(type) {
 	default:
-	case *adminV1.GetLoginPolicyRequest_Id:
+	case *authenticationV1.GetLoginPolicyRequest_Id:
 		whereCond = append(whereCond, loginpolicy.IDEQ(req.GetId()))
 	}
 
@@ -140,7 +145,7 @@ func (r *LoginPolicyRepo) Get(ctx context.Context, req *adminV1.GetLoginPolicyRe
 	return dto, err
 }
 
-func (r *LoginPolicyRepo) Create(ctx context.Context, req *adminV1.CreateLoginPolicyRequest) error {
+func (r *LoginPolicyRepo) Create(ctx context.Context, req *authenticationV1.CreateLoginPolicyRequest) error {
 	if req == nil || req.Data == nil {
 		return adminV1.ErrorBadRequest("invalid request")
 	}
@@ -167,7 +172,7 @@ func (r *LoginPolicyRepo) Create(ctx context.Context, req *adminV1.CreateLoginPo
 	return nil
 }
 
-func (r *LoginPolicyRepo) Update(ctx context.Context, req *adminV1.UpdateLoginPolicyRequest) error {
+func (r *LoginPolicyRepo) Update(ctx context.Context, req *authenticationV1.UpdateLoginPolicyRequest) error {
 	if req == nil || req.Data == nil {
 		return adminV1.ErrorBadRequest("invalid request")
 	}
@@ -179,7 +184,7 @@ func (r *LoginPolicyRepo) Update(ctx context.Context, req *adminV1.UpdateLoginPo
 			return err
 		}
 		if !exist {
-			createReq := &adminV1.CreateLoginPolicyRequest{Data: req.Data}
+			createReq := &authenticationV1.CreateLoginPolicyRequest{Data: req.Data}
 			createReq.Data.CreatedBy = createReq.Data.UpdatedBy
 			createReq.Data.UpdatedBy = nil
 			return r.Create(ctx, createReq)
@@ -188,7 +193,7 @@ func (r *LoginPolicyRepo) Update(ctx context.Context, req *adminV1.UpdateLoginPo
 
 	builder := r.entClient.Client().Debug().LoginPolicy.Update()
 	err := r.repository.UpdateX(ctx, builder, req.Data, req.GetUpdateMask(),
-		func(dto *adminV1.LoginPolicy) {
+		func(dto *authenticationV1.LoginPolicy) {
 			builder.
 				SetNillableTargetID(req.Data.TargetId).
 				SetNillableType(r.typeConverter.ToEntity(req.Data.Type)).
@@ -210,7 +215,7 @@ func (r *LoginPolicyRepo) Update(ctx context.Context, req *adminV1.UpdateLoginPo
 	return err
 }
 
-func (r *LoginPolicyRepo) Delete(ctx context.Context, req *adminV1.DeleteLoginPolicyRequest) error {
+func (r *LoginPolicyRepo) Delete(ctx context.Context, req *authenticationV1.DeleteLoginPolicyRequest) error {
 	if req == nil {
 		return adminV1.ErrorBadRequest("invalid parameter")
 	}

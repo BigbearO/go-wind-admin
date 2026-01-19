@@ -164,6 +164,7 @@ export function makeQueryString(
 
   if (needCleanTenant) {
     // 删除租户相关字段 tenant_id 和 tenantId
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { tenant_id, tenantId, ...rest } = cleaned as Record<string, any>;
 
     // 过滤掉空对象

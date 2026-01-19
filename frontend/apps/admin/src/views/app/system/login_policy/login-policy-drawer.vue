@@ -122,10 +122,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
     try {
       await (data.value?.create
         ? loginPolicyStore.createLoginPolicy(values)
-        : loginPolicyStore.updateLoginPolicy(
-            data.value.row.id,
-            values,
-          ));
+        : loginPolicyStore.updateLoginPolicy(data.value.row.id, values));
 
       notification.success({
         message: data.value?.create

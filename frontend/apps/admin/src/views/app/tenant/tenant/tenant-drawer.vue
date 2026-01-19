@@ -11,14 +11,12 @@ import {
   tenantAuditStatusList,
   tenantStatusList,
   tenantTypeList,
-  useRoleStore,
   useTenantStore,
   useUserListStore,
 } from '#/stores';
 
 const tenantStore = useTenantStore();
 const userListStore = useUserListStore();
-const roleStore = useRoleStore();
 
 const data = ref();
 
@@ -296,7 +294,7 @@ async function createTenantWithAdminUser(values: any) {
 
   // 检查租户编码是否存在
   try {
-    await tenantStore.tenantExists(values.code);
+    await tenantStore.tenantExists(values.code, values.name);
   } catch {
     notification.error({
       message: $t('page.tenant.tenant_code_exists'),

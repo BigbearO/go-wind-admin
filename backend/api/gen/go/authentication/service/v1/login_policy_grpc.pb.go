@@ -2,14 +2,13 @@
 // versions:
 // - protoc-gen-go-grpc v1.6.0
 // - protoc             (unknown)
-// source: admin/service/v1/i_login_policy.proto
+// source: authentication/service/v1/login_policy.proto
 
-package adminpb
+package authenticationpb
 
 import (
 	context "context"
 	v1 "github.com/tx7do/go-crud/api/gen/go/pagination/v1"
-	v11 "go-wind-admin/api/gen/go/authentication/service/v1"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -22,11 +21,11 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	LoginPolicyService_List_FullMethodName   = "/admin.service.v1.LoginPolicyService/List"
-	LoginPolicyService_Get_FullMethodName    = "/admin.service.v1.LoginPolicyService/Get"
-	LoginPolicyService_Create_FullMethodName = "/admin.service.v1.LoginPolicyService/Create"
-	LoginPolicyService_Update_FullMethodName = "/admin.service.v1.LoginPolicyService/Update"
-	LoginPolicyService_Delete_FullMethodName = "/admin.service.v1.LoginPolicyService/Delete"
+	LoginPolicyService_List_FullMethodName   = "/authentication.service.v1.LoginPolicyService/List"
+	LoginPolicyService_Get_FullMethodName    = "/authentication.service.v1.LoginPolicyService/Get"
+	LoginPolicyService_Create_FullMethodName = "/authentication.service.v1.LoginPolicyService/Create"
+	LoginPolicyService_Update_FullMethodName = "/authentication.service.v1.LoginPolicyService/Update"
+	LoginPolicyService_Delete_FullMethodName = "/authentication.service.v1.LoginPolicyService/Delete"
 )
 
 // LoginPolicyServiceClient is the client API for LoginPolicyService service.
@@ -36,15 +35,15 @@ const (
 // 登录策略管理服务
 type LoginPolicyServiceClient interface {
 	// 查询登录策略列表
-	List(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*v11.ListLoginPolicyResponse, error)
+	List(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*ListLoginPolicyResponse, error)
 	// 查询登录策略详情
-	Get(ctx context.Context, in *v11.GetLoginPolicyRequest, opts ...grpc.CallOption) (*v11.LoginPolicy, error)
+	Get(ctx context.Context, in *GetLoginPolicyRequest, opts ...grpc.CallOption) (*LoginPolicy, error)
 	// 创建登录策略
-	Create(ctx context.Context, in *v11.CreateLoginPolicyRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	Create(ctx context.Context, in *CreateLoginPolicyRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// 更新登录策略
-	Update(ctx context.Context, in *v11.UpdateLoginPolicyRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	Update(ctx context.Context, in *UpdateLoginPolicyRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// 删除登录策略
-	Delete(ctx context.Context, in *v11.DeleteLoginPolicyRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	Delete(ctx context.Context, in *DeleteLoginPolicyRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type loginPolicyServiceClient struct {
@@ -55,9 +54,9 @@ func NewLoginPolicyServiceClient(cc grpc.ClientConnInterface) LoginPolicyService
 	return &loginPolicyServiceClient{cc}
 }
 
-func (c *loginPolicyServiceClient) List(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*v11.ListLoginPolicyResponse, error) {
+func (c *loginPolicyServiceClient) List(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*ListLoginPolicyResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(v11.ListLoginPolicyResponse)
+	out := new(ListLoginPolicyResponse)
 	err := c.cc.Invoke(ctx, LoginPolicyService_List_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -65,9 +64,9 @@ func (c *loginPolicyServiceClient) List(ctx context.Context, in *v1.PagingReques
 	return out, nil
 }
 
-func (c *loginPolicyServiceClient) Get(ctx context.Context, in *v11.GetLoginPolicyRequest, opts ...grpc.CallOption) (*v11.LoginPolicy, error) {
+func (c *loginPolicyServiceClient) Get(ctx context.Context, in *GetLoginPolicyRequest, opts ...grpc.CallOption) (*LoginPolicy, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(v11.LoginPolicy)
+	out := new(LoginPolicy)
 	err := c.cc.Invoke(ctx, LoginPolicyService_Get_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -75,7 +74,7 @@ func (c *loginPolicyServiceClient) Get(ctx context.Context, in *v11.GetLoginPoli
 	return out, nil
 }
 
-func (c *loginPolicyServiceClient) Create(ctx context.Context, in *v11.CreateLoginPolicyRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *loginPolicyServiceClient) Create(ctx context.Context, in *CreateLoginPolicyRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, LoginPolicyService_Create_FullMethodName, in, out, cOpts...)
@@ -85,7 +84,7 @@ func (c *loginPolicyServiceClient) Create(ctx context.Context, in *v11.CreateLog
 	return out, nil
 }
 
-func (c *loginPolicyServiceClient) Update(ctx context.Context, in *v11.UpdateLoginPolicyRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *loginPolicyServiceClient) Update(ctx context.Context, in *UpdateLoginPolicyRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, LoginPolicyService_Update_FullMethodName, in, out, cOpts...)
@@ -95,7 +94,7 @@ func (c *loginPolicyServiceClient) Update(ctx context.Context, in *v11.UpdateLog
 	return out, nil
 }
 
-func (c *loginPolicyServiceClient) Delete(ctx context.Context, in *v11.DeleteLoginPolicyRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *loginPolicyServiceClient) Delete(ctx context.Context, in *DeleteLoginPolicyRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, LoginPolicyService_Delete_FullMethodName, in, out, cOpts...)
@@ -112,15 +111,15 @@ func (c *loginPolicyServiceClient) Delete(ctx context.Context, in *v11.DeleteLog
 // 登录策略管理服务
 type LoginPolicyServiceServer interface {
 	// 查询登录策略列表
-	List(context.Context, *v1.PagingRequest) (*v11.ListLoginPolicyResponse, error)
+	List(context.Context, *v1.PagingRequest) (*ListLoginPolicyResponse, error)
 	// 查询登录策略详情
-	Get(context.Context, *v11.GetLoginPolicyRequest) (*v11.LoginPolicy, error)
+	Get(context.Context, *GetLoginPolicyRequest) (*LoginPolicy, error)
 	// 创建登录策略
-	Create(context.Context, *v11.CreateLoginPolicyRequest) (*emptypb.Empty, error)
+	Create(context.Context, *CreateLoginPolicyRequest) (*emptypb.Empty, error)
 	// 更新登录策略
-	Update(context.Context, *v11.UpdateLoginPolicyRequest) (*emptypb.Empty, error)
+	Update(context.Context, *UpdateLoginPolicyRequest) (*emptypb.Empty, error)
 	// 删除登录策略
-	Delete(context.Context, *v11.DeleteLoginPolicyRequest) (*emptypb.Empty, error)
+	Delete(context.Context, *DeleteLoginPolicyRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedLoginPolicyServiceServer()
 }
 
@@ -131,19 +130,19 @@ type LoginPolicyServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedLoginPolicyServiceServer struct{}
 
-func (UnimplementedLoginPolicyServiceServer) List(context.Context, *v1.PagingRequest) (*v11.ListLoginPolicyResponse, error) {
+func (UnimplementedLoginPolicyServiceServer) List(context.Context, *v1.PagingRequest) (*ListLoginPolicyResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method List not implemented")
 }
-func (UnimplementedLoginPolicyServiceServer) Get(context.Context, *v11.GetLoginPolicyRequest) (*v11.LoginPolicy, error) {
+func (UnimplementedLoginPolicyServiceServer) Get(context.Context, *GetLoginPolicyRequest) (*LoginPolicy, error) {
 	return nil, status.Error(codes.Unimplemented, "method Get not implemented")
 }
-func (UnimplementedLoginPolicyServiceServer) Create(context.Context, *v11.CreateLoginPolicyRequest) (*emptypb.Empty, error) {
+func (UnimplementedLoginPolicyServiceServer) Create(context.Context, *CreateLoginPolicyRequest) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Create not implemented")
 }
-func (UnimplementedLoginPolicyServiceServer) Update(context.Context, *v11.UpdateLoginPolicyRequest) (*emptypb.Empty, error) {
+func (UnimplementedLoginPolicyServiceServer) Update(context.Context, *UpdateLoginPolicyRequest) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Update not implemented")
 }
-func (UnimplementedLoginPolicyServiceServer) Delete(context.Context, *v11.DeleteLoginPolicyRequest) (*emptypb.Empty, error) {
+func (UnimplementedLoginPolicyServiceServer) Delete(context.Context, *DeleteLoginPolicyRequest) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedLoginPolicyServiceServer) mustEmbedUnimplementedLoginPolicyServiceServer() {}
@@ -186,7 +185,7 @@ func _LoginPolicyService_List_Handler(srv interface{}, ctx context.Context, dec 
 }
 
 func _LoginPolicyService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(v11.GetLoginPolicyRequest)
+	in := new(GetLoginPolicyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -198,13 +197,13 @@ func _LoginPolicyService_Get_Handler(srv interface{}, ctx context.Context, dec f
 		FullMethod: LoginPolicyService_Get_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LoginPolicyServiceServer).Get(ctx, req.(*v11.GetLoginPolicyRequest))
+		return srv.(LoginPolicyServiceServer).Get(ctx, req.(*GetLoginPolicyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _LoginPolicyService_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(v11.CreateLoginPolicyRequest)
+	in := new(CreateLoginPolicyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -216,13 +215,13 @@ func _LoginPolicyService_Create_Handler(srv interface{}, ctx context.Context, de
 		FullMethod: LoginPolicyService_Create_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LoginPolicyServiceServer).Create(ctx, req.(*v11.CreateLoginPolicyRequest))
+		return srv.(LoginPolicyServiceServer).Create(ctx, req.(*CreateLoginPolicyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _LoginPolicyService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(v11.UpdateLoginPolicyRequest)
+	in := new(UpdateLoginPolicyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -234,13 +233,13 @@ func _LoginPolicyService_Update_Handler(srv interface{}, ctx context.Context, de
 		FullMethod: LoginPolicyService_Update_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LoginPolicyServiceServer).Update(ctx, req.(*v11.UpdateLoginPolicyRequest))
+		return srv.(LoginPolicyServiceServer).Update(ctx, req.(*UpdateLoginPolicyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _LoginPolicyService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(v11.DeleteLoginPolicyRequest)
+	in := new(DeleteLoginPolicyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -252,7 +251,7 @@ func _LoginPolicyService_Delete_Handler(srv interface{}, ctx context.Context, de
 		FullMethod: LoginPolicyService_Delete_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LoginPolicyServiceServer).Delete(ctx, req.(*v11.DeleteLoginPolicyRequest))
+		return srv.(LoginPolicyServiceServer).Delete(ctx, req.(*DeleteLoginPolicyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -261,7 +260,7 @@ func _LoginPolicyService_Delete_Handler(srv interface{}, ctx context.Context, de
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var LoginPolicyService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "admin.service.v1.LoginPolicyService",
+	ServiceName: "authentication.service.v1.LoginPolicyService",
 	HandlerType: (*LoginPolicyServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -286,5 +285,5 @@ var LoginPolicyService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "admin/service/v1/i_login_policy.proto",
+	Metadata: "authentication/service/v1/login_policy.proto",
 }

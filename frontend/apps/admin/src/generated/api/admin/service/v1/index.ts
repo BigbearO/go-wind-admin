@@ -2573,81 +2573,18 @@ export type auditservicev1_GetLoginAuditLogRequest = {
   viewMask?: wellKnownFieldMask;
 };
 
-// 登录策略
-export type LoginPolicy = {
-  //
-  // Behaviors: OPTIONAL
-  id?: number;
-  targetId?: number;
-  type?: LoginPolicy_Type;
-  method?: LoginPolicy_Method;
-  value?: string;
-  reason?: string;
-  tenantId?: number;
-  tenantName?: string;
-  createdBy?: number;
-  updatedBy?: number;
-  deletedBy?: number;
-  createdAt?: wellKnownTimestamp;
-  updatedAt?: wellKnownTimestamp;
-  deletedAt?: wellKnownTimestamp;
-};
-
-// 登录策略类型
-export type LoginPolicy_Type =
-  | "LOGIN_RESTRICTION_TYPE_UNSPECIFIED"
-  | "BLACKLIST"
-  | "WHITELIST";
-// 登录策略方式
-export type LoginPolicy_Method =
-  | "LOGIN_RESTRICTION_METHOD_UNSPECIFIED"
-  | "IP"
-  | "MAC"
-  | "REGION"
-  | "TIME"
-  | "DEVICE";
-// 查询登录策略列表 - 回应
-export type ListLoginPolicyResponse = {
-  items: LoginPolicy[] | undefined;
-  total: number | undefined;
-};
-
-// 查询登录策略详情 - 请求
-export type GetLoginPolicyRequest = {
-  id?: number;
-  viewMask?: wellKnownFieldMask;
-};
-
-// 创建登录策略 - 请求
-export type CreateLoginPolicyRequest = {
-  data: LoginPolicy | undefined;
-};
-
-// 更新登录策略 - 请求
-export type UpdateLoginPolicyRequest = {
-  id: number | undefined;
-  data: LoginPolicy | undefined;
-  updateMask: wellKnownFieldMask | undefined;
-  allowMissing?: boolean;
-};
-
-// 删除登录策略 - 请求
-export type DeleteLoginPolicyRequest = {
-  id: number | undefined;
-};
-
 // 登录策略管理服务
 export interface LoginPolicyService {
   // 查询登录策略列表
-  List(request: pagination_PagingRequest): Promise<ListLoginPolicyResponse>;
+  List(request: pagination_PagingRequest): Promise<authenticationservicev1_ListLoginPolicyResponse>;
   // 查询登录策略详情
-  Get(request: GetLoginPolicyRequest): Promise<LoginPolicy>;
+  Get(request: authenticationservicev1_GetLoginPolicyRequest): Promise<authenticationservicev1_LoginPolicy>;
   // 创建登录策略
-  Create(request: CreateLoginPolicyRequest): Promise<wellKnownEmpty>;
+  Create(request: authenticationservicev1_CreateLoginPolicyRequest): Promise<wellKnownEmpty>;
   // 更新登录策略
-  Update(request: UpdateLoginPolicyRequest): Promise<wellKnownEmpty>;
+  Update(request: authenticationservicev1_UpdateLoginPolicyRequest): Promise<wellKnownEmpty>;
   // 删除登录策略
-  Delete(request: DeleteLoginPolicyRequest): Promise<wellKnownEmpty>;
+  Delete(request: authenticationservicev1_DeleteLoginPolicyRequest): Promise<wellKnownEmpty>;
 }
 
 export function createLoginPolicyServiceClient(
@@ -2731,7 +2668,7 @@ export function createLoginPolicyServiceClient(
       }, {
         service: "LoginPolicyService",
         method: "List",
-      }) as Promise<ListLoginPolicyResponse>;
+      }) as Promise<authenticationservicev1_ListLoginPolicyResponse>;
     },
     Get(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
       if (!request.id) {
@@ -2754,7 +2691,7 @@ export function createLoginPolicyServiceClient(
       }, {
         service: "LoginPolicyService",
         method: "Get",
-      }) as Promise<LoginPolicy>;
+      }) as Promise<authenticationservicev1_LoginPolicy>;
     },
     Create(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
       const path = `admin/v1/login-policies`; // eslint-disable-line quotes
@@ -2815,6 +2752,69 @@ export function createLoginPolicyServiceClient(
     },
   };
 }
+// 查询登录策略列表 - 回应
+export type authenticationservicev1_ListLoginPolicyResponse = {
+  items: authenticationservicev1_LoginPolicy[] | undefined;
+  total: number | undefined;
+};
+
+// 登录策略
+export type authenticationservicev1_LoginPolicy = {
+  //
+  // Behaviors: OPTIONAL
+  id?: number;
+  targetId?: number;
+  type?: authenticationservicev1_LoginPolicy_Type;
+  method?: authenticationservicev1_LoginPolicy_Method;
+  value?: string;
+  reason?: string;
+  tenantId?: number;
+  tenantName?: string;
+  createdBy?: number;
+  updatedBy?: number;
+  deletedBy?: number;
+  createdAt?: wellKnownTimestamp;
+  updatedAt?: wellKnownTimestamp;
+  deletedAt?: wellKnownTimestamp;
+};
+
+// 登录策略类型
+export type authenticationservicev1_LoginPolicy_Type =
+  | "LOGIN_RESTRICTION_TYPE_UNSPECIFIED"
+  | "BLACKLIST"
+  | "WHITELIST";
+// 登录策略方式
+export type authenticationservicev1_LoginPolicy_Method =
+  | "LOGIN_RESTRICTION_METHOD_UNSPECIFIED"
+  | "IP"
+  | "MAC"
+  | "REGION"
+  | "TIME"
+  | "DEVICE";
+// 查询登录策略详情 - 请求
+export type authenticationservicev1_GetLoginPolicyRequest = {
+  id?: number;
+  viewMask?: wellKnownFieldMask;
+};
+
+// 创建登录策略 - 请求
+export type authenticationservicev1_CreateLoginPolicyRequest = {
+  data: authenticationservicev1_LoginPolicy | undefined;
+};
+
+// 更新登录策略 - 请求
+export type authenticationservicev1_UpdateLoginPolicyRequest = {
+  id: number | undefined;
+  data: authenticationservicev1_LoginPolicy | undefined;
+  updateMask: wellKnownFieldMask | undefined;
+  allowMissing?: boolean;
+};
+
+// 删除登录策略 - 请求
+export type authenticationservicev1_DeleteLoginPolicyRequest = {
+  id: number | undefined;
+};
+
 // 后台菜单管理服务
 export interface MenuService {
   // 查询菜单列表

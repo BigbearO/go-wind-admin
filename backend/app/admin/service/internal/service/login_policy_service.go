@@ -12,6 +12,7 @@ import (
 	"go-wind-admin/app/admin/service/internal/data"
 
 	adminV1 "go-wind-admin/api/gen/go/admin/service/v1"
+	authenticationV1 "go-wind-admin/api/gen/go/authentication/service/v1"
 
 	"go-wind-admin/pkg/middleware/auth"
 )
@@ -31,15 +32,15 @@ func NewLoginPolicyService(ctx *bootstrap.Context, repo *data.LoginPolicyRepo) *
 	}
 }
 
-func (s *LoginPolicyService) List(ctx context.Context, req *paginationV1.PagingRequest) (*adminV1.ListLoginPolicyResponse, error) {
+func (s *LoginPolicyService) List(ctx context.Context, req *paginationV1.PagingRequest) (*authenticationV1.ListLoginPolicyResponse, error) {
 	return s.repo.List(ctx, req)
 }
 
-func (s *LoginPolicyService) Get(ctx context.Context, req *adminV1.GetLoginPolicyRequest) (*adminV1.LoginPolicy, error) {
+func (s *LoginPolicyService) Get(ctx context.Context, req *authenticationV1.GetLoginPolicyRequest) (*authenticationV1.LoginPolicy, error) {
 	return s.repo.Get(ctx, req)
 }
 
-func (s *LoginPolicyService) Create(ctx context.Context, req *adminV1.CreateLoginPolicyRequest) (*emptypb.Empty, error) {
+func (s *LoginPolicyService) Create(ctx context.Context, req *authenticationV1.CreateLoginPolicyRequest) (*emptypb.Empty, error) {
 	if req == nil || req.Data == nil {
 		return nil, adminV1.ErrorBadRequest("invalid request")
 	}
@@ -59,7 +60,7 @@ func (s *LoginPolicyService) Create(ctx context.Context, req *adminV1.CreateLogi
 	return &emptypb.Empty{}, nil
 }
 
-func (s *LoginPolicyService) Update(ctx context.Context, req *adminV1.UpdateLoginPolicyRequest) (*emptypb.Empty, error) {
+func (s *LoginPolicyService) Update(ctx context.Context, req *authenticationV1.UpdateLoginPolicyRequest) (*emptypb.Empty, error) {
 	if req == nil || req.Data == nil {
 		return nil, adminV1.ErrorBadRequest("invalid request")
 	}
@@ -79,7 +80,7 @@ func (s *LoginPolicyService) Update(ctx context.Context, req *adminV1.UpdateLogi
 	return &emptypb.Empty{}, nil
 }
 
-func (s *LoginPolicyService) Delete(ctx context.Context, req *adminV1.DeleteLoginPolicyRequest) (*emptypb.Empty, error) {
+func (s *LoginPolicyService) Delete(ctx context.Context, req *authenticationV1.DeleteLoginPolicyRequest) (*emptypb.Empty, error) {
 	if req == nil {
 		return nil, adminV1.ErrorBadRequest("invalid request")
 	}
