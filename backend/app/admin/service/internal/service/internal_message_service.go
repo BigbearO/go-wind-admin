@@ -255,7 +255,7 @@ func (s *InternalMessageService) sendNotification(ctx context.Context, messageId
 
 	recipientJson, _ := json.Marshal(recipient)
 
-	recipientStreamIds := s.userToken.GetAccessToken(ctx, recipientUserId)
+	recipientStreamIds := s.userToken.GetAccessTokens(ctx, recipientUserId)
 	for _, streamId := range recipientStreamIds {
 		s.sseServer.Publish(ctx, sse.StreamID(streamId), &sse.Event{
 			ID:    []byte(uuid.New().String()),

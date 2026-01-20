@@ -111,14 +111,14 @@ func (r *UserTokenCacheRepo) AddBlockedAccessToken(ctx context.Context, userId u
 	return r.set(ctx, key, accessToken, expires)
 }
 
-// GetAccessToken 获取访问令牌
-func (r *UserTokenCacheRepo) GetAccessToken(ctx context.Context, userId uint32) []string {
+// GetAccessTokens 获取访问令牌列表
+func (r *UserTokenCacheRepo) GetAccessTokens(ctx context.Context, userId uint32) []string {
 	key := r.makeAccessTokenKey(userId)
 	return r.get(ctx, key)
 }
 
-// GetRefreshToken 获取刷新令牌
-func (r *UserTokenCacheRepo) GetRefreshToken(ctx context.Context, userId uint32) []string {
+// GetRefreshTokens 获取刷新令牌列表
+func (r *UserTokenCacheRepo) GetRefreshTokens(ctx context.Context, userId uint32) []string {
 	key := r.makeRefreshTokenKey(userId)
 	return r.get(ctx, key)
 }
