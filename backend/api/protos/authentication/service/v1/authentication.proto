@@ -30,6 +30,9 @@ service AuthenticationService {
   // 验证令牌
   rpc ValidateToken(ValidateTokenRequest) returns (ValidateTokenResponse) {}
 
+  // 获取访问令牌列表
+  rpc GetAccessTokens(GetAccessTokensRequest) returns (GetAccessTokensResponse) {}
+
 
   // 获取当前用户身份信息
   rpc WhoAmI(google.protobuf.Empty) returns (WhoAmIResponse) {}
@@ -54,6 +57,14 @@ enum TokenType {
 enum ClientType {
   admin = 0; // 管理端
   app = 1; // APP
+}
+
+// 令牌类别
+enum TokenCategory {
+  TOKEN_CATEGORY_UNSPECIFIED = 0; // 由服务端根据 token 推断（默认）
+
+  ACCESS = 1;  // 访问令牌
+  REFRESH = 2; // 刷新令牌
 }
 
 // 用户后台登录 - 请求
@@ -197,19 +208,33 @@ message LogoutRequest {
 
 // 验证令牌 - 请求
 message ValidateTokenRequest {
-  string token = 1 [
+  uint32 user_id = 1 [
+    json_name = "userId",
+    (gnostic.openapi.v3.property) = {
+      description: "用户ID"
+    }
+  ]; // 用户ID
+
+  string token = 2 [
     json_name = "token",
     (gnostic.openapi.v3.property) = {
       description: "令牌"
     }
   ]; // 令牌
 
-  ClientType client_type = 2 [
+  ClientType client_type = 3 [
     json_name = "clientType",
     (gnostic.openapi.v3.property) = {
       description: "客户端类型"
     }
   ]; // 客户端类型
+
+  TokenCategory token_category = 4 [
+    json_name = "tokenCategory",
+    (gnostic.openapi.v3.property) = {
+      description: "期望验证的令牌类别：ACCESS=访问令牌，REFRESH=刷新令牌。若未指定，服务端可尝试根据 token 推断处理方式。"
+    }
+  ];
 }
 
 // 验证令牌 - 回应
@@ -277,4 +302,28 @@ message WhoAmIResponse {
       description: "当前用户的用户名"
     }
   ]; // 当前用户的用户名
+}
+
+message GetAccessTokensRequest {
+  uint32 user_id = 1 [
+    json_name = "userId",
+    (gnostic.openapi.v3.property) = {
+      description: "用户ID"
+    }
+  ]; // 用户ID
+
+  ClientType client_type = 2 [
+    json_name = "clientType",
+    (gnostic.openapi.v3.property) = {
+      description: "客户端类型"
+    }
+  ]; // 客户端类型
+}
+message GetAccessTokensResponse {
+  repeated string access_tokens = 1 [
+    json_name = "accessTokens",
+    (gnostic.openapi.v3.property) = {
+      description: "访问令牌列表"
+    }
+  ]; // 访问令牌列表
 }

@@ -12,10 +12,10 @@ import "google/protobuf/timestamp.proto";
 import "google/protobuf/field_mask.proto";
 
 import "pagination/v1/pagination.proto";
-import "dict/service/v1/dict.proto";
+import "dict/service/v1/dict_type.proto";
 
-// 数据字典管理服务
-service DictService {
+// 数据字典分类管理服务
+service DictTypeService {
   // 分页查询字典类型列表
   rpc ListDictType (pagination.PagingRequest) returns (dict.service.v1.ListDictTypeResponse) {
     option (google.api.http) = {
@@ -50,40 +50,9 @@ service DictService {
   }
 
   // 删除字典类型
-  rpc DeleteDictType (dict.service.v1.BatchDeleteDictRequest) returns (google.protobuf.Empty) {
+  rpc DeleteDictType (dict.service.v1.DeleteDictTypeRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/admin/v1/dict-types"
-    };
-  }
-
-
-  // 分页查询字典条目列表
-  rpc ListDictEntry (pagination.PagingRequest) returns (dict.service.v1.ListDictEntryResponse) {
-    option (google.api.http) = {
-      get: "/admin/v1/dict-entries"
-    };
-  }
-
-  // 创建字典条目
-  rpc CreateDictEntry (dict.service.v1.CreateDictEntryRequest) returns (google.protobuf.Empty) {
-    option (google.api.http) = {
-      post: "/admin/v1/dict-entries"
-      body: "*"
-    };
-  }
-
-  // 更新字典条目
-  rpc UpdateDictEntry (dict.service.v1.UpdateDictEntryRequest) returns (google.protobuf.Empty) {
-    option (google.api.http) = {
-      put: "/admin/v1/dict-entries/{id}"
-      body: "*"
-    };
-  }
-
-  // 删除字典条目
-  rpc DeleteDictEntry (dict.service.v1.BatchDeleteDictRequest) returns (google.protobuf.Empty) {
-    option (google.api.http) = {
-      delete: "/admin/v1/dict-entries"
     };
   }
 }

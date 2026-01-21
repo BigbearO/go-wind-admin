@@ -2,7 +2,6 @@ package data
 
 import (
 	"context"
-	permissionV1 "go-wind-admin/api/gen/go/permission/service/v1"
 	"sort"
 	"time"
 
@@ -215,7 +214,7 @@ func (r *OrgUnitRepo) Create(ctx context.Context, req *userV1.CreateOrgUnitReque
 	tx, err = r.entClient.Client().Tx(ctx)
 	if err != nil {
 		r.log.Errorf("start transaction failed: %s", err.Error())
-		return permissionV1.ErrorInternalServerError("start transaction failed")
+		return userV1.ErrorInternalServerError("start transaction failed")
 	}
 	defer func() {
 		if err != nil {
@@ -226,7 +225,7 @@ func (r *OrgUnitRepo) Create(ctx context.Context, req *userV1.CreateOrgUnitReque
 		}
 		if commitErr := tx.Commit(); commitErr != nil {
 			r.log.Errorf("transaction commit failed: %s", commitErr.Error())
-			err = permissionV1.ErrorInternalServerError("transaction commit failed")
+			err = userV1.ErrorInternalServerError("transaction commit failed")
 		}
 	}()
 

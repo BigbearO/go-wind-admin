@@ -81,7 +81,8 @@ func NewRestServer(
 
 	authenticationService *service.AuthenticationService,
 	portalService *service.AdminPortalService,
-	dictService *service.DictService,
+	dictTypeService *service.DictTypeService,
+	dictEntryService *service.DictEntryService,
 	ossService *service.OssService,
 	uEditorService *service.UEditorService,
 	fileService *service.FileService,
@@ -132,9 +133,11 @@ func NewRestServer(
 	adminV1.RegisterUserProfileServiceHTTPServer(srv, userProfileService)
 
 	adminV1.RegisterAdminPortalServiceHTTPServer(srv, portalService)
-	adminV1.RegisterDictServiceHTTPServer(srv, dictService)
 	adminV1.RegisterTaskServiceHTTPServer(srv, taskService)
 	adminV1.RegisterLoginPolicyServiceHTTPServer(srv, loginPolicyService)
+
+	adminV1.RegisterDictTypeServiceHTTPServer(srv, dictTypeService)
+	adminV1.RegisterDictEntryServiceHTTPServer(srv, dictEntryService)
 
 	adminV1.RegisterApiServiceHTTPServer(srv, apiService)
 	adminV1.RegisterMenuServiceHTTPServer(srv, menuService)

@@ -1223,8 +1223,209 @@ export type auditservicev1_GetDataAccessAuditLogRequest = {
   viewMask?: wellKnownFieldMask;
 };
 
-// 数据字典管理服务
-export interface DictService {
+// 数据字典条目管理服务
+export interface DictEntryService {
+  // 分页查询字典条目列表
+  ListDictEntry(request: pagination_PagingRequest): Promise<dictservicev1_ListDictEntryResponse>;
+  // 创建字典条目
+  CreateDictEntry(request: dictservicev1_CreateDictEntryRequest): Promise<wellKnownEmpty>;
+  // 更新字典条目
+  UpdateDictEntry(request: dictservicev1_UpdateDictEntryRequest): Promise<wellKnownEmpty>;
+  // 删除字典条目
+  DeleteDictEntry(request: dictservicev1_DeleteDictEntryRequest): Promise<wellKnownEmpty>;
+}
+
+export function createDictEntryServiceClient(
+  handler: RequestHandler
+): DictEntryService {
+  return {
+    ListDictEntry(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      const path = `admin/v1/dict-entries`; // eslint-disable-line quotes
+      const body = null;
+      const queryParams: string[] = [];
+      if (request.page) {
+        queryParams.push(`page=${encodeURIComponent(request.page.toString())}`)
+      }
+      if (request.pageSize) {
+        queryParams.push(`pageSize=${encodeURIComponent(request.pageSize.toString())}`)
+      }
+      if (request.offset) {
+        queryParams.push(`offset=${encodeURIComponent(request.offset.toString())}`)
+      }
+      if (request.limit) {
+        queryParams.push(`limit=${encodeURIComponent(request.limit.toString())}`)
+      }
+      if (request.token) {
+        queryParams.push(`token=${encodeURIComponent(request.token.toString())}`)
+      }
+      if (request.noPaging) {
+        queryParams.push(`noPaging=${encodeURIComponent(request.noPaging.toString())}`)
+      }
+      if (request.query) {
+        queryParams.push(`query=${encodeURIComponent(request.query.toString())}`)
+      }
+      if (request.filter) {
+        queryParams.push(`filter=${encodeURIComponent(request.filter.toString())}`)
+      }
+      if (request.filterExpr?.type) {
+        queryParams.push(`filterExpr.type=${encodeURIComponent(request.filterExpr.type.toString())}`)
+      }
+      if (request.filterExpr?.conditions?.field) {
+        queryParams.push(`filterExpr.conditions.field=${encodeURIComponent(request.filterExpr.conditions.field.toString())}`)
+      }
+      if (request.filterExpr?.conditions?.op) {
+        queryParams.push(`filterExpr.conditions.op=${encodeURIComponent(request.filterExpr.conditions.op.toString())}`)
+      }
+      if (request.filterExpr?.conditions?.value) {
+        queryParams.push(`filterExpr.conditions.value=${encodeURIComponent(request.filterExpr.conditions.value.toString())}`)
+      }
+      if (request.filterExpr?.conditions?.jsonValue) {
+        queryParams.push(`filterExpr.conditions.jsonValue=${encodeURIComponent(request.filterExpr.conditions.jsonValue.toString())}`)
+      }
+      if (request.filterExpr?.conditions?.values) {
+        request.filterExpr.conditions.values.forEach((x) => {
+          queryParams.push(`filterExpr.conditions.values=${encodeURIComponent(x.toString())}`)
+        })
+      }
+      if (request.filterExpr?.conditions?.datePart) {
+        queryParams.push(`filterExpr.conditions.datePart=${encodeURIComponent(request.filterExpr.conditions.datePart.toString())}`)
+      }
+      if (request.filterExpr?.conditions?.jsonPath) {
+        queryParams.push(`filterExpr.conditions.jsonPath=${encodeURIComponent(request.filterExpr.conditions.jsonPath.toString())}`)
+      }
+      if (request.orderBy) {
+        queryParams.push(`orderBy=${encodeURIComponent(request.orderBy.toString())}`)
+      }
+      if (request.sorting?.field) {
+        queryParams.push(`sorting.field=${encodeURIComponent(request.sorting.field.toString())}`)
+      }
+      if (request.sorting?.direction) {
+        queryParams.push(`sorting.direction=${encodeURIComponent(request.sorting.direction.toString())}`)
+      }
+      if (request.fieldMask) {
+        queryParams.push(`fieldMask=${encodeURIComponent(request.fieldMask.toString())}`)
+      }
+      let uri = path;
+      if (queryParams.length > 0) {
+        uri += `?${queryParams.join("&")}`
+      }
+      return handler({
+        path: uri,
+        method: "GET",
+        body,
+      }, {
+        service: "DictEntryService",
+        method: "ListDictEntry",
+      }) as Promise<dictservicev1_ListDictEntryResponse>;
+    },
+    CreateDictEntry(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      const path = `admin/v1/dict-entries`; // eslint-disable-line quotes
+      const body = JSON.stringify(request);
+      const queryParams: string[] = [];
+      let uri = path;
+      if (queryParams.length > 0) {
+        uri += `?${queryParams.join("&")}`
+      }
+      return handler({
+        path: uri,
+        method: "POST",
+        body,
+      }, {
+        service: "DictEntryService",
+        method: "CreateDictEntry",
+      }) as Promise<wellKnownEmpty>;
+    },
+    UpdateDictEntry(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      if (!request.id) {
+        throw new Error("missing required field request.id");
+      }
+      const path = `admin/v1/dict-entries/${request.id}`; // eslint-disable-line quotes
+      const body = JSON.stringify(request);
+      const queryParams: string[] = [];
+      let uri = path;
+      if (queryParams.length > 0) {
+        uri += `?${queryParams.join("&")}`
+      }
+      return handler({
+        path: uri,
+        method: "PUT",
+        body,
+      }, {
+        service: "DictEntryService",
+        method: "UpdateDictEntry",
+      }) as Promise<wellKnownEmpty>;
+    },
+    DeleteDictEntry(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      const path = `admin/v1/dict-entries`; // eslint-disable-line quotes
+      const body = null;
+      const queryParams: string[] = [];
+      if (request.ids) {
+        request.ids.forEach((x) => {
+          queryParams.push(`ids=${encodeURIComponent(x.toString())}`)
+        })
+      }
+      let uri = path;
+      if (queryParams.length > 0) {
+        uri += `?${queryParams.join("&")}`
+      }
+      return handler({
+        path: uri,
+        method: "DELETE",
+        body,
+      }, {
+        service: "DictEntryService",
+        method: "DeleteDictEntry",
+      }) as Promise<wellKnownEmpty>;
+    },
+  };
+}
+// 查询字典条目列表 - 回应
+export type dictservicev1_ListDictEntryResponse = {
+  items: dictservicev1_DictEntry[] | undefined;
+  total: number | undefined;
+};
+
+// 字典条目
+export type dictservicev1_DictEntry = {
+  id?: number;
+  typeId?: number;
+  entryLabel?: string;
+  entryValue?: string;
+  numericValue?: number;
+  languageCode?: string;
+  isEnabled?: boolean;
+  sortOrder?: number;
+  description?: string;
+  tenantId?: number;
+  tenantName?: string;
+  createdBy?: number;
+  updatedBy?: number;
+  deletedBy?: number;
+  createdAt?: wellKnownTimestamp;
+  updatedAt?: wellKnownTimestamp;
+  deletedAt?: wellKnownTimestamp;
+};
+
+// 创建字典条目 - 请求
+export type dictservicev1_CreateDictEntryRequest = {
+  data: dictservicev1_DictEntry | undefined;
+};
+
+// 更新字典条目 - 请求
+export type dictservicev1_UpdateDictEntryRequest = {
+  id: number | undefined;
+  data: dictservicev1_DictEntry | undefined;
+  updateMask: wellKnownFieldMask | undefined;
+  allowMissing?: boolean;
+};
+
+// 批量删除字典 - 请求
+export type dictservicev1_DeleteDictEntryRequest = {
+  ids: number[] | undefined;
+};
+
+// 数据字典分类管理服务
+export interface DictTypeService {
   // 分页查询字典类型列表
   ListDictType(request: pagination_PagingRequest): Promise<dictservicev1_ListDictTypeResponse>;
   // 查询字典类型详情
@@ -1234,20 +1435,12 @@ export interface DictService {
   // 更新字典类型
   UpdateDictType(request: dictservicev1_UpdateDictTypeRequest): Promise<wellKnownEmpty>;
   // 删除字典类型
-  DeleteDictType(request: dictservicev1_BatchDeleteDictRequest): Promise<wellKnownEmpty>;
-  // 分页查询字典条目列表
-  ListDictEntry(request: pagination_PagingRequest): Promise<dictservicev1_ListDictEntryResponse>;
-  // 创建字典条目
-  CreateDictEntry(request: dictservicev1_CreateDictEntryRequest): Promise<wellKnownEmpty>;
-  // 更新字典条目
-  UpdateDictEntry(request: dictservicev1_UpdateDictEntryRequest): Promise<wellKnownEmpty>;
-  // 删除字典条目
-  DeleteDictEntry(request: dictservicev1_BatchDeleteDictRequest): Promise<wellKnownEmpty>;
+  DeleteDictType(request: dictservicev1_DeleteDictTypeRequest): Promise<wellKnownEmpty>;
 }
 
-export function createDictServiceClient(
+export function createDictTypeServiceClient(
   handler: RequestHandler
-): DictService {
+): DictTypeService {
   return {
     ListDictType(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
       const path = `admin/v1/dict-types`; // eslint-disable-line quotes
@@ -1324,7 +1517,7 @@ export function createDictServiceClient(
         method: "GET",
         body,
       }, {
-        service: "DictService",
+        service: "DictTypeService",
         method: "ListDictType",
       }) as Promise<dictservicev1_ListDictTypeResponse>;
     },
@@ -1350,7 +1543,7 @@ export function createDictServiceClient(
         method: "GET",
         body,
       }, {
-        service: "DictService",
+        service: "DictTypeService",
         method: "GetDictType",
       }) as Promise<dictservicev1_DictType>;
     },
@@ -1367,7 +1560,7 @@ export function createDictServiceClient(
         method: "POST",
         body,
       }, {
-        service: "DictService",
+        service: "DictTypeService",
         method: "CreateDictType",
       }) as Promise<wellKnownEmpty>;
     },
@@ -1387,7 +1580,7 @@ export function createDictServiceClient(
         method: "PUT",
         body,
       }, {
-        service: "DictService",
+        service: "DictTypeService",
         method: "UpdateDictType",
       }) as Promise<wellKnownEmpty>;
     },
@@ -1409,146 +1602,8 @@ export function createDictServiceClient(
         method: "DELETE",
         body,
       }, {
-        service: "DictService",
+        service: "DictTypeService",
         method: "DeleteDictType",
-      }) as Promise<wellKnownEmpty>;
-    },
-    ListDictEntry(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
-      const path = `admin/v1/dict-entries`; // eslint-disable-line quotes
-      const body = null;
-      const queryParams: string[] = [];
-      if (request.page) {
-        queryParams.push(`page=${encodeURIComponent(request.page.toString())}`)
-      }
-      if (request.pageSize) {
-        queryParams.push(`pageSize=${encodeURIComponent(request.pageSize.toString())}`)
-      }
-      if (request.offset) {
-        queryParams.push(`offset=${encodeURIComponent(request.offset.toString())}`)
-      }
-      if (request.limit) {
-        queryParams.push(`limit=${encodeURIComponent(request.limit.toString())}`)
-      }
-      if (request.token) {
-        queryParams.push(`token=${encodeURIComponent(request.token.toString())}`)
-      }
-      if (request.noPaging) {
-        queryParams.push(`noPaging=${encodeURIComponent(request.noPaging.toString())}`)
-      }
-      if (request.query) {
-        queryParams.push(`query=${encodeURIComponent(request.query.toString())}`)
-      }
-      if (request.filter) {
-        queryParams.push(`filter=${encodeURIComponent(request.filter.toString())}`)
-      }
-      if (request.filterExpr?.type) {
-        queryParams.push(`filterExpr.type=${encodeURIComponent(request.filterExpr.type.toString())}`)
-      }
-      if (request.filterExpr?.conditions?.field) {
-        queryParams.push(`filterExpr.conditions.field=${encodeURIComponent(request.filterExpr.conditions.field.toString())}`)
-      }
-      if (request.filterExpr?.conditions?.op) {
-        queryParams.push(`filterExpr.conditions.op=${encodeURIComponent(request.filterExpr.conditions.op.toString())}`)
-      }
-      if (request.filterExpr?.conditions?.value) {
-        queryParams.push(`filterExpr.conditions.value=${encodeURIComponent(request.filterExpr.conditions.value.toString())}`)
-      }
-      if (request.filterExpr?.conditions?.jsonValue) {
-        queryParams.push(`filterExpr.conditions.jsonValue=${encodeURIComponent(request.filterExpr.conditions.jsonValue.toString())}`)
-      }
-      if (request.filterExpr?.conditions?.values) {
-        request.filterExpr.conditions.values.forEach((x) => {
-          queryParams.push(`filterExpr.conditions.values=${encodeURIComponent(x.toString())}`)
-        })
-      }
-      if (request.filterExpr?.conditions?.datePart) {
-        queryParams.push(`filterExpr.conditions.datePart=${encodeURIComponent(request.filterExpr.conditions.datePart.toString())}`)
-      }
-      if (request.filterExpr?.conditions?.jsonPath) {
-        queryParams.push(`filterExpr.conditions.jsonPath=${encodeURIComponent(request.filterExpr.conditions.jsonPath.toString())}`)
-      }
-      if (request.orderBy) {
-        queryParams.push(`orderBy=${encodeURIComponent(request.orderBy.toString())}`)
-      }
-      if (request.sorting?.field) {
-        queryParams.push(`sorting.field=${encodeURIComponent(request.sorting.field.toString())}`)
-      }
-      if (request.sorting?.direction) {
-        queryParams.push(`sorting.direction=${encodeURIComponent(request.sorting.direction.toString())}`)
-      }
-      if (request.fieldMask) {
-        queryParams.push(`fieldMask=${encodeURIComponent(request.fieldMask.toString())}`)
-      }
-      let uri = path;
-      if (queryParams.length > 0) {
-        uri += `?${queryParams.join("&")}`
-      }
-      return handler({
-        path: uri,
-        method: "GET",
-        body,
-      }, {
-        service: "DictService",
-        method: "ListDictEntry",
-      }) as Promise<dictservicev1_ListDictEntryResponse>;
-    },
-    CreateDictEntry(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
-      const path = `admin/v1/dict-entries`; // eslint-disable-line quotes
-      const body = JSON.stringify(request);
-      const queryParams: string[] = [];
-      let uri = path;
-      if (queryParams.length > 0) {
-        uri += `?${queryParams.join("&")}`
-      }
-      return handler({
-        path: uri,
-        method: "POST",
-        body,
-      }, {
-        service: "DictService",
-        method: "CreateDictEntry",
-      }) as Promise<wellKnownEmpty>;
-    },
-    UpdateDictEntry(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
-      if (!request.id) {
-        throw new Error("missing required field request.id");
-      }
-      const path = `admin/v1/dict-entries/${request.id}`; // eslint-disable-line quotes
-      const body = JSON.stringify(request);
-      const queryParams: string[] = [];
-      let uri = path;
-      if (queryParams.length > 0) {
-        uri += `?${queryParams.join("&")}`
-      }
-      return handler({
-        path: uri,
-        method: "PUT",
-        body,
-      }, {
-        service: "DictService",
-        method: "UpdateDictEntry",
-      }) as Promise<wellKnownEmpty>;
-    },
-    DeleteDictEntry(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
-      const path = `admin/v1/dict-entries`; // eslint-disable-line quotes
-      const body = null;
-      const queryParams: string[] = [];
-      if (request.ids) {
-        request.ids.forEach((x) => {
-          queryParams.push(`ids=${encodeURIComponent(x.toString())}`)
-        })
-      }
-      let uri = path;
-      if (queryParams.length > 0) {
-        uri += `?${queryParams.join("&")}`
-      }
-      return handler({
-        path: uri,
-        method: "DELETE",
-        body,
-      }, {
-        service: "DictService",
-        method: "DeleteDictEntry",
       }) as Promise<wellKnownEmpty>;
     },
   };
@@ -1598,48 +1653,8 @@ export type dictservicev1_UpdateDictTypeRequest = {
 };
 
 // 批量删除字典 - 请求
-export type dictservicev1_BatchDeleteDictRequest = {
+export type dictservicev1_DeleteDictTypeRequest = {
   ids: number[] | undefined;
-};
-
-// 查询字典条目列表 - 回应
-export type dictservicev1_ListDictEntryResponse = {
-  items: dictservicev1_DictEntry[] | undefined;
-  total: number | undefined;
-};
-
-// 字典条目
-export type dictservicev1_DictEntry = {
-  id?: number;
-  typeId?: number;
-  entryLabel?: string;
-  entryValue?: string;
-  numericValue?: number;
-  languageCode?: string;
-  isEnabled?: boolean;
-  sortOrder?: number;
-  description?: string;
-  tenantId?: number;
-  tenantName?: string;
-  createdBy?: number;
-  updatedBy?: number;
-  deletedBy?: number;
-  createdAt?: wellKnownTimestamp;
-  updatedAt?: wellKnownTimestamp;
-  deletedAt?: wellKnownTimestamp;
-};
-
-// 创建字典条目 - 请求
-export type dictservicev1_CreateDictEntryRequest = {
-  data: dictservicev1_DictEntry | undefined;
-};
-
-// 更新字典条目 - 请求
-export type dictservicev1_UpdateDictEntryRequest = {
-  id: number | undefined;
-  data: dictservicev1_DictEntry | undefined;
-  updateMask: wellKnownFieldMask | undefined;
-  allowMissing?: boolean;
 };
 
 // 文件管理服务

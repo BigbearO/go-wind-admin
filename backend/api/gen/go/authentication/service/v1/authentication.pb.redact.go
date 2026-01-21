@@ -101,6 +101,17 @@ func (s *redactedAuthenticationServiceServer) ValidateToken(ctx context.Context,
 	return res, err
 }
 
+// GetAccessTokens is the redacted wrapper for the actual AuthenticationServiceServer.GetAccessTokens method
+// Unary RPC
+func (s *redactedAuthenticationServiceServer) GetAccessTokens(ctx context.Context, in *GetAccessTokensRequest) (*GetAccessTokensResponse, error) {
+	res, err := s.srv.GetAccessTokens(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
 // WhoAmI is the redacted wrapper for the actual AuthenticationServiceServer.WhoAmI method
 // Unary RPC
 func (s *redactedAuthenticationServiceServer) WhoAmI(ctx context.Context, in *emptypb.Empty) (*WhoAmIResponse, error) {
@@ -182,9 +193,13 @@ func (x *ValidateTokenRequest) Redact() string {
 		return ""
 	}
 
+	// Safe field: UserId
+
 	// Safe field: Token
 
 	// Safe field: ClientType
+
+	// Safe field: TokenCategory
 	return x.String()
 }
 
@@ -235,5 +250,27 @@ func (x *WhoAmIResponse) Redact() string {
 	// Safe field: UserId
 
 	// Safe field: Username
+	return x.String()
+}
+
+// Redact method implementation for GetAccessTokensRequest
+func (x *GetAccessTokensRequest) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: UserId
+
+	// Safe field: ClientType
+	return x.String()
+}
+
+// Redact method implementation for GetAccessTokensResponse
+func (x *GetAccessTokensResponse) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: AccessTokens
 	return x.String()
 }

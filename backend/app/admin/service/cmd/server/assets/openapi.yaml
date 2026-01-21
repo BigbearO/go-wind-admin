@@ -406,9 +406,9 @@ paths:
     /admin/v1/dict-entries:
         get:
             tags:
-                - DictService
+                - DictEntryService
             description: 分页查询字典条目列表
-            operationId: DictService_ListDictEntry
+            operationId: DictEntryService_ListDictEntry
             parameters:
                 - name: page
                   in: query
@@ -483,9 +483,9 @@ paths:
                                 $ref: '#/components/schemas/ListDictEntryResponse'
         post:
             tags:
-                - DictService
+                - DictEntryService
             description: 创建字典条目
-            operationId: DictService_CreateDictEntry
+            operationId: DictEntryService_CreateDictEntry
             requestBody:
                 content:
                     application/json:
@@ -498,9 +498,9 @@ paths:
                     content: {}
         delete:
             tags:
-                - DictService
+                - DictEntryService
             description: 删除字典条目
-            operationId: DictService_DeleteDictEntry
+            operationId: DictEntryService_DeleteDictEntry
             parameters:
                 - name: ids
                   in: query
@@ -516,9 +516,9 @@ paths:
     /admin/v1/dict-entries/{id}:
         put:
             tags:
-                - DictService
+                - DictEntryService
             description: 更新字典条目
-            operationId: DictService_UpdateDictEntry
+            operationId: DictEntryService_UpdateDictEntry
             parameters:
                 - name: id
                   in: path
@@ -539,9 +539,9 @@ paths:
     /admin/v1/dict-types:
         get:
             tags:
-                - DictService
+                - DictTypeService
             description: 分页查询字典类型列表
-            operationId: DictService_ListDictType
+            operationId: DictTypeService_ListDictType
             parameters:
                 - name: page
                   in: query
@@ -616,9 +616,9 @@ paths:
                                 $ref: '#/components/schemas/ListDictTypeResponse'
         post:
             tags:
-                - DictService
+                - DictTypeService
             description: 创建字典类型
-            operationId: DictService_CreateDictType
+            operationId: DictTypeService_CreateDictType
             requestBody:
                 content:
                     application/json:
@@ -631,9 +631,9 @@ paths:
                     content: {}
         delete:
             tags:
-                - DictService
+                - DictTypeService
             description: 删除字典类型
-            operationId: DictService_DeleteDictType
+            operationId: DictTypeService_DeleteDictType
             parameters:
                 - name: ids
                   in: query
@@ -649,9 +649,9 @@ paths:
     /admin/v1/dict-types/code/{code}:
         get:
             tags:
-                - DictService
+                - DictTypeService
             description: 查询字典类型详情
-            operationId: DictService_GetDictType
+            operationId: DictTypeService_GetDictType
             parameters:
                 - name: code
                   in: path
@@ -678,9 +678,9 @@ paths:
     /admin/v1/dict-types/{id}:
         get:
             tags:
-                - DictService
+                - DictTypeService
             description: 查询字典类型详情
-            operationId: DictService_GetDictType
+            operationId: DictTypeService_GetDictType
             parameters:
                 - name: id
                   in: path
@@ -706,9 +706,9 @@ paths:
                                 $ref: '#/components/schemas/DictType'
         put:
             tags:
-                - DictService
+                - DictTypeService
             description: 更新字典类型
-            operationId: DictService_UpdateDictType
+            operationId: DictTypeService_UpdateDictType
             parameters:
                 - name: id
                   in: path
@@ -7347,8 +7347,10 @@ tags:
       description: 用户后台登录认证服务
     - name: DataAccessAuditLogService
       description: 数据访问审计日志管理服务
-    - name: DictService
-      description: 数据字典管理服务
+    - name: DictEntryService
+      description: 数据字典条目管理服务
+    - name: DictTypeService
+      description: 数据字典分类管理服务
     - name: FileService
       description: 文件管理服务
     - name: InternalMessageCategoryService

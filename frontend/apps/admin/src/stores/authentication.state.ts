@@ -12,8 +12,8 @@ import CryptoJS from 'crypto-js';
 import { defineStore } from 'pinia';
 
 import {
+  createAdminPortalServiceClient,
   createAuthenticationServiceClient,
-  createRouterServiceClient,
   createUserProfileServiceClient,
 } from '#/generated/api/admin/service/v1';
 import { $t } from '#/locales';
@@ -41,7 +41,9 @@ export const useAuthStore = defineStore('auth', () => {
   const authnService = createAuthenticationServiceClient(
     requestClientRequestHandler,
   );
-  const routerService = createRouterServiceClient(requestClientRequestHandler);
+  const adminPortalService = createAdminPortalServiceClient(
+    requestClientRequestHandler,
+  );
   const userProfileService = createUserProfileServiceClient(
     requestClientRequestHandler,
   );
@@ -291,7 +293,7 @@ export const useAuthStore = defineStore('auth', () => {
    * 获取用户权限码
    */
   async function fetchAccessCodes() {
-    return await routerService.ListPermissionCode({});
+    return await adminPortalService.GetMyPermissionCode({});
   }
 
   /**
