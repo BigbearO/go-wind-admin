@@ -71,15 +71,21 @@ const gridOptions: VxeGridProps<File> = {
             pageSize: page.pageSize,
           },
           formValues,
+          null,
+          ['-created_at'],
         );
       },
     },
   },
 
   columns: [
-    { title: $t('ui.table.seq'), type: 'seq', width: 50 },
+    { title: $t('page.file.md5'), field: 'md5' },
     { title: $t('page.file.fileName'), field: 'saveFileName' },
-    { title: $t('page.file.size'), field: 'size' },
+    {
+      title: $t('page.file.size'),
+      field: 'size',
+      slots: { default: 'fileSize' },
+    },
     { title: $t('page.file.bucketName'), field: 'bucketName' },
     { title: $t('page.file.fileDirectory'), field: 'fileDirectory' },
     {
@@ -142,6 +148,8 @@ async function handleUploadFile(options: any) {
 
     onSuccess?.(res ?? {}, file);
 
+    await gridApi.reload();
+
     notification.success({
       message: $t('ui.notification.upload_success'),
     });
@@ -199,6 +207,9 @@ async function handleDelete(row: any) {
         <a-tag :color="statusToColor(row.status)">
           {{ statusToName(row.status) }}
         </a-tag>
+      </template>
+      <template #fileSize="{ row }">
+        {{ row.size }} {{ row.sizeFormat }}
       </template>
       <template #action="{ row }">
         <a-button

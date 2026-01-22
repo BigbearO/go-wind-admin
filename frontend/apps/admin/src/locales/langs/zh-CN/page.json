@@ -238,6 +238,7 @@
     "fileDirectory": "目录",
     "provider": "供应商",
     "fileGuid": "GUID",
+    "md5": "MD5值",
     "size": "大小",
     "uploader": "上传者",
     "button": {

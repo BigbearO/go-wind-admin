@@ -269,10 +269,14 @@ func (c *MinIOClient) DeleteFile(ctx context.Context, req *fileV1.DeleteOssFileR
 }
 
 // UploadFile 上传文件
-func (c *MinIOClient) UploadFile(ctx context.Context, bucketName string, objectName string, file []byte) (string, error) {
+func (c *MinIOClient) UploadFile(ctx context.Context, bucketName string, objectName string, file []byte) (minio.UploadInfo, string, error) {
 	reader := bytes.NewReader(file)
+	if reader == nil {
+		c.log.Errorf("Invalid file data")
+		return minio.UploadInfo{}, "", fileV1.ErrorUploadFailed("invalid file data")
+	}
 
-	_, err := c.mc.PutObject(
+	info, err := c.mc.PutObject(
 		ctx,
 		bucketName,
 		objectName,
@@ -281,12 +285,12 @@ func (c *MinIOClient) UploadFile(ctx context.Context, bucketName string, objectN
 	)
 	if err != nil {
 		c.log.Errorf("Failed to upload file: %v", err)
-		return "", fileV1.ErrorUploadFailed("failed to upload file")
+		return info, "", fileV1.ErrorUploadFailed("failed to upload file")
 	}
 
 	downloadUrl := "/" + bucketName + "/" + objectName
 
-	return downloadUrl, nil
+	return info, downloadUrl, nil
 }
 
 // GetDownloadUrl 获取下载地址

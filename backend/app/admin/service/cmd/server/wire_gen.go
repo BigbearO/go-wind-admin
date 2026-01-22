@@ -74,7 +74,7 @@ func initApp(context *bootstrap.Context) (*kratos.App, func(), error) {
 	uEditorService := service.NewUEditorService(context, minIOClient)
 	fileRepo := data.NewFileRepo(context, entClient)
 	fileService := service.NewFileService(context, fileRepo)
-	fileTransferService := service.NewFileTransferService(context, minIOClient)
+	fileTransferService := service.NewFileTransferService(context, minIOClient, fileRepo)
 	dictTypeI18nRepo := data.NewDictTypeI18nRepo(context, entClient)
 	dictTypeRepo := data.NewDictTypeRepo(context, entClient, dictTypeI18nRepo)
 	dictTypeService := service.NewDictTypeService(context, dictTypeRepo)
