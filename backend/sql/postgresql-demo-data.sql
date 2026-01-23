@@ -114,46 +114,85 @@ VALUES
 ;
 SELECT setval('sys_login_policies_id_seq', (SELECT MAX(id) FROM sys_login_policies));
 
--- 字典类型
-ALTER SEQUENCE public.sys_dict_types_id_seq RESTART WITH 1;
-INSERT INTO public.sys_dict_types(id, type_code, type_name, sort_order, description, is_enabled, created_at)
-VALUES
-    (1, 'USER_STATUS', '用户状态', 10, '系统用户的状态管理，包括正常、冻结、注销', true, now()),
-    (2, 'DEVICE_TYPE', '设备类型', 20, 'IoT平台接入的设备品类，新增需同步至设备接入模块', true, now()),
-    (3, 'ORDER_STATUS', '订单状态', 30, '电商订单的全生命周期状态', true, now()),
-    (4, 'GENDER', '性别', 40, '用户性别枚举，默认未知', true, now()),
-    (5, 'PAYMENT_METHOD', '支付方式', 50, '支持的支付渠道，含第三方支付和自有渠道', true, now())
-;
+-- 插入字典类型
+INSERT INTO public.sys_dict_types (
+    id, type_code, sort_order, is_enabled, created_at, updated_at
+) VALUES
+      (1, 'USER_STATUS', 10, true, now(), now()),
+      (2, 'DEVICE_TYPE', 20, true, now(), now()),
+      (3, 'ORDER_STATUS', 30, true, now(), now()),
+      (4, 'GENDER', 40, true, now(), now()),
+      (5, 'PAYMENT_METHOD', 50, true, now(), now());
 SELECT setval('sys_dict_types_id_seq', (SELECT MAX(id) FROM sys_dict_types));
 
--- 字典条目
-INSERT INTO public.sys_dict_entries(id, type_id, entry_value, entry_label, numeric_value, sort_order, description, is_enabled, created_at)
-VALUES
-    -- 用户状态
-    (1, 1, 'NORMAL', '正常', 1, 1, '用户可正常登录和操作', true, now()),
-    (2, 1, 'FROZEN', '冻结', 2, 2, '因违规被临时冻结，需管理员解冻', true, now()),
-    (3, 1, 'CANCELED', '注销', 3, 3, '用户主动注销，数据保留但不可登录', true, now()),
-    -- 设备类型
-    (4, 2, 'TEMP_SENSOR', '温湿度传感器', 101, 1, '支持温度（-20~80℃）和湿度（0~100%RH）采集', true, now()),
-    (5, 2, 'CURRENT_METER', '电流仪表', 102, 2, '交流/直流电流测量，精度0.5级', true, now()),
-    (6, 2, 'GAS_DETECTOR', '气体探测器', 103, 3, '暂不支持，待硬件适配（2025Q4计划启用）', false, now()),
-    -- 订单状态
-    (7, 3, 'PENDING', '待支付', 1, 1, '下单后未支付，超时自动取消', true, now()),
-    (8, 3, 'PAID', '已支付', 2, 2, '支付成功，等待发货', true, now()),
-    (9, 3, 'SHIPPED', '已发货', 3, 3, '商品已出库，物流配送中', true, now()),
-    (10, 3, 'COMPLETED', '已完成', 4, 4, '用户确认收货，订单结束', true, now()),
-    (11, 3, 'CANCELED', '已取消', 5, 5, '用户或系统取消订单', true, now()),
-    -- 性别
-    (12, 4, 'MALE', '男', 1, 1, '', true, now()),
-    (13, 4, 'FEMALE', '女', 2, 2, '', true, now()),
-    (14, 4, 'UNKNOWN', '未知', 0, 3, '用户未填写时默认值', true, now()),
-    -- 支付方式
-    (15, 5, 'ALIPAY', '支付宝', 1, 1, '支持花呗、余额宝', true, now()),
-    (16, 5, 'WECHAT', '微信支付', 2, 2, '需绑定微信', true, now()),
-    (17, 5, 'UNIONPAY', '银联支付', 3, 3, '支持信用卡、储蓄卡', true, now()),
-    (18, 5, 'CASH', '现金支付', 4, 4, '线下支付，已废弃（2025-01停用）', false, now())
-;
+-- 插入字典类型国际化（zh-CN）
+INSERT INTO public.sys_dict_type_i18n (
+    type_id, language_code, type_name, description, tenant_id, created_at, updated_at
+) VALUES
+      (1, 'zh-CN', '用户状态', '系统用户的状态管理，包括正常、冻结、注销', 0, now(), now()),
+      (2, 'zh-CN', '设备类型', 'IoT平台接入的设备品类，新增需同步至设备接入模块', 0, now(), now()),
+      (3, 'zh-CN', '订单状态', '电商订单的全生命周期状态', 0, now(), now()),
+      (4, 'zh-CN', '性别', '用户性别枚举，默认未知', 0, now(), now()),
+      (5, 'zh-CN', '支付方式', '支持的支付渠道，含第三方支付和自有渠道', 0, now(), now());
+SELECT setval('sys_dict_type_i18n_id_seq', (SELECT MAX(id) FROM sys_dict_type_i18n));
+
+-- 插入字典条目
+INSERT INTO public.sys_dict_entries (
+    id, type_id, entry_value, numeric_value, sort_order, is_enabled, created_at, updated_at, tenant_id
+) VALUES
+      -- 用户状态
+      (1, 1, 'NORMAL', 1, 1, true, now(), now(), 0),
+      (2, 1, 'FROZEN', 2, 2, true, now(), now(), 0),
+      (3, 1, 'CANCELED', 3, 3, true, now(), now(), 0),
+      -- 设备类型
+      (4, 2, 'TEMP_SENSOR', 101, 1, true, now(), now(), 0),
+      (5, 2, 'CURRENT_METER', 102, 2, true, now(), now(), 0),
+      (6, 2, 'GAS_DETECTOR', 103, 3, false, now(), now(), 0),
+      -- 订单状态
+      (7, 3, 'PENDING', 1, 1, true, now(), now(), 0),
+      (8, 3, 'PAID', 2, 2, true, now(), now(), 0),
+      (9, 3, 'SHIPPED', 3, 3, true, now(), now(), 0),
+      (10, 3, 'COMPLETED', 4, 4, true, now(), now(), 0),
+      (11, 3, 'CANCELED', 5, 5, true, now(), now(), 0),
+      -- 性别
+      (12, 4, 'MALE', 1, 1, true, now(), now(), 0),
+      (13, 4, 'FEMALE', 2, 2, true, now(), now(), 0),
+      (14, 4, 'UNKNOWN', 0, 3, true, now(), now(), 0),
+      -- 支付方式
+      (15, 5, 'ALIPAY', 1, 1, true, now(), now(), 0),
+      (16, 5, 'WECHAT', 2, 2, true, now(), now(), 0),
+      (17, 5, 'UNIONPAY', 3, 3, true, now(), now(), 0),
+      (18, 5, 'CASH', 4, 4, false, now(), now(), 0);
 SELECT setval('sys_dict_entries_id_seq', (SELECT MAX(id) FROM sys_dict_entries));
+
+-- 插入字典条目国际化（zh-CN）
+INSERT INTO public.sys_dict_entry_i18n (
+    entry_id, language_code, entry_label, description, sort_order, tenant_id, created_at, updated_at
+) VALUES
+      -- 用户状态
+      (1, 'zh-CN', '正常', '用户可正常登录和操作', 1, 0, now(), now()),
+      (2, 'zh-CN', '冻结', '因违规被临时冻结，需管理员解冻', 2, 0, now(), now()),
+      (3, 'zh-CN', '注销', '用户主动注销，数据保留但不可登录', 3, 0, now(), now()),
+      -- 设备类型
+      (4, 'zh-CN', '温湿度传感器', '支持温度（-20~80℃）和湿度（0~100%RH）采集', 1, 0, now(), now()),
+      (5, 'zh-CN', '电流仪表', '交流/直流电流测量，精度0.5级', 2, 0, now(), now()),
+      (6, 'zh-CN', '气体探测器', '暂不支持，待硬件适配（2025Q4计划启用）', 3, 0, now(), now()),
+      -- 订单状态
+      (7, 'zh-CN', '待支付', '下单后未支付，超时自动取消', 1, 0, now(), now()),
+      (8, 'zh-CN', '已支付', '支付成功，等待发货', 2, 0, now(), now()),
+      (9, 'zh-CN', '已发货', '商品已出库，物流配送中', 3, 0, now(), now()),
+      (10, 'zh-CN', '已完成', '用户确认收货，订单结束', 4, 0, now(), now()),
+      (11, 'zh-CN', '已取消', '用户或系统取消订单', 5, 0, now(), now()),
+      -- 性别
+      (12, 'zh-CN', '男', '', 1, 0, now(), now()),
+      (13, 'zh-CN', '女', '', 2, 0, now(), now()),
+      (14, 'zh-CN', '未知', '用户未填写时默认值', 3, 0, now(), now()),
+      -- 支付方式
+      (15, 'zh-CN', '支付宝', '支持花呗、余额宝', 1, 0, now(), now()),
+      (16, 'zh-CN', '微信支付', '需绑定微信', 2, 0, now(), now()),
+      (17, 'zh-CN', '银联支付', '支持信用卡、储蓄卡', 3, 0, now(), now()),
+      (18, 'zh-CN', '现金支付', '线下支付，已废弃（2025-01停用）', 4, 0, now(), now());
+SELECT setval('sys_dict_entry_i18n_id_seq', (SELECT MAX(id) FROM sys_dict_entry_i18n));
 
 -- 站内信分类
 INSERT INTO public.internal_message_categories (id, code, name, remark, sort_order, is_enabled, created_at)
