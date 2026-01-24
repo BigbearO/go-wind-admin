@@ -6,7 +6,7 @@ import { defineStore } from 'pinia';
 
 import {
   createTenantServiceClient,
-  type CreateTenantWithAdminUserRequest,
+  type userservicev1_CreateTenantWithAdminUserRequest as CreateTenantWithAdminUserRequest,
   type userservicev1_Tenant_AuditStatus as Tenant_AuditStatus,
   type userservicev1_Tenant_Status as Tenant_Status,
   type userservicev1_Tenant_Type as Tenant_Type,

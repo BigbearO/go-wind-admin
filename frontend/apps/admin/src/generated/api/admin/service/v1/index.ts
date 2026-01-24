@@ -5889,114 +5889,6 @@ export type taskservicev1_ControlTaskRequest_ControlType =
   | "Start"
   | "Stop"
   | "Restart";
-// 创建租户及管理员用户 - 请求
-export type CreateTenantWithAdminUserRequest = {
-  tenant: userservicev1_Tenant | undefined;
-  user: userservicev1_User | undefined;
-  password: string | undefined;
-};
-
-// 租户
-export type userservicev1_Tenant = {
-  id?: number;
-  name?: string;
-  code?: string;
-  domain?: string;
-  logoUrl?: string;
-  industry?: string;
-  type?: userservicev1_Tenant_Type;
-  remark?: string;
-  adminUserId?: number;
-  adminUserName?: string;
-  subscriptionAt?: wellKnownTimestamp;
-  unsubscribeAt?: wellKnownTimestamp;
-  expiredAt?: wellKnownTimestamp;
-  subscriptionPlan?: string;
-  memberCount?: number;
-  status?: userservicev1_Tenant_Status;
-  auditStatus?: userservicev1_Tenant_AuditStatus;
-  createdBy?: number;
-  updatedBy?: number;
-  deletedBy?: number;
-  createdAt?: wellKnownTimestamp;
-  updatedAt?: wellKnownTimestamp;
-  deletedAt?: wellKnownTimestamp;
-};
-
-// 租户类型
-export type userservicev1_Tenant_Type =
-  | "TENANT_TYPE_UNSPECIFIED"
-  | "TRIAL"
-  | "PAID"
-  | "INTERNAL"
-  | "PARTNER"
-  | "CUSTOM";
-// 租户状态
-export type userservicev1_Tenant_Status =
-  | "OFF"
-  | "ON"
-  | "EXPIRED"
-  | "FREEZE";
-// 租户审核状态
-export type userservicev1_Tenant_AuditStatus =
-  | "TENANT_AUDIT_STATUS_UNSPECIFIED"
-  | "PENDING"
-  | "APPROVED"
-  | "REJECTED";
-// 用户
-export type userservicev1_User = {
-  id?: number;
-  tenantId?: number;
-  tenantName?: string;
-  orgUnitId?: number;
-  orgUnitIds: number[] | undefined;
-  orgUnitName?: string;
-  orgUnitNames: string[] | undefined;
-  positionId?: number;
-  positionIds: number[] | undefined;
-  positionName?: string;
-  positionNames: string[] | undefined;
-  roleId?: number;
-  roleIds: number[] | undefined;
-  roles: string[] | undefined;
-  roleNames: string[] | undefined;
-  username?: string;
-  nickname?: string;
-  realname?: string;
-  avatar?: string;
-  email?: string;
-  mobile?: string;
-  telephone?: string;
-  gender?: userservicev1_User_Gender;
-  address?: string;
-  region?: string;
-  description?: string;
-  remark?: string;
-  lastLoginAt?: wellKnownTimestamp;
-  lastLoginIp?: string;
-  status?: userservicev1_User_Status;
-  lockedUntil?: wellKnownTimestamp;
-  createdBy?: number;
-  updatedBy?: number;
-  deletedBy?: number;
-  createdAt?: wellKnownTimestamp;
-  updatedAt?: wellKnownTimestamp;
-  deletedAt?: wellKnownTimestamp;
-};
-
-// 用户性别
-export type userservicev1_User_Gender =
-  | "SECRET"
-  | "MALE"
-  | "FEMALE";
-// 用户状态
-export type userservicev1_User_Status =
-  | "DISABLED"
-  | "NORMAL"
-  | "PENDING"
-  | "LOCKED"
-  | "EXPIRED"
-  | "CLOSED";
 // 租户管理服务
 export interface TenantService {
   // 获取租户列表
@@ -6010,7 +5902,7 @@ export interface TenantService {
   // 删除租户
   Delete(request: userservicev1_DeleteTenantRequest): Promise<wellKnownEmpty>;
   // 创建租户及管理员用户
-  CreateTenantWithAdminUser(request: CreateTenantWithAdminUserRequest): Promise<wellKnownEmpty>;
+  CreateTenantWithAdminUser(request: userservicev1_CreateTenantWithAdminUserRequest): Promise<wellKnownEmpty>;
   // 租户是否存在
   TenantExists(request: userservicev1_TenantExistsRequest): Promise<userservicev1_TenantExistsResponse>;
 }
@@ -6232,6 +6124,53 @@ export type userservicev1_ListTenantResponse = {
   total: number | undefined;
 };
 
+// 租户
+export type userservicev1_Tenant = {
+  id?: number;
+  name?: string;
+  code?: string;
+  domain?: string;
+  logoUrl?: string;
+  industry?: string;
+  type?: userservicev1_Tenant_Type;
+  remark?: string;
+  adminUserId?: number;
+  adminUserName?: string;
+  subscriptionAt?: wellKnownTimestamp;
+  unsubscribeAt?: wellKnownTimestamp;
+  expiredAt?: wellKnownTimestamp;
+  subscriptionPlan?: string;
+  memberCount?: number;
+  status?: userservicev1_Tenant_Status;
+  auditStatus?: userservicev1_Tenant_AuditStatus;
+  createdBy?: number;
+  updatedBy?: number;
+  deletedBy?: number;
+  createdAt?: wellKnownTimestamp;
+  updatedAt?: wellKnownTimestamp;
+  deletedAt?: wellKnownTimestamp;
+};
+
+// 租户类型
+export type userservicev1_Tenant_Type =
+  | "TENANT_TYPE_UNSPECIFIED"
+  | "TRIAL"
+  | "PAID"
+  | "INTERNAL"
+  | "PARTNER"
+  | "CUSTOM";
+// 租户状态
+export type userservicev1_Tenant_Status =
+  | "OFF"
+  | "ON"
+  | "EXPIRED"
+  | "FREEZE";
+// 租户审核状态
+export type userservicev1_Tenant_AuditStatus =
+  | "TENANT_AUDIT_STATUS_UNSPECIFIED"
+  | "PENDING"
+  | "APPROVED"
+  | "REJECTED";
 // 租户数据 - 请求
 export type userservicev1_GetTenantRequest = {
   id?: number;
@@ -6258,6 +6197,67 @@ export type userservicev1_DeleteTenantRequest = {
   id: number | undefined;
 };
 
+// 创建租户及管理员用户 - 请求
+export type userservicev1_CreateTenantWithAdminUserRequest = {
+  tenant: userservicev1_Tenant | undefined;
+  user: userservicev1_User | undefined;
+  password: string | undefined;
+};
+
+// 用户
+export type userservicev1_User = {
+  id?: number;
+  tenantId?: number;
+  tenantName?: string;
+  orgUnitId?: number;
+  orgUnitIds: number[] | undefined;
+  orgUnitName?: string;
+  orgUnitNames: string[] | undefined;
+  positionId?: number;
+  positionIds: number[] | undefined;
+  positionName?: string;
+  positionNames: string[] | undefined;
+  roleId?: number;
+  roleIds: number[] | undefined;
+  roles: string[] | undefined;
+  roleNames: string[] | undefined;
+  username?: string;
+  nickname?: string;
+  realname?: string;
+  avatar?: string;
+  email?: string;
+  mobile?: string;
+  telephone?: string;
+  gender?: userservicev1_User_Gender;
+  address?: string;
+  region?: string;
+  description?: string;
+  remark?: string;
+  lastLoginAt?: wellKnownTimestamp;
+  lastLoginIp?: string;
+  status?: userservicev1_User_Status;
+  lockedUntil?: wellKnownTimestamp;
+  createdBy?: number;
+  updatedBy?: number;
+  deletedBy?: number;
+  createdAt?: wellKnownTimestamp;
+  updatedAt?: wellKnownTimestamp;
+  deletedAt?: wellKnownTimestamp;
+};
+
+// 用户性别
+export type userservicev1_User_Gender =
+  | "SECRET"
+  | "MALE"
+  | "FEMALE";
+// 用户状态
+export type userservicev1_User_Status =
+  | "DISABLED"
+  | "NORMAL"
+  | "PENDING"
+  | "LOCKED"
+  | "EXPIRED"
+  | "CLOSED";
 // 租户是否存在 - 请求
 export type userservicev1_TenantExistsRequest = {
   code: string | undefined;

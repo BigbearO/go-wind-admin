@@ -102,7 +102,7 @@ func (s *redactedTenantServiceServer) Delete(ctx context.Context, in *userpb.Del
 
 // CreateTenantWithAdminUser is the redacted wrapper for the actual TenantServiceServer.CreateTenantWithAdminUser method
 // Unary RPC
-func (s *redactedTenantServiceServer) CreateTenantWithAdminUser(ctx context.Context, in *CreateTenantWithAdminUserRequest) (*emptypb.Empty, error) {
+func (s *redactedTenantServiceServer) CreateTenantWithAdminUser(ctx context.Context, in *userpb.CreateTenantWithAdminUserRequest) (*emptypb.Empty, error) {
 	res, err := s.srv.CreateTenantWithAdminUser(ctx, in)
 	if !s.bypass.CheckInternal(ctx) {
 		// Apply redaction to the response
@@ -120,18 +120,4 @@ func (s *redactedTenantServiceServer) TenantExists(ctx context.Context, in *user
 		redact.Apply(res)
 	}
 	return res, err
-}
-
-// Redact method implementation for CreateTenantWithAdminUserRequest
-func (x *CreateTenantWithAdminUserRequest) Redact() string {
-	if x == nil {
-		return ""
-	}
-
-	// Safe field: Tenant
-
-	// Safe field: User
-
-	// Safe field: Password
-	return x.String()
 }

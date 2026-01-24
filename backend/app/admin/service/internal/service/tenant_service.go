@@ -155,7 +155,7 @@ func (s *TenantService) TenantExists(ctx context.Context, req *userV1.TenantExis
 }
 
 // CreateTenantWithAdminUser 创建租户及其管理员用户
-func (s *TenantService) CreateTenantWithAdminUser(ctx context.Context, req *adminV1.CreateTenantWithAdminUserRequest) (*emptypb.Empty, error) {
+func (s *TenantService) CreateTenantWithAdminUser(ctx context.Context, req *userV1.CreateTenantWithAdminUserRequest) (*emptypb.Empty, error) {
 	if req.Tenant == nil || req.User == nil {
 		s.log.Error("invalid parameter: tenant or user is nil", req)
 		return nil, adminV1.ErrorBadRequest("invalid parameter")

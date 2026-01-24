@@ -282,3 +282,17 @@ func (x *TenantExistsResponse) Redact() string {
 	// Safe field: Exist
 	return x.String()
 }
+
+// Redact method implementation for CreateTenantWithAdminUserRequest
+func (x *CreateTenantWithAdminUserRequest) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: Tenant
+
+	// Safe field: User
+
+	// Safe field: Password
+	return x.String()
+}

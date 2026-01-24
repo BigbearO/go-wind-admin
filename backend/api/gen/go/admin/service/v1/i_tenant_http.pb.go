@@ -34,7 +34,7 @@ type TenantServiceHTTPServer interface {
 	// Create 创建租户
 	Create(context.Context, *v11.CreateTenantRequest) (*emptypb.Empty, error)
 	// CreateTenantWithAdminUser 创建租户及管理员用户
-	CreateTenantWithAdminUser(context.Context, *CreateTenantWithAdminUserRequest) (*emptypb.Empty, error)
+	CreateTenantWithAdminUser(context.Context, *v11.CreateTenantWithAdminUserRequest) (*emptypb.Empty, error)
 	// Delete 删除租户
 	Delete(context.Context, *v11.DeleteTenantRequest) (*emptypb.Empty, error)
 	// Get 获取租户数据
@@ -170,7 +170,7 @@ func _TenantService_Delete12_HTTP_Handler(srv TenantServiceHTTPServer) func(ctx 
 
 func _TenantService_CreateTenantWithAdminUser0_HTTP_Handler(srv TenantServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in CreateTenantWithAdminUserRequest
+		var in v11.CreateTenantWithAdminUserRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
@@ -179,7 +179,7 @@ func _TenantService_CreateTenantWithAdminUser0_HTTP_Handler(srv TenantServiceHTT
 		}
 		http.SetOperation(ctx, OperationTenantServiceCreateTenantWithAdminUser)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.CreateTenantWithAdminUser(ctx, req.(*CreateTenantWithAdminUserRequest))
+			return srv.CreateTenantWithAdminUser(ctx, req.(*v11.CreateTenantWithAdminUserRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -213,7 +213,7 @@ type TenantServiceHTTPClient interface {
 	// Create 创建租户
 	Create(ctx context.Context, req *v11.CreateTenantRequest, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 	// CreateTenantWithAdminUser 创建租户及管理员用户
-	CreateTenantWithAdminUser(ctx context.Context, req *CreateTenantWithAdminUserRequest, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
+	CreateTenantWithAdminUser(ctx context.Context, req *v11.CreateTenantWithAdminUserRequest, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 	// Delete 删除租户
 	Delete(ctx context.Context, req *v11.DeleteTenantRequest, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 	// Get 获取租户数据
@@ -249,7 +249,7 @@ func (c *TenantServiceHTTPClientImpl) Create(ctx context.Context, in *v11.Create
 }
 
 // CreateTenantWithAdminUser 创建租户及管理员用户
-func (c *TenantServiceHTTPClientImpl) CreateTenantWithAdminUser(ctx context.Context, in *CreateTenantWithAdminUserRequest, opts ...http.CallOption) (*emptypb.Empty, error) {
+func (c *TenantServiceHTTPClientImpl) CreateTenantWithAdminUser(ctx context.Context, in *v11.CreateTenantWithAdminUserRequest, opts ...http.CallOption) (*emptypb.Empty, error) {
 	var out emptypb.Empty
 	pattern := "/admin/v1/tenants:with-admin"
 	path := binding.EncodeURL(pattern, in, false)

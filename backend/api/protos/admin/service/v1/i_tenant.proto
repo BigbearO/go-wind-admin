@@ -50,7 +50,7 @@ service TenantService {
   }
 
   // 创建租户及管理员用户
-  rpc CreateTenantWithAdminUser (CreateTenantWithAdminUserRequest) returns (google.protobuf.Empty) {
+  rpc CreateTenantWithAdminUser (user.service.v1.CreateTenantWithAdminUserRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/admin/v1/tenants:with-admin"
       body: "*"
@@ -58,16 +58,9 @@ service TenantService {
   }
 
   // 租户是否存在
-  rpc TenantExists ( user.service.v1.TenantExistsRequest ) returns ( user.service.v1.TenantExistsResponse ) {
+  rpc TenantExists (user.service.v1.TenantExistsRequest) returns (user.service.v1.TenantExistsResponse) {
     option (google.api.http) = {
       get: "/admin/v1/tenants:exists"
     };
   }
-}
-
-// 创建租户及管理员用户 - 请求
-message CreateTenantWithAdminUserRequest {
-  user.service.v1.Tenant tenant = 1;
-  user.service.v1.User user = 2;
-  string password = 3;
 }

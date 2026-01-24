@@ -48,7 +48,7 @@ type TenantServiceClient interface {
 	// 删除租户
 	Delete(ctx context.Context, in *v11.DeleteTenantRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// 创建租户及管理员用户
-	CreateTenantWithAdminUser(ctx context.Context, in *CreateTenantWithAdminUserRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	CreateTenantWithAdminUser(ctx context.Context, in *v11.CreateTenantWithAdminUserRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// 租户是否存在
 	TenantExists(ctx context.Context, in *v11.TenantExistsRequest, opts ...grpc.CallOption) (*v11.TenantExistsResponse, error)
 }
@@ -111,7 +111,7 @@ func (c *tenantServiceClient) Delete(ctx context.Context, in *v11.DeleteTenantRe
 	return out, nil
 }
 
-func (c *tenantServiceClient) CreateTenantWithAdminUser(ctx context.Context, in *CreateTenantWithAdminUserRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *tenantServiceClient) CreateTenantWithAdminUser(ctx context.Context, in *v11.CreateTenantWithAdminUserRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, TenantService_CreateTenantWithAdminUser_FullMethodName, in, out, cOpts...)
@@ -148,7 +148,7 @@ type TenantServiceServer interface {
 	// 删除租户
 	Delete(context.Context, *v11.DeleteTenantRequest) (*emptypb.Empty, error)
 	// 创建租户及管理员用户
-	CreateTenantWithAdminUser(context.Context, *CreateTenantWithAdminUserRequest) (*emptypb.Empty, error)
+	CreateTenantWithAdminUser(context.Context, *v11.CreateTenantWithAdminUserRequest) (*emptypb.Empty, error)
 	// 租户是否存在
 	TenantExists(context.Context, *v11.TenantExistsRequest) (*v11.TenantExistsResponse, error)
 	mustEmbedUnimplementedTenantServiceServer()
@@ -176,7 +176,7 @@ func (UnimplementedTenantServiceServer) Update(context.Context, *v11.UpdateTenan
 func (UnimplementedTenantServiceServer) Delete(context.Context, *v11.DeleteTenantRequest) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Delete not implemented")
 }
-func (UnimplementedTenantServiceServer) CreateTenantWithAdminUser(context.Context, *CreateTenantWithAdminUserRequest) (*emptypb.Empty, error) {
+func (UnimplementedTenantServiceServer) CreateTenantWithAdminUser(context.Context, *v11.CreateTenantWithAdminUserRequest) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method CreateTenantWithAdminUser not implemented")
 }
 func (UnimplementedTenantServiceServer) TenantExists(context.Context, *v11.TenantExistsRequest) (*v11.TenantExistsResponse, error) {
@@ -294,7 +294,7 @@ func _TenantService_Delete_Handler(srv interface{}, ctx context.Context, dec fun
 }
 
 func _TenantService_CreateTenantWithAdminUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateTenantWithAdminUserRequest)
+	in := new(v11.CreateTenantWithAdminUserRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -306,7 +306,7 @@ func _TenantService_CreateTenantWithAdminUser_Handler(srv interface{}, ctx conte
 		FullMethod: TenantService_CreateTenantWithAdminUser_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TenantServiceServer).CreateTenantWithAdminUser(ctx, req.(*CreateTenantWithAdminUserRequest))
+		return srv.(TenantServiceServer).CreateTenantWithAdminUser(ctx, req.(*v11.CreateTenantWithAdminUserRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

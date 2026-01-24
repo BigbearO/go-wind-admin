@@ -9,6 +9,7 @@ import "google/protobuf/field_mask.proto";
 import "google/protobuf/timestamp.proto";
 
 import "pagination/v1/pagination.proto";
+import "user/service/v1/user.proto";
 
 // 租户服务
 service TenantService {
@@ -240,3 +241,12 @@ message TenantExistsRequest {
 message TenantExistsResponse {
   bool exist = 1;
 }
+
+
+// 创建租户及管理员用户 - 请求
+message CreateTenantWithAdminUserRequest {
+  user.service.v1.Tenant tenant = 1;
+  user.service.v1.User user = 2;
+  string password = 3;
+}
+
