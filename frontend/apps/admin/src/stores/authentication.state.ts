@@ -21,7 +21,8 @@ import { requestClientRequestHandler } from '#/utils/request';
 
 type RefreshTokenFunc = () => Promise<string> | string;
 
-const REFRESH_INTERVAL = 90 * 60 * 1000; // 1.5 小时
+const ACCESS_TOKEN_REFRESH_INTERVAL = 90 * 60 * 1000; // 1.5 小时
+const REFRESH_TOKEN_REFRESH_INTERVAL = 12 * 60 * 60 * 1000; // 12 小时
 
 let refreshTimer: null | ReturnType<typeof setTimeout> = null;
 let refreshCallback: null | RefreshTokenFunc = null;
@@ -98,16 +99,32 @@ export const useAuthStore = defineStore('auth', () => {
         grant_type: 'password',
       });
 
-      const access_token = (resp as any).access_token;
+      const accessToken = (resp as any).access_token;
       const refresh_token = (resp as any).refresh_token;
+      let expiresIn = (resp as any).expires_in;
+      let refreshExpiresIn = (resp as any).refresh_expires_in;
+
+      const expiresInSec = Number(expiresIn);
+      expiresIn =
+        !Number.isFinite(expiresInSec) || expiresInSec <= 0
+          ? Date.now() + ACCESS_TOKEN_REFRESH_INTERVAL
+          : Date.now() + Math.floor(expiresInSec * 1000);
+
+      const refreshExpiresInSec = Number(refreshExpiresIn);
+      refreshExpiresIn =
+        !Number.isFinite(refreshExpiresInSec) || refreshExpiresInSec <= 0
+          ? Date.now() + REFRESH_TOKEN_REFRESH_INTERVAL
+          : Date.now() + Math.floor(refreshExpiresInSec * 1000);
 
       // 如果成功获取到 accessToken
-      if (access_token) {
-        accessStore.setAccessToken(access_token);
+      if (accessToken) {
+        accessStore.setAccessToken(accessToken);
+        accessStore.setAccessTokenExpireTime(expiresIn);
 
         if (refresh_token) {
           accessStore.setRefreshToken(refresh_token);
-          _startRefreshTimer(refreshToken);
+          accessStore.setRefreshTokenExpireTime(refreshExpiresIn);
+          startRefreshTimer();
         }
 
         // 获取用户信息并存储到 accessStore 中
@@ -232,6 +249,24 @@ export const useAuthStore = defineStore('auth', () => {
       const newAccessToken = (resp as any).access_token;
       const newRefreshToken = (resp as any).refresh_token;
 
+      let expiresIn = (resp as any).expires_in;
+      let refreshExpiresIn = (resp as any).refresh_expires_in;
+
+      const expiresInSec = Number(expiresIn);
+      expiresIn =
+        !Number.isFinite(expiresInSec) || expiresInSec <= 0
+          ? Date.now() + ACCESS_TOKEN_REFRESH_INTERVAL
+          : Date.now() + Math.floor(expiresInSec * 1000);
+
+      const refreshExpiresInSec = Number(refreshExpiresIn);
+      refreshExpiresIn =
+        !Number.isFinite(refreshExpiresInSec) || refreshExpiresInSec <= 0
+          ? Date.now() + REFRESH_TOKEN_REFRESH_INTERVAL
+          : Date.now() + Math.floor(refreshExpiresInSec * 1000);
+
+      accessStore.setAccessTokenExpireTime(expiresIn);
+      accessStore.setRefreshTokenExpireTime(refreshExpiresIn);
+
       accessStore.setAccessToken(newAccessToken ?? null);
       accessStore.setRefreshToken(newRefreshToken ?? null);
 
@@ -261,6 +296,7 @@ export const useAuthStore = defineStore('auth', () => {
       accessStore.setAccessToken(null);
       accessStore.setRefreshToken(null);
       accessStore.setIsAccessChecked(false);
+      accessStore.setAccessCodes([]);
 
       if (
         preferences.app.loginExpiredMode === 'modal' &&
@@ -312,6 +348,17 @@ export const useAuthStore = defineStore('auth', () => {
       return;
     }
 
+    let refreshInterval = ACCESS_TOKEN_REFRESH_INTERVAL;
+    // 如果有 refresh token 过期时间，则调整刷新间隔为过期时间的 80%
+    if (accessStore.refreshTokenExpireTime) {
+      const now = Date.now();
+      const timeToExpire =
+        accessStore.refreshTokenExpireTime - now - 5 * 60 * 1000; // 提前 5 分钟刷新
+      if (timeToExpire > 0) {
+        refreshInterval = Math.floor(timeToExpire * 0.8);
+      }
+    }
+
     // 使用 self-scheduling 的 setTimeout，避免并发刷新
     const schedule = async () => {
       try {
@@ -328,13 +375,13 @@ export const useAuthStore = defineStore('auth', () => {
       } finally {
         // 只有在回调仍然存在时才继续调度
         if (refreshCallback) {
-          refreshTimer = globalThis.setTimeout(schedule, REFRESH_INTERVAL);
+          refreshTimer = globalThis.setTimeout(schedule, refreshInterval);
         }
       }
     };
 
     // 首次在间隔后执行（不立即执行）
-    refreshTimer = globalThis.setTimeout(schedule, REFRESH_INTERVAL);
+    refreshTimer = globalThis.setTimeout(schedule, refreshInterval);
   }
 
   /**

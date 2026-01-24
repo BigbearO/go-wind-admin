@@ -66,7 +66,7 @@ func initApp(context *bootstrap.Context) (*kratos.App, func(), error) {
 	loginPolicyRepo := data.NewLoginPolicyRepo(context, entClient)
 	loginPolicyService := service.NewLoginPolicyService(context, loginPolicyRepo)
 	menuRepo := data.NewMenuRepo(context, entClient)
-	adminPortalService := service.NewRouterService(context, menuRepo, roleRepo, userRepo)
+	adminPortalService := service.NewAdminPortalService(context, menuRepo, roleRepo, userRepo)
 	taskRepo := data.NewTaskRepo(context, entClient)
 	taskService := service.NewTaskService(context, taskRepo, userRepo)
 	minIOClient := data.NewMinIoClient(context)

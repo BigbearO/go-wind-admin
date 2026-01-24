@@ -29,6 +29,10 @@ interface AccessState {
    */
   accessToken: AccessToken;
   /**
+   * accessToken 过期时间戳
+   */
+  accessTokenExpireTime?: number;
+  /**
    * 是否已经检查过权限
    */
   isAccessChecked: boolean;
@@ -36,10 +40,16 @@ interface AccessState {
    * 登录是否过期
    */
   loginExpired: boolean;
+
   /**
    * 登录 accessToken
    */
   refreshToken: AccessToken;
+
+  /**
+   * refreshToken 过期时间戳
+   */
+  refreshTokenExpireTime?: number;
 }
 
 /**
@@ -55,6 +65,28 @@ export const useAccessStore = defineStore('core-access', {
       this.accessRoutes = [];
       this.isAccessChecked = false;
       this.loginExpired = false;
+      this.accessTokenExpireTime = undefined;
+      this.refreshTokenExpireTime = undefined;
+    },
+    /**
+     * @zh_CN 检查 accessToken 是否过期
+     */
+    checkAccessTokenExpired(): boolean {
+      if (!this.accessTokenExpireTime) {
+        return true;
+      }
+      const now = Date.now();
+      return now >= this.accessTokenExpireTime;
+    },
+    /**
+     * @zh_CN 检查 refreshToken 是否过期
+     */
+    checkRefreshTokenExpired(): boolean {
+      if (!this.refreshTokenExpireTime) {
+        return true;
+      }
+      const now = Date.now();
+      return now >= this.refreshTokenExpireTime;
     },
     setAccessCodes(codes: string[]) {
       this.accessCodes = codes;
@@ -68,9 +100,13 @@ export const useAccessStore = defineStore('core-access', {
     setAccessToken(token: AccessToken) {
       this.accessToken = token;
     },
+    setAccessTokenExpireTime(accessTokenExpireTime: number) {
+      this.accessTokenExpireTime = accessTokenExpireTime;
+    },
     setIsAccessChecked(isAccessChecked: boolean) {
       this.isAccessChecked = isAccessChecked;
     },
+
     setLoginExpired(loginExpired: boolean) {
       this.loginExpired = loginExpired;
     },
@@ -78,19 +114,31 @@ export const useAccessStore = defineStore('core-access', {
     setRefreshToken(token: AccessToken) {
       this.refreshToken = token;
     },
+
+    setRefreshTokenExpireTime(refreshTokenExpireTime: number) {
+      this.refreshTokenExpireTime = refreshTokenExpireTime;
+    },
   },
   persist: {
     // 持久化
-    pick: ['accessToken', 'refreshToken', 'accessCodes'],
+    pick: [
+      'accessToken',
+      'refreshToken',
+      'accessCodes',
+      'refreshTokenExpireTime',
+      'accessTokenExpireTime',
+    ],
   },
   state: (): AccessState => ({
     accessCodes: [],
     accessMenus: [],
     accessRoutes: [],
     accessToken: null,
+    accessTokenExpireTime: undefined,
     isAccessChecked: false,
     loginExpired: false,
     refreshToken: null,
+    refreshTokenExpireTime: undefined,
   }),
 });
 

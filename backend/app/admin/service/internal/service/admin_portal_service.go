@@ -34,7 +34,7 @@ type AdminPortalService struct {
 	userRepo data.UserRepo
 }
 
-func NewRouterService(
+func NewAdminPortalService(
 	ctx *bootstrap.Context,
 	menuRepo *data.MenuRepo,
 	roleRepo *data.RoleRepo,
