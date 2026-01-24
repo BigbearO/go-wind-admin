@@ -2,45 +2,68 @@ package metadata
 
 import (
 	"context"
-	"encoding/json"
+	"encoding/base64"
 
+	"github.com/go-kratos/kratos/v2/encoding"
+	_ "github.com/go-kratos/kratos/v2/encoding/json"
+	_ "github.com/go-kratos/kratos/v2/encoding/proto"
 	"github.com/go-kratos/kratos/v2/metadata"
 
-	permissionV1 "go-wind-admin/api/gen/go/permission/service/v1"
+	authenticationV1 "go-wind-admin/api/gen/go/authentication/service/v1"
 )
 
-func FromOperatorMetadata(ctx context.Context) *OperatorInfo {
-	md, ok := metadata.FromServerContext(ctx)
-	if !ok {
-		return nil
-	}
+const (
+	mdOperatorKey  = "x-md-operator"
+	mdSignatureKey = "x-md-signature"
+)
 
-	if op := md.Get(mdOperator); op != "" {
-		var p OperatorInfo
-		if err := json.Unmarshal([]byte(op), &p); err == nil {
-			return &p
-		}
-	}
+var codec = encoding.GetCodec("proto")
 
-	return nil
+func NewContext(ctx context.Context, info *authenticationV1.OperatorMetadata) (context.Context, error) {
+	str, err := encodeOperatorMetadata(info)
+	if err != nil {
+		return ctx, err
+	}
+	return metadata.AppendToClientContext(ctx, mdOperatorKey, str), nil
 }
 
-func NewOperatorMetadataContext(
-	ctx context.Context,
-	uid uint64,
-	tid uint64,
-	ouid uint64,
-	dataScope permissionV1.DataScope,
-) context.Context {
-	payload := OperatorInfo{
-		UserID:    &uid,
-		TenantID:  &tid,
-		OrgUnitID: &ouid,
-		DataScope: &dataScope,
-	}
-	if b, err := json.Marshal(payload); err == nil {
-		ctx = metadata.AppendToClientContext(ctx, mdOperator, string(b))
+func FromContext(ctx context.Context) (*authenticationV1.OperatorMetadata, error) {
+	md, ok := metadata.FromServerContext(ctx)
+	if !ok {
+		return nil, ErrNoMetadata
 	}
 
-	return ctx
+	val := md.Get(mdOperatorKey)
+	if val == "" {
+		return nil, ErrNoOperatorHeader
+	}
+
+	info, err := decodeOperatorMetadata(val)
+	if err != nil {
+		return nil, ErrInvalidOperator
+	}
+
+	return info, nil
+}
+
+func encodeOperatorMetadata(info *authenticationV1.OperatorMetadata) (string, error) {
+	b, err := codec.Marshal(info)
+	if err != nil {
+		return "", err
+	}
+	str := base64.RawStdEncoding.EncodeToString(b)
+	return str, nil
+}
+
+func decodeOperatorMetadata(str string) (*authenticationV1.OperatorMetadata, error) {
+	b, err := base64.RawStdEncoding.DecodeString(str)
+	if err != nil {
+		return nil, err
+	}
+
+	info := &authenticationV1.OperatorMetadata{}
+	if err = codec.Unmarshal(b, info); err != nil {
+		return nil, err
+	}
+	return info, nil
 }

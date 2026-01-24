@@ -9,6 +9,7 @@ import (
 	"github.com/go-kratos/kratos/v2/transport"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/tx7do/go-crud/viewer"
+	"go.opentelemetry.io/otel/trace"
 
 	authnEngine "github.com/tx7do/kratos-authn/engine"
 	authn "github.com/tx7do/kratos-authn/middleware"
@@ -117,22 +118,35 @@ func Server(opts ...Option) middleware.Middleware {
 			}
 
 			if op.injectEnt {
+				var traceID string
+				spanContext := trace.SpanContextFromContext(ctx)
+				if spanContext.HasTraceID() {
+					traceID = spanContext.TraceID().String()
+				}
+
 				userViewer := appViewer.NewUserViewer(
 					uint64(tokenPayload.GetUserId()),
 					uint64(tokenPayload.GetTenantId()),
 					uint64(tokenPayload.GetOrgUnitId()),
+					traceID,
 					tokenPayload.GetDataScope(),
 				)
 				ctx = viewer.WithContext(ctx, userViewer)
 			}
 
 			if op.injectMetadata {
-				ctx = metadata.NewOperatorMetadataContext(ctx,
-					uint64(tokenPayload.GetUserId()),
-					uint64(tokenPayload.GetTenantId()),
-					uint64(tokenPayload.GetOrgUnitId()),
-					tokenPayload.GetDataScope(),
+				ctx, err = metadata.NewContext(ctx,
+					&authenticationV1.OperatorMetadata{
+						UserId:    uint64(tokenPayload.GetUserId()),
+						TenantId:  uint64(tokenPayload.GetTenantId()),
+						OrgUnitId: uint64(tokenPayload.GetOrgUnitId()),
+						DataScope: tokenPayload.GetDataScope(),
+					},
 				)
+				if err != nil {
+					op.log.Errorf("auth middleware: invalid token payload in context [%s]", err.Error())
+					return nil, err
+				}
 			}
 
 			if op.enableAuthz {

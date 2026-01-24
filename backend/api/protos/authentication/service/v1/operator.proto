@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package authentication.service.v1;
+
+import "gnostic/openapi/v3/annotations.proto";
+import "permission/service/v1/permission.proto";
+
+// 操作者元数据
+message OperatorMetadata {
+  uint64 user_id = 1 [
+    json_name = "uid",
+    (gnostic.openapi.v3.property) = {description: "用户ID"}
+  ]; // 用户ID
+
+  uint64 tenant_id = 2 [
+    json_name = "tid",
+    (gnostic.openapi.v3.property) = {description: "租户ID"}
+  ]; // 租户ID
+
+  uint64 org_unit_id = 3 [
+    json_name = "ouid",
+    (gnostic.openapi.v3.property) = {description: "当前操作所属的组织单元"}
+  ]; // 当前操作所属的组织单元
+
+  permission.service.v1.DataScope data_scope = 4 [
+    json_name = "ds",
+    (gnostic.openapi.v3.property) = {description: "数据权限范围策略"}
+  ]; // 数据权限范围策略
+
+  repeated uint64 role_ids = 5 [
+    json_name = "rids",
+    (gnostic.openapi.v3.property) = {description: "用于存放少量的核心角色 ID 或标记位"}
+  ]; // 用于存放少量的核心角色 ID 或标记位
+}
+
+// 签名的元数据
+message SignedOperatorPayload {
+  bytes payload = 1;   // 序列化后的二进制
+  bytes signature = 2; // HMAC 签名
+}

@@ -2,87 +2,105 @@ package metadata
 
 import (
 	"context"
-	"encoding/json"
+	"encoding/base64"
 	"testing"
+
+	authenticationV1 "go-wind-admin/api/gen/go/authentication/service/v1"
+	permissionV1 "go-wind-admin/api/gen/go/permission/service/v1"
 
 	"github.com/go-kratos/kratos/v2/metadata"
 	"github.com/stretchr/testify/assert"
-	"github.com/tx7do/go-utils/trans"
-
-	permissionV1 "go-wind-admin/api/gen/go/permission/service/v1"
 )
 
-func TestFromOperatorMetadata_JSON(t *testing.T) {
-	ctx := context.Background()
-
-	ds := permissionV1.DataScope(1)
-	src := OperatorInfo{
-		UserID:    trans.Ptr(uint64(123)),
-		TenantID:  trans.Ptr(uint64(456)),
-		OrgUnitID: trans.Ptr(uint64(789)),
-		DataScope: &ds,
-	}
-	b, err := json.Marshal(src)
-	assert.NoError(t, err)
-
-	ctx = metadata.NewServerContext(ctx, metadata.Metadata{
-		mdOperator: []string{string(b)},
+func TestNewContext_FromContext_RoundTrip(t *testing.T) {
+	// 使用空的 OperatorMetadata 做回环测试
+	info := &authenticationV1.OperatorMetadata{}
+	b, err := encodeOperatorMetadata(info)
+	ctx2 := metadata.NewServerContext(context.Background(), metadata.Metadata{
+		mdOperatorKey: []string{b},
 	})
 
-	got := FromOperatorMetadata(ctx)
-	if assert.NotNil(t, got) {
-		assert.NotNil(t, got)
-		assert.NotNil(t, got.UserID)
-		assert.Equal(t, uint32(123), *got.UserID)
-
-		assert.NotNil(t, got.TenantID)
-		assert.Equal(t, uint32(456), *got.TenantID)
-
-		assert.NotNil(t, got.OrgUnitID)
-		assert.Equal(t, uint32(789), *got.OrgUnitID)
-
-		assert.NotNil(t, got.DataScope)
-		assert.Equal(t, ds, *got.DataScope)
-	}
+	_, err = FromContext(ctx2)
+	assert.Equal(t, err, ErrNoOperatorHeader)
 }
 
-func TestFromOperatorMetadata_NoHeaderOrInvalid(t *testing.T) {
-	// no header -> nil
-	ctx := context.Background()
-	assert.Nil(t, FromOperatorMetadata(ctx))
+func TestFromContext_MissingOrInvalid(t *testing.T) {
+	// 丢失 header
+	got, err := FromContext(context.Background())
+	assert.Error(t, err)
+	assert.Nil(t, got)
 
-	// invalid json -> nil
-	ctx = metadata.NewServerContext(context.Background(), metadata.Metadata{
-		mdOperator: []string{"not-a-json"},
+	// 无效 base64
+	ctx := metadata.AppendToClientContext(context.Background(), mdOperatorKey, "not-base64")
+	got, err = FromContext(ctx)
+	assert.Error(t, err)
+	assert.Nil(t, got)
+
+	// 有效 base64 但不是有效的 proto bytes
+	bad := base64.RawStdEncoding.EncodeToString([]byte("not-proto-bytes"))
+	ctx = metadata.AppendToClientContext(context.Background(), mdOperatorKey, bad)
+	got, err = FromContext(ctx)
+	assert.Error(t, err)
+	assert.Nil(t, got)
+}
+
+func TestNewContext_FromContext_InvalidData(t *testing.T) {
+	// 使用空的 OperatorMetadata 做回环测试
+	info := &authenticationV1.OperatorMetadata{
+		UserId:    uint64(123),
+		TenantId:  uint64(456),
+		OrgUnitId: uint64(789),
+		DataScope: permissionV1.DataScope_ALL,
+		RoleIds:   []uint64{1},
+	}
+	b, err := encodeOperatorMetadata(info)
+	ctx2 := metadata.NewServerContext(context.Background(), metadata.Metadata{
+		mdOperatorKey: []string{b},
 	})
-	assert.Nil(t, FromOperatorMetadata(ctx))
+
+	got, err := FromContext(ctx2)
+	assert.NoError(t, err)
+	assert.NotNil(t, got)
+	assert.Equal(t, info.UserId, got.UserId)
+	assert.Equal(t, info.TenantId, got.TenantId)
+	assert.Equal(t, info.OrgUnitId, got.OrgUnitId)
+	assert.Equal(t, info.DataScope, got.DataScope)
+	assert.Equal(t, info.RoleIds, got.RoleIds)
 }
 
 func TestNewOperatorMetadataContext_WriteAndRead(t *testing.T) {
-	ctx := context.Background()
-
-	ds := permissionV1.DataScope(2)
-	ctx = NewOperatorMetadataContext(ctx, 321, 654, 987, ds)
+	info := &authenticationV1.OperatorMetadata{
+		UserId:    uint64(123),
+		TenantId:  uint64(456),
+		OrgUnitId: uint64(789),
+		DataScope: permissionV1.DataScope_ALL,
+		RoleIds:   []uint64{1},
+	}
+	ctx, err := NewContext(context.Background(), info)
+	assert.NoError(t, err)
 
 	md, ok := metadata.FromClientContext(ctx)
 	assert.True(t, ok)
 
-	op := md.Get(mdOperator)
+	op := md.Get(mdOperatorKey)
 	assert.NotEmpty(t, op)
 
-	var got OperatorInfo
-	assert.NoError(t, json.Unmarshal([]byte(op), &got))
+	got, err := decodeOperatorMetadata(op)
+	assert.NoError(t, err)
 
-	if assert.NotNil(t, got.UserID) {
-		assert.Equal(t, uint32(321), *got.UserID)
+	if assert.NotNil(t, got.UserId) {
+		assert.Equal(t, info.UserId, got.UserId)
 	}
-	if assert.NotNil(t, got.TenantID) {
-		assert.Equal(t, uint32(654), *got.TenantID)
+	if assert.NotNil(t, got.TenantId) {
+		assert.Equal(t, info.TenantId, got.TenantId)
 	}
-	if assert.NotNil(t, got.OrgUnitID) {
-		assert.Equal(t, uint32(987), *got.OrgUnitID)
+	if assert.NotNil(t, got.OrgUnitId) {
+		assert.Equal(t, info.OrgUnitId, got.OrgUnitId)
 	}
 	if assert.NotNil(t, got.DataScope) {
-		assert.Equal(t, ds, *got.DataScope)
+		assert.Equal(t, info.DataScope, got.DataScope)
+	}
+	if assert.NotNil(t, got.RoleIds) {
+		assert.Equal(t, info.RoleIds, got.RoleIds)
 	}
 }

@@ -1,9 +1,9 @@
 package viewer
 
 import (
-	permissionV1 "go-wind-admin/api/gen/go/permission/service/v1"
-
 	"github.com/tx7do/go-crud/viewer"
+
+	permissionV1 "go-wind-admin/api/gen/go/permission/service/v1"
 )
 
 // UserViewer describes a user-viewer.
@@ -21,13 +21,17 @@ func NewUserViewer(
 	uid uint64,
 	tid uint64,
 	ouid uint64,
+	traceID string,
 	dataScope permissionV1.DataScope,
 ) viewer.Context {
-	return UserViewer{
-		uid:  uid,
-		tid:  tid,
-		ouid: ouid,
+	uv := UserViewer{
+		uid:        uid,
+		tid:        tid,
+		ouid:       ouid,
+		dataScopes: []viewer.DataScope{convertDataScope(dataScope)},
+		traceID:    traceID,
 	}
+	return uv
 }
 
 // UserID 返回当前用户ID
@@ -88,4 +92,25 @@ func (v UserViewer) IsSystemContext() bool {
 // ShouldAudit 返回是否需要记录审计日志（便于在中间件/Hook 中快速判断）
 func (v UserViewer) ShouldAudit() bool {
 	return false
+}
+
+func convertDataScope(dataScope permissionV1.DataScope) viewer.DataScope {
+	switch dataScope {
+	case permissionV1.DataScope_ALL:
+		return viewer.DataScope{
+			ScopeType: viewer.ScopeTypeAll,
+		}
+	case permissionV1.DataScope_UNIT_ONLY, permissionV1.DataScope_UNIT_AND_CHILD:
+		return viewer.DataScope{
+			ScopeType: viewer.ScopeTypeUnit,
+		}
+	case permissionV1.DataScope_SELF:
+		return viewer.DataScope{
+			ScopeType: viewer.ScopeTypeSelf,
+		}
+	default:
+		return viewer.DataScope{
+			ScopeType: viewer.ScopeTypeNone,
+		}
+	}
 }

@@ -7,5 +7,7 @@ const (
 )
 
 var (
-	ErrMissingMetadata = errors.Unauthorized(reason, "missing metadata in context")
+	ErrNoMetadata       = errors.Unauthorized(reason, "metadata: missing server metadata")
+	ErrNoOperatorHeader = errors.Unauthorized(reason, "metadata: missing operator header")
+	ErrInvalidOperator  = errors.Unauthorized(reason, "metadata: invalid operator header")
 )
