@@ -544,13 +544,13 @@ func (r *userRepo) CreateWithTx(ctx context.Context, tx *ent.Tx, data *userV1.Us
 		return nil, userV1.ErrorInternalServerError("insert user failed")
 	}
 
-	if data.RoleId != nil {
+	if data.GetRoleId() > 0 {
 		data.RoleIds = append(data.RoleIds, data.GetRoleId())
 	}
-	if data.OrgUnitId != nil {
+	if data.GetOrgUnitId() > 0 {
 		data.OrgUnitIds = append(data.OrgUnitIds, data.GetOrgUnitId())
 	}
-	if data.PositionId != nil {
+	if data.GetPositionId() > 0 {
 		data.PositionIds = append(data.PositionIds, data.GetPositionId())
 	}
 

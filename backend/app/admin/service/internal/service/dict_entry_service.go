@@ -35,11 +35,11 @@ func NewDictEntryService(
 	}
 }
 
-func (s *DictEntryService) ListDictEntry(ctx context.Context, req *paginationV1.PagingRequest) (*dictV1.ListDictEntryResponse, error) {
+func (s *DictEntryService) List(ctx context.Context, req *paginationV1.PagingRequest) (*dictV1.ListDictEntryResponse, error) {
 	return s.dictEntryRepo.List(ctx, req)
 }
 
-func (s *DictEntryService) CreateDictEntry(ctx context.Context, req *dictV1.CreateDictEntryRequest) (*emptypb.Empty, error) {
+func (s *DictEntryService) Create(ctx context.Context, req *dictV1.CreateDictEntryRequest) (*emptypb.Empty, error) {
 	if req.Data == nil {
 		return nil, dictV1.ErrorBadRequest("invalid parameter")
 	}
@@ -59,7 +59,7 @@ func (s *DictEntryService) CreateDictEntry(ctx context.Context, req *dictV1.Crea
 	return &emptypb.Empty{}, nil
 }
 
-func (s *DictEntryService) UpdateDictEntry(ctx context.Context, req *dictV1.UpdateDictEntryRequest) (*emptypb.Empty, error) {
+func (s *DictEntryService) Update(ctx context.Context, req *dictV1.UpdateDictEntryRequest) (*emptypb.Empty, error) {
 	if req.Data == nil {
 		return nil, dictV1.ErrorBadRequest("invalid parameter")
 	}
@@ -82,7 +82,7 @@ func (s *DictEntryService) UpdateDictEntry(ctx context.Context, req *dictV1.Upda
 	return &emptypb.Empty{}, nil
 }
 
-func (s *DictEntryService) DeleteDictEntry(ctx context.Context, req *dictV1.DeleteDictEntryRequest) (*emptypb.Empty, error) {
+func (s *DictEntryService) Delete(ctx context.Context, req *dictV1.DeleteDictEntryRequest) (*emptypb.Empty, error) {
 	if err := s.dictEntryRepo.BatchDelete(ctx, req.GetIds()); err != nil {
 		return nil, err
 	}

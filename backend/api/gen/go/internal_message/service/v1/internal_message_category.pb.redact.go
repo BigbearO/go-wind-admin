@@ -59,6 +59,17 @@ func (s *redactedInternalMessageCategoryServiceServer) List(ctx context.Context,
 	return res, err
 }
 
+// Count is the redacted wrapper for the actual InternalMessageCategoryServiceServer.Count method
+// Unary RPC
+func (s *redactedInternalMessageCategoryServiceServer) Count(ctx context.Context, in *pagination.PagingRequest) (*CountInternalMessageCategoryResponse, error) {
+	res, err := s.srv.Count(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
 // Get is the redacted wrapper for the actual InternalMessageCategoryServiceServer.Get method
 // Unary RPC
 func (s *redactedInternalMessageCategoryServiceServer) Get(ctx context.Context, in *GetInternalMessageCategoryRequest) (*InternalMessageCategory, error) {
@@ -196,5 +207,15 @@ func (x *DeleteInternalMessageCategoryRequest) Redact() string {
 	}
 
 	// Safe field: Id
+	return x.String()
+}
+
+// Redact method implementation for CountInternalMessageCategoryResponse
+func (x *CountInternalMessageCategoryResponse) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: Count
 	return x.String()
 }

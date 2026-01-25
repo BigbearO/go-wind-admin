@@ -22,6 +22,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	UserCredentialService_List_FullMethodName             = "/authentication.service.v1.UserCredentialService/List"
+	UserCredentialService_Count_FullMethodName            = "/authentication.service.v1.UserCredentialService/Count"
 	UserCredentialService_Get_FullMethodName              = "/authentication.service.v1.UserCredentialService/Get"
 	UserCredentialService_GetByIdentifier_FullMethodName  = "/authentication.service.v1.UserCredentialService/GetByIdentifier"
 	UserCredentialService_Create_FullMethodName           = "/authentication.service.v1.UserCredentialService/Create"
@@ -40,6 +41,8 @@ const (
 type UserCredentialServiceClient interface {
 	// 查询列表
 	List(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*ListUserCredentialResponse, error)
+	// 统计数量
+	Count(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*CountUserCredentialResponse, error)
 	// 查询
 	Get(ctx context.Context, in *GetUserCredentialRequest, opts ...grpc.CallOption) (*UserCredential, error)
 	GetByIdentifier(ctx context.Context, in *GetUserCredentialByIdentifierRequest, opts ...grpc.CallOption) (*UserCredential, error)
@@ -69,6 +72,16 @@ func (c *userCredentialServiceClient) List(ctx context.Context, in *v1.PagingReq
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListUserCredentialResponse)
 	err := c.cc.Invoke(ctx, UserCredentialService_List_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userCredentialServiceClient) Count(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*CountUserCredentialResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CountUserCredentialResponse)
+	err := c.cc.Invoke(ctx, UserCredentialService_Count_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -163,6 +176,8 @@ func (c *userCredentialServiceClient) ResetCredential(ctx context.Context, in *R
 type UserCredentialServiceServer interface {
 	// 查询列表
 	List(context.Context, *v1.PagingRequest) (*ListUserCredentialResponse, error)
+	// 统计数量
+	Count(context.Context, *v1.PagingRequest) (*CountUserCredentialResponse, error)
 	// 查询
 	Get(context.Context, *GetUserCredentialRequest) (*UserCredential, error)
 	GetByIdentifier(context.Context, *GetUserCredentialByIdentifierRequest) (*UserCredential, error)
@@ -190,6 +205,9 @@ type UnimplementedUserCredentialServiceServer struct{}
 
 func (UnimplementedUserCredentialServiceServer) List(context.Context, *v1.PagingRequest) (*ListUserCredentialResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method List not implemented")
+}
+func (UnimplementedUserCredentialServiceServer) Count(context.Context, *v1.PagingRequest) (*CountUserCredentialResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Count not implemented")
 }
 func (UnimplementedUserCredentialServiceServer) Get(context.Context, *GetUserCredentialRequest) (*UserCredential, error) {
 	return nil, status.Error(codes.Unimplemented, "method Get not implemented")
@@ -250,6 +268,24 @@ func _UserCredentialService_List_Handler(srv interface{}, ctx context.Context, d
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserCredentialServiceServer).List(ctx, req.(*v1.PagingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserCredentialService_Count_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(v1.PagingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserCredentialServiceServer).Count(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserCredentialService_Count_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserCredentialServiceServer).Count(ctx, req.(*v1.PagingRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -408,6 +444,10 @@ var UserCredentialService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "List",
 			Handler:    _UserCredentialService_List_Handler,
+		},
+		{
+			MethodName: "Count",
+			Handler:    _UserCredentialService_Count_Handler,
 		},
 		{
 			MethodName: "Get",

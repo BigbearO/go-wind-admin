@@ -582,6 +582,50 @@ func (x *DeleteFileRequest) GetId() uint32 {
 	return 0
 }
 
+type CountFileResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Count         uint64                 `protobuf:"varint,1,opt,name=count,proto3" json:"count,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CountFileResponse) Reset() {
+	*x = CountFileResponse{}
+	mi := &file_file_service_v1_file_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CountFileResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CountFileResponse) ProtoMessage() {}
+
+func (x *CountFileResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_file_service_v1_file_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CountFileResponse.ProtoReflect.Descriptor instead.
+func (*CountFileResponse) Descriptor() ([]byte, []int) {
+	return file_file_service_v1_file_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *CountFileResponse) GetCount() uint64 {
+	if x != nil {
+		return x.Count
+	}
+	return 0
+}
+
 var File_file_service_v1_file_proto protoreflect.FileDescriptor
 
 const file_file_service_v1_file_proto_rawDesc = "" +
@@ -665,7 +709,9 @@ const file_file_service_v1_file_proto_rawDesc = "" +
 	"\rallow_missing\x18\x04 \x01(\bB\x89\x01\xbaG\x85\x01\x92\x02\x81\x01如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。H\x00R\fallowMissing\x88\x01\x01B\x10\n" +
 	"\x0e_allow_missing\"#\n" +
 	"\x11DeleteFileRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id*~\n" +
+	"\x02id\x18\x01 \x01(\rR\x02id\")\n" +
+	"\x11CountFileResponse\x12\x14\n" +
+	"\x05count\x18\x01 \x01(\x04R\x05count*~\n" +
 	"\vOSSProvider\x12\t\n" +
 	"\x05MINIO\x10\x00\x12\n" +
 	"\n" +
@@ -702,7 +748,7 @@ func file_file_service_v1_file_proto_rawDescGZIP() []byte {
 }
 
 var file_file_service_v1_file_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_file_service_v1_file_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_file_service_v1_file_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_file_service_v1_file_proto_goTypes = []any{
 	(OSSProvider)(0),              // 0: file.service.v1.OSSProvider
 	(*File)(nil),                  // 1: file.service.v1.File
@@ -711,31 +757,32 @@ var file_file_service_v1_file_proto_goTypes = []any{
 	(*CreateFileRequest)(nil),     // 4: file.service.v1.CreateFileRequest
 	(*UpdateFileRequest)(nil),     // 5: file.service.v1.UpdateFileRequest
 	(*DeleteFileRequest)(nil),     // 6: file.service.v1.DeleteFileRequest
-	(*timestamppb.Timestamp)(nil), // 7: google.protobuf.Timestamp
-	(*fieldmaskpb.FieldMask)(nil), // 8: google.protobuf.FieldMask
-	(*v1.PagingRequest)(nil),      // 9: pagination.PagingRequest
-	(*emptypb.Empty)(nil),         // 10: google.protobuf.Empty
+	(*CountFileResponse)(nil),     // 7: file.service.v1.CountFileResponse
+	(*timestamppb.Timestamp)(nil), // 8: google.protobuf.Timestamp
+	(*fieldmaskpb.FieldMask)(nil), // 9: google.protobuf.FieldMask
+	(*v1.PagingRequest)(nil),      // 10: pagination.PagingRequest
+	(*emptypb.Empty)(nil),         // 11: google.protobuf.Empty
 }
 var file_file_service_v1_file_proto_depIdxs = []int32{
 	0,  // 0: file.service.v1.File.provider:type_name -> file.service.v1.OSSProvider
-	7,  // 1: file.service.v1.File.created_at:type_name -> google.protobuf.Timestamp
-	7,  // 2: file.service.v1.File.updated_at:type_name -> google.protobuf.Timestamp
-	7,  // 3: file.service.v1.File.deleted_at:type_name -> google.protobuf.Timestamp
+	8,  // 1: file.service.v1.File.created_at:type_name -> google.protobuf.Timestamp
+	8,  // 2: file.service.v1.File.updated_at:type_name -> google.protobuf.Timestamp
+	8,  // 3: file.service.v1.File.deleted_at:type_name -> google.protobuf.Timestamp
 	1,  // 4: file.service.v1.ListFileResponse.items:type_name -> file.service.v1.File
-	8,  // 5: file.service.v1.GetFileRequest.view_mask:type_name -> google.protobuf.FieldMask
+	9,  // 5: file.service.v1.GetFileRequest.view_mask:type_name -> google.protobuf.FieldMask
 	1,  // 6: file.service.v1.CreateFileRequest.data:type_name -> file.service.v1.File
 	1,  // 7: file.service.v1.UpdateFileRequest.data:type_name -> file.service.v1.File
-	8,  // 8: file.service.v1.UpdateFileRequest.update_mask:type_name -> google.protobuf.FieldMask
-	9,  // 9: file.service.v1.FileService.List:input_type -> pagination.PagingRequest
+	9,  // 8: file.service.v1.UpdateFileRequest.update_mask:type_name -> google.protobuf.FieldMask
+	10, // 9: file.service.v1.FileService.List:input_type -> pagination.PagingRequest
 	3,  // 10: file.service.v1.FileService.Get:input_type -> file.service.v1.GetFileRequest
 	4,  // 11: file.service.v1.FileService.Create:input_type -> file.service.v1.CreateFileRequest
 	5,  // 12: file.service.v1.FileService.Update:input_type -> file.service.v1.UpdateFileRequest
 	6,  // 13: file.service.v1.FileService.Delete:input_type -> file.service.v1.DeleteFileRequest
 	2,  // 14: file.service.v1.FileService.List:output_type -> file.service.v1.ListFileResponse
 	1,  // 15: file.service.v1.FileService.Get:output_type -> file.service.v1.File
-	10, // 16: file.service.v1.FileService.Create:output_type -> google.protobuf.Empty
-	10, // 17: file.service.v1.FileService.Update:output_type -> google.protobuf.Empty
-	10, // 18: file.service.v1.FileService.Delete:output_type -> google.protobuf.Empty
+	11, // 16: file.service.v1.FileService.Create:output_type -> google.protobuf.Empty
+	11, // 17: file.service.v1.FileService.Update:output_type -> google.protobuf.Empty
+	11, // 18: file.service.v1.FileService.Delete:output_type -> google.protobuf.Empty
 	14, // [14:19] is the sub-list for method output_type
 	9,  // [9:14] is the sub-list for method input_type
 	9,  // [9:9] is the sub-list for extension type_name
@@ -759,7 +806,7 @@ func file_file_service_v1_file_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_file_service_v1_file_proto_rawDesc), len(file_file_service_v1_file_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   6,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

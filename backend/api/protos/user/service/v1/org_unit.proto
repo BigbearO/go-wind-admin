@@ -14,6 +14,9 @@ service OrgUnitService {
   // 查询组织单元列表
   rpc List (pagination.PagingRequest) returns (ListOrgUnitResponse) {}
 
+  // 统计组织单元数量
+  rpc Count (pagination.PagingRequest) returns (CountOrgUnitResponse) {}
+
   // 查询组织单元详情
   rpc Get (GetOrgUnitRequest) returns (OrgUnit) {}
 
@@ -241,4 +244,8 @@ message BatchCreateOrgUnitsResponse {
       description: "创建成功的组织单元ID列表"
     }
   ]; // 创建成功的组织单元ID列表
+}
+
+message CountOrgUnitResponse {
+  uint64 count = 1;
 }

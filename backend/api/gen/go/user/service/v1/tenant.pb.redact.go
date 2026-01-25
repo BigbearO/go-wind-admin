@@ -57,10 +57,32 @@ func (s *redactedTenantServiceServer) List(ctx context.Context, in *pagination.P
 	return res, err
 }
 
+// Count is the redacted wrapper for the actual TenantServiceServer.Count method
+// Unary RPC
+func (s *redactedTenantServiceServer) Count(ctx context.Context, in *pagination.PagingRequest) (*CountTenantResponse, error) {
+	res, err := s.srv.Count(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
 // Get is the redacted wrapper for the actual TenantServiceServer.Get method
 // Unary RPC
 func (s *redactedTenantServiceServer) Get(ctx context.Context, in *GetTenantRequest) (*Tenant, error) {
 	res, err := s.srv.Get(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
+// BatchCreate is the redacted wrapper for the actual TenantServiceServer.BatchCreate method
+// Unary RPC
+func (s *redactedTenantServiceServer) BatchCreate(ctx context.Context, in *BatchCreateTenantsRequest) (*BatchCreateTenantsResponse, error) {
+	res, err := s.srv.BatchCreate(ctx, in)
 	if !s.bypass.CheckInternal(ctx) {
 		// Apply redaction to the response
 		redact.Apply(res)
@@ -94,17 +116,6 @@ func (s *redactedTenantServiceServer) Update(ctx context.Context, in *UpdateTena
 // Unary RPC
 func (s *redactedTenantServiceServer) Delete(ctx context.Context, in *DeleteTenantRequest) (*emptypb.Empty, error) {
 	res, err := s.srv.Delete(ctx, in)
-	if !s.bypass.CheckInternal(ctx) {
-		// Apply redaction to the response
-		redact.Apply(res)
-	}
-	return res, err
-}
-
-// BatchCreate is the redacted wrapper for the actual TenantServiceServer.BatchCreate method
-// Unary RPC
-func (s *redactedTenantServiceServer) BatchCreate(ctx context.Context, in *BatchCreateTenantsRequest) (*BatchCreateTenantsResponse, error) {
-	res, err := s.srv.BatchCreate(ctx, in)
 	if !s.bypass.CheckInternal(ctx) {
 		// Apply redaction to the response
 		redact.Apply(res)
@@ -294,5 +305,15 @@ func (x *CreateTenantWithAdminUserRequest) Redact() string {
 	// Safe field: User
 
 	// Safe field: Password
+	return x.String()
+}
+
+// Redact method implementation for CountTenantResponse
+func (x *CountTenantResponse) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: Count
 	return x.String()
 }

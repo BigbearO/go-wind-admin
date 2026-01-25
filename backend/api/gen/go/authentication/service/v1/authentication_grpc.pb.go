@@ -26,6 +26,9 @@ const (
 	AuthenticationService_RefreshToken_FullMethodName    = "/authentication.service.v1.AuthenticationService/RefreshToken"
 	AuthenticationService_ValidateToken_FullMethodName   = "/authentication.service.v1.AuthenticationService/ValidateToken"
 	AuthenticationService_GetAccessTokens_FullMethodName = "/authentication.service.v1.AuthenticationService/GetAccessTokens"
+	AuthenticationService_RevokeTokenById_FullMethodName = "/authentication.service.v1.AuthenticationService/RevokeTokenById"
+	AuthenticationService_BlockToken_FullMethodName      = "/authentication.service.v1.AuthenticationService/BlockToken"
+	AuthenticationService_UnblockToken_FullMethodName    = "/authentication.service.v1.AuthenticationService/UnblockToken"
 	AuthenticationService_WhoAmI_FullMethodName          = "/authentication.service.v1.AuthenticationService/WhoAmI"
 )
 
@@ -47,6 +50,12 @@ type AuthenticationServiceClient interface {
 	ValidateToken(ctx context.Context, in *ValidateTokenRequest, opts ...grpc.CallOption) (*ValidateTokenResponse, error)
 	// 获取访问令牌列表
 	GetAccessTokens(ctx context.Context, in *GetAccessTokensRequest, opts ...grpc.CallOption) (*GetAccessTokensResponse, error)
+	// 根据令牌ID撤销令牌
+	RevokeTokenById(ctx context.Context, in *RevokeTokenByIdRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// 拉黑令牌
+	BlockToken(ctx context.Context, in *BlockTokenRequest, opts ...grpc.CallOption) (*BlockTokenResponse, error)
+	// 解封令牌
+	UnblockToken(ctx context.Context, in *UnblockTokenRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// 获取当前用户身份信息
 	WhoAmI(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*WhoAmIResponse, error)
 }
@@ -119,6 +128,36 @@ func (c *authenticationServiceClient) GetAccessTokens(ctx context.Context, in *G
 	return out, nil
 }
 
+func (c *authenticationServiceClient) RevokeTokenById(ctx context.Context, in *RevokeTokenByIdRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, AuthenticationService_RevokeTokenById_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authenticationServiceClient) BlockToken(ctx context.Context, in *BlockTokenRequest, opts ...grpc.CallOption) (*BlockTokenResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(BlockTokenResponse)
+	err := c.cc.Invoke(ctx, AuthenticationService_BlockToken_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authenticationServiceClient) UnblockToken(ctx context.Context, in *UnblockTokenRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, AuthenticationService_UnblockToken_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *authenticationServiceClient) WhoAmI(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*WhoAmIResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(WhoAmIResponse)
@@ -147,6 +186,12 @@ type AuthenticationServiceServer interface {
 	ValidateToken(context.Context, *ValidateTokenRequest) (*ValidateTokenResponse, error)
 	// 获取访问令牌列表
 	GetAccessTokens(context.Context, *GetAccessTokensRequest) (*GetAccessTokensResponse, error)
+	// 根据令牌ID撤销令牌
+	RevokeTokenById(context.Context, *RevokeTokenByIdRequest) (*emptypb.Empty, error)
+	// 拉黑令牌
+	BlockToken(context.Context, *BlockTokenRequest) (*BlockTokenResponse, error)
+	// 解封令牌
+	UnblockToken(context.Context, *UnblockTokenRequest) (*emptypb.Empty, error)
 	// 获取当前用户身份信息
 	WhoAmI(context.Context, *emptypb.Empty) (*WhoAmIResponse, error)
 	mustEmbedUnimplementedAuthenticationServiceServer()
@@ -176,6 +221,15 @@ func (UnimplementedAuthenticationServiceServer) ValidateToken(context.Context, *
 }
 func (UnimplementedAuthenticationServiceServer) GetAccessTokens(context.Context, *GetAccessTokensRequest) (*GetAccessTokensResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetAccessTokens not implemented")
+}
+func (UnimplementedAuthenticationServiceServer) RevokeTokenById(context.Context, *RevokeTokenByIdRequest) (*emptypb.Empty, error) {
+	return nil, status.Error(codes.Unimplemented, "method RevokeTokenById not implemented")
+}
+func (UnimplementedAuthenticationServiceServer) BlockToken(context.Context, *BlockTokenRequest) (*BlockTokenResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method BlockToken not implemented")
+}
+func (UnimplementedAuthenticationServiceServer) UnblockToken(context.Context, *UnblockTokenRequest) (*emptypb.Empty, error) {
+	return nil, status.Error(codes.Unimplemented, "method UnblockToken not implemented")
 }
 func (UnimplementedAuthenticationServiceServer) WhoAmI(context.Context, *emptypb.Empty) (*WhoAmIResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method WhoAmI not implemented")
@@ -309,6 +363,60 @@ func _AuthenticationService_GetAccessTokens_Handler(srv interface{}, ctx context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AuthenticationService_RevokeTokenById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RevokeTokenByIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthenticationServiceServer).RevokeTokenById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthenticationService_RevokeTokenById_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthenticationServiceServer).RevokeTokenById(ctx, req.(*RevokeTokenByIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthenticationService_BlockToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BlockTokenRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthenticationServiceServer).BlockToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthenticationService_BlockToken_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthenticationServiceServer).BlockToken(ctx, req.(*BlockTokenRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthenticationService_UnblockToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UnblockTokenRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthenticationServiceServer).UnblockToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthenticationService_UnblockToken_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthenticationServiceServer).UnblockToken(ctx, req.(*UnblockTokenRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _AuthenticationService_WhoAmI_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
@@ -357,6 +465,18 @@ var AuthenticationService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAccessTokens",
 			Handler:    _AuthenticationService_GetAccessTokens_Handler,
+		},
+		{
+			MethodName: "RevokeTokenById",
+			Handler:    _AuthenticationService_RevokeTokenById_Handler,
+		},
+		{
+			MethodName: "BlockToken",
+			Handler:    _AuthenticationService_BlockToken_Handler,
+		},
+		{
+			MethodName: "UnblockToken",
+			Handler:    _AuthenticationService_UnblockToken_Handler,
 		},
 		{
 			MethodName: "WhoAmI",

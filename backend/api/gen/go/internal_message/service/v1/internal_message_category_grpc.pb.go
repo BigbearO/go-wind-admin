@@ -22,6 +22,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	InternalMessageCategoryService_List_FullMethodName   = "/internal_message.service.v1.InternalMessageCategoryService/List"
+	InternalMessageCategoryService_Count_FullMethodName  = "/internal_message.service.v1.InternalMessageCategoryService/Count"
 	InternalMessageCategoryService_Get_FullMethodName    = "/internal_message.service.v1.InternalMessageCategoryService/Get"
 	InternalMessageCategoryService_Create_FullMethodName = "/internal_message.service.v1.InternalMessageCategoryService/Create"
 	InternalMessageCategoryService_Update_FullMethodName = "/internal_message.service.v1.InternalMessageCategoryService/Update"
@@ -36,6 +37,8 @@ const (
 type InternalMessageCategoryServiceClient interface {
 	// 查询站内信消息分类列表
 	List(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*ListInternalMessageCategoryResponse, error)
+	// 统计站内信消息分类数量
+	Count(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*CountInternalMessageCategoryResponse, error)
 	// 查询站内信消息分类详情
 	Get(ctx context.Context, in *GetInternalMessageCategoryRequest, opts ...grpc.CallOption) (*InternalMessageCategory, error)
 	// 创建站内信消息分类
@@ -58,6 +61,16 @@ func (c *internalMessageCategoryServiceClient) List(ctx context.Context, in *v1.
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListInternalMessageCategoryResponse)
 	err := c.cc.Invoke(ctx, InternalMessageCategoryService_List_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *internalMessageCategoryServiceClient) Count(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*CountInternalMessageCategoryResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CountInternalMessageCategoryResponse)
+	err := c.cc.Invoke(ctx, InternalMessageCategoryService_Count_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -112,6 +125,8 @@ func (c *internalMessageCategoryServiceClient) Delete(ctx context.Context, in *D
 type InternalMessageCategoryServiceServer interface {
 	// 查询站内信消息分类列表
 	List(context.Context, *v1.PagingRequest) (*ListInternalMessageCategoryResponse, error)
+	// 统计站内信消息分类数量
+	Count(context.Context, *v1.PagingRequest) (*CountInternalMessageCategoryResponse, error)
 	// 查询站内信消息分类详情
 	Get(context.Context, *GetInternalMessageCategoryRequest) (*InternalMessageCategory, error)
 	// 创建站内信消息分类
@@ -132,6 +147,9 @@ type UnimplementedInternalMessageCategoryServiceServer struct{}
 
 func (UnimplementedInternalMessageCategoryServiceServer) List(context.Context, *v1.PagingRequest) (*ListInternalMessageCategoryResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method List not implemented")
+}
+func (UnimplementedInternalMessageCategoryServiceServer) Count(context.Context, *v1.PagingRequest) (*CountInternalMessageCategoryResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Count not implemented")
 }
 func (UnimplementedInternalMessageCategoryServiceServer) Get(context.Context, *GetInternalMessageCategoryRequest) (*InternalMessageCategory, error) {
 	return nil, status.Error(codes.Unimplemented, "method Get not implemented")
@@ -181,6 +199,24 @@ func _InternalMessageCategoryService_List_Handler(srv interface{}, ctx context.C
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(InternalMessageCategoryServiceServer).List(ctx, req.(*v1.PagingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InternalMessageCategoryService_Count_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(v1.PagingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InternalMessageCategoryServiceServer).Count(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InternalMessageCategoryService_Count_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InternalMessageCategoryServiceServer).Count(ctx, req.(*v1.PagingRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -267,6 +303,10 @@ var InternalMessageCategoryService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "List",
 			Handler:    _InternalMessageCategoryService_List_Handler,
+		},
+		{
+			MethodName: "Count",
+			Handler:    _InternalMessageCategoryService_Count_Handler,
 		},
 		{
 			MethodName: "Get",

@@ -57,6 +57,17 @@ func (s *redactedRoleServiceServer) List(ctx context.Context, in *pagination.Pag
 	return res, err
 }
 
+// Count is the redacted wrapper for the actual RoleServiceServer.Count method
+// Unary RPC
+func (s *redactedRoleServiceServer) Count(ctx context.Context, in *pagination.PagingRequest) (*CountRoleResponse, error) {
+	res, err := s.srv.Count(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
 // Get is the redacted wrapper for the actual RoleServiceServer.Get method
 // Unary RPC
 func (s *redactedRoleServiceServer) Get(ctx context.Context, in *GetRoleRequest) (*Role, error) {
@@ -79,6 +90,17 @@ func (s *redactedRoleServiceServer) Create(ctx context.Context, in *CreateRoleRe
 	return res, err
 }
 
+// BatchCreate is the redacted wrapper for the actual RoleServiceServer.BatchCreate method
+// Unary RPC
+func (s *redactedRoleServiceServer) BatchCreate(ctx context.Context, in *BatchCreateRolesRequest) (*BatchCreateRolesResponse, error) {
+	res, err := s.srv.BatchCreate(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
 // Update is the redacted wrapper for the actual RoleServiceServer.Update method
 // Unary RPC
 func (s *redactedRoleServiceServer) Update(ctx context.Context, in *UpdateRoleRequest) (*emptypb.Empty, error) {
@@ -94,17 +116,6 @@ func (s *redactedRoleServiceServer) Update(ctx context.Context, in *UpdateRoleRe
 // Unary RPC
 func (s *redactedRoleServiceServer) Delete(ctx context.Context, in *DeleteRoleRequest) (*emptypb.Empty, error) {
 	res, err := s.srv.Delete(ctx, in)
-	if !s.bypass.CheckInternal(ctx) {
-		// Apply redaction to the response
-		redact.Apply(res)
-	}
-	return res, err
-}
-
-// BatchCreate is the redacted wrapper for the actual RoleServiceServer.BatchCreate method
-// Unary RPC
-func (s *redactedRoleServiceServer) BatchCreate(ctx context.Context, in *BatchCreateRolesRequest) (*BatchCreateRolesResponse, error) {
-	res, err := s.srv.BatchCreate(ctx, in)
 	if !s.bypass.CheckInternal(ctx) {
 		// Apply redaction to the response
 		redact.Apply(res)
@@ -312,5 +323,15 @@ func (x *GetRolesByRoleIdsRequest) Redact() string {
 	// Safe field: RoleIds
 
 	// Safe field: ViewMask
+	return x.String()
+}
+
+// Redact method implementation for CountRoleResponse
+func (x *CountRoleResponse) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: Count
 	return x.String()
 }

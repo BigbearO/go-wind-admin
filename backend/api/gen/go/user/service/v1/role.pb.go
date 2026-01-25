@@ -845,6 +845,50 @@ func (x *GetRolesByRoleIdsRequest) GetViewMask() *fieldmaskpb.FieldMask {
 	return nil
 }
 
+type CountRoleResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Count         uint64                 `protobuf:"varint,1,opt,name=count,proto3" json:"count,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CountRoleResponse) Reset() {
+	*x = CountRoleResponse{}
+	mi := &file_user_service_v1_role_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CountRoleResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CountRoleResponse) ProtoMessage() {}
+
+func (x *CountRoleResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_user_service_v1_role_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CountRoleResponse.ProtoReflect.Descriptor instead.
+func (*CountRoleResponse) Descriptor() ([]byte, []int) {
+	return file_user_service_v1_role_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *CountRoleResponse) GetCount() uint64 {
+	if x != nil {
+		return x.Count
+	}
+	return 0
+}
+
 var File_user_service_v1_role_proto protoreflect.FileDescriptor
 
 const file_user_service_v1_role_proto_rawDesc = "" +
@@ -943,14 +987,17 @@ const file_user_service_v1_role_proto_rawDesc = "" +
 	"\brole_ids\x18\x01 \x03(\rB\x14\xbaG\x11\x92\x02\x0e角色ID列表R\aroleIds\x12w\n" +
 	"\tview_mask\x18d \x01(\v2\x1a.google.protobuf.FieldMaskB9\xbaG6\x92\x023视图字段过滤器，用于控制返回的字段H\x00R\bviewMask\x88\x01\x01B\f\n" +
 	"\n" +
-	"_view_mask2\x9c\x06\n" +
+	"_view_mask\")\n" +
+	"\x11CountRoleResponse\x12\x14\n" +
+	"\x05count\x18\x01 \x01(\x04R\x05count2\xe6\x06\n" +
 	"\vRoleService\x12F\n" +
-	"\x04List\x12\x19.pagination.PagingRequest\x1a!.user.service.v1.ListRoleResponse\"\x00\x12?\n" +
+	"\x04List\x12\x19.pagination.PagingRequest\x1a!.user.service.v1.ListRoleResponse\"\x00\x12H\n" +
+	"\x05Count\x12\x19.pagination.PagingRequest\x1a\".user.service.v1.CountRoleResponse\"\x00\x12?\n" +
 	"\x03Get\x12\x1f.user.service.v1.GetRoleRequest\x1a\x15.user.service.v1.Role\"\x00\x12F\n" +
-	"\x06Create\x12\".user.service.v1.CreateRoleRequest\x1a\x16.google.protobuf.Empty\"\x00\x12F\n" +
+	"\x06Create\x12\".user.service.v1.CreateRoleRequest\x1a\x16.google.protobuf.Empty\"\x00\x12d\n" +
+	"\vBatchCreate\x12(.user.service.v1.BatchCreateRolesRequest\x1a).user.service.v1.BatchCreateRolesResponse\"\x00\x12F\n" +
 	"\x06Update\x12\".user.service.v1.UpdateRoleRequest\x1a\x16.google.protobuf.Empty\"\x00\x12F\n" +
-	"\x06Delete\x12\".user.service.v1.DeleteRoleRequest\x1a\x16.google.protobuf.Empty\"\x00\x12d\n" +
-	"\vBatchCreate\x12(.user.service.v1.BatchCreateRolesRequest\x1a).user.service.v1.BatchCreateRolesResponse\"\x00\x12x\n" +
+	"\x06Delete\x12\".user.service.v1.DeleteRoleRequest\x1a\x16.google.protobuf.Empty\"\x00\x12x\n" +
 	"\x15GetRoleCodesByRoleIds\x12-.user.service.v1.GetRoleCodesByRoleIdsRequest\x1a..user.service.v1.GetRoleCodesByRoleIdsResponse\"\x00\x12g\n" +
 	"\x13GetRolesByRoleCodes\x12+.user.service.v1.GetRolesByRoleCodesRequest\x1a!.user.service.v1.ListRoleResponse\"\x00\x12c\n" +
 	"\x11GetRolesByRoleIds\x12).user.service.v1.GetRolesByRoleIdsRequest\x1a!.user.service.v1.ListRoleResponse\"\x00B\xaf\x01\n" +
@@ -969,7 +1016,7 @@ func file_user_service_v1_role_proto_rawDescGZIP() []byte {
 }
 
 var file_user_service_v1_role_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_user_service_v1_role_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_user_service_v1_role_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
 var file_user_service_v1_role_proto_goTypes = []any{
 	(Role_Status)(0),                      // 0: user.service.v1.Role.Status
 	(*Role)(nil),                          // 1: user.service.v1.Role
@@ -984,44 +1031,47 @@ var file_user_service_v1_role_proto_goTypes = []any{
 	(*GetRoleCodesByRoleIdsResponse)(nil), // 10: user.service.v1.GetRoleCodesByRoleIdsResponse
 	(*GetRolesByRoleCodesRequest)(nil),    // 11: user.service.v1.GetRolesByRoleCodesRequest
 	(*GetRolesByRoleIdsRequest)(nil),      // 12: user.service.v1.GetRolesByRoleIdsRequest
-	(*timestamppb.Timestamp)(nil),         // 13: google.protobuf.Timestamp
-	(*fieldmaskpb.FieldMask)(nil),         // 14: google.protobuf.FieldMask
-	(*v1.PagingRequest)(nil),              // 15: pagination.PagingRequest
-	(*emptypb.Empty)(nil),                 // 16: google.protobuf.Empty
+	(*CountRoleResponse)(nil),             // 13: user.service.v1.CountRoleResponse
+	(*timestamppb.Timestamp)(nil),         // 14: google.protobuf.Timestamp
+	(*fieldmaskpb.FieldMask)(nil),         // 15: google.protobuf.FieldMask
+	(*v1.PagingRequest)(nil),              // 16: pagination.PagingRequest
+	(*emptypb.Empty)(nil),                 // 17: google.protobuf.Empty
 }
 var file_user_service_v1_role_proto_depIdxs = []int32{
 	0,  // 0: user.service.v1.Role.status:type_name -> user.service.v1.Role.Status
-	13, // 1: user.service.v1.Role.created_at:type_name -> google.protobuf.Timestamp
-	13, // 2: user.service.v1.Role.updated_at:type_name -> google.protobuf.Timestamp
-	13, // 3: user.service.v1.Role.deleted_at:type_name -> google.protobuf.Timestamp
+	14, // 1: user.service.v1.Role.created_at:type_name -> google.protobuf.Timestamp
+	14, // 2: user.service.v1.Role.updated_at:type_name -> google.protobuf.Timestamp
+	14, // 3: user.service.v1.Role.deleted_at:type_name -> google.protobuf.Timestamp
 	1,  // 4: user.service.v1.ListRoleResponse.items:type_name -> user.service.v1.Role
-	14, // 5: user.service.v1.GetRoleRequest.view_mask:type_name -> google.protobuf.FieldMask
+	15, // 5: user.service.v1.GetRoleRequest.view_mask:type_name -> google.protobuf.FieldMask
 	1,  // 6: user.service.v1.CreateRoleRequest.data:type_name -> user.service.v1.Role
 	1,  // 7: user.service.v1.UpdateRoleRequest.data:type_name -> user.service.v1.Role
-	14, // 8: user.service.v1.UpdateRoleRequest.update_mask:type_name -> google.protobuf.FieldMask
+	15, // 8: user.service.v1.UpdateRoleRequest.update_mask:type_name -> google.protobuf.FieldMask
 	1,  // 9: user.service.v1.BatchCreateRolesRequest.data:type_name -> user.service.v1.Role
-	14, // 10: user.service.v1.GetRolesByRoleCodesRequest.view_mask:type_name -> google.protobuf.FieldMask
-	14, // 11: user.service.v1.GetRolesByRoleIdsRequest.view_mask:type_name -> google.protobuf.FieldMask
-	15, // 12: user.service.v1.RoleService.List:input_type -> pagination.PagingRequest
-	3,  // 13: user.service.v1.RoleService.Get:input_type -> user.service.v1.GetRoleRequest
-	4,  // 14: user.service.v1.RoleService.Create:input_type -> user.service.v1.CreateRoleRequest
-	5,  // 15: user.service.v1.RoleService.Update:input_type -> user.service.v1.UpdateRoleRequest
-	6,  // 16: user.service.v1.RoleService.Delete:input_type -> user.service.v1.DeleteRoleRequest
-	7,  // 17: user.service.v1.RoleService.BatchCreate:input_type -> user.service.v1.BatchCreateRolesRequest
-	9,  // 18: user.service.v1.RoleService.GetRoleCodesByRoleIds:input_type -> user.service.v1.GetRoleCodesByRoleIdsRequest
-	11, // 19: user.service.v1.RoleService.GetRolesByRoleCodes:input_type -> user.service.v1.GetRolesByRoleCodesRequest
-	12, // 20: user.service.v1.RoleService.GetRolesByRoleIds:input_type -> user.service.v1.GetRolesByRoleIdsRequest
-	2,  // 21: user.service.v1.RoleService.List:output_type -> user.service.v1.ListRoleResponse
-	1,  // 22: user.service.v1.RoleService.Get:output_type -> user.service.v1.Role
-	16, // 23: user.service.v1.RoleService.Create:output_type -> google.protobuf.Empty
-	16, // 24: user.service.v1.RoleService.Update:output_type -> google.protobuf.Empty
-	16, // 25: user.service.v1.RoleService.Delete:output_type -> google.protobuf.Empty
+	15, // 10: user.service.v1.GetRolesByRoleCodesRequest.view_mask:type_name -> google.protobuf.FieldMask
+	15, // 11: user.service.v1.GetRolesByRoleIdsRequest.view_mask:type_name -> google.protobuf.FieldMask
+	16, // 12: user.service.v1.RoleService.List:input_type -> pagination.PagingRequest
+	16, // 13: user.service.v1.RoleService.Count:input_type -> pagination.PagingRequest
+	3,  // 14: user.service.v1.RoleService.Get:input_type -> user.service.v1.GetRoleRequest
+	4,  // 15: user.service.v1.RoleService.Create:input_type -> user.service.v1.CreateRoleRequest
+	7,  // 16: user.service.v1.RoleService.BatchCreate:input_type -> user.service.v1.BatchCreateRolesRequest
+	5,  // 17: user.service.v1.RoleService.Update:input_type -> user.service.v1.UpdateRoleRequest
+	6,  // 18: user.service.v1.RoleService.Delete:input_type -> user.service.v1.DeleteRoleRequest
+	9,  // 19: user.service.v1.RoleService.GetRoleCodesByRoleIds:input_type -> user.service.v1.GetRoleCodesByRoleIdsRequest
+	11, // 20: user.service.v1.RoleService.GetRolesByRoleCodes:input_type -> user.service.v1.GetRolesByRoleCodesRequest
+	12, // 21: user.service.v1.RoleService.GetRolesByRoleIds:input_type -> user.service.v1.GetRolesByRoleIdsRequest
+	2,  // 22: user.service.v1.RoleService.List:output_type -> user.service.v1.ListRoleResponse
+	13, // 23: user.service.v1.RoleService.Count:output_type -> user.service.v1.CountRoleResponse
+	1,  // 24: user.service.v1.RoleService.Get:output_type -> user.service.v1.Role
+	17, // 25: user.service.v1.RoleService.Create:output_type -> google.protobuf.Empty
 	8,  // 26: user.service.v1.RoleService.BatchCreate:output_type -> user.service.v1.BatchCreateRolesResponse
-	10, // 27: user.service.v1.RoleService.GetRoleCodesByRoleIds:output_type -> user.service.v1.GetRoleCodesByRoleIdsResponse
-	2,  // 28: user.service.v1.RoleService.GetRolesByRoleCodes:output_type -> user.service.v1.ListRoleResponse
-	2,  // 29: user.service.v1.RoleService.GetRolesByRoleIds:output_type -> user.service.v1.ListRoleResponse
-	21, // [21:30] is the sub-list for method output_type
-	12, // [12:21] is the sub-list for method input_type
+	17, // 27: user.service.v1.RoleService.Update:output_type -> google.protobuf.Empty
+	17, // 28: user.service.v1.RoleService.Delete:output_type -> google.protobuf.Empty
+	10, // 29: user.service.v1.RoleService.GetRoleCodesByRoleIds:output_type -> user.service.v1.GetRoleCodesByRoleIdsResponse
+	2,  // 30: user.service.v1.RoleService.GetRolesByRoleCodes:output_type -> user.service.v1.ListRoleResponse
+	2,  // 31: user.service.v1.RoleService.GetRolesByRoleIds:output_type -> user.service.v1.ListRoleResponse
+	22, // [22:32] is the sub-list for method output_type
+	12, // [12:22] is the sub-list for method input_type
 	12, // [12:12] is the sub-list for extension type_name
 	12, // [12:12] is the sub-list for extension extendee
 	0,  // [0:12] is the sub-list for field type_name
@@ -1047,7 +1097,7 @@ func file_user_service_v1_role_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_service_v1_role_proto_rawDesc), len(file_user_service_v1_role_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   12,
+			NumMessages:   13,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

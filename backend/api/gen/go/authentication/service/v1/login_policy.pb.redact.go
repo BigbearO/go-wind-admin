@@ -59,6 +59,17 @@ func (s *redactedLoginPolicyServiceServer) List(ctx context.Context, in *paginat
 	return res, err
 }
 
+// Count is the redacted wrapper for the actual LoginPolicyServiceServer.Count method
+// Unary RPC
+func (s *redactedLoginPolicyServiceServer) Count(ctx context.Context, in *pagination.PagingRequest) (*CountLoginPolicyResponse, error) {
+	res, err := s.srv.Count(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
 // Get is the redacted wrapper for the actual LoginPolicyServiceServer.Get method
 // Unary RPC
 func (s *redactedLoginPolicyServiceServer) Get(ctx context.Context, in *GetLoginPolicyRequest) (*LoginPolicy, error) {
@@ -196,5 +207,15 @@ func (x *DeleteLoginPolicyRequest) Redact() string {
 	}
 
 	// Safe field: Id
+	return x.String()
+}
+
+// Redact method implementation for CountLoginPolicyResponse
+func (x *CountLoginPolicyResponse) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: Count
 	return x.String()
 }

@@ -22,6 +22,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	MenuService_List_FullMethodName   = "/permission.service.v1.MenuService/List"
+	MenuService_Count_FullMethodName  = "/permission.service.v1.MenuService/Count"
 	MenuService_Get_FullMethodName    = "/permission.service.v1.MenuService/Get"
 	MenuService_Create_FullMethodName = "/permission.service.v1.MenuService/Create"
 	MenuService_Update_FullMethodName = "/permission.service.v1.MenuService/Update"
@@ -36,6 +37,8 @@ const (
 type MenuServiceClient interface {
 	// 查询菜单列表
 	List(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*ListMenuResponse, error)
+	// 统计菜单数量
+	Count(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*CountMenuResponse, error)
 	// 查询菜单详情
 	Get(ctx context.Context, in *GetMenuRequest, opts ...grpc.CallOption) (*Menu, error)
 	// 创建菜单
@@ -58,6 +61,16 @@ func (c *menuServiceClient) List(ctx context.Context, in *v1.PagingRequest, opts
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListMenuResponse)
 	err := c.cc.Invoke(ctx, MenuService_List_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *menuServiceClient) Count(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*CountMenuResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CountMenuResponse)
+	err := c.cc.Invoke(ctx, MenuService_Count_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -112,6 +125,8 @@ func (c *menuServiceClient) Delete(ctx context.Context, in *DeleteMenuRequest, o
 type MenuServiceServer interface {
 	// 查询菜单列表
 	List(context.Context, *v1.PagingRequest) (*ListMenuResponse, error)
+	// 统计菜单数量
+	Count(context.Context, *v1.PagingRequest) (*CountMenuResponse, error)
 	// 查询菜单详情
 	Get(context.Context, *GetMenuRequest) (*Menu, error)
 	// 创建菜单
@@ -132,6 +147,9 @@ type UnimplementedMenuServiceServer struct{}
 
 func (UnimplementedMenuServiceServer) List(context.Context, *v1.PagingRequest) (*ListMenuResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method List not implemented")
+}
+func (UnimplementedMenuServiceServer) Count(context.Context, *v1.PagingRequest) (*CountMenuResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Count not implemented")
 }
 func (UnimplementedMenuServiceServer) Get(context.Context, *GetMenuRequest) (*Menu, error) {
 	return nil, status.Error(codes.Unimplemented, "method Get not implemented")
@@ -180,6 +198,24 @@ func _MenuService_List_Handler(srv interface{}, ctx context.Context, dec func(in
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MenuServiceServer).List(ctx, req.(*v1.PagingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MenuService_Count_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(v1.PagingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MenuServiceServer).Count(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MenuService_Count_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MenuServiceServer).Count(ctx, req.(*v1.PagingRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -266,6 +302,10 @@ var MenuService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "List",
 			Handler:    _MenuService_List_Handler,
+		},
+		{
+			MethodName: "Count",
+			Handler:    _MenuService_Count_Handler,
 		},
 		{
 			MethodName: "Get",

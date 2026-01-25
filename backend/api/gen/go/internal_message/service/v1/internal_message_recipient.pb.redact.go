@@ -59,6 +59,17 @@ func (s *redactedInternalMessageRecipientServiceServer) List(ctx context.Context
 	return res, err
 }
 
+// Count is the redacted wrapper for the actual InternalMessageRecipientServiceServer.Count method
+// Unary RPC
+func (s *redactedInternalMessageRecipientServiceServer) Count(ctx context.Context, in *pagination.PagingRequest) (*CountInternalMessageRecipientResponse, error) {
+	res, err := s.srv.Count(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
 // Get is the redacted wrapper for the actual InternalMessageRecipientServiceServer.Get method
 // Unary RPC
 func (s *redactedInternalMessageRecipientServiceServer) Get(ctx context.Context, in *GetInternalMessageRecipientRequest) (*InternalMessageRecipient, error) {
@@ -315,5 +326,15 @@ func (x *MarkNotificationsStatusRequest) Redact() string {
 	// Safe field: RecipientIds
 
 	// Safe field: NewStatus
+	return x.String()
+}
+
+// Redact method implementation for CountInternalMessageRecipientResponse
+func (x *CountInternalMessageRecipientResponse) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: Count
 	return x.String()
 }

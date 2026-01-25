@@ -876,6 +876,50 @@ func (x *BatchCreateOrgUnitsResponse) GetCreatedIds() []int32 {
 	return nil
 }
 
+type CountOrgUnitResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Count         uint64                 `protobuf:"varint,1,opt,name=count,proto3" json:"count,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CountOrgUnitResponse) Reset() {
+	*x = CountOrgUnitResponse{}
+	mi := &file_user_service_v1_org_unit_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CountOrgUnitResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CountOrgUnitResponse) ProtoMessage() {}
+
+func (x *CountOrgUnitResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_user_service_v1_org_unit_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CountOrgUnitResponse.ProtoReflect.Descriptor instead.
+func (*CountOrgUnitResponse) Descriptor() ([]byte, []int) {
+	return file_user_service_v1_org_unit_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *CountOrgUnitResponse) GetCount() uint64 {
+	if x != nil {
+		return x.Count
+	}
+	return 0
+}
+
 var File_user_service_v1_org_unit_proto protoreflect.FileDescriptor
 
 const file_user_service_v1_org_unit_proto_rawDesc = "" +
@@ -1025,9 +1069,12 @@ const file_user_service_v1_org_unit_proto_rawDesc = "" +
 	"\x04data\x18\x01 \x03(\v2\x18.user.service.v1.OrgUnitR\x04data\"i\n" +
 	"\x1bBatchCreateOrgUnitsResponse\x12J\n" +
 	"\vcreated_ids\x18\x01 \x03(\x05B)\xbaG&\x92\x02#创建成功的组织单元ID列表R\n" +
-	"createdIds2\xef\x03\n" +
+	"createdIds\",\n" +
+	"\x14CountOrgUnitResponse\x12\x14\n" +
+	"\x05count\x18\x01 \x01(\x04R\x05count2\xbc\x04\n" +
 	"\x0eOrgUnitService\x12I\n" +
-	"\x04List\x12\x19.pagination.PagingRequest\x1a$.user.service.v1.ListOrgUnitResponse\"\x00\x12E\n" +
+	"\x04List\x12\x19.pagination.PagingRequest\x1a$.user.service.v1.ListOrgUnitResponse\"\x00\x12K\n" +
+	"\x05Count\x12\x19.pagination.PagingRequest\x1a%.user.service.v1.CountOrgUnitResponse\"\x00\x12E\n" +
 	"\x03Get\x12\".user.service.v1.GetOrgUnitRequest\x1a\x18.user.service.v1.OrgUnit\"\x00\x12I\n" +
 	"\x06Create\x12%.user.service.v1.CreateOrgUnitRequest\x1a\x16.google.protobuf.Empty\"\x00\x12I\n" +
 	"\x06Update\x12%.user.service.v1.UpdateOrgUnitRequest\x1a\x16.google.protobuf.Empty\"\x00\x12I\n" +
@@ -1048,7 +1095,7 @@ func file_user_service_v1_org_unit_proto_rawDescGZIP() []byte {
 }
 
 var file_user_service_v1_org_unit_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_user_service_v1_org_unit_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_user_service_v1_org_unit_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_user_service_v1_org_unit_proto_goTypes = []any{
 	(OrgUnit_Status)(0),                 // 0: user.service.v1.OrgUnit.Status
 	(OrgUnit_Type)(0),                   // 1: user.service.v1.OrgUnit.Type
@@ -1060,42 +1107,45 @@ var file_user_service_v1_org_unit_proto_goTypes = []any{
 	(*DeleteOrgUnitRequest)(nil),        // 7: user.service.v1.DeleteOrgUnitRequest
 	(*BatchCreateOrgUnitsRequest)(nil),  // 8: user.service.v1.BatchCreateOrgUnitsRequest
 	(*BatchCreateOrgUnitsResponse)(nil), // 9: user.service.v1.BatchCreateOrgUnitsResponse
-	nil,                                 // 10: user.service.v1.OrgUnit.AttributesEntry
-	(*timestamppb.Timestamp)(nil),       // 11: google.protobuf.Timestamp
-	(*fieldmaskpb.FieldMask)(nil),       // 12: google.protobuf.FieldMask
-	(*v1.PagingRequest)(nil),            // 13: pagination.PagingRequest
-	(*emptypb.Empty)(nil),               // 14: google.protobuf.Empty
+	(*CountOrgUnitResponse)(nil),        // 10: user.service.v1.CountOrgUnitResponse
+	nil,                                 // 11: user.service.v1.OrgUnit.AttributesEntry
+	(*timestamppb.Timestamp)(nil),       // 12: google.protobuf.Timestamp
+	(*fieldmaskpb.FieldMask)(nil),       // 13: google.protobuf.FieldMask
+	(*v1.PagingRequest)(nil),            // 14: pagination.PagingRequest
+	(*emptypb.Empty)(nil),               // 15: google.protobuf.Empty
 }
 var file_user_service_v1_org_unit_proto_depIdxs = []int32{
 	1,  // 0: user.service.v1.OrgUnit.type:type_name -> user.service.v1.OrgUnit.Type
 	0,  // 1: user.service.v1.OrgUnit.status:type_name -> user.service.v1.OrgUnit.Status
-	11, // 2: user.service.v1.OrgUnit.start_at:type_name -> google.protobuf.Timestamp
-	11, // 3: user.service.v1.OrgUnit.end_at:type_name -> google.protobuf.Timestamp
-	10, // 4: user.service.v1.OrgUnit.attributes:type_name -> user.service.v1.OrgUnit.AttributesEntry
+	12, // 2: user.service.v1.OrgUnit.start_at:type_name -> google.protobuf.Timestamp
+	12, // 3: user.service.v1.OrgUnit.end_at:type_name -> google.protobuf.Timestamp
+	11, // 4: user.service.v1.OrgUnit.attributes:type_name -> user.service.v1.OrgUnit.AttributesEntry
 	2,  // 5: user.service.v1.OrgUnit.children:type_name -> user.service.v1.OrgUnit
-	11, // 6: user.service.v1.OrgUnit.created_at:type_name -> google.protobuf.Timestamp
-	11, // 7: user.service.v1.OrgUnit.updated_at:type_name -> google.protobuf.Timestamp
-	11, // 8: user.service.v1.OrgUnit.deleted_at:type_name -> google.protobuf.Timestamp
+	12, // 6: user.service.v1.OrgUnit.created_at:type_name -> google.protobuf.Timestamp
+	12, // 7: user.service.v1.OrgUnit.updated_at:type_name -> google.protobuf.Timestamp
+	12, // 8: user.service.v1.OrgUnit.deleted_at:type_name -> google.protobuf.Timestamp
 	2,  // 9: user.service.v1.ListOrgUnitResponse.items:type_name -> user.service.v1.OrgUnit
-	12, // 10: user.service.v1.GetOrgUnitRequest.view_mask:type_name -> google.protobuf.FieldMask
+	13, // 10: user.service.v1.GetOrgUnitRequest.view_mask:type_name -> google.protobuf.FieldMask
 	2,  // 11: user.service.v1.CreateOrgUnitRequest.data:type_name -> user.service.v1.OrgUnit
 	2,  // 12: user.service.v1.UpdateOrgUnitRequest.data:type_name -> user.service.v1.OrgUnit
-	12, // 13: user.service.v1.UpdateOrgUnitRequest.update_mask:type_name -> google.protobuf.FieldMask
+	13, // 13: user.service.v1.UpdateOrgUnitRequest.update_mask:type_name -> google.protobuf.FieldMask
 	2,  // 14: user.service.v1.BatchCreateOrgUnitsRequest.data:type_name -> user.service.v1.OrgUnit
-	13, // 15: user.service.v1.OrgUnitService.List:input_type -> pagination.PagingRequest
-	4,  // 16: user.service.v1.OrgUnitService.Get:input_type -> user.service.v1.GetOrgUnitRequest
-	5,  // 17: user.service.v1.OrgUnitService.Create:input_type -> user.service.v1.CreateOrgUnitRequest
-	6,  // 18: user.service.v1.OrgUnitService.Update:input_type -> user.service.v1.UpdateOrgUnitRequest
-	7,  // 19: user.service.v1.OrgUnitService.Delete:input_type -> user.service.v1.DeleteOrgUnitRequest
-	8,  // 20: user.service.v1.OrgUnitService.BatchCreate:input_type -> user.service.v1.BatchCreateOrgUnitsRequest
-	3,  // 21: user.service.v1.OrgUnitService.List:output_type -> user.service.v1.ListOrgUnitResponse
-	2,  // 22: user.service.v1.OrgUnitService.Get:output_type -> user.service.v1.OrgUnit
-	14, // 23: user.service.v1.OrgUnitService.Create:output_type -> google.protobuf.Empty
-	14, // 24: user.service.v1.OrgUnitService.Update:output_type -> google.protobuf.Empty
-	14, // 25: user.service.v1.OrgUnitService.Delete:output_type -> google.protobuf.Empty
-	9,  // 26: user.service.v1.OrgUnitService.BatchCreate:output_type -> user.service.v1.BatchCreateOrgUnitsResponse
-	21, // [21:27] is the sub-list for method output_type
-	15, // [15:21] is the sub-list for method input_type
+	14, // 15: user.service.v1.OrgUnitService.List:input_type -> pagination.PagingRequest
+	14, // 16: user.service.v1.OrgUnitService.Count:input_type -> pagination.PagingRequest
+	4,  // 17: user.service.v1.OrgUnitService.Get:input_type -> user.service.v1.GetOrgUnitRequest
+	5,  // 18: user.service.v1.OrgUnitService.Create:input_type -> user.service.v1.CreateOrgUnitRequest
+	6,  // 19: user.service.v1.OrgUnitService.Update:input_type -> user.service.v1.UpdateOrgUnitRequest
+	7,  // 20: user.service.v1.OrgUnitService.Delete:input_type -> user.service.v1.DeleteOrgUnitRequest
+	8,  // 21: user.service.v1.OrgUnitService.BatchCreate:input_type -> user.service.v1.BatchCreateOrgUnitsRequest
+	3,  // 22: user.service.v1.OrgUnitService.List:output_type -> user.service.v1.ListOrgUnitResponse
+	10, // 23: user.service.v1.OrgUnitService.Count:output_type -> user.service.v1.CountOrgUnitResponse
+	2,  // 24: user.service.v1.OrgUnitService.Get:output_type -> user.service.v1.OrgUnit
+	15, // 25: user.service.v1.OrgUnitService.Create:output_type -> google.protobuf.Empty
+	15, // 26: user.service.v1.OrgUnitService.Update:output_type -> google.protobuf.Empty
+	15, // 27: user.service.v1.OrgUnitService.Delete:output_type -> google.protobuf.Empty
+	9,  // 28: user.service.v1.OrgUnitService.BatchCreate:output_type -> user.service.v1.BatchCreateOrgUnitsResponse
+	22, // [22:29] is the sub-list for method output_type
+	15, // [15:22] is the sub-list for method input_type
 	15, // [15:15] is the sub-list for extension type_name
 	15, // [15:15] is the sub-list for extension extendee
 	0,  // [0:15] is the sub-list for field type_name
@@ -1117,7 +1167,7 @@ func file_user_service_v1_org_unit_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_service_v1_org_unit_proto_rawDesc), len(file_user_service_v1_org_unit_proto_rawDesc)),
 			NumEnums:      2,
-			NumMessages:   9,
+			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

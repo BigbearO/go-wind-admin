@@ -960,3 +960,105 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DeleteApiRequestValidationError{}
+
+// Validate checks the field values on CountApiResponse with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *CountApiResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CountApiResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CountApiResponseMultiError, or nil if none found.
+func (m *CountApiResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CountApiResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Count
+
+	if len(errors) > 0 {
+		return CountApiResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// CountApiResponseMultiError is an error wrapping multiple validation errors
+// returned by CountApiResponse.ValidateAll() if the designated constraints
+// aren't met.
+type CountApiResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CountApiResponseMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CountApiResponseMultiError) AllErrors() []error { return m }
+
+// CountApiResponseValidationError is the validation error returned by
+// CountApiResponse.Validate if the designated constraints aren't met.
+type CountApiResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CountApiResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CountApiResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CountApiResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CountApiResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CountApiResponseValidationError) ErrorName() string { return "CountApiResponseValidationError" }
+
+// Error satisfies the builtin error interface
+func (e CountApiResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCountApiResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CountApiResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CountApiResponseValidationError{}

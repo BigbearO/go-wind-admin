@@ -39,6 +39,15 @@ service AuthenticationService {
   // 获取访问令牌列表
   rpc GetAccessTokens(GetAccessTokensRequest) returns (GetAccessTokensResponse) {}
 
+  // 根据令牌ID撤销令牌
+  rpc RevokeTokenById (RevokeTokenByIdRequest) returns (google.protobuf.Empty) {}
+
+  // 拉黑令牌
+  rpc BlockToken (BlockTokenRequest) returns (BlockTokenResponse) {}
+
+  // 解封令牌
+  rpc UnblockToken (UnblockTokenRequest) returns (google.protobuf.Empty) {}
+
 
   // 获取当前用户身份信息
   rpc WhoAmI(google.protobuf.Empty) returns (WhoAmIResponse) {}
@@ -228,50 +237,71 @@ message LogoutRequest {
 
 // 验证令牌 - 请求
 message ValidateTokenRequest {
-  uint32 user_id = 1 [
-    json_name = "userId",
-    (gnostic.openapi.v3.property) = {
-      description: "用户ID"
-    }
-  ]; // 用户ID
-
-  string token = 2 [
+  string token = 1 [
     json_name = "token",
     (gnostic.openapi.v3.property) = {
       description: "令牌"
     }
   ]; // 令牌
 
-  ClientType client_type = 3 [
+  ClientType client_type = 2 [
     json_name = "clientType",
     (gnostic.openapi.v3.property) = {
       description: "客户端类型"
     }
   ]; // 客户端类型
 
-  TokenCategory token_category = 4 [
+  TokenCategory token_category = 3 [
     json_name = "tokenCategory",
     (gnostic.openapi.v3.property) = {
       description: "期望验证的令牌类别：ACCESS=访问令牌，REFRESH=刷新令牌。若未指定，服务端可尝试根据 token 推断处理方式。"
+    }
+  ];
+
+  optional uint32 user_id = 4 [
+    json_name = "userId",
+    (gnostic.openapi.v3.property) = {
+      description: "用户ID"
+    }
+  ]; // 用户ID
+
+  optional bool skip_redis = 5 [
+    json_name = "skipRedis",
+    (gnostic.openapi.v3.property) = {
+      description: "可选：为 true 时跳过 Redis 在库校验；默认 false（进行 Redis 校验）"
+    }
+  ];
+
+  optional bool skip_blacklist = 6 [
+    json_name = "skipBlacklist",
+    (gnostic.openapi.v3.property) = {
+      description: "可选：为 true 时跳过黑名单校验；默认 false（进行黑名单校验）"
     }
   ];
 }
 
 // 验证令牌 - 回应
 message ValidateTokenResponse {
-  bool is_valid = 1 [
+  optional UserTokenPayload payload = 1 [
+    json_name = "payload",
+    (gnostic.openapi.v3.property) = {
+      description: "用户令牌载体"
+    }
+  ]; // 用户令牌载体
+
+  bool is_valid = 2 [
     json_name = "isValid",
     (gnostic.openapi.v3.property) = {
       description: "令牌是否有效"
     }
   ]; // 令牌是否有效
 
-  optional UserTokenPayload claim = 2 [
-    json_name = "claim",
+  bool is_blocked = 3 [
+    json_name = "isBlocked",
     (gnostic.openapi.v3.property) = {
-      description: "用户令牌载体"
+      description: "令牌是否被阻塞/列入黑名单"
     }
-  ]; // 用户令牌载体
+  ]; // 令牌是否被阻塞/列入黑名单
 }
 
 message RegisterUserRequest {
@@ -302,9 +332,21 @@ message RegisterUserRequest {
       description: "电子邮件地址"
     }
   ]; // 电子邮件地址
+
+  optional ClientType client_type = 5 [
+    json_name = "client_type",
+    (gnostic.openapi.v3.property) = {
+      description: "客户端类型"
+    }
+  ]; // 客户端类型
 }
 message RegisterUserResponse {
-  uint32 user_id = 1;
+  uint32 user_id = 1 [
+    json_name = "userId",
+    (gnostic.openapi.v3.property) = {
+      description: "用户ID"
+    }
+  ];
 }
 
 // 获取当前用户身份信息 - 响应
@@ -346,4 +388,99 @@ message GetAccessTokensResponse {
       description: "访问令牌列表"
     }
   ]; // 访问令牌列表
+}
+
+
+// 将指定令牌加入黑名单 / 拉黑（支持通过明文 token 或 token_id）
+message BlockTokenRequest {
+  uint32 user_id = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    json_name = "userId",
+    (gnostic.openapi.v3.property) = {
+      description: "用户ID"
+    }
+  ]; // 用户ID
+
+  ClientType client_type = 2 [
+    json_name = "clientType",
+    (gnostic.openapi.v3.property) = {
+      description: "客户端类型"
+    }
+  ];
+
+  oneof target {
+    string token = 10;    // 原始 token（服务端应立即哈希并只保存哈希）
+    string jti = 11; // 推荐：token_id（哈希或 DB id）
+  }
+
+  string reason = 20 [
+    json_name = "reason",
+    (gnostic.openapi.v3.property) = {
+      description: "拉黑原因"
+    }
+  ]; // 拉黑原因
+
+  optional google.protobuf.Duration duration = 30 [
+    json_name = "duration",
+    (gnostic.openapi.v3.property) = {
+      description: "黑名单保留时长（可选，默认永久）"
+    }
+  ]; // 黑名单保留时长（可选，默认永久）
+}
+
+message UnblockTokenRequest {
+  uint32 user_id = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    json_name = "userId",
+    (gnostic.openapi.v3.property) = {
+      description: "用户ID"
+    }
+  ]; // 用户ID
+
+  ClientType client_type = 2 [
+    json_name = "clientType",
+    (gnostic.openapi.v3.property) = {
+      description: "客户端类型"
+    }
+  ];
+
+  oneof target {
+    string token = 10; // 原始 token（服务端一般按哈希匹配）
+    string jti = 11;   // token id / 标识
+  }
+}
+
+message BlockTokenResponse {
+  google.protobuf.Timestamp blocked_until = 1 [
+    json_name = "blockedUntil",
+    (gnostic.openapi.v3.property) = {
+      description: "返回黑名单保留到期时间（可选）"
+    }
+  ]; // 返回黑名单保留到期时间（可选）
+}
+
+// 管理端按 id 撤销（仅管理员/系统）
+message RevokeTokenByIdRequest {
+  string jti = 1 [(google.api.field_behavior) = REQUIRED];
+
+  optional ClientType client_type = 2 [
+    json_name = "clientType",
+    (gnostic.openapi.v3.property) = {
+      description: "可选：目标令牌所属的客户端类型（当 jti 非全局唯一时必须提供）"
+    }
+  ]; // 目标令牌所属的客户端类型
+
+  string reason = 3 [
+    json_name = "reason",
+    (gnostic.openapi.v3.property) = {
+      description: "撤销原因"
+    }
+  ]; // 撤销原因
+
+  optional uint32 user_id = 4 [
+    json_name = "userId",
+    (gnostic.openapi.v3.property) = {
+      description: "可选：关联的用户ID，便于高效定位要撤销的令牌（向后兼容）"
+    }
+  ]; // 关联用户ID（可选）
 }

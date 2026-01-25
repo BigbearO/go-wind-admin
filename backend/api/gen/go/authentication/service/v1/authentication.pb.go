@@ -13,9 +13,9 @@ import (
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	_ "google.golang.org/protobuf/types/known/durationpb"
+	durationpb "google.golang.org/protobuf/types/known/durationpb"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
-	_ "google.golang.org/protobuf/types/known/timestamppb"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -510,10 +510,12 @@ func (x *LogoutRequest) GetClientType() ClientType {
 // 验证令牌 - 请求
 type ValidateTokenRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        uint32                 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`                                                       // 用户ID
-	Token         string                 `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`                                                                        // 令牌
-	ClientType    ClientType             `protobuf:"varint,3,opt,name=client_type,json=clientType,proto3,enum=authentication.service.v1.ClientType" json:"client_type,omitempty"` // 客户端类型
-	TokenCategory TokenCategory          `protobuf:"varint,4,opt,name=token_category,json=tokenCategory,proto3,enum=authentication.service.v1.TokenCategory" json:"token_category,omitempty"`
+	Token         string                 `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`                                                                        // 令牌
+	ClientType    ClientType             `protobuf:"varint,2,opt,name=client_type,json=clientType,proto3,enum=authentication.service.v1.ClientType" json:"client_type,omitempty"` // 客户端类型
+	TokenCategory TokenCategory          `protobuf:"varint,3,opt,name=token_category,json=tokenCategory,proto3,enum=authentication.service.v1.TokenCategory" json:"token_category,omitempty"`
+	UserId        *uint32                `protobuf:"varint,4,opt,name=user_id,json=userId,proto3,oneof" json:"user_id,omitempty"` // 用户ID
+	SkipRedis     *bool                  `protobuf:"varint,5,opt,name=skip_redis,json=skipRedis,proto3,oneof" json:"skip_redis,omitempty"`
+	SkipBlacklist *bool                  `protobuf:"varint,6,opt,name=skip_blacklist,json=skipBlacklist,proto3,oneof" json:"skip_blacklist,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -548,13 +550,6 @@ func (*ValidateTokenRequest) Descriptor() ([]byte, []int) {
 	return file_authentication_service_v1_authentication_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *ValidateTokenRequest) GetUserId() uint32 {
-	if x != nil {
-		return x.UserId
-	}
-	return 0
-}
-
 func (x *ValidateTokenRequest) GetToken() string {
 	if x != nil {
 		return x.Token
@@ -576,11 +571,33 @@ func (x *ValidateTokenRequest) GetTokenCategory() TokenCategory {
 	return TokenCategory_TOKEN_CATEGORY_UNSPECIFIED
 }
 
+func (x *ValidateTokenRequest) GetUserId() uint32 {
+	if x != nil && x.UserId != nil {
+		return *x.UserId
+	}
+	return 0
+}
+
+func (x *ValidateTokenRequest) GetSkipRedis() bool {
+	if x != nil && x.SkipRedis != nil {
+		return *x.SkipRedis
+	}
+	return false
+}
+
+func (x *ValidateTokenRequest) GetSkipBlacklist() bool {
+	if x != nil && x.SkipBlacklist != nil {
+		return *x.SkipBlacklist
+	}
+	return false
+}
+
 // 验证令牌 - 回应
 type ValidateTokenResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	IsValid       bool                   `protobuf:"varint,1,opt,name=is_valid,json=isValid,proto3" json:"is_valid,omitempty"` // 令牌是否有效
-	Claim         *UserTokenPayload      `protobuf:"bytes,2,opt,name=claim,proto3,oneof" json:"claim,omitempty"`               // 用户令牌载体
+	Payload       *UserTokenPayload      `protobuf:"bytes,1,opt,name=payload,proto3,oneof" json:"payload,omitempty"`                 // 用户令牌载体
+	IsValid       bool                   `protobuf:"varint,2,opt,name=is_valid,json=isValid,proto3" json:"is_valid,omitempty"`       // 令牌是否有效
+	IsBlocked     bool                   `protobuf:"varint,3,opt,name=is_blocked,json=isBlocked,proto3" json:"is_blocked,omitempty"` // 令牌是否被阻塞/列入黑名单
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -615,6 +632,13 @@ func (*ValidateTokenResponse) Descriptor() ([]byte, []int) {
 	return file_authentication_service_v1_authentication_proto_rawDescGZIP(), []int{4}
 }
 
+func (x *ValidateTokenResponse) GetPayload() *UserTokenPayload {
+	if x != nil {
+		return x.Payload
+	}
+	return nil
+}
+
 func (x *ValidateTokenResponse) GetIsValid() bool {
 	if x != nil {
 		return x.IsValid
@@ -622,19 +646,20 @@ func (x *ValidateTokenResponse) GetIsValid() bool {
 	return false
 }
 
-func (x *ValidateTokenResponse) GetClaim() *UserTokenPayload {
+func (x *ValidateTokenResponse) GetIsBlocked() bool {
 	if x != nil {
-		return x.Claim
+		return x.IsBlocked
 	}
-	return nil
+	return false
 }
 
 type RegisterUserRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Username      string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`                       // 用户名
-	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`                       // 登入密码
-	TenantCode    string                 `protobuf:"bytes,3,opt,name=tenant_code,json=tenantCode,proto3" json:"tenant_code,omitempty"` // 租户代码
-	Email         *string                `protobuf:"bytes,4,opt,name=email,proto3,oneof" json:"email,omitempty"`                       // 电子邮件地址
+	Username      string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`                                                        // 用户名
+	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`                                                        // 登入密码
+	TenantCode    string                 `protobuf:"bytes,3,opt,name=tenant_code,json=tenantCode,proto3" json:"tenant_code,omitempty"`                                  // 租户代码
+	Email         *string                `protobuf:"bytes,4,opt,name=email,proto3,oneof" json:"email,omitempty"`                                                        // 电子邮件地址
+	ClientType    *ClientType            `protobuf:"varint,5,opt,name=client_type,proto3,enum=authentication.service.v1.ClientType,oneof" json:"client_type,omitempty"` // 客户端类型
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -695,6 +720,13 @@ func (x *RegisterUserRequest) GetEmail() string {
 		return *x.Email
 	}
 	return ""
+}
+
+func (x *RegisterUserRequest) GetClientType() ClientType {
+	if x != nil && x.ClientType != nil {
+		return *x.ClientType
+	}
+	return ClientType_admin
 }
 
 type RegisterUserResponse struct {
@@ -890,6 +922,332 @@ func (x *GetAccessTokensResponse) GetAccessTokens() []string {
 	return nil
 }
 
+// 将指定令牌加入黑名单 / 拉黑（支持通过明文 token 或 token_id）
+type BlockTokenRequest struct {
+	state      protoimpl.MessageState `protogen:"open.v1"`
+	UserId     uint32                 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"` // 用户ID
+	ClientType ClientType             `protobuf:"varint,2,opt,name=client_type,json=clientType,proto3,enum=authentication.service.v1.ClientType" json:"client_type,omitempty"`
+	// Types that are valid to be assigned to Target:
+	//
+	//	*BlockTokenRequest_Token
+	//	*BlockTokenRequest_Jti
+	Target        isBlockTokenRequest_Target `protobuf_oneof:"target"`
+	Reason        string                     `protobuf:"bytes,20,opt,name=reason,proto3" json:"reason,omitempty"`           // 拉黑原因
+	Duration      *durationpb.Duration       `protobuf:"bytes,30,opt,name=duration,proto3,oneof" json:"duration,omitempty"` // 黑名单保留时长（可选，默认永久）
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BlockTokenRequest) Reset() {
+	*x = BlockTokenRequest{}
+	mi := &file_authentication_service_v1_authentication_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BlockTokenRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BlockTokenRequest) ProtoMessage() {}
+
+func (x *BlockTokenRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_authentication_service_v1_authentication_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BlockTokenRequest.ProtoReflect.Descriptor instead.
+func (*BlockTokenRequest) Descriptor() ([]byte, []int) {
+	return file_authentication_service_v1_authentication_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *BlockTokenRequest) GetUserId() uint32 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *BlockTokenRequest) GetClientType() ClientType {
+	if x != nil {
+		return x.ClientType
+	}
+	return ClientType_admin
+}
+
+func (x *BlockTokenRequest) GetTarget() isBlockTokenRequest_Target {
+	if x != nil {
+		return x.Target
+	}
+	return nil
+}
+
+func (x *BlockTokenRequest) GetToken() string {
+	if x != nil {
+		if x, ok := x.Target.(*BlockTokenRequest_Token); ok {
+			return x.Token
+		}
+	}
+	return ""
+}
+
+func (x *BlockTokenRequest) GetJti() string {
+	if x != nil {
+		if x, ok := x.Target.(*BlockTokenRequest_Jti); ok {
+			return x.Jti
+		}
+	}
+	return ""
+}
+
+func (x *BlockTokenRequest) GetReason() string {
+	if x != nil {
+		return x.Reason
+	}
+	return ""
+}
+
+func (x *BlockTokenRequest) GetDuration() *durationpb.Duration {
+	if x != nil {
+		return x.Duration
+	}
+	return nil
+}
+
+type isBlockTokenRequest_Target interface {
+	isBlockTokenRequest_Target()
+}
+
+type BlockTokenRequest_Token struct {
+	Token string `protobuf:"bytes,10,opt,name=token,proto3,oneof"` // 原始 token（服务端应立即哈希并只保存哈希）
+}
+
+type BlockTokenRequest_Jti struct {
+	Jti string `protobuf:"bytes,11,opt,name=jti,proto3,oneof"` // 推荐：token_id（哈希或 DB id）
+}
+
+func (*BlockTokenRequest_Token) isBlockTokenRequest_Target() {}
+
+func (*BlockTokenRequest_Jti) isBlockTokenRequest_Target() {}
+
+type UnblockTokenRequest struct {
+	state      protoimpl.MessageState `protogen:"open.v1"`
+	UserId     uint32                 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"` // 用户ID
+	ClientType ClientType             `protobuf:"varint,2,opt,name=client_type,json=clientType,proto3,enum=authentication.service.v1.ClientType" json:"client_type,omitempty"`
+	// Types that are valid to be assigned to Target:
+	//
+	//	*UnblockTokenRequest_Token
+	//	*UnblockTokenRequest_Jti
+	Target        isUnblockTokenRequest_Target `protobuf_oneof:"target"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UnblockTokenRequest) Reset() {
+	*x = UnblockTokenRequest{}
+	mi := &file_authentication_service_v1_authentication_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UnblockTokenRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UnblockTokenRequest) ProtoMessage() {}
+
+func (x *UnblockTokenRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_authentication_service_v1_authentication_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UnblockTokenRequest.ProtoReflect.Descriptor instead.
+func (*UnblockTokenRequest) Descriptor() ([]byte, []int) {
+	return file_authentication_service_v1_authentication_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *UnblockTokenRequest) GetUserId() uint32 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *UnblockTokenRequest) GetClientType() ClientType {
+	if x != nil {
+		return x.ClientType
+	}
+	return ClientType_admin
+}
+
+func (x *UnblockTokenRequest) GetTarget() isUnblockTokenRequest_Target {
+	if x != nil {
+		return x.Target
+	}
+	return nil
+}
+
+func (x *UnblockTokenRequest) GetToken() string {
+	if x != nil {
+		if x, ok := x.Target.(*UnblockTokenRequest_Token); ok {
+			return x.Token
+		}
+	}
+	return ""
+}
+
+func (x *UnblockTokenRequest) GetJti() string {
+	if x != nil {
+		if x, ok := x.Target.(*UnblockTokenRequest_Jti); ok {
+			return x.Jti
+		}
+	}
+	return ""
+}
+
+type isUnblockTokenRequest_Target interface {
+	isUnblockTokenRequest_Target()
+}
+
+type UnblockTokenRequest_Token struct {
+	Token string `protobuf:"bytes,10,opt,name=token,proto3,oneof"` // 原始 token（服务端一般按哈希匹配）
+}
+
+type UnblockTokenRequest_Jti struct {
+	Jti string `protobuf:"bytes,11,opt,name=jti,proto3,oneof"` // token id / 标识
+}
+
+func (*UnblockTokenRequest_Token) isUnblockTokenRequest_Target() {}
+
+func (*UnblockTokenRequest_Jti) isUnblockTokenRequest_Target() {}
+
+type BlockTokenResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	BlockedUntil  *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=blocked_until,json=blockedUntil,proto3" json:"blocked_until,omitempty"` // 返回黑名单保留到期时间（可选）
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BlockTokenResponse) Reset() {
+	*x = BlockTokenResponse{}
+	mi := &file_authentication_service_v1_authentication_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BlockTokenResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BlockTokenResponse) ProtoMessage() {}
+
+func (x *BlockTokenResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_authentication_service_v1_authentication_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BlockTokenResponse.ProtoReflect.Descriptor instead.
+func (*BlockTokenResponse) Descriptor() ([]byte, []int) {
+	return file_authentication_service_v1_authentication_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *BlockTokenResponse) GetBlockedUntil() *timestamppb.Timestamp {
+	if x != nil {
+		return x.BlockedUntil
+	}
+	return nil
+}
+
+// 管理端按 id 撤销（仅管理员/系统）
+type RevokeTokenByIdRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Jti           string                 `protobuf:"bytes,1,opt,name=jti,proto3" json:"jti,omitempty"`
+	ClientType    *ClientType            `protobuf:"varint,2,opt,name=client_type,json=clientType,proto3,enum=authentication.service.v1.ClientType,oneof" json:"client_type,omitempty"` // 目标令牌所属的客户端类型
+	Reason        string                 `protobuf:"bytes,3,opt,name=reason,proto3" json:"reason,omitempty"`                                                                            // 撤销原因
+	UserId        *uint32                `protobuf:"varint,4,opt,name=user_id,json=userId,proto3,oneof" json:"user_id,omitempty"`                                                       // 关联用户ID（可选）
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RevokeTokenByIdRequest) Reset() {
+	*x = RevokeTokenByIdRequest{}
+	mi := &file_authentication_service_v1_authentication_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RevokeTokenByIdRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RevokeTokenByIdRequest) ProtoMessage() {}
+
+func (x *RevokeTokenByIdRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_authentication_service_v1_authentication_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RevokeTokenByIdRequest.ProtoReflect.Descriptor instead.
+func (*RevokeTokenByIdRequest) Descriptor() ([]byte, []int) {
+	return file_authentication_service_v1_authentication_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *RevokeTokenByIdRequest) GetJti() string {
+	if x != nil {
+		return x.Jti
+	}
+	return ""
+}
+
+func (x *RevokeTokenByIdRequest) GetClientType() ClientType {
+	if x != nil && x.ClientType != nil {
+		return *x.ClientType
+	}
+	return ClientType_admin
+}
+
+func (x *RevokeTokenByIdRequest) GetReason() string {
+	if x != nil {
+		return x.Reason
+	}
+	return ""
+}
+
+func (x *RevokeTokenByIdRequest) GetUserId() uint32 {
+	if x != nil && x.UserId != nil {
+		return *x.UserId
+	}
+	return 0
+}
+
 var File_authentication_service_v1_authentication_proto protoreflect.FileDescriptor
 
 const file_authentication_service_v1_authentication_proto_rawDesc = "" +
@@ -946,26 +1304,38 @@ const file_authentication_service_v1_authentication_proto_rawDesc = "" +
 	"\rLogoutRequest\x12'\n" +
 	"\auser_id\x18\x01 \x01(\rB\x0e\xbaG\v\x92\x02\b用户IDR\x06userId\x12]\n" +
 	"\vclient_type\x18\x02 \x01(\x0e2%.authentication.service.v1.ClientTypeB\x15\xbaG\x12\x92\x02\x0f客户端类型R\n" +
-	"clientType\"\xad\x03\n" +
-	"\x14ValidateTokenRequest\x12'\n" +
-	"\auser_id\x18\x01 \x01(\rB\x0e\xbaG\v\x92\x02\b用户IDR\x06userId\x12\"\n" +
-	"\x05token\x18\x02 \x01(\tB\f\xbaG\t\x92\x02\x06令牌R\x05token\x12]\n" +
-	"\vclient_type\x18\x03 \x01(\x0e2%.authentication.service.v1.ClientTypeB\x15\xbaG\x12\x92\x02\x0f客户端类型R\n" +
+	"clientType\"\xec\x05\n" +
+	"\x14ValidateTokenRequest\x12\"\n" +
+	"\x05token\x18\x01 \x01(\tB\f\xbaG\t\x92\x02\x06令牌R\x05token\x12]\n" +
+	"\vclient_type\x18\x02 \x01(\x0e2%.authentication.service.v1.ClientTypeB\x15\xbaG\x12\x92\x02\x0f客户端类型R\n" +
 	"clientType\x12\xe8\x01\n" +
-	"\x0etoken_category\x18\x04 \x01(\x0e2(.authentication.service.v1.TokenCategoryB\x96\x01\xbaG\x92\x01\x92\x02\x8e\x01期望验证的令牌类别：ACCESS=访问令牌，REFRESH=刷新令牌。若未指定，服务端可尝试根据 token 推断处理方式。R\rtokenCategory\"\xb8\x01\n" +
-	"\x15ValidateTokenResponse\x123\n" +
-	"\bis_valid\x18\x01 \x01(\bB\x18\xbaG\x15\x92\x02\x12令牌是否有效R\aisValid\x12`\n" +
-	"\x05claim\x18\x02 \x01(\v2+.authentication.service.v1.UserTokenPayloadB\x18\xbaG\x15\x92\x02\x12用户令牌载体H\x00R\x05claim\x88\x01\x01B\b\n" +
-	"\x06_claim\"\xe6\x01\n" +
+	"\x0etoken_category\x18\x03 \x01(\x0e2(.authentication.service.v1.TokenCategoryB\x96\x01\xbaG\x92\x01\x92\x02\x8e\x01期望验证的令牌类别：ACCESS=访问令牌，REFRESH=刷新令牌。若未指定，服务端可尝试根据 token 推断处理方式。R\rtokenCategory\x12,\n" +
+	"\auser_id\x18\x04 \x01(\rB\x0e\xbaG\v\x92\x02\b用户IDH\x00R\x06userId\x88\x01\x01\x12\x80\x01\n" +
+	"\n" +
+	"skip_redis\x18\x05 \x01(\bB\\\xbaGY\x92\x02V可选：为 true 时跳过 Redis 在库校验；默认 false（进行 Redis 校验）H\x01R\tskipRedis\x88\x01\x01\x12\x86\x01\n" +
+	"\x0eskip_blacklist\x18\x06 \x01(\bBZ\xbaGW\x92\x02T可选：为 true 时跳过黑名单校验；默认 false（进行黑名单校验）H\x02R\rskipBlacklist\x88\x01\x01B\n" +
+	"\n" +
+	"\b_user_idB\r\n" +
+	"\v_skip_redisB\x11\n" +
+	"\x0f_skip_blacklist\"\x8a\x02\n" +
+	"\x15ValidateTokenResponse\x12d\n" +
+	"\apayload\x18\x01 \x01(\v2+.authentication.service.v1.UserTokenPayloadB\x18\xbaG\x15\x92\x02\x12用户令牌载体H\x00R\apayload\x88\x01\x01\x123\n" +
+	"\bis_valid\x18\x02 \x01(\bB\x18\xbaG\x15\x92\x02\x12令牌是否有效R\aisValid\x12J\n" +
+	"\n" +
+	"is_blocked\x18\x03 \x01(\bB+\xbaG(\x92\x02%令牌是否被阻塞/列入黑名单R\tisBlockedB\n" +
+	"\n" +
+	"\b_payload\"\xdb\x02\n" +
 	"\x13RegisterUserRequest\x12+\n" +
 	"\busername\x18\x01 \x01(\tB\x0f\xbaG\f\x92\x02\t用户名R\busername\x12.\n" +
 	"\bpassword\x18\x02 \x01(\tB\x12\xbaG\x0f\x92\x02\f登入密码R\bpassword\x123\n" +
 	"\vtenant_code\x18\x03 \x01(\tB\x12\xbaG\x0f\x92\x02\f租户代码R\n" +
 	"tenantCode\x123\n" +
-	"\x05email\x18\x04 \x01(\tB\x18\xbaG\x15\x92\x02\x12电子邮件地址H\x00R\x05email\x88\x01\x01B\b\n" +
-	"\x06_email\"/\n" +
-	"\x14RegisterUserResponse\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\rR\x06userId\"r\n" +
+	"\x05email\x18\x04 \x01(\tB\x18\xbaG\x15\x92\x02\x12电子邮件地址H\x00R\x05email\x88\x01\x01\x12c\n" +
+	"\vclient_type\x18\x05 \x01(\x0e2%.authentication.service.v1.ClientTypeB\x15\xbaG\x12\x92\x02\x0f客户端类型H\x01R\vclient_type\x88\x01\x01B\b\n" +
+	"\x06_emailB\x0e\n" +
+	"\f_client_type\"?\n" +
+	"\x14RegisterUserResponse\x12'\n" +
+	"\auser_id\x18\x01 \x01(\rB\x0e\xbaG\v\x92\x02\b用户IDR\x06userId\"r\n" +
 	"\x0eWhoAmIResponse\x12$\n" +
 	"\auser_id\x18\x01 \x01(\rB\x0e\xbaG\v\x92\x02\b用户IDR\x03uid\x12:\n" +
 	"\busername\x18\x02 \x01(\tB\x1e\xbaG\x1b\x92\x02\x18当前用户的用户名R\busername\"\xa0\x01\n" +
@@ -974,7 +1344,37 @@ const file_authentication_service_v1_authentication_proto_rawDesc = "" +
 	"\vclient_type\x18\x02 \x01(\x0e2%.authentication.service.v1.ClientTypeB\x15\xbaG\x12\x92\x02\x0f客户端类型R\n" +
 	"clientType\"X\n" +
 	"\x17GetAccessTokensResponse\x12=\n" +
-	"\raccess_tokens\x18\x01 \x03(\tB\x18\xbaG\x15\x92\x02\x12访问令牌列表R\faccessTokens*j\n" +
+	"\raccess_tokens\x18\x01 \x03(\tB\x18\xbaG\x15\x92\x02\x12访问令牌列表R\faccessTokens\"\x81\x03\n" +
+	"\x11BlockTokenRequest\x12*\n" +
+	"\auser_id\x18\x01 \x01(\rB\x11\xe0A\x02\xbaG\v\x92\x02\b用户IDR\x06userId\x12]\n" +
+	"\vclient_type\x18\x02 \x01(\x0e2%.authentication.service.v1.ClientTypeB\x15\xbaG\x12\x92\x02\x0f客户端类型R\n" +
+	"clientType\x12\x16\n" +
+	"\x05token\x18\n" +
+	" \x01(\tH\x00R\x05token\x12\x12\n" +
+	"\x03jti\x18\v \x01(\tH\x00R\x03jti\x12*\n" +
+	"\x06reason\x18\x14 \x01(\tB\x12\xbaG\x0f\x92\x02\f拉黑原因R\x06reason\x12r\n" +
+	"\bduration\x18\x1e \x01(\v2\x19.google.protobuf.DurationB6\xbaG3\x92\x020黑名单保留时长（可选，默认永久）H\x01R\bduration\x88\x01\x01B\b\n" +
+	"\x06targetB\v\n" +
+	"\t_duration\"\xd6\x01\n" +
+	"\x13UnblockTokenRequest\x12*\n" +
+	"\auser_id\x18\x01 \x01(\rB\x11\xe0A\x02\xbaG\v\x92\x02\b用户IDR\x06userId\x12]\n" +
+	"\vclient_type\x18\x02 \x01(\x0e2%.authentication.service.v1.ClientTypeB\x15\xbaG\x12\x92\x02\x0f客户端类型R\n" +
+	"clientType\x12\x16\n" +
+	"\x05token\x18\n" +
+	" \x01(\tH\x00R\x05token\x12\x12\n" +
+	"\x03jti\x18\v \x01(\tH\x00R\x03jtiB\b\n" +
+	"\x06target\"\x8a\x01\n" +
+	"\x12BlockTokenResponse\x12t\n" +
+	"\rblocked_until\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampB3\xbaG0\x92\x02-返回黑名单保留到期时间（可选）R\fblockedUntil\"\x9f\x03\n" +
+	"\x16RevokeTokenByIdRequest\x12\x15\n" +
+	"\x03jti\x18\x01 \x01(\tB\x03\xe0A\x02R\x03jti\x12\xac\x01\n" +
+	"\vclient_type\x18\x02 \x01(\x0e2%.authentication.service.v1.ClientTypeB_\xbaG\\\x92\x02Y可选：目标令牌所属的客户端类型（当 jti 非全局唯一时必须提供）H\x00R\n" +
+	"clientType\x88\x01\x01\x12*\n" +
+	"\x06reason\x18\x03 \x01(\tB\x12\xbaG\x0f\x92\x02\f撤销原因R\x06reason\x12w\n" +
+	"\auser_id\x18\x04 \x01(\rBY\xbaGV\x92\x02S可选：关联的用户ID，便于高效定位要撤销的令牌（向后兼容）H\x01R\x06userId\x88\x01\x01B\x0e\n" +
+	"\f_client_typeB\n" +
+	"\n" +
+	"\b_user_id*j\n" +
 	"\tGrantType\x12\f\n" +
 	"\bpassword\x10\x00\x12\x16\n" +
 	"\x12client_credentials\x10\x01\x12\x16\n" +
@@ -993,14 +1393,18 @@ const file_authentication_service_v1_authentication_proto_rawDesc = "" +
 	"\x1aTOKEN_CATEGORY_UNSPECIFIED\x10\x00\x12\n" +
 	"\n" +
 	"\x06ACCESS\x10\x01\x12\v\n" +
-	"\aREFRESH\x10\x022\xdc\x05\n" +
+	"\aREFRESH\x10\x022\x83\b\n" +
 	"\x15AuthenticationService\x12\\\n" +
 	"\x05Login\x12'.authentication.service.v1.LoginRequest\x1a(.authentication.service.v1.LoginResponse\"\x00\x12L\n" +
 	"\x06Logout\x12(.authentication.service.v1.LogoutRequest\x1a\x16.google.protobuf.Empty\"\x00\x12q\n" +
 	"\fRegisterUser\x12..authentication.service.v1.RegisterUserRequest\x1a/.authentication.service.v1.RegisterUserResponse\"\x00\x12c\n" +
 	"\fRefreshToken\x12'.authentication.service.v1.LoginRequest\x1a(.authentication.service.v1.LoginResponse\"\x00\x12t\n" +
 	"\rValidateToken\x12/.authentication.service.v1.ValidateTokenRequest\x1a0.authentication.service.v1.ValidateTokenResponse\"\x00\x12z\n" +
-	"\x0fGetAccessTokens\x121.authentication.service.v1.GetAccessTokensRequest\x1a2.authentication.service.v1.GetAccessTokensResponse\"\x00\x12M\n" +
+	"\x0fGetAccessTokens\x121.authentication.service.v1.GetAccessTokensRequest\x1a2.authentication.service.v1.GetAccessTokensResponse\"\x00\x12^\n" +
+	"\x0fRevokeTokenById\x121.authentication.service.v1.RevokeTokenByIdRequest\x1a\x16.google.protobuf.Empty\"\x00\x12k\n" +
+	"\n" +
+	"BlockToken\x12,.authentication.service.v1.BlockTokenRequest\x1a-.authentication.service.v1.BlockTokenResponse\"\x00\x12X\n" +
+	"\fUnblockToken\x12..authentication.service.v1.UnblockTokenRequest\x1a\x16.google.protobuf.Empty\"\x00\x12M\n" +
 	"\x06WhoAmI\x12\x16.google.protobuf.Empty\x1a).authentication.service.v1.WhoAmIResponse\"\x00B\xff\x01\n" +
 	"\x1dcom.authentication.service.v1B\x13AuthenticationProtoP\x01ZCgo-wind-admin/api/gen/go/authentication/service/v1;authenticationpb\xa2\x02\x03ASX\xaa\x02\x19Authentication.Service.V1\xca\x02\x19Authentication\\Service\\V1\xe2\x02%Authentication\\Service\\V1\\GPBMetadata\xea\x02\x1bAuthentication::Service::V1b\x06proto3"
 
@@ -1017,7 +1421,7 @@ func file_authentication_service_v1_authentication_proto_rawDescGZIP() []byte {
 }
 
 var file_authentication_service_v1_authentication_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
-var file_authentication_service_v1_authentication_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
+var file_authentication_service_v1_authentication_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_authentication_service_v1_authentication_proto_goTypes = []any{
 	(GrantType)(0),                  // 0: authentication.service.v1.GrantType
 	(TokenType)(0),                  // 1: authentication.service.v1.TokenType
@@ -1033,8 +1437,14 @@ var file_authentication_service_v1_authentication_proto_goTypes = []any{
 	(*WhoAmIResponse)(nil),          // 11: authentication.service.v1.WhoAmIResponse
 	(*GetAccessTokensRequest)(nil),  // 12: authentication.service.v1.GetAccessTokensRequest
 	(*GetAccessTokensResponse)(nil), // 13: authentication.service.v1.GetAccessTokensResponse
-	(*UserTokenPayload)(nil),        // 14: authentication.service.v1.UserTokenPayload
-	(*emptypb.Empty)(nil),           // 15: google.protobuf.Empty
+	(*BlockTokenRequest)(nil),       // 14: authentication.service.v1.BlockTokenRequest
+	(*UnblockTokenRequest)(nil),     // 15: authentication.service.v1.UnblockTokenRequest
+	(*BlockTokenResponse)(nil),      // 16: authentication.service.v1.BlockTokenResponse
+	(*RevokeTokenByIdRequest)(nil),  // 17: authentication.service.v1.RevokeTokenByIdRequest
+	(*UserTokenPayload)(nil),        // 18: authentication.service.v1.UserTokenPayload
+	(*durationpb.Duration)(nil),     // 19: google.protobuf.Duration
+	(*timestamppb.Timestamp)(nil),   // 20: google.protobuf.Timestamp
+	(*emptypb.Empty)(nil),           // 21: google.protobuf.Empty
 }
 var file_authentication_service_v1_authentication_proto_depIdxs = []int32{
 	0,  // 0: authentication.service.v1.LoginRequest.grant_type:type_name -> authentication.service.v1.GrantType
@@ -1043,27 +1453,39 @@ var file_authentication_service_v1_authentication_proto_depIdxs = []int32{
 	2,  // 3: authentication.service.v1.LogoutRequest.client_type:type_name -> authentication.service.v1.ClientType
 	2,  // 4: authentication.service.v1.ValidateTokenRequest.client_type:type_name -> authentication.service.v1.ClientType
 	3,  // 5: authentication.service.v1.ValidateTokenRequest.token_category:type_name -> authentication.service.v1.TokenCategory
-	14, // 6: authentication.service.v1.ValidateTokenResponse.claim:type_name -> authentication.service.v1.UserTokenPayload
-	2,  // 7: authentication.service.v1.GetAccessTokensRequest.client_type:type_name -> authentication.service.v1.ClientType
-	4,  // 8: authentication.service.v1.AuthenticationService.Login:input_type -> authentication.service.v1.LoginRequest
-	6,  // 9: authentication.service.v1.AuthenticationService.Logout:input_type -> authentication.service.v1.LogoutRequest
-	9,  // 10: authentication.service.v1.AuthenticationService.RegisterUser:input_type -> authentication.service.v1.RegisterUserRequest
-	4,  // 11: authentication.service.v1.AuthenticationService.RefreshToken:input_type -> authentication.service.v1.LoginRequest
-	7,  // 12: authentication.service.v1.AuthenticationService.ValidateToken:input_type -> authentication.service.v1.ValidateTokenRequest
-	12, // 13: authentication.service.v1.AuthenticationService.GetAccessTokens:input_type -> authentication.service.v1.GetAccessTokensRequest
-	15, // 14: authentication.service.v1.AuthenticationService.WhoAmI:input_type -> google.protobuf.Empty
-	5,  // 15: authentication.service.v1.AuthenticationService.Login:output_type -> authentication.service.v1.LoginResponse
-	15, // 16: authentication.service.v1.AuthenticationService.Logout:output_type -> google.protobuf.Empty
-	10, // 17: authentication.service.v1.AuthenticationService.RegisterUser:output_type -> authentication.service.v1.RegisterUserResponse
-	5,  // 18: authentication.service.v1.AuthenticationService.RefreshToken:output_type -> authentication.service.v1.LoginResponse
-	8,  // 19: authentication.service.v1.AuthenticationService.ValidateToken:output_type -> authentication.service.v1.ValidateTokenResponse
-	13, // 20: authentication.service.v1.AuthenticationService.GetAccessTokens:output_type -> authentication.service.v1.GetAccessTokensResponse
-	11, // 21: authentication.service.v1.AuthenticationService.WhoAmI:output_type -> authentication.service.v1.WhoAmIResponse
-	15, // [15:22] is the sub-list for method output_type
-	8,  // [8:15] is the sub-list for method input_type
-	8,  // [8:8] is the sub-list for extension type_name
-	8,  // [8:8] is the sub-list for extension extendee
-	0,  // [0:8] is the sub-list for field type_name
+	18, // 6: authentication.service.v1.ValidateTokenResponse.payload:type_name -> authentication.service.v1.UserTokenPayload
+	2,  // 7: authentication.service.v1.RegisterUserRequest.client_type:type_name -> authentication.service.v1.ClientType
+	2,  // 8: authentication.service.v1.GetAccessTokensRequest.client_type:type_name -> authentication.service.v1.ClientType
+	2,  // 9: authentication.service.v1.BlockTokenRequest.client_type:type_name -> authentication.service.v1.ClientType
+	19, // 10: authentication.service.v1.BlockTokenRequest.duration:type_name -> google.protobuf.Duration
+	2,  // 11: authentication.service.v1.UnblockTokenRequest.client_type:type_name -> authentication.service.v1.ClientType
+	20, // 12: authentication.service.v1.BlockTokenResponse.blocked_until:type_name -> google.protobuf.Timestamp
+	2,  // 13: authentication.service.v1.RevokeTokenByIdRequest.client_type:type_name -> authentication.service.v1.ClientType
+	4,  // 14: authentication.service.v1.AuthenticationService.Login:input_type -> authentication.service.v1.LoginRequest
+	6,  // 15: authentication.service.v1.AuthenticationService.Logout:input_type -> authentication.service.v1.LogoutRequest
+	9,  // 16: authentication.service.v1.AuthenticationService.RegisterUser:input_type -> authentication.service.v1.RegisterUserRequest
+	4,  // 17: authentication.service.v1.AuthenticationService.RefreshToken:input_type -> authentication.service.v1.LoginRequest
+	7,  // 18: authentication.service.v1.AuthenticationService.ValidateToken:input_type -> authentication.service.v1.ValidateTokenRequest
+	12, // 19: authentication.service.v1.AuthenticationService.GetAccessTokens:input_type -> authentication.service.v1.GetAccessTokensRequest
+	17, // 20: authentication.service.v1.AuthenticationService.RevokeTokenById:input_type -> authentication.service.v1.RevokeTokenByIdRequest
+	14, // 21: authentication.service.v1.AuthenticationService.BlockToken:input_type -> authentication.service.v1.BlockTokenRequest
+	15, // 22: authentication.service.v1.AuthenticationService.UnblockToken:input_type -> authentication.service.v1.UnblockTokenRequest
+	21, // 23: authentication.service.v1.AuthenticationService.WhoAmI:input_type -> google.protobuf.Empty
+	5,  // 24: authentication.service.v1.AuthenticationService.Login:output_type -> authentication.service.v1.LoginResponse
+	21, // 25: authentication.service.v1.AuthenticationService.Logout:output_type -> google.protobuf.Empty
+	10, // 26: authentication.service.v1.AuthenticationService.RegisterUser:output_type -> authentication.service.v1.RegisterUserResponse
+	5,  // 27: authentication.service.v1.AuthenticationService.RefreshToken:output_type -> authentication.service.v1.LoginResponse
+	8,  // 28: authentication.service.v1.AuthenticationService.ValidateToken:output_type -> authentication.service.v1.ValidateTokenResponse
+	13, // 29: authentication.service.v1.AuthenticationService.GetAccessTokens:output_type -> authentication.service.v1.GetAccessTokensResponse
+	21, // 30: authentication.service.v1.AuthenticationService.RevokeTokenById:output_type -> google.protobuf.Empty
+	16, // 31: authentication.service.v1.AuthenticationService.BlockToken:output_type -> authentication.service.v1.BlockTokenResponse
+	21, // 32: authentication.service.v1.AuthenticationService.UnblockToken:output_type -> google.protobuf.Empty
+	11, // 33: authentication.service.v1.AuthenticationService.WhoAmI:output_type -> authentication.service.v1.WhoAmIResponse
+	24, // [24:34] is the sub-list for method output_type
+	14, // [14:24] is the sub-list for method input_type
+	14, // [14:14] is the sub-list for extension type_name
+	14, // [14:14] is the sub-list for extension extendee
+	0,  // [0:14] is the sub-list for field type_name
 }
 
 func init() { file_authentication_service_v1_authentication_proto_init() }
@@ -1074,15 +1496,25 @@ func file_authentication_service_v1_authentication_proto_init() {
 	file_authentication_service_v1_user_token_proto_init()
 	file_authentication_service_v1_authentication_proto_msgTypes[0].OneofWrappers = []any{}
 	file_authentication_service_v1_authentication_proto_msgTypes[1].OneofWrappers = []any{}
+	file_authentication_service_v1_authentication_proto_msgTypes[3].OneofWrappers = []any{}
 	file_authentication_service_v1_authentication_proto_msgTypes[4].OneofWrappers = []any{}
 	file_authentication_service_v1_authentication_proto_msgTypes[5].OneofWrappers = []any{}
+	file_authentication_service_v1_authentication_proto_msgTypes[10].OneofWrappers = []any{
+		(*BlockTokenRequest_Token)(nil),
+		(*BlockTokenRequest_Jti)(nil),
+	}
+	file_authentication_service_v1_authentication_proto_msgTypes[11].OneofWrappers = []any{
+		(*UnblockTokenRequest_Token)(nil),
+		(*UnblockTokenRequest_Jti)(nil),
+	}
+	file_authentication_service_v1_authentication_proto_msgTypes[13].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_authentication_service_v1_authentication_proto_rawDesc), len(file_authentication_service_v1_authentication_proto_rawDesc)),
 			NumEnums:      4,
-			NumMessages:   10,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

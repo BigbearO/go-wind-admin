@@ -18,6 +18,8 @@ service InternalMessageRecipientService {
   // 查询站内信消息收件箱列表
   rpc List (pagination.PagingRequest) returns (ListInternalMessageRecipientResponse) {}
 
+  rpc Count (pagination.PagingRequest) returns (CountInternalMessageRecipientResponse) {}
+
   // 查询站内信消息收件箱详情
   rpc Get (GetInternalMessageRecipientRequest) returns (InternalMessageRecipient) {}
 
@@ -210,4 +212,8 @@ message MarkNotificationsStatusRequest {
     json_name = "newStatus",
     (gnostic.openapi.v3.property) = { description: "新的消息状态" }
   ]; // 新的消息状态
+}
+
+message CountInternalMessageRecipientResponse {
+  uint64 count = 1;
 }

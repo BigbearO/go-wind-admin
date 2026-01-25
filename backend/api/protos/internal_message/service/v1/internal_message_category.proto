@@ -18,6 +18,9 @@ service InternalMessageCategoryService {
   // 查询站内信消息分类列表
   rpc List (pagination.PagingRequest) returns (ListInternalMessageCategoryResponse) {}
 
+  // 统计站内信消息分类数量
+  rpc Count (pagination.PagingRequest) returns (CountInternalMessageCategoryResponse) {}
+
   // 查询站内信消息分类详情
   rpc Get (GetInternalMessageCategoryRequest) returns (InternalMessageCategory) {}
 
@@ -132,4 +135,8 @@ message UpdateInternalMessageCategoryRequest {
 // 删除站内信消息分类 - 请求
 message DeleteInternalMessageCategoryRequest {
   uint32 id = 1;
+}
+
+message CountInternalMessageCategoryResponse {
+  uint64 count = 1;
 }

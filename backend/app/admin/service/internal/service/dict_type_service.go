@@ -35,15 +35,15 @@ func NewDictTypeService(
 	}
 }
 
-func (s *DictTypeService) ListDictType(ctx context.Context, req *paginationV1.PagingRequest) (*dictV1.ListDictTypeResponse, error) {
+func (s *DictTypeService) List(ctx context.Context, req *paginationV1.PagingRequest) (*dictV1.ListDictTypeResponse, error) {
 	return s.dictTypeRepo.List(ctx, req)
 }
 
-func (s *DictTypeService) GetDictType(ctx context.Context, req *dictV1.GetDictTypeRequest) (*dictV1.DictType, error) {
+func (s *DictTypeService) Get(ctx context.Context, req *dictV1.GetDictTypeRequest) (*dictV1.DictType, error) {
 	return s.dictTypeRepo.Get(ctx, req)
 }
 
-func (s *DictTypeService) CreateDictType(ctx context.Context, req *dictV1.CreateDictTypeRequest) (*emptypb.Empty, error) {
+func (s *DictTypeService) Create(ctx context.Context, req *dictV1.CreateDictTypeRequest) (*emptypb.Empty, error) {
 	if req.Data == nil {
 		return nil, dictV1.ErrorBadRequest("invalid parameter")
 	}
@@ -63,7 +63,7 @@ func (s *DictTypeService) CreateDictType(ctx context.Context, req *dictV1.Create
 	return &emptypb.Empty{}, nil
 }
 
-func (s *DictTypeService) UpdateDictType(ctx context.Context, req *dictV1.UpdateDictTypeRequest) (*emptypb.Empty, error) {
+func (s *DictTypeService) Update(ctx context.Context, req *dictV1.UpdateDictTypeRequest) (*emptypb.Empty, error) {
 	if req.Data == nil {
 		return nil, dictV1.ErrorBadRequest("invalid parameter")
 	}
@@ -86,7 +86,7 @@ func (s *DictTypeService) UpdateDictType(ctx context.Context, req *dictV1.Update
 	return &emptypb.Empty{}, nil
 }
 
-func (s *DictTypeService) DeleteDictType(ctx context.Context, req *dictV1.DeleteDictTypeRequest) (*emptypb.Empty, error) {
+func (s *DictTypeService) Delete(ctx context.Context, req *dictV1.DeleteDictTypeRequest) (*emptypb.Empty, error) {
 	if err := s.dictTypeRepo.BatchDelete(ctx, req.GetIds()); err != nil {
 		return nil, err
 	}

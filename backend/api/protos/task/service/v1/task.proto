@@ -19,6 +19,9 @@ service TaskService {
   // 查询调度任务列表
   rpc List (pagination.PagingRequest) returns (ListTaskResponse) {}
 
+  // 统计调度任务数量
+  rpc Count (pagination.PagingRequest) returns (CountTaskResponse) {}
+
   // 查询调度任务详情
   rpc Get (GetTaskRequest) returns (Task) {}
 
@@ -300,4 +303,8 @@ message ListTaskTypeNameResponse {
     json_name = "typeNames",
     (gnostic.openapi.v3.property) = {description: "类型名称列表"}
   ]; // 类型名称列表
+}
+
+message CountTaskResponse {
+  uint64 count = 1;
 }

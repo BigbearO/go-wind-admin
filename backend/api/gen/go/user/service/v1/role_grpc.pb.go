@@ -22,11 +22,12 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	RoleService_List_FullMethodName                  = "/user.service.v1.RoleService/List"
+	RoleService_Count_FullMethodName                 = "/user.service.v1.RoleService/Count"
 	RoleService_Get_FullMethodName                   = "/user.service.v1.RoleService/Get"
 	RoleService_Create_FullMethodName                = "/user.service.v1.RoleService/Create"
+	RoleService_BatchCreate_FullMethodName           = "/user.service.v1.RoleService/BatchCreate"
 	RoleService_Update_FullMethodName                = "/user.service.v1.RoleService/Update"
 	RoleService_Delete_FullMethodName                = "/user.service.v1.RoleService/Delete"
-	RoleService_BatchCreate_FullMethodName           = "/user.service.v1.RoleService/BatchCreate"
 	RoleService_GetRoleCodesByRoleIds_FullMethodName = "/user.service.v1.RoleService/GetRoleCodesByRoleIds"
 	RoleService_GetRolesByRoleCodes_FullMethodName   = "/user.service.v1.RoleService/GetRolesByRoleCodes"
 	RoleService_GetRolesByRoleIds_FullMethodName     = "/user.service.v1.RoleService/GetRolesByRoleIds"
@@ -40,16 +41,17 @@ const (
 type RoleServiceClient interface {
 	// 查询角色列表
 	List(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*ListRoleResponse, error)
+	Count(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*CountRoleResponse, error)
 	// 查询角色详情
 	Get(ctx context.Context, in *GetRoleRequest, opts ...grpc.CallOption) (*Role, error)
 	// 创建角色
 	Create(ctx context.Context, in *CreateRoleRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// 批量创建角色
+	BatchCreate(ctx context.Context, in *BatchCreateRolesRequest, opts ...grpc.CallOption) (*BatchCreateRolesResponse, error)
 	// 更新角色
 	Update(ctx context.Context, in *UpdateRoleRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// 删除角色
 	Delete(ctx context.Context, in *DeleteRoleRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	// 批量创建角色
-	BatchCreate(ctx context.Context, in *BatchCreateRolesRequest, opts ...grpc.CallOption) (*BatchCreateRolesResponse, error)
 	// 根据角色ID列表获取角色值列表
 	GetRoleCodesByRoleIds(ctx context.Context, in *GetRoleCodesByRoleIdsRequest, opts ...grpc.CallOption) (*GetRoleCodesByRoleIdsResponse, error)
 	// 根据角色值列表获取角色列表
@@ -76,6 +78,16 @@ func (c *roleServiceClient) List(ctx context.Context, in *v1.PagingRequest, opts
 	return out, nil
 }
 
+func (c *roleServiceClient) Count(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*CountRoleResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CountRoleResponse)
+	err := c.cc.Invoke(ctx, RoleService_Count_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *roleServiceClient) Get(ctx context.Context, in *GetRoleRequest, opts ...grpc.CallOption) (*Role, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Role)
@@ -96,6 +108,16 @@ func (c *roleServiceClient) Create(ctx context.Context, in *CreateRoleRequest, o
 	return out, nil
 }
 
+func (c *roleServiceClient) BatchCreate(ctx context.Context, in *BatchCreateRolesRequest, opts ...grpc.CallOption) (*BatchCreateRolesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(BatchCreateRolesResponse)
+	err := c.cc.Invoke(ctx, RoleService_BatchCreate_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *roleServiceClient) Update(ctx context.Context, in *UpdateRoleRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(emptypb.Empty)
@@ -110,16 +132,6 @@ func (c *roleServiceClient) Delete(ctx context.Context, in *DeleteRoleRequest, o
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, RoleService_Delete_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *roleServiceClient) BatchCreate(ctx context.Context, in *BatchCreateRolesRequest, opts ...grpc.CallOption) (*BatchCreateRolesResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(BatchCreateRolesResponse)
-	err := c.cc.Invoke(ctx, RoleService_BatchCreate_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -164,16 +176,17 @@ func (c *roleServiceClient) GetRolesByRoleIds(ctx context.Context, in *GetRolesB
 type RoleServiceServer interface {
 	// 查询角色列表
 	List(context.Context, *v1.PagingRequest) (*ListRoleResponse, error)
+	Count(context.Context, *v1.PagingRequest) (*CountRoleResponse, error)
 	// 查询角色详情
 	Get(context.Context, *GetRoleRequest) (*Role, error)
 	// 创建角色
 	Create(context.Context, *CreateRoleRequest) (*emptypb.Empty, error)
+	// 批量创建角色
+	BatchCreate(context.Context, *BatchCreateRolesRequest) (*BatchCreateRolesResponse, error)
 	// 更新角色
 	Update(context.Context, *UpdateRoleRequest) (*emptypb.Empty, error)
 	// 删除角色
 	Delete(context.Context, *DeleteRoleRequest) (*emptypb.Empty, error)
-	// 批量创建角色
-	BatchCreate(context.Context, *BatchCreateRolesRequest) (*BatchCreateRolesResponse, error)
 	// 根据角色ID列表获取角色值列表
 	GetRoleCodesByRoleIds(context.Context, *GetRoleCodesByRoleIdsRequest) (*GetRoleCodesByRoleIdsResponse, error)
 	// 根据角色值列表获取角色列表
@@ -193,20 +206,23 @@ type UnimplementedRoleServiceServer struct{}
 func (UnimplementedRoleServiceServer) List(context.Context, *v1.PagingRequest) (*ListRoleResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method List not implemented")
 }
+func (UnimplementedRoleServiceServer) Count(context.Context, *v1.PagingRequest) (*CountRoleResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Count not implemented")
+}
 func (UnimplementedRoleServiceServer) Get(context.Context, *GetRoleRequest) (*Role, error) {
 	return nil, status.Error(codes.Unimplemented, "method Get not implemented")
 }
 func (UnimplementedRoleServiceServer) Create(context.Context, *CreateRoleRequest) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Create not implemented")
 }
+func (UnimplementedRoleServiceServer) BatchCreate(context.Context, *BatchCreateRolesRequest) (*BatchCreateRolesResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method BatchCreate not implemented")
+}
 func (UnimplementedRoleServiceServer) Update(context.Context, *UpdateRoleRequest) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Update not implemented")
 }
 func (UnimplementedRoleServiceServer) Delete(context.Context, *DeleteRoleRequest) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Delete not implemented")
-}
-func (UnimplementedRoleServiceServer) BatchCreate(context.Context, *BatchCreateRolesRequest) (*BatchCreateRolesResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method BatchCreate not implemented")
 }
 func (UnimplementedRoleServiceServer) GetRoleCodesByRoleIds(context.Context, *GetRoleCodesByRoleIdsRequest) (*GetRoleCodesByRoleIdsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetRoleCodesByRoleIds not implemented")
@@ -256,6 +272,24 @@ func _RoleService_List_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _RoleService_Count_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(v1.PagingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RoleServiceServer).Count(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: RoleService_Count_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RoleServiceServer).Count(ctx, req.(*v1.PagingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _RoleService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetRoleRequest)
 	if err := dec(in); err != nil {
@@ -292,6 +326,24 @@ func _RoleService_Create_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _RoleService_BatchCreate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BatchCreateRolesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RoleServiceServer).BatchCreate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: RoleService_BatchCreate_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RoleServiceServer).BatchCreate(ctx, req.(*BatchCreateRolesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _RoleService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateRoleRequest)
 	if err := dec(in); err != nil {
@@ -324,24 +376,6 @@ func _RoleService_Delete_Handler(srv interface{}, ctx context.Context, dec func(
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(RoleServiceServer).Delete(ctx, req.(*DeleteRoleRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _RoleService_BatchCreate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(BatchCreateRolesRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(RoleServiceServer).BatchCreate(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: RoleService_BatchCreate_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RoleServiceServer).BatchCreate(ctx, req.(*BatchCreateRolesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -412,6 +446,10 @@ var RoleService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _RoleService_List_Handler,
 		},
 		{
+			MethodName: "Count",
+			Handler:    _RoleService_Count_Handler,
+		},
+		{
 			MethodName: "Get",
 			Handler:    _RoleService_Get_Handler,
 		},
@@ -420,16 +458,16 @@ var RoleService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _RoleService_Create_Handler,
 		},
 		{
+			MethodName: "BatchCreate",
+			Handler:    _RoleService_BatchCreate_Handler,
+		},
+		{
 			MethodName: "Update",
 			Handler:    _RoleService_Update_Handler,
 		},
 		{
 			MethodName: "Delete",
 			Handler:    _RoleService_Delete_Handler,
-		},
-		{
-			MethodName: "BatchCreate",
-			Handler:    _RoleService_BatchCreate_Handler,
 		},
 		{
 			MethodName: "GetRoleCodesByRoleIds",

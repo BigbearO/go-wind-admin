@@ -66,7 +66,7 @@ func (s *RoleService) List(ctx context.Context, req *paginationV1.PagingRequest)
 	var tenantSet = make(name_set.UserNameSetMap)
 
 	for _, v := range resp.Items {
-		if v.TenantId != nil {
+		if v.GetTenantId() > 0 {
 			tenantSet[v.GetTenantId()] = nil
 		}
 	}
@@ -74,7 +74,7 @@ func (s *RoleService) List(ctx context.Context, req *paginationV1.PagingRequest)
 	QueryTenantInfoFromRepo(ctx, s.tenantRepo, &tenantSet)
 
 	for _, v := range resp.Items {
-		if v.TenantId != nil {
+		if v.GetTenantId() > 0 {
 			if tenantInfo, ok := tenantSet[v.GetTenantId()]; ok && tenantInfo != nil {
 				v.TenantName = &tenantInfo.UserName
 			}
@@ -90,7 +90,7 @@ func (s *RoleService) Get(ctx context.Context, req *userV1.GetRoleRequest) (*use
 		return nil, err
 	}
 
-	if resp.TenantId != nil {
+	if resp.GetTenantId() > 0 {
 		var aTenant *userV1.Tenant
 		aTenant, err = s.tenantRepo.Get(ctx, &userV1.GetTenantRequest{QueryBy: &userV1.GetTenantRequest_Id{Id: resp.GetTenantId()}})
 		if err == nil && aTenant != nil {

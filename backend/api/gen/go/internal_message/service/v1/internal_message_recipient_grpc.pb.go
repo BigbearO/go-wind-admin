@@ -22,6 +22,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	InternalMessageRecipientService_List_FullMethodName                              = "/internal_message.service.v1.InternalMessageRecipientService/List"
+	InternalMessageRecipientService_Count_FullMethodName                             = "/internal_message.service.v1.InternalMessageRecipientService/Count"
 	InternalMessageRecipientService_Get_FullMethodName                               = "/internal_message.service.v1.InternalMessageRecipientService/Get"
 	InternalMessageRecipientService_Create_FullMethodName                            = "/internal_message.service.v1.InternalMessageRecipientService/Create"
 	InternalMessageRecipientService_Update_FullMethodName                            = "/internal_message.service.v1.InternalMessageRecipientService/Update"
@@ -41,6 +42,7 @@ const (
 type InternalMessageRecipientServiceClient interface {
 	// 查询站内信消息收件箱列表
 	List(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*ListInternalMessageRecipientResponse, error)
+	Count(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*CountInternalMessageRecipientResponse, error)
 	// 查询站内信消息收件箱详情
 	Get(ctx context.Context, in *GetInternalMessageRecipientRequest, opts ...grpc.CallOption) (*InternalMessageRecipient, error)
 	// 创建站内信消息收件箱
@@ -73,6 +75,16 @@ func (c *internalMessageRecipientServiceClient) List(ctx context.Context, in *v1
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListInternalMessageRecipientResponse)
 	err := c.cc.Invoke(ctx, InternalMessageRecipientService_List_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *internalMessageRecipientServiceClient) Count(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*CountInternalMessageRecipientResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CountInternalMessageRecipientResponse)
+	err := c.cc.Invoke(ctx, InternalMessageRecipientService_Count_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -177,6 +189,7 @@ func (c *internalMessageRecipientServiceClient) MarkNotificationsStatus(ctx cont
 type InternalMessageRecipientServiceServer interface {
 	// 查询站内信消息收件箱列表
 	List(context.Context, *v1.PagingRequest) (*ListInternalMessageRecipientResponse, error)
+	Count(context.Context, *v1.PagingRequest) (*CountInternalMessageRecipientResponse, error)
 	// 查询站内信消息收件箱详情
 	Get(context.Context, *GetInternalMessageRecipientRequest) (*InternalMessageRecipient, error)
 	// 创建站内信消息收件箱
@@ -207,6 +220,9 @@ type UnimplementedInternalMessageRecipientServiceServer struct{}
 
 func (UnimplementedInternalMessageRecipientServiceServer) List(context.Context, *v1.PagingRequest) (*ListInternalMessageRecipientResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method List not implemented")
+}
+func (UnimplementedInternalMessageRecipientServiceServer) Count(context.Context, *v1.PagingRequest) (*CountInternalMessageRecipientResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Count not implemented")
 }
 func (UnimplementedInternalMessageRecipientServiceServer) Get(context.Context, *GetInternalMessageRecipientRequest) (*InternalMessageRecipient, error) {
 	return nil, status.Error(codes.Unimplemented, "method Get not implemented")
@@ -271,6 +287,24 @@ func _InternalMessageRecipientService_List_Handler(srv interface{}, ctx context.
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(InternalMessageRecipientServiceServer).List(ctx, req.(*v1.PagingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InternalMessageRecipientService_Count_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(v1.PagingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InternalMessageRecipientServiceServer).Count(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InternalMessageRecipientService_Count_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InternalMessageRecipientServiceServer).Count(ctx, req.(*v1.PagingRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -447,6 +481,10 @@ var InternalMessageRecipientService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "List",
 			Handler:    _InternalMessageRecipientService_List_Handler,
+		},
+		{
+			MethodName: "Count",
+			Handler:    _InternalMessageRecipientService_Count_Handler,
 		},
 		{
 			MethodName: "Get",

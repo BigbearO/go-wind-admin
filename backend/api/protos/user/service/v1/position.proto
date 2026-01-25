@@ -14,20 +14,22 @@ service PositionService {
   // 查询职位列表
   rpc List (pagination.PagingRequest) returns (ListPositionResponse) {}
 
+  // 统计职位数量
+  rpc Count (pagination.PagingRequest) returns (CountPositionResponse) {}
+
   // 查询职位详情
   rpc Get (GetPositionRequest) returns (Position) {}
 
   // 创建职位
   rpc Create (CreatePositionRequest) returns (google.protobuf.Empty) {}
+  // 批量创建职位
+  rpc BatchCreate (BatchCreatePositionsRequest) returns (BatchCreatePositionsResponse) {}
 
   // 更新职位
   rpc Update (UpdatePositionRequest) returns (google.protobuf.Empty) {}
 
   // 删除职位
   rpc Delete (DeletePositionRequest) returns (google.protobuf.Empty) {}
-
-  // 批量创建职位
-  rpc BatchCreate (BatchCreatePositionsRequest) returns (BatchCreatePositionsResponse) {}
 }
 
 // 职位
@@ -215,4 +217,8 @@ message BatchCreatePositionsResponse {
       description: "创建成功的职位ID列表"
     }
   ]; // 创建成功的职位ID列表
+}
+
+message CountPositionResponse {
+  uint64 count = 1;
 }

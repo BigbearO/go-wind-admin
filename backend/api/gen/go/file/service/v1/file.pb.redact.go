@@ -210,3 +210,13 @@ func (x *DeleteFileRequest) Redact() string {
 	// Safe field: Id
 	return x.String()
 }
+
+// Redact method implementation for CountFileResponse
+func (x *CountFileResponse) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: Count
+	return x.String()
+}

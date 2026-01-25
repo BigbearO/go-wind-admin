@@ -484,7 +484,7 @@ func (s *AuthenticationService) ValidateToken(_ context.Context, req *authentica
 
 	return &authenticationV1.ValidateTokenResponse{
 		IsValid: true,
-		Claim:   claims,
+		Payload: claims,
 	}, nil
 }
 

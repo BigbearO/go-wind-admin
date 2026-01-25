@@ -18,6 +18,9 @@ service LoginPolicyService {
   // 查询登录策略列表
   rpc List (pagination.PagingRequest) returns (ListLoginPolicyResponse) {}
 
+  // 统计登录策略数量
+  rpc Count (pagination.PagingRequest) returns (CountLoginPolicyResponse) {}
+
   // 查询登录策略详情
   rpc Get (GetLoginPolicyRequest) returns (LoginPolicy) {}
 
@@ -162,4 +165,8 @@ message UpdateLoginPolicyRequest {
 // 删除登录策略 - 请求
 message DeleteLoginPolicyRequest {
   uint32 id = 1;
+}
+
+message CountLoginPolicyResponse {
+  uint64 count = 1;
 }

@@ -1014,3 +1014,107 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DeletePermissionRequestValidationError{}
+
+// Validate checks the field values on CountPermissionResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CountPermissionResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CountPermissionResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CountPermissionResponseMultiError, or nil if none found.
+func (m *CountPermissionResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CountPermissionResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Count
+
+	if len(errors) > 0 {
+		return CountPermissionResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// CountPermissionResponseMultiError is an error wrapping multiple validation
+// errors returned by CountPermissionResponse.ValidateAll() if the designated
+// constraints aren't met.
+type CountPermissionResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CountPermissionResponseMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CountPermissionResponseMultiError) AllErrors() []error { return m }
+
+// CountPermissionResponseValidationError is the validation error returned by
+// CountPermissionResponse.Validate if the designated constraints aren't met.
+type CountPermissionResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CountPermissionResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CountPermissionResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CountPermissionResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CountPermissionResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CountPermissionResponseValidationError) ErrorName() string {
+	return "CountPermissionResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CountPermissionResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCountPermissionResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CountPermissionResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CountPermissionResponseValidationError{}

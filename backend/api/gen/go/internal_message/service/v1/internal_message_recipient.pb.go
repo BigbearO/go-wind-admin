@@ -796,6 +796,50 @@ func (x *MarkNotificationsStatusRequest) GetNewStatus() InternalMessageRecipient
 	return InternalMessageRecipient_SENT
 }
 
+type CountInternalMessageRecipientResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Count         uint64                 `protobuf:"varint,1,opt,name=count,proto3" json:"count,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CountInternalMessageRecipientResponse) Reset() {
+	*x = CountInternalMessageRecipientResponse{}
+	mi := &file_internal_message_service_v1_internal_message_recipient_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CountInternalMessageRecipientResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CountInternalMessageRecipientResponse) ProtoMessage() {}
+
+func (x *CountInternalMessageRecipientResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_internal_message_service_v1_internal_message_recipient_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CountInternalMessageRecipientResponse.ProtoReflect.Descriptor instead.
+func (*CountInternalMessageRecipientResponse) Descriptor() ([]byte, []int) {
+	return file_internal_message_service_v1_internal_message_recipient_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *CountInternalMessageRecipientResponse) GetCount() uint64 {
+	if x != nil {
+		return x.Count
+	}
+	return 0
+}
+
 var File_internal_message_service_v1_internal_message_recipient_proto protoreflect.FileDescriptor
 
 const file_internal_message_service_v1_internal_message_recipient_proto_rawDesc = "" +
@@ -891,9 +935,13 @@ const file_internal_message_service_v1_internal_message_recipient_proto_rawDesc 
 	"\auser_id\x18\x01 \x01(\rB\x0e\xbaG\v\x92\x02\b用户IDR\x06userId\x12B\n" +
 	"\rrecipient_ids\x18\x02 \x03(\rB\x1d\xbaG\x1a\x92\x02\x17收件箱记录ID列表R\frecipientIds\x12u\n" +
 	"\n" +
-	"new_status\x18\x03 \x01(\x0e2<.internal_message.service.v1.InternalMessageRecipient.StatusB\x18\xbaG\x15\x92\x02\x12新的消息状态R\tnewStatus2\xca\t\n" +
+	"new_status\x18\x03 \x01(\x0e2<.internal_message.service.v1.InternalMessageRecipient.StatusB\x18\xbaG\x15\x92\x02\x12新的消息状态R\tnewStatus\"=\n" +
+	"%CountInternalMessageRecipientResponse\x12\x14\n" +
+	"\x05count\x18\x01 \x01(\x04R\x05count2\xb4\n" +
+	"\n" +
 	"\x1fInternalMessageRecipientService\x12f\n" +
-	"\x04List\x12\x19.pagination.PagingRequest\x1aA.internal_message.service.v1.ListInternalMessageRecipientResponse\"\x00\x12\x7f\n" +
+	"\x04List\x12\x19.pagination.PagingRequest\x1aA.internal_message.service.v1.ListInternalMessageRecipientResponse\"\x00\x12h\n" +
+	"\x05Count\x12\x19.pagination.PagingRequest\x1aB.internal_message.service.v1.CountInternalMessageRecipientResponse\"\x00\x12\x7f\n" +
 	"\x03Get\x12?.internal_message.service.v1.GetInternalMessageRecipientRequest\x1a5.internal_message.service.v1.InternalMessageRecipient\"\x00\x12\x85\x01\n" +
 	"\x06Create\x12B.internal_message.service.v1.CreateInternalMessageRecipientRequest\x1a5.internal_message.service.v1.InternalMessageRecipient\"\x00\x12f\n" +
 	"\x06Update\x12B.internal_message.service.v1.UpdateInternalMessageRecipientRequest\x1a\x16.google.protobuf.Empty\"\x00\x12f\n" +
@@ -918,7 +966,7 @@ func file_internal_message_service_v1_internal_message_recipient_proto_rawDescGZ
 }
 
 var file_internal_message_service_v1_internal_message_recipient_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_internal_message_service_v1_internal_message_recipient_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_internal_message_service_v1_internal_message_recipient_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_internal_message_service_v1_internal_message_recipient_proto_goTypes = []any{
 	(InternalMessageRecipient_Status)(0),             // 0: internal_message.service.v1.InternalMessageRecipient.Status
 	(*InternalMessageRecipient)(nil),                 // 1: internal_message.service.v1.InternalMessageRecipient
@@ -932,47 +980,50 @@ var file_internal_message_service_v1_internal_message_recipient_proto_goTypes = 
 	(*DeleteNotificationFromInboxRequest)(nil),       // 9: internal_message.service.v1.DeleteNotificationFromInboxRequest
 	(*MarkNotificationAsReadRequest)(nil),            // 10: internal_message.service.v1.MarkNotificationAsReadRequest
 	(*MarkNotificationsStatusRequest)(nil),           // 11: internal_message.service.v1.MarkNotificationsStatusRequest
-	(*timestamppb.Timestamp)(nil),                    // 12: google.protobuf.Timestamp
-	(*fieldmaskpb.FieldMask)(nil),                    // 13: google.protobuf.FieldMask
-	(*v1.PagingRequest)(nil),                         // 14: pagination.PagingRequest
-	(*emptypb.Empty)(nil),                            // 15: google.protobuf.Empty
+	(*CountInternalMessageRecipientResponse)(nil),    // 12: internal_message.service.v1.CountInternalMessageRecipientResponse
+	(*timestamppb.Timestamp)(nil),                    // 13: google.protobuf.Timestamp
+	(*fieldmaskpb.FieldMask)(nil),                    // 14: google.protobuf.FieldMask
+	(*v1.PagingRequest)(nil),                         // 15: pagination.PagingRequest
+	(*emptypb.Empty)(nil),                            // 16: google.protobuf.Empty
 }
 var file_internal_message_service_v1_internal_message_recipient_proto_depIdxs = []int32{
 	0,  // 0: internal_message.service.v1.InternalMessageRecipient.status:type_name -> internal_message.service.v1.InternalMessageRecipient.Status
-	12, // 1: internal_message.service.v1.InternalMessageRecipient.received_at:type_name -> google.protobuf.Timestamp
-	12, // 2: internal_message.service.v1.InternalMessageRecipient.read_at:type_name -> google.protobuf.Timestamp
-	12, // 3: internal_message.service.v1.InternalMessageRecipient.created_at:type_name -> google.protobuf.Timestamp
-	12, // 4: internal_message.service.v1.InternalMessageRecipient.updated_at:type_name -> google.protobuf.Timestamp
-	12, // 5: internal_message.service.v1.InternalMessageRecipient.deleted_at:type_name -> google.protobuf.Timestamp
+	13, // 1: internal_message.service.v1.InternalMessageRecipient.received_at:type_name -> google.protobuf.Timestamp
+	13, // 2: internal_message.service.v1.InternalMessageRecipient.read_at:type_name -> google.protobuf.Timestamp
+	13, // 3: internal_message.service.v1.InternalMessageRecipient.created_at:type_name -> google.protobuf.Timestamp
+	13, // 4: internal_message.service.v1.InternalMessageRecipient.updated_at:type_name -> google.protobuf.Timestamp
+	13, // 5: internal_message.service.v1.InternalMessageRecipient.deleted_at:type_name -> google.protobuf.Timestamp
 	1,  // 6: internal_message.service.v1.ListInternalMessageRecipientResponse.items:type_name -> internal_message.service.v1.InternalMessageRecipient
 	1,  // 7: internal_message.service.v1.ListUserInboxResponse.items:type_name -> internal_message.service.v1.InternalMessageRecipient
-	13, // 8: internal_message.service.v1.GetInternalMessageRecipientRequest.view_mask:type_name -> google.protobuf.FieldMask
+	14, // 8: internal_message.service.v1.GetInternalMessageRecipientRequest.view_mask:type_name -> google.protobuf.FieldMask
 	1,  // 9: internal_message.service.v1.CreateInternalMessageRecipientRequest.data:type_name -> internal_message.service.v1.InternalMessageRecipient
 	1,  // 10: internal_message.service.v1.UpdateInternalMessageRecipientRequest.data:type_name -> internal_message.service.v1.InternalMessageRecipient
-	13, // 11: internal_message.service.v1.UpdateInternalMessageRecipientRequest.update_mask:type_name -> google.protobuf.FieldMask
+	14, // 11: internal_message.service.v1.UpdateInternalMessageRecipientRequest.update_mask:type_name -> google.protobuf.FieldMask
 	0,  // 12: internal_message.service.v1.MarkNotificationsStatusRequest.new_status:type_name -> internal_message.service.v1.InternalMessageRecipient.Status
-	14, // 13: internal_message.service.v1.InternalMessageRecipientService.List:input_type -> pagination.PagingRequest
-	4,  // 14: internal_message.service.v1.InternalMessageRecipientService.Get:input_type -> internal_message.service.v1.GetInternalMessageRecipientRequest
-	5,  // 15: internal_message.service.v1.InternalMessageRecipientService.Create:input_type -> internal_message.service.v1.CreateInternalMessageRecipientRequest
-	6,  // 16: internal_message.service.v1.InternalMessageRecipientService.Update:input_type -> internal_message.service.v1.UpdateInternalMessageRecipientRequest
-	7,  // 17: internal_message.service.v1.InternalMessageRecipientService.Delete:input_type -> internal_message.service.v1.DeleteInternalMessageRecipientRequest
-	8,  // 18: internal_message.service.v1.InternalMessageRecipientService.GetInternalMessageRecipientsByIds:input_type -> internal_message.service.v1.GetInternalMessageRecipientsByIdsRequest
-	14, // 19: internal_message.service.v1.InternalMessageRecipientService.ListUserInbox:input_type -> pagination.PagingRequest
-	9,  // 20: internal_message.service.v1.InternalMessageRecipientService.DeleteNotificationFromInbox:input_type -> internal_message.service.v1.DeleteNotificationFromInboxRequest
-	10, // 21: internal_message.service.v1.InternalMessageRecipientService.MarkNotificationAsRead:input_type -> internal_message.service.v1.MarkNotificationAsReadRequest
-	11, // 22: internal_message.service.v1.InternalMessageRecipientService.MarkNotificationsStatus:input_type -> internal_message.service.v1.MarkNotificationsStatusRequest
-	2,  // 23: internal_message.service.v1.InternalMessageRecipientService.List:output_type -> internal_message.service.v1.ListInternalMessageRecipientResponse
-	1,  // 24: internal_message.service.v1.InternalMessageRecipientService.Get:output_type -> internal_message.service.v1.InternalMessageRecipient
-	1,  // 25: internal_message.service.v1.InternalMessageRecipientService.Create:output_type -> internal_message.service.v1.InternalMessageRecipient
-	15, // 26: internal_message.service.v1.InternalMessageRecipientService.Update:output_type -> google.protobuf.Empty
-	15, // 27: internal_message.service.v1.InternalMessageRecipientService.Delete:output_type -> google.protobuf.Empty
-	2,  // 28: internal_message.service.v1.InternalMessageRecipientService.GetInternalMessageRecipientsByIds:output_type -> internal_message.service.v1.ListInternalMessageRecipientResponse
-	3,  // 29: internal_message.service.v1.InternalMessageRecipientService.ListUserInbox:output_type -> internal_message.service.v1.ListUserInboxResponse
-	15, // 30: internal_message.service.v1.InternalMessageRecipientService.DeleteNotificationFromInbox:output_type -> google.protobuf.Empty
-	15, // 31: internal_message.service.v1.InternalMessageRecipientService.MarkNotificationAsRead:output_type -> google.protobuf.Empty
-	15, // 32: internal_message.service.v1.InternalMessageRecipientService.MarkNotificationsStatus:output_type -> google.protobuf.Empty
-	23, // [23:33] is the sub-list for method output_type
-	13, // [13:23] is the sub-list for method input_type
+	15, // 13: internal_message.service.v1.InternalMessageRecipientService.List:input_type -> pagination.PagingRequest
+	15, // 14: internal_message.service.v1.InternalMessageRecipientService.Count:input_type -> pagination.PagingRequest
+	4,  // 15: internal_message.service.v1.InternalMessageRecipientService.Get:input_type -> internal_message.service.v1.GetInternalMessageRecipientRequest
+	5,  // 16: internal_message.service.v1.InternalMessageRecipientService.Create:input_type -> internal_message.service.v1.CreateInternalMessageRecipientRequest
+	6,  // 17: internal_message.service.v1.InternalMessageRecipientService.Update:input_type -> internal_message.service.v1.UpdateInternalMessageRecipientRequest
+	7,  // 18: internal_message.service.v1.InternalMessageRecipientService.Delete:input_type -> internal_message.service.v1.DeleteInternalMessageRecipientRequest
+	8,  // 19: internal_message.service.v1.InternalMessageRecipientService.GetInternalMessageRecipientsByIds:input_type -> internal_message.service.v1.GetInternalMessageRecipientsByIdsRequest
+	15, // 20: internal_message.service.v1.InternalMessageRecipientService.ListUserInbox:input_type -> pagination.PagingRequest
+	9,  // 21: internal_message.service.v1.InternalMessageRecipientService.DeleteNotificationFromInbox:input_type -> internal_message.service.v1.DeleteNotificationFromInboxRequest
+	10, // 22: internal_message.service.v1.InternalMessageRecipientService.MarkNotificationAsRead:input_type -> internal_message.service.v1.MarkNotificationAsReadRequest
+	11, // 23: internal_message.service.v1.InternalMessageRecipientService.MarkNotificationsStatus:input_type -> internal_message.service.v1.MarkNotificationsStatusRequest
+	2,  // 24: internal_message.service.v1.InternalMessageRecipientService.List:output_type -> internal_message.service.v1.ListInternalMessageRecipientResponse
+	12, // 25: internal_message.service.v1.InternalMessageRecipientService.Count:output_type -> internal_message.service.v1.CountInternalMessageRecipientResponse
+	1,  // 26: internal_message.service.v1.InternalMessageRecipientService.Get:output_type -> internal_message.service.v1.InternalMessageRecipient
+	1,  // 27: internal_message.service.v1.InternalMessageRecipientService.Create:output_type -> internal_message.service.v1.InternalMessageRecipient
+	16, // 28: internal_message.service.v1.InternalMessageRecipientService.Update:output_type -> google.protobuf.Empty
+	16, // 29: internal_message.service.v1.InternalMessageRecipientService.Delete:output_type -> google.protobuf.Empty
+	2,  // 30: internal_message.service.v1.InternalMessageRecipientService.GetInternalMessageRecipientsByIds:output_type -> internal_message.service.v1.ListInternalMessageRecipientResponse
+	3,  // 31: internal_message.service.v1.InternalMessageRecipientService.ListUserInbox:output_type -> internal_message.service.v1.ListUserInboxResponse
+	16, // 32: internal_message.service.v1.InternalMessageRecipientService.DeleteNotificationFromInbox:output_type -> google.protobuf.Empty
+	16, // 33: internal_message.service.v1.InternalMessageRecipientService.MarkNotificationAsRead:output_type -> google.protobuf.Empty
+	16, // 34: internal_message.service.v1.InternalMessageRecipientService.MarkNotificationsStatus:output_type -> google.protobuf.Empty
+	24, // [24:35] is the sub-list for method output_type
+	13, // [13:24] is the sub-list for method input_type
 	13, // [13:13] is the sub-list for extension type_name
 	13, // [13:13] is the sub-list for extension extendee
 	0,  // [0:13] is the sub-list for field type_name
@@ -994,7 +1045,7 @@ func file_internal_message_service_v1_internal_message_recipient_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_internal_message_service_v1_internal_message_recipient_proto_rawDesc), len(file_internal_message_service_v1_internal_message_recipient_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   11,
+			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

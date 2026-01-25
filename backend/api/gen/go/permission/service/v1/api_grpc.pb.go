@@ -22,6 +22,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	ApiService_List_FullMethodName             = "/permission.service.v1.ApiService/List"
+	ApiService_Count_FullMethodName            = "/permission.service.v1.ApiService/Count"
 	ApiService_Get_FullMethodName              = "/permission.service.v1.ApiService/Get"
 	ApiService_Create_FullMethodName           = "/permission.service.v1.ApiService/Create"
 	ApiService_Update_FullMethodName           = "/permission.service.v1.ApiService/Update"
@@ -38,6 +39,8 @@ const (
 type ApiServiceClient interface {
 	// 查询API资源列表
 	List(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*ListApiResponse, error)
+	// 统计API资源数量
+	Count(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*CountApiResponse, error)
 	// 查询API资源详情
 	Get(ctx context.Context, in *GetApiRequest, opts ...grpc.CallOption) (*Api, error)
 	// 创建API资源
@@ -64,6 +67,16 @@ func (c *apiServiceClient) List(ctx context.Context, in *v1.PagingRequest, opts 
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListApiResponse)
 	err := c.cc.Invoke(ctx, ApiService_List_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *apiServiceClient) Count(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*CountApiResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CountApiResponse)
+	err := c.cc.Invoke(ctx, ApiService_Count_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -138,6 +151,8 @@ func (c *apiServiceClient) GetWalkRouteData(ctx context.Context, in *emptypb.Emp
 type ApiServiceServer interface {
 	// 查询API资源列表
 	List(context.Context, *v1.PagingRequest) (*ListApiResponse, error)
+	// 统计API资源数量
+	Count(context.Context, *v1.PagingRequest) (*CountApiResponse, error)
 	// 查询API资源详情
 	Get(context.Context, *GetApiRequest) (*Api, error)
 	// 创建API资源
@@ -162,6 +177,9 @@ type UnimplementedApiServiceServer struct{}
 
 func (UnimplementedApiServiceServer) List(context.Context, *v1.PagingRequest) (*ListApiResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method List not implemented")
+}
+func (UnimplementedApiServiceServer) Count(context.Context, *v1.PagingRequest) (*CountApiResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Count not implemented")
 }
 func (UnimplementedApiServiceServer) Get(context.Context, *GetApiRequest) (*Api, error) {
 	return nil, status.Error(codes.Unimplemented, "method Get not implemented")
@@ -216,6 +234,24 @@ func _ApiService_List_Handler(srv interface{}, ctx context.Context, dec func(int
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ApiServiceServer).List(ctx, req.(*v1.PagingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ApiService_Count_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(v1.PagingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApiServiceServer).Count(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ApiService_Count_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApiServiceServer).Count(ctx, req.(*v1.PagingRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -338,6 +374,10 @@ var ApiService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "List",
 			Handler:    _ApiService_List_Handler,
+		},
+		{
+			MethodName: "Count",
+			Handler:    _ApiService_Count_Handler,
 		},
 		{
 			MethodName: "Get",

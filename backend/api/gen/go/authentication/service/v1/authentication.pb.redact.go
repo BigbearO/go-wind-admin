@@ -116,6 +116,39 @@ func (s *redactedAuthenticationServiceServer) GetAccessTokens(ctx context.Contex
 	return res, err
 }
 
+// RevokeTokenById is the redacted wrapper for the actual AuthenticationServiceServer.RevokeTokenById method
+// Unary RPC
+func (s *redactedAuthenticationServiceServer) RevokeTokenById(ctx context.Context, in *RevokeTokenByIdRequest) (*emptypb.Empty, error) {
+	res, err := s.srv.RevokeTokenById(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
+// BlockToken is the redacted wrapper for the actual AuthenticationServiceServer.BlockToken method
+// Unary RPC
+func (s *redactedAuthenticationServiceServer) BlockToken(ctx context.Context, in *BlockTokenRequest) (*BlockTokenResponse, error) {
+	res, err := s.srv.BlockToken(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
+// UnblockToken is the redacted wrapper for the actual AuthenticationServiceServer.UnblockToken method
+// Unary RPC
+func (s *redactedAuthenticationServiceServer) UnblockToken(ctx context.Context, in *UnblockTokenRequest) (*emptypb.Empty, error) {
+	res, err := s.srv.UnblockToken(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
 // WhoAmI is the redacted wrapper for the actual AuthenticationServiceServer.WhoAmI method
 // Unary RPC
 func (s *redactedAuthenticationServiceServer) WhoAmI(ctx context.Context, in *emptypb.Empty) (*WhoAmIResponse, error) {
@@ -201,13 +234,17 @@ func (x *ValidateTokenRequest) Redact() string {
 		return ""
 	}
 
-	// Safe field: UserId
-
 	// Safe field: Token
 
 	// Safe field: ClientType
 
 	// Safe field: TokenCategory
+
+	// Safe field: UserId
+
+	// Safe field: SkipRedis
+
+	// Safe field: SkipBlacklist
 	return x.String()
 }
 
@@ -217,9 +254,11 @@ func (x *ValidateTokenResponse) Redact() string {
 		return ""
 	}
 
+	// Safe field: Payload
+
 	// Safe field: IsValid
 
-	// Safe field: Claim
+	// Safe field: IsBlocked
 	return x.String()
 }
 
@@ -236,6 +275,8 @@ func (x *RegisterUserRequest) Redact() string {
 	// Safe field: TenantCode
 
 	// Safe field: Email
+
+	// Safe field: ClientType
 	return x.String()
 }
 
@@ -280,5 +321,67 @@ func (x *GetAccessTokensResponse) Redact() string {
 	}
 
 	// Safe field: AccessTokens
+	return x.String()
+}
+
+// Redact method implementation for BlockTokenRequest
+func (x *BlockTokenRequest) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: UserId
+
+	// Safe field: ClientType
+
+	// Safe field: Token
+
+	// Safe field: Jti
+
+	// Safe field: Reason
+
+	// Safe field: Duration
+	return x.String()
+}
+
+// Redact method implementation for UnblockTokenRequest
+func (x *UnblockTokenRequest) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: UserId
+
+	// Safe field: ClientType
+
+	// Safe field: Token
+
+	// Safe field: Jti
+	return x.String()
+}
+
+// Redact method implementation for BlockTokenResponse
+func (x *BlockTokenResponse) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: BlockedUntil
+	return x.String()
+}
+
+// Redact method implementation for RevokeTokenByIdRequest
+func (x *RevokeTokenByIdRequest) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: Jti
+
+	// Safe field: ClientType
+
+	// Safe field: Reason
+
+	// Safe field: UserId
 	return x.String()
 }

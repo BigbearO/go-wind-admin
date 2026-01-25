@@ -16,19 +16,22 @@ import "pagination/v1/pagination.proto";
 // 数据字典分类服务
 service DictTypeService {
   // 分页查询字典类型列表
-  rpc ListDictType (pagination.PagingRequest) returns (ListDictTypeResponse) {}
+  rpc List (pagination.PagingRequest) returns (ListDictTypeResponse) {}
+
+  // 统计字典类型数量
+  rpc Count (pagination.PagingRequest) returns (CountDictTypeResponse) {}
 
   // 查询字典类型详情
-  rpc GetDictType (GetDictTypeRequest) returns (DictType) {}
+  rpc Get (GetDictTypeRequest) returns (DictType) {}
 
   // 创建字典类型
-  rpc CreateDictType (CreateDictTypeRequest) returns (google.protobuf.Empty) {}
+  rpc Create (CreateDictTypeRequest) returns (google.protobuf.Empty) {}
 
   // 更新字典类型
-  rpc UpdateDictType (UpdateDictTypeRequest) returns (google.protobuf.Empty) {}
+  rpc Update (UpdateDictTypeRequest) returns (google.protobuf.Empty) {}
 
   // 删除字典类型
-  rpc DeleteDictType (DeleteDictTypeRequest) returns (google.protobuf.Empty) {}
+  rpc Delete (DeleteDictTypeRequest) returns (google.protobuf.Empty) {}
 }
 
 // 字典类型
@@ -161,4 +164,8 @@ message UpdateDictTypeRequest {
 // 批量删除字典 - 请求
 message DeleteDictTypeRequest {
   repeated uint32 ids = 1;  // 要删除的ID列表
+}
+
+message CountDictTypeResponse {
+  uint64 count = 1;  // 字典类型数量
 }

@@ -57,6 +57,17 @@ func (s *redactedPermissionServiceServer) List(ctx context.Context, in *paginati
 	return res, err
 }
 
+// Count is the redacted wrapper for the actual PermissionServiceServer.Count method
+// Unary RPC
+func (s *redactedPermissionServiceServer) Count(ctx context.Context, in *pagination.PagingRequest) (*CountPermissionResponse, error) {
+	res, err := s.srv.Count(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
 // Get is the redacted wrapper for the actual PermissionServiceServer.Get method
 // Unary RPC
 func (s *redactedPermissionServiceServer) Get(ctx context.Context, in *GetPermissionRequest) (*Permission, error) {
@@ -213,5 +224,15 @@ func (x *DeletePermissionRequest) Redact() string {
 	// Safe field: Code
 
 	// Safe field: GroupId
+	return x.String()
+}
+
+// Redact method implementation for CountPermissionResponse
+func (x *CountPermissionResponse) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: Count
 	return x.String()
 }

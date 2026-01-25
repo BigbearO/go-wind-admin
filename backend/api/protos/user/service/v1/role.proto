@@ -14,11 +14,15 @@ service RoleService {
   // 查询角色列表
   rpc List (pagination.PagingRequest) returns (ListRoleResponse) {}
 
+  rpc Count (pagination.PagingRequest) returns (CountRoleResponse) {}
+
   // 查询角色详情
   rpc Get (GetRoleRequest) returns (Role) {}
 
   // 创建角色
   rpc Create (CreateRoleRequest) returns (google.protobuf.Empty) {}
+  // 批量创建角色
+  rpc BatchCreate (BatchCreateRolesRequest) returns (BatchCreateRolesResponse) {}
 
   // 更新角色
   rpc Update (UpdateRoleRequest) returns (google.protobuf.Empty) {}
@@ -26,8 +30,6 @@ service RoleService {
   // 删除角色
   rpc Delete (DeleteRoleRequest) returns (google.protobuf.Empty) {}
 
-  // 批量创建角色
-  rpc BatchCreate (BatchCreateRolesRequest) returns (BatchCreateRolesResponse) {}
 
   // 根据角色ID列表获取角色值列表
   rpc GetRoleCodesByRoleIds(GetRoleCodesByRoleIdsRequest) returns (GetRoleCodesByRoleIdsResponse) {}
@@ -215,4 +217,8 @@ message GetRolesByRoleIdsRequest {
       description: "视图字段过滤器，用于控制返回的字段"
     }
   ]; // 视图字段过滤器，用于控制返回的字段
+}
+
+message CountRoleResponse {
+  uint64 count = 1;
 }

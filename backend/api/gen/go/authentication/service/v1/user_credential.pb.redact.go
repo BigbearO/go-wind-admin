@@ -57,6 +57,17 @@ func (s *redactedUserCredentialServiceServer) List(ctx context.Context, in *pagi
 	return res, err
 }
 
+// Count is the redacted wrapper for the actual UserCredentialServiceServer.Count method
+// Unary RPC
+func (s *redactedUserCredentialServiceServer) Count(ctx context.Context, in *pagination.PagingRequest) (*CountUserCredentialResponse, error) {
+	res, err := s.srv.Count(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
 // Get is the redacted wrapper for the actual UserCredentialServiceServer.Get method
 // Unary RPC
 func (s *redactedUserCredentialServiceServer) Get(ctx context.Context, in *GetUserCredentialRequest) (*UserCredential, error) {
@@ -316,5 +327,15 @@ func (x *ResetCredentialRequest) Redact() string {
 	// Safe field: NewCredential
 
 	// Safe field: NeedDecrypt
+	return x.String()
+}
+
+// Redact method implementation for CountUserCredentialResponse
+func (x *CountUserCredentialResponse) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: Count
 	return x.String()
 }

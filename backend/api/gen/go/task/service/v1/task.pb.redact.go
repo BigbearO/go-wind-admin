@@ -61,6 +61,17 @@ func (s *redactedTaskServiceServer) List(ctx context.Context, in *pagination.Pag
 	return res, err
 }
 
+// Count is the redacted wrapper for the actual TaskServiceServer.Count method
+// Unary RPC
+func (s *redactedTaskServiceServer) Count(ctx context.Context, in *pagination.PagingRequest) (*CountTaskResponse, error) {
+	res, err := s.srv.Count(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
 // Get is the redacted wrapper for the actual TaskServiceServer.Get method
 // Unary RPC
 func (s *redactedTaskServiceServer) Get(ctx context.Context, in *GetTaskRequest) (*Task, error) {
@@ -315,5 +326,15 @@ func (x *ListTaskTypeNameResponse) Redact() string {
 	}
 
 	// Safe field: TypeNames
+	return x.String()
+}
+
+// Redact method implementation for CountTaskResponse
+func (x *CountTaskResponse) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: Count
 	return x.String()
 }

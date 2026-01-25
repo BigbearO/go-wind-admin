@@ -78,30 +78,36 @@ func (s *UserService) initUserNameSetMap(
 	roleSet *name_set.UserNameSetMap,
 ) {
 	for _, v := range users {
-		if v.TenantId != nil {
+		if v.GetTenantId() > 0 {
 			(*tenantSet)[v.GetTenantId()] = nil
 		}
 
-		if v.OrgUnitId != nil {
+		if v.GetOrgUnitId() > 0 {
 			(*orgUnitSet)[v.GetOrgUnitId()] = nil
 		}
 		if len(v.OrgUnitIds) > 0 {
 			for _, orgID := range v.OrgUnitIds {
-				(*orgUnitSet)[orgID] = nil
+				if orgID > 0 {
+					(*orgUnitSet)[orgID] = nil
+				}
 			}
 		}
 
-		if v.PositionId != nil {
+		if v.GetPositionId() > 0 {
 			(*posSet)[v.GetPositionId()] = nil
 		}
 		if len(v.PositionIds) > 0 {
 			for _, posID := range v.PositionIds {
-				(*posSet)[posID] = nil
+				if posID > 0 {
+					(*posSet)[posID] = nil
+				}
 			}
 		}
 
 		for _, roleId := range v.RoleIds {
-			(*roleSet)[roleId] = nil
+			if roleId > 0 {
+				(*roleSet)[roleId] = nil
+			}
 		}
 	}
 }
@@ -189,7 +195,7 @@ func (s *UserService) List(ctx context.Context, req *paginationV1.PagingRequest)
 }
 
 func (s *UserService) fillUserInfo(ctx context.Context, user *userV1.User) error {
-	if user.TenantId != nil {
+	if user.GetTenantId() > 0 {
 		tenant, err := s.tenantRepo.Get(ctx, &userV1.GetTenantRequest{QueryBy: &userV1.GetTenantRequest_Id{Id: user.GetTenantId()}})
 		if err == nil && tenant != nil {
 			user.TenantName = tenant.Name
@@ -198,7 +204,7 @@ func (s *UserService) fillUserInfo(ctx context.Context, user *userV1.User) error
 		}
 	}
 
-	if user.OrgUnitId != nil {
+	if user.GetOrgUnitId() > 0 {
 		organization, err := s.orgUnitRepo.Get(ctx, &userV1.GetOrgUnitRequest{QueryBy: &userV1.GetOrgUnitRequest_Id{Id: user.GetOrgUnitId()}})
 		if err == nil && organization != nil {
 			user.OrgUnitName = organization.Name
@@ -219,7 +225,7 @@ func (s *UserService) fillUserInfo(ctx context.Context, user *userV1.User) error
 		}
 	}
 
-	if user.PositionId != nil {
+	if user.GetPositionId() > 0 {
 		position, err := s.positionRepo.Get(ctx, &userV1.GetPositionRequest{QueryBy: &userV1.GetPositionRequest_Id{Id: user.GetPositionId()}})
 		if err == nil && position != nil {
 			user.PositionName = position.Name

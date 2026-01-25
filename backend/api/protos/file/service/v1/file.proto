@@ -17,6 +17,8 @@ service FileService {
   // 获取文件列表
   rpc List (pagination.PagingRequest) returns (ListFileResponse) {}
 
+  // 统计文件数量  rpc Count (pagination.PagingRequest) returns (CountFileResponse) {}
+
   // 获取文件数据
   rpc Get (GetFileRequest) returns (File) {}
 
@@ -192,4 +194,8 @@ message UpdateFileRequest {
 // 删除 - 请求
 message DeleteFileRequest {
   uint32 id = 1;
+}
+
+message CountFileResponse {
+  uint64 count = 1;
 }

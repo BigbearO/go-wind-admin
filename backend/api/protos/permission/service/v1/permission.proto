@@ -17,6 +17,9 @@ service PermissionService {
   // 查询权限点列表
   rpc List (pagination.PagingRequest) returns (ListPermissionResponse) {}
 
+  // 统计权限点数量
+  rpc Count (pagination.PagingRequest) returns (CountPermissionResponse) {}
+
   // 查询权限点详情
   rpc Get (GetPermissionRequest) returns (Permission) {}
 
@@ -176,4 +179,8 @@ message DeletePermissionRequest {
       json_name = "groupId"
     ]; // 权限分组
   }
+}
+
+message CountPermissionResponse {
+  uint64 count = 1;
 }

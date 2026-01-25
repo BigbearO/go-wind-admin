@@ -57,6 +57,17 @@ func (s *redactedApiServiceServer) List(ctx context.Context, in *pagination.Pagi
 	return res, err
 }
 
+// Count is the redacted wrapper for the actual ApiServiceServer.Count method
+// Unary RPC
+func (s *redactedApiServiceServer) Count(ctx context.Context, in *pagination.PagingRequest) (*CountApiResponse, error) {
+	res, err := s.srv.Count(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
 // Get is the redacted wrapper for the actual ApiServiceServer.Get method
 // Unary RPC
 func (s *redactedApiServiceServer) Get(ctx context.Context, in *GetApiRequest) (*Api, error) {
@@ -218,5 +229,15 @@ func (x *DeleteApiRequest) Redact() string {
 	}
 
 	// Safe field: Id
+	return x.String()
+}
+
+// Redact method implementation for CountApiResponse
+func (x *CountApiResponse) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: Count
 	return x.String()
 }

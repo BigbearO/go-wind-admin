@@ -22,6 +22,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	TaskService_List_FullMethodName             = "/task.service.v1.TaskService/List"
+	TaskService_Count_FullMethodName            = "/task.service.v1.TaskService/Count"
 	TaskService_Get_FullMethodName              = "/task.service.v1.TaskService/Get"
 	TaskService_Create_FullMethodName           = "/task.service.v1.TaskService/Create"
 	TaskService_Update_FullMethodName           = "/task.service.v1.TaskService/Update"
@@ -41,6 +42,8 @@ const (
 type TaskServiceClient interface {
 	// 查询调度任务列表
 	List(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*ListTaskResponse, error)
+	// 统计调度任务数量
+	Count(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*CountTaskResponse, error)
 	// 查询调度任务详情
 	Get(ctx context.Context, in *GetTaskRequest, opts ...grpc.CallOption) (*Task, error)
 	// 创建调度任务
@@ -73,6 +76,16 @@ func (c *taskServiceClient) List(ctx context.Context, in *v1.PagingRequest, opts
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListTaskResponse)
 	err := c.cc.Invoke(ctx, TaskService_List_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *taskServiceClient) Count(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*CountTaskResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CountTaskResponse)
+	err := c.cc.Invoke(ctx, TaskService_Count_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -177,6 +190,8 @@ func (c *taskServiceClient) ControlTask(ctx context.Context, in *ControlTaskRequ
 type TaskServiceServer interface {
 	// 查询调度任务列表
 	List(context.Context, *v1.PagingRequest) (*ListTaskResponse, error)
+	// 统计调度任务数量
+	Count(context.Context, *v1.PagingRequest) (*CountTaskResponse, error)
 	// 查询调度任务详情
 	Get(context.Context, *GetTaskRequest) (*Task, error)
 	// 创建调度任务
@@ -207,6 +222,9 @@ type UnimplementedTaskServiceServer struct{}
 
 func (UnimplementedTaskServiceServer) List(context.Context, *v1.PagingRequest) (*ListTaskResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method List not implemented")
+}
+func (UnimplementedTaskServiceServer) Count(context.Context, *v1.PagingRequest) (*CountTaskResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Count not implemented")
 }
 func (UnimplementedTaskServiceServer) Get(context.Context, *GetTaskRequest) (*Task, error) {
 	return nil, status.Error(codes.Unimplemented, "method Get not implemented")
@@ -270,6 +288,24 @@ func _TaskService_List_Handler(srv interface{}, ctx context.Context, dec func(in
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(TaskServiceServer).List(ctx, req.(*v1.PagingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TaskService_Count_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(v1.PagingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskServiceServer).Count(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TaskService_Count_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskServiceServer).Count(ctx, req.(*v1.PagingRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -446,6 +482,10 @@ var TaskService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "List",
 			Handler:    _TaskService_List_Handler,
+		},
+		{
+			MethodName: "Count",
+			Handler:    _TaskService_Count_Handler,
 		},
 		{
 			MethodName: "Get",

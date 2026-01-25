@@ -22,6 +22,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	OrgUnitService_List_FullMethodName        = "/user.service.v1.OrgUnitService/List"
+	OrgUnitService_Count_FullMethodName       = "/user.service.v1.OrgUnitService/Count"
 	OrgUnitService_Get_FullMethodName         = "/user.service.v1.OrgUnitService/Get"
 	OrgUnitService_Create_FullMethodName      = "/user.service.v1.OrgUnitService/Create"
 	OrgUnitService_Update_FullMethodName      = "/user.service.v1.OrgUnitService/Update"
@@ -37,6 +38,8 @@ const (
 type OrgUnitServiceClient interface {
 	// 查询组织单元列表
 	List(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*ListOrgUnitResponse, error)
+	// 统计组织单元数量
+	Count(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*CountOrgUnitResponse, error)
 	// 查询组织单元详情
 	Get(ctx context.Context, in *GetOrgUnitRequest, opts ...grpc.CallOption) (*OrgUnit, error)
 	// 创建组织单元
@@ -61,6 +64,16 @@ func (c *orgUnitServiceClient) List(ctx context.Context, in *v1.PagingRequest, o
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListOrgUnitResponse)
 	err := c.cc.Invoke(ctx, OrgUnitService_List_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *orgUnitServiceClient) Count(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*CountOrgUnitResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CountOrgUnitResponse)
+	err := c.cc.Invoke(ctx, OrgUnitService_Count_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -125,6 +138,8 @@ func (c *orgUnitServiceClient) BatchCreate(ctx context.Context, in *BatchCreateO
 type OrgUnitServiceServer interface {
 	// 查询组织单元列表
 	List(context.Context, *v1.PagingRequest) (*ListOrgUnitResponse, error)
+	// 统计组织单元数量
+	Count(context.Context, *v1.PagingRequest) (*CountOrgUnitResponse, error)
 	// 查询组织单元详情
 	Get(context.Context, *GetOrgUnitRequest) (*OrgUnit, error)
 	// 创建组织单元
@@ -147,6 +162,9 @@ type UnimplementedOrgUnitServiceServer struct{}
 
 func (UnimplementedOrgUnitServiceServer) List(context.Context, *v1.PagingRequest) (*ListOrgUnitResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method List not implemented")
+}
+func (UnimplementedOrgUnitServiceServer) Count(context.Context, *v1.PagingRequest) (*CountOrgUnitResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Count not implemented")
 }
 func (UnimplementedOrgUnitServiceServer) Get(context.Context, *GetOrgUnitRequest) (*OrgUnit, error) {
 	return nil, status.Error(codes.Unimplemented, "method Get not implemented")
@@ -198,6 +216,24 @@ func _OrgUnitService_List_Handler(srv interface{}, ctx context.Context, dec func
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(OrgUnitServiceServer).List(ctx, req.(*v1.PagingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _OrgUnitService_Count_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(v1.PagingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrgUnitServiceServer).Count(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: OrgUnitService_Count_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrgUnitServiceServer).Count(ctx, req.(*v1.PagingRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -302,6 +338,10 @@ var OrgUnitService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "List",
 			Handler:    _OrgUnitService_List_Handler,
+		},
+		{
+			MethodName: "Count",
+			Handler:    _OrgUnitService_Count_Handler,
 		},
 		{
 			MethodName: "Get",

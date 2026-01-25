@@ -16,8 +16,13 @@ service TenantService {
   // 查询租户列表
   rpc List (pagination.PagingRequest) returns (ListTenantResponse) {}
 
+  // 统计租户数量
+  rpc Count (pagination.PagingRequest) returns (CountTenantResponse) {}
+
   // 查询租户详情
   rpc Get (GetTenantRequest) returns (Tenant) {}
+  // 批量创建租户
+  rpc BatchCreate (BatchCreateTenantsRequest) returns (BatchCreateTenantsResponse) {}
 
   // 创建租户
   rpc Create (CreateTenantRequest) returns (google.protobuf.Empty) {}
@@ -28,11 +33,8 @@ service TenantService {
   // 删除租户
   rpc Delete (DeleteTenantRequest) returns (google.protobuf.Empty) {}
 
-  // 批量创建租户
-  rpc BatchCreate (BatchCreateTenantsRequest) returns ( BatchCreateTenantsResponse ) {}
-
   // 租户是否存在
-  rpc TenantExists ( TenantExistsRequest ) returns ( TenantExistsResponse ) {}
+  rpc TenantExists (TenantExistsRequest) returns (TenantExistsResponse) {}
 }
 
 // 租户
@@ -250,3 +252,6 @@ message CreateTenantWithAdminUserRequest {
   string password = 3;
 }
 
+message CountTenantResponse {
+  uint64 count = 1;
+}

@@ -792,6 +792,50 @@ func (x *BatchCreatePositionsResponse) GetCreatedIds() []int32 {
 	return nil
 }
 
+type CountPositionResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Count         uint64                 `protobuf:"varint,1,opt,name=count,proto3" json:"count,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CountPositionResponse) Reset() {
+	*x = CountPositionResponse{}
+	mi := &file_user_service_v1_position_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CountPositionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CountPositionResponse) ProtoMessage() {}
+
+func (x *CountPositionResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_user_service_v1_position_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CountPositionResponse.ProtoReflect.Descriptor instead.
+func (*CountPositionResponse) Descriptor() ([]byte, []int) {
+	return file_user_service_v1_position_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *CountPositionResponse) GetCount() uint64 {
+	if x != nil {
+		return x.Count
+	}
+	return 0
+}
+
 var File_user_service_v1_position_proto protoreflect.FileDescriptor
 
 const file_user_service_v1_position_proto_rawDesc = "" +
@@ -906,14 +950,17 @@ const file_user_service_v1_position_proto_rawDesc = "" +
 	"\x04data\x18\x01 \x03(\v2\x19.user.service.v1.PositionR\x04data\"d\n" +
 	"\x1cBatchCreatePositionsResponse\x12D\n" +
 	"\vcreated_ids\x18\x01 \x03(\x05B#\xbaG \x92\x02\x1d创建成功的职位ID列表R\n" +
-	"createdIds2\xf8\x03\n" +
+	"createdIds\"-\n" +
+	"\x15CountPositionResponse\x12\x14\n" +
+	"\x05count\x18\x01 \x01(\x04R\x05count2\xc6\x04\n" +
 	"\x0fPositionService\x12J\n" +
-	"\x04List\x12\x19.pagination.PagingRequest\x1a%.user.service.v1.ListPositionResponse\"\x00\x12G\n" +
+	"\x04List\x12\x19.pagination.PagingRequest\x1a%.user.service.v1.ListPositionResponse\"\x00\x12L\n" +
+	"\x05Count\x12\x19.pagination.PagingRequest\x1a&.user.service.v1.CountPositionResponse\"\x00\x12G\n" +
 	"\x03Get\x12#.user.service.v1.GetPositionRequest\x1a\x19.user.service.v1.Position\"\x00\x12J\n" +
-	"\x06Create\x12&.user.service.v1.CreatePositionRequest\x1a\x16.google.protobuf.Empty\"\x00\x12J\n" +
+	"\x06Create\x12&.user.service.v1.CreatePositionRequest\x1a\x16.google.protobuf.Empty\"\x00\x12l\n" +
+	"\vBatchCreate\x12,.user.service.v1.BatchCreatePositionsRequest\x1a-.user.service.v1.BatchCreatePositionsResponse\"\x00\x12J\n" +
 	"\x06Update\x12&.user.service.v1.UpdatePositionRequest\x1a\x16.google.protobuf.Empty\"\x00\x12J\n" +
-	"\x06Delete\x12&.user.service.v1.DeletePositionRequest\x1a\x16.google.protobuf.Empty\"\x00\x12l\n" +
-	"\vBatchCreate\x12,.user.service.v1.BatchCreatePositionsRequest\x1a-.user.service.v1.BatchCreatePositionsResponse\"\x00B\xb3\x01\n" +
+	"\x06Delete\x12&.user.service.v1.DeletePositionRequest\x1a\x16.google.protobuf.Empty\"\x00B\xb3\x01\n" +
 	"\x13com.user.service.v1B\rPositionProtoP\x01Z/go-wind-admin/api/gen/go/user/service/v1;userpb\xa2\x02\x03USX\xaa\x02\x0fUser.Service.V1\xca\x02\x0fUser\\Service\\V1\xe2\x02\x1bUser\\Service\\V1\\GPBMetadata\xea\x02\x11User::Service::V1b\x06proto3"
 
 var (
@@ -929,7 +976,7 @@ func file_user_service_v1_position_proto_rawDescGZIP() []byte {
 }
 
 var file_user_service_v1_position_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_user_service_v1_position_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_user_service_v1_position_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_user_service_v1_position_proto_goTypes = []any{
 	(Position_Status)(0),                 // 0: user.service.v1.Position.Status
 	(Position_Type)(0),                   // 1: user.service.v1.Position.Type
@@ -941,39 +988,42 @@ var file_user_service_v1_position_proto_goTypes = []any{
 	(*DeletePositionRequest)(nil),        // 7: user.service.v1.DeletePositionRequest
 	(*BatchCreatePositionsRequest)(nil),  // 8: user.service.v1.BatchCreatePositionsRequest
 	(*BatchCreatePositionsResponse)(nil), // 9: user.service.v1.BatchCreatePositionsResponse
-	(*timestamppb.Timestamp)(nil),        // 10: google.protobuf.Timestamp
-	(*fieldmaskpb.FieldMask)(nil),        // 11: google.protobuf.FieldMask
-	(*v1.PagingRequest)(nil),             // 12: pagination.PagingRequest
-	(*emptypb.Empty)(nil),                // 13: google.protobuf.Empty
+	(*CountPositionResponse)(nil),        // 10: user.service.v1.CountPositionResponse
+	(*timestamppb.Timestamp)(nil),        // 11: google.protobuf.Timestamp
+	(*fieldmaskpb.FieldMask)(nil),        // 12: google.protobuf.FieldMask
+	(*v1.PagingRequest)(nil),             // 13: pagination.PagingRequest
+	(*emptypb.Empty)(nil),                // 14: google.protobuf.Empty
 }
 var file_user_service_v1_position_proto_depIdxs = []int32{
 	0,  // 0: user.service.v1.Position.status:type_name -> user.service.v1.Position.Status
 	1,  // 1: user.service.v1.Position.type:type_name -> user.service.v1.Position.Type
-	10, // 2: user.service.v1.Position.start_at:type_name -> google.protobuf.Timestamp
-	10, // 3: user.service.v1.Position.end_at:type_name -> google.protobuf.Timestamp
-	10, // 4: user.service.v1.Position.created_at:type_name -> google.protobuf.Timestamp
-	10, // 5: user.service.v1.Position.updated_at:type_name -> google.protobuf.Timestamp
-	10, // 6: user.service.v1.Position.deleted_at:type_name -> google.protobuf.Timestamp
+	11, // 2: user.service.v1.Position.start_at:type_name -> google.protobuf.Timestamp
+	11, // 3: user.service.v1.Position.end_at:type_name -> google.protobuf.Timestamp
+	11, // 4: user.service.v1.Position.created_at:type_name -> google.protobuf.Timestamp
+	11, // 5: user.service.v1.Position.updated_at:type_name -> google.protobuf.Timestamp
+	11, // 6: user.service.v1.Position.deleted_at:type_name -> google.protobuf.Timestamp
 	2,  // 7: user.service.v1.ListPositionResponse.items:type_name -> user.service.v1.Position
-	11, // 8: user.service.v1.GetPositionRequest.view_mask:type_name -> google.protobuf.FieldMask
+	12, // 8: user.service.v1.GetPositionRequest.view_mask:type_name -> google.protobuf.FieldMask
 	2,  // 9: user.service.v1.CreatePositionRequest.data:type_name -> user.service.v1.Position
 	2,  // 10: user.service.v1.UpdatePositionRequest.data:type_name -> user.service.v1.Position
-	11, // 11: user.service.v1.UpdatePositionRequest.update_mask:type_name -> google.protobuf.FieldMask
+	12, // 11: user.service.v1.UpdatePositionRequest.update_mask:type_name -> google.protobuf.FieldMask
 	2,  // 12: user.service.v1.BatchCreatePositionsRequest.data:type_name -> user.service.v1.Position
-	12, // 13: user.service.v1.PositionService.List:input_type -> pagination.PagingRequest
-	4,  // 14: user.service.v1.PositionService.Get:input_type -> user.service.v1.GetPositionRequest
-	5,  // 15: user.service.v1.PositionService.Create:input_type -> user.service.v1.CreatePositionRequest
-	6,  // 16: user.service.v1.PositionService.Update:input_type -> user.service.v1.UpdatePositionRequest
-	7,  // 17: user.service.v1.PositionService.Delete:input_type -> user.service.v1.DeletePositionRequest
-	8,  // 18: user.service.v1.PositionService.BatchCreate:input_type -> user.service.v1.BatchCreatePositionsRequest
-	3,  // 19: user.service.v1.PositionService.List:output_type -> user.service.v1.ListPositionResponse
-	2,  // 20: user.service.v1.PositionService.Get:output_type -> user.service.v1.Position
-	13, // 21: user.service.v1.PositionService.Create:output_type -> google.protobuf.Empty
-	13, // 22: user.service.v1.PositionService.Update:output_type -> google.protobuf.Empty
-	13, // 23: user.service.v1.PositionService.Delete:output_type -> google.protobuf.Empty
+	13, // 13: user.service.v1.PositionService.List:input_type -> pagination.PagingRequest
+	13, // 14: user.service.v1.PositionService.Count:input_type -> pagination.PagingRequest
+	4,  // 15: user.service.v1.PositionService.Get:input_type -> user.service.v1.GetPositionRequest
+	5,  // 16: user.service.v1.PositionService.Create:input_type -> user.service.v1.CreatePositionRequest
+	8,  // 17: user.service.v1.PositionService.BatchCreate:input_type -> user.service.v1.BatchCreatePositionsRequest
+	6,  // 18: user.service.v1.PositionService.Update:input_type -> user.service.v1.UpdatePositionRequest
+	7,  // 19: user.service.v1.PositionService.Delete:input_type -> user.service.v1.DeletePositionRequest
+	3,  // 20: user.service.v1.PositionService.List:output_type -> user.service.v1.ListPositionResponse
+	10, // 21: user.service.v1.PositionService.Count:output_type -> user.service.v1.CountPositionResponse
+	2,  // 22: user.service.v1.PositionService.Get:output_type -> user.service.v1.Position
+	14, // 23: user.service.v1.PositionService.Create:output_type -> google.protobuf.Empty
 	9,  // 24: user.service.v1.PositionService.BatchCreate:output_type -> user.service.v1.BatchCreatePositionsResponse
-	19, // [19:25] is the sub-list for method output_type
-	13, // [13:19] is the sub-list for method input_type
+	14, // 25: user.service.v1.PositionService.Update:output_type -> google.protobuf.Empty
+	14, // 26: user.service.v1.PositionService.Delete:output_type -> google.protobuf.Empty
+	20, // [20:27] is the sub-list for method output_type
+	13, // [13:20] is the sub-list for method input_type
 	13, // [13:13] is the sub-list for extension type_name
 	13, // [13:13] is the sub-list for extension extendee
 	0,  // [0:13] is the sub-list for field type_name
@@ -997,7 +1047,7 @@ func file_user_service_v1_position_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_service_v1_position_proto_rawDesc), len(file_user_service_v1_position_proto_rawDesc)),
 			NumEnums:      2,
-			NumMessages:   8,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -568,6 +568,50 @@ func (x *DeleteApiRequest) GetId() uint32 {
 	return 0
 }
 
+type CountApiResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Count         uint64                 `protobuf:"varint,1,opt,name=count,proto3" json:"count,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CountApiResponse) Reset() {
+	*x = CountApiResponse{}
+	mi := &file_permission_service_v1_api_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CountApiResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CountApiResponse) ProtoMessage() {}
+
+func (x *CountApiResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_permission_service_v1_api_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CountApiResponse.ProtoReflect.Descriptor instead.
+func (*CountApiResponse) Descriptor() ([]byte, []int) {
+	return file_permission_service_v1_api_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *CountApiResponse) GetCount() uint64 {
+	if x != nil {
+		return x.Count
+	}
+	return 0
+}
+
 var File_permission_service_v1_api_proto protoreflect.FileDescriptor
 
 const file_permission_service_v1_api_proto_rawDesc = "" +
@@ -642,10 +686,13 @@ const file_permission_service_v1_api_proto_rawDesc = "" +
 	"\rallow_missing\x18\x04 \x01(\bB\x89\x01\xbaG\x85\x01\x92\x02\x81\x01如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。H\x00R\fallowMissing\x88\x01\x01B\x10\n" +
 	"\x0e_allow_missing\"\"\n" +
 	"\x10DeleteApiRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id2\x9f\x04\n" +
+	"\x02id\x18\x01 \x01(\rR\x02id\"(\n" +
+	"\x10CountApiResponse\x12\x14\n" +
+	"\x05count\x18\x01 \x01(\x04R\x05count2\xee\x04\n" +
 	"\n" +
 	"ApiService\x12K\n" +
-	"\x04List\x12\x19.pagination.PagingRequest\x1a&.permission.service.v1.ListApiResponse\"\x00\x12I\n" +
+	"\x04List\x12\x19.pagination.PagingRequest\x1a&.permission.service.v1.ListApiResponse\"\x00\x12M\n" +
+	"\x05Count\x12\x19.pagination.PagingRequest\x1a'.permission.service.v1.CountApiResponse\"\x00\x12I\n" +
 	"\x03Get\x12$.permission.service.v1.GetApiRequest\x1a\x1a.permission.service.v1.Api\"\x00\x12K\n" +
 	"\x06Create\x12'.permission.service.v1.CreateApiRequest\x1a\x16.google.protobuf.Empty\"\x00\x12K\n" +
 	"\x06Update\x12'.permission.service.v1.UpdateApiRequest\x1a\x16.google.protobuf.Empty\"\x00\x12K\n" +
@@ -667,7 +714,7 @@ func file_permission_service_v1_api_proto_rawDescGZIP() []byte {
 }
 
 var file_permission_service_v1_api_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_permission_service_v1_api_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_permission_service_v1_api_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_permission_service_v1_api_proto_goTypes = []any{
 	(Api_Scope)(0),                // 0: permission.service.v1.Api.Scope
 	(Api_Status)(0),               // 1: permission.service.v1.Api.Status
@@ -677,38 +724,41 @@ var file_permission_service_v1_api_proto_goTypes = []any{
 	(*CreateApiRequest)(nil),      // 5: permission.service.v1.CreateApiRequest
 	(*UpdateApiRequest)(nil),      // 6: permission.service.v1.UpdateApiRequest
 	(*DeleteApiRequest)(nil),      // 7: permission.service.v1.DeleteApiRequest
-	(*timestamppb.Timestamp)(nil), // 8: google.protobuf.Timestamp
-	(*fieldmaskpb.FieldMask)(nil), // 9: google.protobuf.FieldMask
-	(*v1.PagingRequest)(nil),      // 10: pagination.PagingRequest
-	(*emptypb.Empty)(nil),         // 11: google.protobuf.Empty
+	(*CountApiResponse)(nil),      // 8: permission.service.v1.CountApiResponse
+	(*timestamppb.Timestamp)(nil), // 9: google.protobuf.Timestamp
+	(*fieldmaskpb.FieldMask)(nil), // 10: google.protobuf.FieldMask
+	(*v1.PagingRequest)(nil),      // 11: pagination.PagingRequest
+	(*emptypb.Empty)(nil),         // 12: google.protobuf.Empty
 }
 var file_permission_service_v1_api_proto_depIdxs = []int32{
 	0,  // 0: permission.service.v1.Api.scope:type_name -> permission.service.v1.Api.Scope
 	1,  // 1: permission.service.v1.Api.status:type_name -> permission.service.v1.Api.Status
-	8,  // 2: permission.service.v1.Api.created_at:type_name -> google.protobuf.Timestamp
-	8,  // 3: permission.service.v1.Api.updated_at:type_name -> google.protobuf.Timestamp
-	8,  // 4: permission.service.v1.Api.deleted_at:type_name -> google.protobuf.Timestamp
+	9,  // 2: permission.service.v1.Api.created_at:type_name -> google.protobuf.Timestamp
+	9,  // 3: permission.service.v1.Api.updated_at:type_name -> google.protobuf.Timestamp
+	9,  // 4: permission.service.v1.Api.deleted_at:type_name -> google.protobuf.Timestamp
 	2,  // 5: permission.service.v1.ListApiResponse.items:type_name -> permission.service.v1.Api
-	9,  // 6: permission.service.v1.GetApiRequest.view_mask:type_name -> google.protobuf.FieldMask
+	10, // 6: permission.service.v1.GetApiRequest.view_mask:type_name -> google.protobuf.FieldMask
 	2,  // 7: permission.service.v1.CreateApiRequest.data:type_name -> permission.service.v1.Api
 	2,  // 8: permission.service.v1.UpdateApiRequest.data:type_name -> permission.service.v1.Api
-	9,  // 9: permission.service.v1.UpdateApiRequest.update_mask:type_name -> google.protobuf.FieldMask
-	10, // 10: permission.service.v1.ApiService.List:input_type -> pagination.PagingRequest
-	4,  // 11: permission.service.v1.ApiService.Get:input_type -> permission.service.v1.GetApiRequest
-	5,  // 12: permission.service.v1.ApiService.Create:input_type -> permission.service.v1.CreateApiRequest
-	6,  // 13: permission.service.v1.ApiService.Update:input_type -> permission.service.v1.UpdateApiRequest
-	7,  // 14: permission.service.v1.ApiService.Delete:input_type -> permission.service.v1.DeleteApiRequest
-	11, // 15: permission.service.v1.ApiService.SyncApis:input_type -> google.protobuf.Empty
-	11, // 16: permission.service.v1.ApiService.GetWalkRouteData:input_type -> google.protobuf.Empty
-	3,  // 17: permission.service.v1.ApiService.List:output_type -> permission.service.v1.ListApiResponse
-	2,  // 18: permission.service.v1.ApiService.Get:output_type -> permission.service.v1.Api
-	11, // 19: permission.service.v1.ApiService.Create:output_type -> google.protobuf.Empty
-	11, // 20: permission.service.v1.ApiService.Update:output_type -> google.protobuf.Empty
-	11, // 21: permission.service.v1.ApiService.Delete:output_type -> google.protobuf.Empty
-	11, // 22: permission.service.v1.ApiService.SyncApis:output_type -> google.protobuf.Empty
-	3,  // 23: permission.service.v1.ApiService.GetWalkRouteData:output_type -> permission.service.v1.ListApiResponse
-	17, // [17:24] is the sub-list for method output_type
-	10, // [10:17] is the sub-list for method input_type
+	10, // 9: permission.service.v1.UpdateApiRequest.update_mask:type_name -> google.protobuf.FieldMask
+	11, // 10: permission.service.v1.ApiService.List:input_type -> pagination.PagingRequest
+	11, // 11: permission.service.v1.ApiService.Count:input_type -> pagination.PagingRequest
+	4,  // 12: permission.service.v1.ApiService.Get:input_type -> permission.service.v1.GetApiRequest
+	5,  // 13: permission.service.v1.ApiService.Create:input_type -> permission.service.v1.CreateApiRequest
+	6,  // 14: permission.service.v1.ApiService.Update:input_type -> permission.service.v1.UpdateApiRequest
+	7,  // 15: permission.service.v1.ApiService.Delete:input_type -> permission.service.v1.DeleteApiRequest
+	12, // 16: permission.service.v1.ApiService.SyncApis:input_type -> google.protobuf.Empty
+	12, // 17: permission.service.v1.ApiService.GetWalkRouteData:input_type -> google.protobuf.Empty
+	3,  // 18: permission.service.v1.ApiService.List:output_type -> permission.service.v1.ListApiResponse
+	8,  // 19: permission.service.v1.ApiService.Count:output_type -> permission.service.v1.CountApiResponse
+	2,  // 20: permission.service.v1.ApiService.Get:output_type -> permission.service.v1.Api
+	12, // 21: permission.service.v1.ApiService.Create:output_type -> google.protobuf.Empty
+	12, // 22: permission.service.v1.ApiService.Update:output_type -> google.protobuf.Empty
+	12, // 23: permission.service.v1.ApiService.Delete:output_type -> google.protobuf.Empty
+	12, // 24: permission.service.v1.ApiService.SyncApis:output_type -> google.protobuf.Empty
+	3,  // 25: permission.service.v1.ApiService.GetWalkRouteData:output_type -> permission.service.v1.ListApiResponse
+	18, // [18:26] is the sub-list for method output_type
+	10, // [10:18] is the sub-list for method input_type
 	10, // [10:10] is the sub-list for extension type_name
 	10, // [10:10] is the sub-list for extension extendee
 	0,  // [0:10] is the sub-list for field type_name
@@ -730,7 +780,7 @@ func file_permission_service_v1_api_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_permission_service_v1_api_proto_rawDesc), len(file_permission_service_v1_api_proto_rawDesc)),
 			NumEnums:      2,
-			NumMessages:   6,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

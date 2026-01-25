@@ -840,6 +840,50 @@ func (x *ListTaskTypeNameResponse) GetTypeNames() []string {
 	return nil
 }
 
+type CountTaskResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Count         uint64                 `protobuf:"varint,1,opt,name=count,proto3" json:"count,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CountTaskResponse) Reset() {
+	*x = CountTaskResponse{}
+	mi := &file_task_service_v1_task_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CountTaskResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CountTaskResponse) ProtoMessage() {}
+
+func (x *CountTaskResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_task_service_v1_task_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CountTaskResponse.ProtoReflect.Descriptor instead.
+func (*CountTaskResponse) Descriptor() ([]byte, []int) {
+	return file_task_service_v1_task_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *CountTaskResponse) GetCount() uint64 {
+	if x != nil {
+		return x.Count
+	}
+	return 0
+}
+
 var File_task_service_v1_task_proto protoreflect.FileDescriptor
 
 const file_task_service_v1_task_proto_rawDesc = "" +
@@ -952,9 +996,12 @@ const file_task_service_v1_task_proto_rawDesc = "" +
 	"\aRestart\x10\x02\"S\n" +
 	"\x18ListTaskTypeNameResponse\x127\n" +
 	"\n" +
-	"type_names\x18\x01 \x03(\tB\x18\xbaG\x15\x92\x02\x12类型名称列表R\ttypeNames2\xed\x05\n" +
+	"type_names\x18\x01 \x03(\tB\x18\xbaG\x15\x92\x02\x12类型名称列表R\ttypeNames\")\n" +
+	"\x11CountTaskResponse\x12\x14\n" +
+	"\x05count\x18\x01 \x01(\x04R\x05count2\xb7\x06\n" +
 	"\vTaskService\x12F\n" +
-	"\x04List\x12\x19.pagination.PagingRequest\x1a!.task.service.v1.ListTaskResponse\"\x00\x12?\n" +
+	"\x04List\x12\x19.pagination.PagingRequest\x1a!.task.service.v1.ListTaskResponse\"\x00\x12H\n" +
+	"\x05Count\x12\x19.pagination.PagingRequest\x1a\".task.service.v1.CountTaskResponse\"\x00\x12?\n" +
 	"\x03Get\x12\x1f.task.service.v1.GetTaskRequest\x1a\x15.task.service.v1.Task\"\x00\x12F\n" +
 	"\x06Create\x12\".task.service.v1.CreateTaskRequest\x1a\x16.google.protobuf.Empty\"\x00\x12F\n" +
 	"\x06Update\x12\".task.service.v1.UpdateTaskRequest\x1a\x16.google.protobuf.Empty\"\x00\x12F\n" +
@@ -979,7 +1026,7 @@ func file_task_service_v1_task_proto_rawDescGZIP() []byte {
 }
 
 var file_task_service_v1_task_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_task_service_v1_task_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
+var file_task_service_v1_task_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_task_service_v1_task_proto_goTypes = []any{
 	(Task_Type)(0),                      // 0: task.service.v1.Task.Type
 	(ControlTaskRequest_ControlType)(0), // 1: task.service.v1.ControlTaskRequest.ControlType
@@ -993,52 +1040,55 @@ var file_task_service_v1_task_proto_goTypes = []any{
 	(*RestartAllTaskResponse)(nil),      // 9: task.service.v1.RestartAllTaskResponse
 	(*ControlTaskRequest)(nil),          // 10: task.service.v1.ControlTaskRequest
 	(*ListTaskTypeNameResponse)(nil),    // 11: task.service.v1.ListTaskTypeNameResponse
-	(*durationpb.Duration)(nil),         // 12: google.protobuf.Duration
-	(*timestamppb.Timestamp)(nil),       // 13: google.protobuf.Timestamp
-	(*fieldmaskpb.FieldMask)(nil),       // 14: google.protobuf.FieldMask
-	(*v1.PagingRequest)(nil),            // 15: pagination.PagingRequest
-	(*emptypb.Empty)(nil),               // 16: google.protobuf.Empty
+	(*CountTaskResponse)(nil),           // 12: task.service.v1.CountTaskResponse
+	(*durationpb.Duration)(nil),         // 13: google.protobuf.Duration
+	(*timestamppb.Timestamp)(nil),       // 14: google.protobuf.Timestamp
+	(*fieldmaskpb.FieldMask)(nil),       // 15: google.protobuf.FieldMask
+	(*v1.PagingRequest)(nil),            // 16: pagination.PagingRequest
+	(*emptypb.Empty)(nil),               // 17: google.protobuf.Empty
 }
 var file_task_service_v1_task_proto_depIdxs = []int32{
-	12, // 0: task.service.v1.TaskOption.timeout:type_name -> google.protobuf.Duration
-	13, // 1: task.service.v1.TaskOption.deadline:type_name -> google.protobuf.Timestamp
-	12, // 2: task.service.v1.TaskOption.process_in:type_name -> google.protobuf.Duration
-	13, // 3: task.service.v1.TaskOption.process_at:type_name -> google.protobuf.Timestamp
-	12, // 4: task.service.v1.TaskOption.unique_ttl:type_name -> google.protobuf.Duration
-	12, // 5: task.service.v1.TaskOption.retention:type_name -> google.protobuf.Duration
+	13, // 0: task.service.v1.TaskOption.timeout:type_name -> google.protobuf.Duration
+	14, // 1: task.service.v1.TaskOption.deadline:type_name -> google.protobuf.Timestamp
+	13, // 2: task.service.v1.TaskOption.process_in:type_name -> google.protobuf.Duration
+	14, // 3: task.service.v1.TaskOption.process_at:type_name -> google.protobuf.Timestamp
+	13, // 4: task.service.v1.TaskOption.unique_ttl:type_name -> google.protobuf.Duration
+	13, // 5: task.service.v1.TaskOption.retention:type_name -> google.protobuf.Duration
 	0,  // 6: task.service.v1.Task.type:type_name -> task.service.v1.Task.Type
 	2,  // 7: task.service.v1.Task.task_options:type_name -> task.service.v1.TaskOption
-	13, // 8: task.service.v1.Task.created_at:type_name -> google.protobuf.Timestamp
-	13, // 9: task.service.v1.Task.updated_at:type_name -> google.protobuf.Timestamp
-	13, // 10: task.service.v1.Task.deleted_at:type_name -> google.protobuf.Timestamp
+	14, // 8: task.service.v1.Task.created_at:type_name -> google.protobuf.Timestamp
+	14, // 9: task.service.v1.Task.updated_at:type_name -> google.protobuf.Timestamp
+	14, // 10: task.service.v1.Task.deleted_at:type_name -> google.protobuf.Timestamp
 	3,  // 11: task.service.v1.ListTaskResponse.items:type_name -> task.service.v1.Task
-	14, // 12: task.service.v1.GetTaskRequest.view_mask:type_name -> google.protobuf.FieldMask
+	15, // 12: task.service.v1.GetTaskRequest.view_mask:type_name -> google.protobuf.FieldMask
 	3,  // 13: task.service.v1.CreateTaskRequest.data:type_name -> task.service.v1.Task
 	3,  // 14: task.service.v1.UpdateTaskRequest.data:type_name -> task.service.v1.Task
-	14, // 15: task.service.v1.UpdateTaskRequest.update_mask:type_name -> google.protobuf.FieldMask
+	15, // 15: task.service.v1.UpdateTaskRequest.update_mask:type_name -> google.protobuf.FieldMask
 	1,  // 16: task.service.v1.ControlTaskRequest.control_type:type_name -> task.service.v1.ControlTaskRequest.ControlType
-	15, // 17: task.service.v1.TaskService.List:input_type -> pagination.PagingRequest
-	5,  // 18: task.service.v1.TaskService.Get:input_type -> task.service.v1.GetTaskRequest
-	6,  // 19: task.service.v1.TaskService.Create:input_type -> task.service.v1.CreateTaskRequest
-	7,  // 20: task.service.v1.TaskService.Update:input_type -> task.service.v1.UpdateTaskRequest
-	8,  // 21: task.service.v1.TaskService.Delete:input_type -> task.service.v1.DeleteTaskRequest
-	16, // 22: task.service.v1.TaskService.ListTaskTypeName:input_type -> google.protobuf.Empty
-	16, // 23: task.service.v1.TaskService.RestartAllTask:input_type -> google.protobuf.Empty
-	16, // 24: task.service.v1.TaskService.StartAllTask:input_type -> google.protobuf.Empty
-	16, // 25: task.service.v1.TaskService.StopAllTask:input_type -> google.protobuf.Empty
-	10, // 26: task.service.v1.TaskService.ControlTask:input_type -> task.service.v1.ControlTaskRequest
-	4,  // 27: task.service.v1.TaskService.List:output_type -> task.service.v1.ListTaskResponse
-	3,  // 28: task.service.v1.TaskService.Get:output_type -> task.service.v1.Task
-	16, // 29: task.service.v1.TaskService.Create:output_type -> google.protobuf.Empty
-	16, // 30: task.service.v1.TaskService.Update:output_type -> google.protobuf.Empty
-	16, // 31: task.service.v1.TaskService.Delete:output_type -> google.protobuf.Empty
-	11, // 32: task.service.v1.TaskService.ListTaskTypeName:output_type -> task.service.v1.ListTaskTypeNameResponse
-	9,  // 33: task.service.v1.TaskService.RestartAllTask:output_type -> task.service.v1.RestartAllTaskResponse
-	16, // 34: task.service.v1.TaskService.StartAllTask:output_type -> google.protobuf.Empty
-	16, // 35: task.service.v1.TaskService.StopAllTask:output_type -> google.protobuf.Empty
-	16, // 36: task.service.v1.TaskService.ControlTask:output_type -> google.protobuf.Empty
-	27, // [27:37] is the sub-list for method output_type
-	17, // [17:27] is the sub-list for method input_type
+	16, // 17: task.service.v1.TaskService.List:input_type -> pagination.PagingRequest
+	16, // 18: task.service.v1.TaskService.Count:input_type -> pagination.PagingRequest
+	5,  // 19: task.service.v1.TaskService.Get:input_type -> task.service.v1.GetTaskRequest
+	6,  // 20: task.service.v1.TaskService.Create:input_type -> task.service.v1.CreateTaskRequest
+	7,  // 21: task.service.v1.TaskService.Update:input_type -> task.service.v1.UpdateTaskRequest
+	8,  // 22: task.service.v1.TaskService.Delete:input_type -> task.service.v1.DeleteTaskRequest
+	17, // 23: task.service.v1.TaskService.ListTaskTypeName:input_type -> google.protobuf.Empty
+	17, // 24: task.service.v1.TaskService.RestartAllTask:input_type -> google.protobuf.Empty
+	17, // 25: task.service.v1.TaskService.StartAllTask:input_type -> google.protobuf.Empty
+	17, // 26: task.service.v1.TaskService.StopAllTask:input_type -> google.protobuf.Empty
+	10, // 27: task.service.v1.TaskService.ControlTask:input_type -> task.service.v1.ControlTaskRequest
+	4,  // 28: task.service.v1.TaskService.List:output_type -> task.service.v1.ListTaskResponse
+	12, // 29: task.service.v1.TaskService.Count:output_type -> task.service.v1.CountTaskResponse
+	3,  // 30: task.service.v1.TaskService.Get:output_type -> task.service.v1.Task
+	17, // 31: task.service.v1.TaskService.Create:output_type -> google.protobuf.Empty
+	17, // 32: task.service.v1.TaskService.Update:output_type -> google.protobuf.Empty
+	17, // 33: task.service.v1.TaskService.Delete:output_type -> google.protobuf.Empty
+	11, // 34: task.service.v1.TaskService.ListTaskTypeName:output_type -> task.service.v1.ListTaskTypeNameResponse
+	9,  // 35: task.service.v1.TaskService.RestartAllTask:output_type -> task.service.v1.RestartAllTaskResponse
+	17, // 36: task.service.v1.TaskService.StartAllTask:output_type -> google.protobuf.Empty
+	17, // 37: task.service.v1.TaskService.StopAllTask:output_type -> google.protobuf.Empty
+	17, // 38: task.service.v1.TaskService.ControlTask:output_type -> google.protobuf.Empty
+	28, // [28:39] is the sub-list for method output_type
+	17, // [17:28] is the sub-list for method input_type
 	17, // [17:17] is the sub-list for extension type_name
 	17, // [17:17] is the sub-list for extension extendee
 	0,  // [0:17] is the sub-list for field type_name
@@ -1062,7 +1112,7 @@ func file_task_service_v1_task_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_task_service_v1_task_proto_rawDesc), len(file_task_service_v1_task_proto_rawDesc)),
 			NumEnums:      2,
-			NumMessages:   10,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

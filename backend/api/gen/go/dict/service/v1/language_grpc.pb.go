@@ -22,11 +22,12 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	LanguageService_List_FullMethodName        = "/dict.service.v1.LanguageService/List"
+	LanguageService_Count_FullMethodName       = "/dict.service.v1.LanguageService/Count"
 	LanguageService_Get_FullMethodName         = "/dict.service.v1.LanguageService/Get"
 	LanguageService_Create_FullMethodName      = "/dict.service.v1.LanguageService/Create"
+	LanguageService_BatchCreate_FullMethodName = "/dict.service.v1.LanguageService/BatchCreate"
 	LanguageService_Update_FullMethodName      = "/dict.service.v1.LanguageService/Update"
 	LanguageService_Delete_FullMethodName      = "/dict.service.v1.LanguageService/Delete"
-	LanguageService_BatchCreate_FullMethodName = "/dict.service.v1.LanguageService/BatchCreate"
 )
 
 // LanguageServiceClient is the client API for LanguageService service.
@@ -37,16 +38,18 @@ const (
 type LanguageServiceClient interface {
 	// 分页查询语言列表
 	List(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*ListLanguageResponse, error)
+	// 统计语言数量
+	Count(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*CountLanguageResponse, error)
 	// 查询语言详情
 	Get(ctx context.Context, in *GetLanguageRequest, opts ...grpc.CallOption) (*Language, error)
 	// 创建语言
 	Create(ctx context.Context, in *CreateLanguageRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// 批量创建语言
+	BatchCreate(ctx context.Context, in *BatchCreateLanguagesRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// 更新语言
 	Update(ctx context.Context, in *UpdateLanguageRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// 删除语言
 	Delete(ctx context.Context, in *DeleteLanguageRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	// 批量创建语言
-	BatchCreate(ctx context.Context, in *BatchCreateLanguagesRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type languageServiceClient struct {
@@ -61,6 +64,16 @@ func (c *languageServiceClient) List(ctx context.Context, in *v1.PagingRequest, 
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListLanguageResponse)
 	err := c.cc.Invoke(ctx, LanguageService_List_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *languageServiceClient) Count(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*CountLanguageResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CountLanguageResponse)
+	err := c.cc.Invoke(ctx, LanguageService_Count_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -87,6 +100,16 @@ func (c *languageServiceClient) Create(ctx context.Context, in *CreateLanguageRe
 	return out, nil
 }
 
+func (c *languageServiceClient) BatchCreate(ctx context.Context, in *BatchCreateLanguagesRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, LanguageService_BatchCreate_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *languageServiceClient) Update(ctx context.Context, in *UpdateLanguageRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(emptypb.Empty)
@@ -107,16 +130,6 @@ func (c *languageServiceClient) Delete(ctx context.Context, in *DeleteLanguageRe
 	return out, nil
 }
 
-func (c *languageServiceClient) BatchCreate(ctx context.Context, in *BatchCreateLanguagesRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, LanguageService_BatchCreate_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // LanguageServiceServer is the server API for LanguageService service.
 // All implementations must embed UnimplementedLanguageServiceServer
 // for forward compatibility.
@@ -125,16 +138,18 @@ func (c *languageServiceClient) BatchCreate(ctx context.Context, in *BatchCreate
 type LanguageServiceServer interface {
 	// 分页查询语言列表
 	List(context.Context, *v1.PagingRequest) (*ListLanguageResponse, error)
+	// 统计语言数量
+	Count(context.Context, *v1.PagingRequest) (*CountLanguageResponse, error)
 	// 查询语言详情
 	Get(context.Context, *GetLanguageRequest) (*Language, error)
 	// 创建语言
 	Create(context.Context, *CreateLanguageRequest) (*emptypb.Empty, error)
+	// 批量创建语言
+	BatchCreate(context.Context, *BatchCreateLanguagesRequest) (*emptypb.Empty, error)
 	// 更新语言
 	Update(context.Context, *UpdateLanguageRequest) (*emptypb.Empty, error)
 	// 删除语言
 	Delete(context.Context, *DeleteLanguageRequest) (*emptypb.Empty, error)
-	// 批量创建语言
-	BatchCreate(context.Context, *BatchCreateLanguagesRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedLanguageServiceServer()
 }
 
@@ -148,20 +163,23 @@ type UnimplementedLanguageServiceServer struct{}
 func (UnimplementedLanguageServiceServer) List(context.Context, *v1.PagingRequest) (*ListLanguageResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method List not implemented")
 }
+func (UnimplementedLanguageServiceServer) Count(context.Context, *v1.PagingRequest) (*CountLanguageResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Count not implemented")
+}
 func (UnimplementedLanguageServiceServer) Get(context.Context, *GetLanguageRequest) (*Language, error) {
 	return nil, status.Error(codes.Unimplemented, "method Get not implemented")
 }
 func (UnimplementedLanguageServiceServer) Create(context.Context, *CreateLanguageRequest) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Create not implemented")
 }
+func (UnimplementedLanguageServiceServer) BatchCreate(context.Context, *BatchCreateLanguagesRequest) (*emptypb.Empty, error) {
+	return nil, status.Error(codes.Unimplemented, "method BatchCreate not implemented")
+}
 func (UnimplementedLanguageServiceServer) Update(context.Context, *UpdateLanguageRequest) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Update not implemented")
 }
 func (UnimplementedLanguageServiceServer) Delete(context.Context, *DeleteLanguageRequest) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Delete not implemented")
-}
-func (UnimplementedLanguageServiceServer) BatchCreate(context.Context, *BatchCreateLanguagesRequest) (*emptypb.Empty, error) {
-	return nil, status.Error(codes.Unimplemented, "method BatchCreate not implemented")
 }
 func (UnimplementedLanguageServiceServer) mustEmbedUnimplementedLanguageServiceServer() {}
 func (UnimplementedLanguageServiceServer) testEmbeddedByValue()                         {}
@@ -202,6 +220,24 @@ func _LanguageService_List_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _LanguageService_Count_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(v1.PagingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LanguageServiceServer).Count(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: LanguageService_Count_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LanguageServiceServer).Count(ctx, req.(*v1.PagingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _LanguageService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetLanguageRequest)
 	if err := dec(in); err != nil {
@@ -234,6 +270,24 @@ func _LanguageService_Create_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(LanguageServiceServer).Create(ctx, req.(*CreateLanguageRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _LanguageService_BatchCreate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BatchCreateLanguagesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LanguageServiceServer).BatchCreate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: LanguageService_BatchCreate_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LanguageServiceServer).BatchCreate(ctx, req.(*BatchCreateLanguagesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -274,24 +328,6 @@ func _LanguageService_Delete_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
-func _LanguageService_BatchCreate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(BatchCreateLanguagesRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LanguageServiceServer).BatchCreate(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: LanguageService_BatchCreate_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LanguageServiceServer).BatchCreate(ctx, req.(*BatchCreateLanguagesRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // LanguageService_ServiceDesc is the grpc.ServiceDesc for LanguageService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -304,6 +340,10 @@ var LanguageService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _LanguageService_List_Handler,
 		},
 		{
+			MethodName: "Count",
+			Handler:    _LanguageService_Count_Handler,
+		},
+		{
 			MethodName: "Get",
 			Handler:    _LanguageService_Get_Handler,
 		},
@@ -312,16 +352,16 @@ var LanguageService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _LanguageService_Create_Handler,
 		},
 		{
+			MethodName: "BatchCreate",
+			Handler:    _LanguageService_BatchCreate_Handler,
+		},
+		{
 			MethodName: "Update",
 			Handler:    _LanguageService_Update_Handler,
 		},
 		{
 			MethodName: "Delete",
 			Handler:    _LanguageService_Delete_Handler,
-		},
-		{
-			MethodName: "BatchCreate",
-			Handler:    _LanguageService_BatchCreate_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

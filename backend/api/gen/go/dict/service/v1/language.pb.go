@@ -559,6 +559,50 @@ func (x *BatchCreateLanguagesResponse) GetCreatedIds() []int32 {
 	return nil
 }
 
+type CountLanguageResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Count         uint64                 `protobuf:"varint,1,opt,name=count,proto3" json:"count,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CountLanguageResponse) Reset() {
+	*x = CountLanguageResponse{}
+	mi := &file_dict_service_v1_language_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CountLanguageResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CountLanguageResponse) ProtoMessage() {}
+
+func (x *CountLanguageResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_dict_service_v1_language_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CountLanguageResponse.ProtoReflect.Descriptor instead.
+func (*CountLanguageResponse) Descriptor() ([]byte, []int) {
+	return file_dict_service_v1_language_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *CountLanguageResponse) GetCount() uint64 {
+	if x != nil {
+		return x.Count
+	}
+	return 0
+}
+
 var File_dict_service_v1_language_proto protoreflect.FileDescriptor
 
 const file_dict_service_v1_language_proto_rawDesc = "" +
@@ -629,14 +673,17 @@ const file_dict_service_v1_language_proto_rawDesc = "" +
 	"\x04data\x18\x01 \x03(\v2\x19.dict.service.v1.LanguageR\x04data\"d\n" +
 	"\x1cBatchCreateLanguagesResponse\x12D\n" +
 	"\vcreated_ids\x18\x01 \x03(\x05B#\xbaG \x92\x02\x1d创建成功的语言ID列表R\n" +
-	"createdIds2\xe1\x03\n" +
+	"createdIds\"-\n" +
+	"\x15CountLanguageResponse\x12\x14\n" +
+	"\x05count\x18\x01 \x01(\x04R\x05count2\xaf\x04\n" +
 	"\x0fLanguageService\x12J\n" +
-	"\x04List\x12\x19.pagination.PagingRequest\x1a%.dict.service.v1.ListLanguageResponse\"\x00\x12G\n" +
+	"\x04List\x12\x19.pagination.PagingRequest\x1a%.dict.service.v1.ListLanguageResponse\"\x00\x12L\n" +
+	"\x05Count\x12\x19.pagination.PagingRequest\x1a&.dict.service.v1.CountLanguageResponse\"\x00\x12G\n" +
 	"\x03Get\x12#.dict.service.v1.GetLanguageRequest\x1a\x19.dict.service.v1.Language\"\x00\x12J\n" +
-	"\x06Create\x12&.dict.service.v1.CreateLanguageRequest\x1a\x16.google.protobuf.Empty\"\x00\x12J\n" +
+	"\x06Create\x12&.dict.service.v1.CreateLanguageRequest\x1a\x16.google.protobuf.Empty\"\x00\x12U\n" +
+	"\vBatchCreate\x12,.dict.service.v1.BatchCreateLanguagesRequest\x1a\x16.google.protobuf.Empty\"\x00\x12J\n" +
 	"\x06Update\x12&.dict.service.v1.UpdateLanguageRequest\x1a\x16.google.protobuf.Empty\"\x00\x12J\n" +
-	"\x06Delete\x12&.dict.service.v1.DeleteLanguageRequest\x1a\x16.google.protobuf.Empty\"\x00\x12U\n" +
-	"\vBatchCreate\x12,.dict.service.v1.BatchCreateLanguagesRequest\x1a\x16.google.protobuf.Empty\"\x00B\xb3\x01\n" +
+	"\x06Delete\x12&.dict.service.v1.DeleteLanguageRequest\x1a\x16.google.protobuf.Empty\"\x00B\xb3\x01\n" +
 	"\x13com.dict.service.v1B\rLanguageProtoP\x01Z/go-wind-admin/api/gen/go/dict/service/v1;dictpb\xa2\x02\x03DSX\xaa\x02\x0fDict.Service.V1\xca\x02\x0fDict\\Service\\V1\xe2\x02\x1bDict\\Service\\V1\\GPBMetadata\xea\x02\x11Dict::Service::V1b\x06proto3"
 
 var (
@@ -651,7 +698,7 @@ func file_dict_service_v1_language_proto_rawDescGZIP() []byte {
 	return file_dict_service_v1_language_proto_rawDescData
 }
 
-var file_dict_service_v1_language_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_dict_service_v1_language_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_dict_service_v1_language_proto_goTypes = []any{
 	(*Language)(nil),                     // 0: dict.service.v1.Language
 	(*ListLanguageResponse)(nil),         // 1: dict.service.v1.ListLanguageResponse
@@ -661,35 +708,38 @@ var file_dict_service_v1_language_proto_goTypes = []any{
 	(*DeleteLanguageRequest)(nil),        // 5: dict.service.v1.DeleteLanguageRequest
 	(*BatchCreateLanguagesRequest)(nil),  // 6: dict.service.v1.BatchCreateLanguagesRequest
 	(*BatchCreateLanguagesResponse)(nil), // 7: dict.service.v1.BatchCreateLanguagesResponse
-	(*timestamppb.Timestamp)(nil),        // 8: google.protobuf.Timestamp
-	(*fieldmaskpb.FieldMask)(nil),        // 9: google.protobuf.FieldMask
-	(*v1.PagingRequest)(nil),             // 10: pagination.PagingRequest
-	(*emptypb.Empty)(nil),                // 11: google.protobuf.Empty
+	(*CountLanguageResponse)(nil),        // 8: dict.service.v1.CountLanguageResponse
+	(*timestamppb.Timestamp)(nil),        // 9: google.protobuf.Timestamp
+	(*fieldmaskpb.FieldMask)(nil),        // 10: google.protobuf.FieldMask
+	(*v1.PagingRequest)(nil),             // 11: pagination.PagingRequest
+	(*emptypb.Empty)(nil),                // 12: google.protobuf.Empty
 }
 var file_dict_service_v1_language_proto_depIdxs = []int32{
-	8,  // 0: dict.service.v1.Language.created_at:type_name -> google.protobuf.Timestamp
-	8,  // 1: dict.service.v1.Language.updated_at:type_name -> google.protobuf.Timestamp
-	8,  // 2: dict.service.v1.Language.deleted_at:type_name -> google.protobuf.Timestamp
+	9,  // 0: dict.service.v1.Language.created_at:type_name -> google.protobuf.Timestamp
+	9,  // 1: dict.service.v1.Language.updated_at:type_name -> google.protobuf.Timestamp
+	9,  // 2: dict.service.v1.Language.deleted_at:type_name -> google.protobuf.Timestamp
 	0,  // 3: dict.service.v1.ListLanguageResponse.items:type_name -> dict.service.v1.Language
-	9,  // 4: dict.service.v1.GetLanguageRequest.view_mask:type_name -> google.protobuf.FieldMask
+	10, // 4: dict.service.v1.GetLanguageRequest.view_mask:type_name -> google.protobuf.FieldMask
 	0,  // 5: dict.service.v1.CreateLanguageRequest.data:type_name -> dict.service.v1.Language
 	0,  // 6: dict.service.v1.UpdateLanguageRequest.data:type_name -> dict.service.v1.Language
-	9,  // 7: dict.service.v1.UpdateLanguageRequest.update_mask:type_name -> google.protobuf.FieldMask
+	10, // 7: dict.service.v1.UpdateLanguageRequest.update_mask:type_name -> google.protobuf.FieldMask
 	0,  // 8: dict.service.v1.BatchCreateLanguagesRequest.data:type_name -> dict.service.v1.Language
-	10, // 9: dict.service.v1.LanguageService.List:input_type -> pagination.PagingRequest
-	2,  // 10: dict.service.v1.LanguageService.Get:input_type -> dict.service.v1.GetLanguageRequest
-	3,  // 11: dict.service.v1.LanguageService.Create:input_type -> dict.service.v1.CreateLanguageRequest
-	4,  // 12: dict.service.v1.LanguageService.Update:input_type -> dict.service.v1.UpdateLanguageRequest
-	5,  // 13: dict.service.v1.LanguageService.Delete:input_type -> dict.service.v1.DeleteLanguageRequest
-	6,  // 14: dict.service.v1.LanguageService.BatchCreate:input_type -> dict.service.v1.BatchCreateLanguagesRequest
-	1,  // 15: dict.service.v1.LanguageService.List:output_type -> dict.service.v1.ListLanguageResponse
-	0,  // 16: dict.service.v1.LanguageService.Get:output_type -> dict.service.v1.Language
-	11, // 17: dict.service.v1.LanguageService.Create:output_type -> google.protobuf.Empty
-	11, // 18: dict.service.v1.LanguageService.Update:output_type -> google.protobuf.Empty
-	11, // 19: dict.service.v1.LanguageService.Delete:output_type -> google.protobuf.Empty
-	11, // 20: dict.service.v1.LanguageService.BatchCreate:output_type -> google.protobuf.Empty
-	15, // [15:21] is the sub-list for method output_type
-	9,  // [9:15] is the sub-list for method input_type
+	11, // 9: dict.service.v1.LanguageService.List:input_type -> pagination.PagingRequest
+	11, // 10: dict.service.v1.LanguageService.Count:input_type -> pagination.PagingRequest
+	2,  // 11: dict.service.v1.LanguageService.Get:input_type -> dict.service.v1.GetLanguageRequest
+	3,  // 12: dict.service.v1.LanguageService.Create:input_type -> dict.service.v1.CreateLanguageRequest
+	6,  // 13: dict.service.v1.LanguageService.BatchCreate:input_type -> dict.service.v1.BatchCreateLanguagesRequest
+	4,  // 14: dict.service.v1.LanguageService.Update:input_type -> dict.service.v1.UpdateLanguageRequest
+	5,  // 15: dict.service.v1.LanguageService.Delete:input_type -> dict.service.v1.DeleteLanguageRequest
+	1,  // 16: dict.service.v1.LanguageService.List:output_type -> dict.service.v1.ListLanguageResponse
+	8,  // 17: dict.service.v1.LanguageService.Count:output_type -> dict.service.v1.CountLanguageResponse
+	0,  // 18: dict.service.v1.LanguageService.Get:output_type -> dict.service.v1.Language
+	12, // 19: dict.service.v1.LanguageService.Create:output_type -> google.protobuf.Empty
+	12, // 20: dict.service.v1.LanguageService.BatchCreate:output_type -> google.protobuf.Empty
+	12, // 21: dict.service.v1.LanguageService.Update:output_type -> google.protobuf.Empty
+	12, // 22: dict.service.v1.LanguageService.Delete:output_type -> google.protobuf.Empty
+	16, // [16:23] is the sub-list for method output_type
+	9,  // [9:16] is the sub-list for method input_type
 	9,  // [9:9] is the sub-list for extension type_name
 	9,  // [9:9] is the sub-list for extension extendee
 	0,  // [0:9] is the sub-list for field type_name
@@ -712,7 +762,7 @@ func file_dict_service_v1_language_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_dict_service_v1_language_proto_rawDesc), len(file_dict_service_v1_language_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -22,6 +22,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	LoginPolicyService_List_FullMethodName   = "/authentication.service.v1.LoginPolicyService/List"
+	LoginPolicyService_Count_FullMethodName  = "/authentication.service.v1.LoginPolicyService/Count"
 	LoginPolicyService_Get_FullMethodName    = "/authentication.service.v1.LoginPolicyService/Get"
 	LoginPolicyService_Create_FullMethodName = "/authentication.service.v1.LoginPolicyService/Create"
 	LoginPolicyService_Update_FullMethodName = "/authentication.service.v1.LoginPolicyService/Update"
@@ -36,6 +37,8 @@ const (
 type LoginPolicyServiceClient interface {
 	// 查询登录策略列表
 	List(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*ListLoginPolicyResponse, error)
+	// 统计登录策略数量
+	Count(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*CountLoginPolicyResponse, error)
 	// 查询登录策略详情
 	Get(ctx context.Context, in *GetLoginPolicyRequest, opts ...grpc.CallOption) (*LoginPolicy, error)
 	// 创建登录策略
@@ -58,6 +61,16 @@ func (c *loginPolicyServiceClient) List(ctx context.Context, in *v1.PagingReques
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListLoginPolicyResponse)
 	err := c.cc.Invoke(ctx, LoginPolicyService_List_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *loginPolicyServiceClient) Count(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*CountLoginPolicyResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CountLoginPolicyResponse)
+	err := c.cc.Invoke(ctx, LoginPolicyService_Count_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -112,6 +125,8 @@ func (c *loginPolicyServiceClient) Delete(ctx context.Context, in *DeleteLoginPo
 type LoginPolicyServiceServer interface {
 	// 查询登录策略列表
 	List(context.Context, *v1.PagingRequest) (*ListLoginPolicyResponse, error)
+	// 统计登录策略数量
+	Count(context.Context, *v1.PagingRequest) (*CountLoginPolicyResponse, error)
 	// 查询登录策略详情
 	Get(context.Context, *GetLoginPolicyRequest) (*LoginPolicy, error)
 	// 创建登录策略
@@ -132,6 +147,9 @@ type UnimplementedLoginPolicyServiceServer struct{}
 
 func (UnimplementedLoginPolicyServiceServer) List(context.Context, *v1.PagingRequest) (*ListLoginPolicyResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method List not implemented")
+}
+func (UnimplementedLoginPolicyServiceServer) Count(context.Context, *v1.PagingRequest) (*CountLoginPolicyResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Count not implemented")
 }
 func (UnimplementedLoginPolicyServiceServer) Get(context.Context, *GetLoginPolicyRequest) (*LoginPolicy, error) {
 	return nil, status.Error(codes.Unimplemented, "method Get not implemented")
@@ -180,6 +198,24 @@ func _LoginPolicyService_List_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(LoginPolicyServiceServer).List(ctx, req.(*v1.PagingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _LoginPolicyService_Count_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(v1.PagingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LoginPolicyServiceServer).Count(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: LoginPolicyService_Count_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LoginPolicyServiceServer).Count(ctx, req.(*v1.PagingRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -266,6 +302,10 @@ var LoginPolicyService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "List",
 			Handler:    _LoginPolicyService_List_Handler,
+		},
+		{
+			MethodName: "Count",
+			Handler:    _LoginPolicyService_Count_Handler,
 		},
 		{
 			MethodName: "Get",

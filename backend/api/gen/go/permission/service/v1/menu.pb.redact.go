@@ -59,6 +59,17 @@ func (s *redactedMenuServiceServer) List(ctx context.Context, in *pagination.Pag
 	return res, err
 }
 
+// Count is the redacted wrapper for the actual MenuServiceServer.Count method
+// Unary RPC
+func (s *redactedMenuServiceServer) Count(ctx context.Context, in *pagination.PagingRequest) (*CountMenuResponse, error) {
+	res, err := s.srv.Count(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
 // Get is the redacted wrapper for the actual MenuServiceServer.Get method
 // Unary RPC
 func (s *redactedMenuServiceServer) Get(ctx context.Context, in *GetMenuRequest) (*Menu, error) {
@@ -280,5 +291,15 @@ func (x *DeleteMenuRequest) Redact() string {
 	// Safe field: OperatorId
 
 	// Safe field: Id
+	return x.String()
+}
+
+// Redact method implementation for CountMenuResponse
+func (x *CountMenuResponse) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: Count
 	return x.String()
 }

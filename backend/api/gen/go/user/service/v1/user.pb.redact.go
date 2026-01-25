@@ -60,6 +60,17 @@ func (s *redactedUserServiceServer) List(ctx context.Context, in *pagination.Pag
 	return res, err
 }
 
+// Count is the redacted wrapper for the actual UserServiceServer.Count method
+// Unary RPC
+func (s *redactedUserServiceServer) Count(ctx context.Context, in *pagination.PagingRequest) (*CountUserResponse, error) {
+	res, err := s.srv.Count(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
 // Get is the redacted wrapper for the actual UserServiceServer.Get method
 // Unary RPC
 func (s *redactedUserServiceServer) Get(ctx context.Context, in *GetUserRequest) (*User, error) {
@@ -82,6 +93,17 @@ func (s *redactedUserServiceServer) Create(ctx context.Context, in *CreateUserRe
 	return res, err
 }
 
+// BatchCreate is the redacted wrapper for the actual UserServiceServer.BatchCreate method
+// Unary RPC
+func (s *redactedUserServiceServer) BatchCreate(ctx context.Context, in *BatchCreateUsersRequest) (*BatchCreateUsersResponse, error) {
+	res, err := s.srv.BatchCreate(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
 // Update is the redacted wrapper for the actual UserServiceServer.Update method
 // Unary RPC
 func (s *redactedUserServiceServer) Update(ctx context.Context, in *UpdateUserRequest) (*emptypb.Empty, error) {
@@ -97,17 +119,6 @@ func (s *redactedUserServiceServer) Update(ctx context.Context, in *UpdateUserRe
 // Unary RPC
 func (s *redactedUserServiceServer) Delete(ctx context.Context, in *DeleteUserRequest) (*emptypb.Empty, error) {
 	res, err := s.srv.Delete(ctx, in)
-	if !s.bypass.CheckInternal(ctx) {
-		// Apply redaction to the response
-		redact.Apply(res)
-	}
-	return res, err
-}
-
-// BatchCreate is the redacted wrapper for the actual UserServiceServer.BatchCreate method
-// Unary RPC
-func (s *redactedUserServiceServer) BatchCreate(ctx context.Context, in *BatchCreateUsersRequest) (*BatchCreateUsersResponse, error) {
-	res, err := s.srv.BatchCreate(ctx, in)
 	if !s.bypass.CheckInternal(ctx) {
 		// Apply redaction to the response
 		redact.Apply(res)
@@ -447,5 +458,15 @@ func (x *EmailVerification) Redact() string {
 	// Safe field: Email
 
 	// Safe field: Code
+	return x.String()
+}
+
+// Redact method implementation for CountUserResponse
+func (x *CountUserResponse) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: Count
 	return x.String()
 }

@@ -43,5 +43,11 @@ func (x *UserTokenPayload) Redact() string {
 	// Safe field: DataScope
 
 	// Safe field: OrgUnitId
+
+	// Safe field: IsPlatformAdmin
+
+	// Safe field: IsTenantAdmin
+
+	// Safe field: Jti
 	return x.String()
 }

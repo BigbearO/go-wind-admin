@@ -18,6 +18,9 @@ service MenuService {
   // 查询菜单列表
   rpc List (pagination.PagingRequest) returns (ListMenuResponse) {}
 
+  // 统计菜单数量
+  rpc Count (pagination.PagingRequest) returns (CountMenuResponse) {}
+
   // 查询菜单详情
   rpc Get (GetMenuRequest) returns (Menu) {}
 
@@ -420,4 +423,8 @@ message DeleteMenuRequest {
   ]; // 操作用户ID
 
   uint32 id = 2;
+}
+
+message CountMenuResponse {
+  uint64 count = 1;
 }

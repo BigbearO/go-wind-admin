@@ -1702,6 +1702,50 @@ func (x *EmailVerification) GetCode() string {
 	return ""
 }
 
+type CountUserResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Count         uint64                 `protobuf:"varint,1,opt,name=count,proto3" json:"count,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CountUserResponse) Reset() {
+	*x = CountUserResponse{}
+	mi := &file_user_service_v1_user_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CountUserResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CountUserResponse) ProtoMessage() {}
+
+func (x *CountUserResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_user_service_v1_user_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CountUserResponse.ProtoReflect.Descriptor instead.
+func (*CountUserResponse) Descriptor() ([]byte, []int) {
+	return file_user_service_v1_user_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *CountUserResponse) GetCount() uint64 {
+	if x != nil {
+		return x.Count
+	}
+	return 0
+}
+
 var File_user_service_v1_user_proto protoreflect.FileDescriptor
 
 const file_user_service_v1_user_proto_rawDesc = "" +
@@ -1884,14 +1928,17 @@ const file_user_service_v1_user_proto_rawDesc = "" +
 	"\x04code\x18\x02 \x01(\tB\x18\xe0A\x02\xbaG\x12\x92\x02\x0f短信验证码R\x04code\"k\n" +
 	"\x11EmailVerification\x12(\n" +
 	"\x05email\x18\x01 \x01(\tB\x12\xbaG\x0f\x92\x02\f邮箱地址R\x05email\x12,\n" +
-	"\x04code\x18\x02 \x01(\tB\x18\xe0A\x02\xbaG\x12\x92\x02\x0f邮箱验证码R\x04code2\xad\x04\n" +
+	"\x04code\x18\x02 \x01(\tB\x18\xe0A\x02\xbaG\x12\x92\x02\x0f邮箱验证码R\x04code\")\n" +
+	"\x11CountUserResponse\x12\x14\n" +
+	"\x05count\x18\x01 \x01(\x04R\x05count2\xf7\x04\n" +
 	"\vUserService\x12F\n" +
-	"\x04List\x12\x19.pagination.PagingRequest\x1a!.user.service.v1.ListUserResponse\"\x00\x12?\n" +
+	"\x04List\x12\x19.pagination.PagingRequest\x1a!.user.service.v1.ListUserResponse\"\x00\x12H\n" +
+	"\x05Count\x12\x19.pagination.PagingRequest\x1a\".user.service.v1.CountUserResponse\"\x00\x12?\n" +
 	"\x03Get\x12\x1f.user.service.v1.GetUserRequest\x1a\x15.user.service.v1.User\"\x00\x12F\n" +
-	"\x06Create\x12\".user.service.v1.CreateUserRequest\x1a\x16.google.protobuf.Empty\"\x00\x12F\n" +
+	"\x06Create\x12\".user.service.v1.CreateUserRequest\x1a\x16.google.protobuf.Empty\"\x00\x12d\n" +
+	"\vBatchCreate\x12(.user.service.v1.BatchCreateUsersRequest\x1a).user.service.v1.BatchCreateUsersResponse\"\x00\x12F\n" +
 	"\x06Update\x12\".user.service.v1.UpdateUserRequest\x1a\x16.google.protobuf.Empty\"\x00\x12F\n" +
-	"\x06Delete\x12\".user.service.v1.DeleteUserRequest\x1a\x16.google.protobuf.Empty\"\x00\x12d\n" +
-	"\vBatchCreate\x12(.user.service.v1.BatchCreateUsersRequest\x1a).user.service.v1.BatchCreateUsersResponse\"\x00\x12W\n" +
+	"\x06Delete\x12\".user.service.v1.DeleteUserRequest\x1a\x16.google.protobuf.Empty\"\x00\x12W\n" +
 	"\n" +
 	"UserExists\x12\".user.service.v1.UserExistsRequest\x1a#.user.service.v1.UserExistsResponse\"\x00B\xaf\x01\n" +
 	"\x13com.user.service.v1B\tUserProtoP\x01Z/go-wind-admin/api/gen/go/user/service/v1;userpb\xa2\x02\x03USX\xaa\x02\x0fUser.Service.V1\xca\x02\x0fUser\\Service\\V1\xe2\x02\x1bUser\\Service\\V1\\GPBMetadata\xea\x02\x11User::Service::V1b\x06proto3"
@@ -1909,7 +1956,7 @@ func file_user_service_v1_user_proto_rawDescGZIP() []byte {
 }
 
 var file_user_service_v1_user_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_user_service_v1_user_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
+var file_user_service_v1_user_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
 var file_user_service_v1_user_proto_goTypes = []any{
 	(User_Gender)(0),                 // 0: user.service.v1.User.Gender
 	(User_Status)(0),                 // 1: user.service.v1.User.Status
@@ -1934,45 +1981,48 @@ var file_user_service_v1_user_proto_goTypes = []any{
 	(*VerifyContactRequest)(nil),     // 20: user.service.v1.VerifyContactRequest
 	(*PhoneVerification)(nil),        // 21: user.service.v1.PhoneVerification
 	(*EmailVerification)(nil),        // 22: user.service.v1.EmailVerification
-	(*timestamppb.Timestamp)(nil),    // 23: google.protobuf.Timestamp
-	(*fieldmaskpb.FieldMask)(nil),    // 24: google.protobuf.FieldMask
-	(*v1.PagingRequest)(nil),         // 25: pagination.PagingRequest
-	(*emptypb.Empty)(nil),            // 26: google.protobuf.Empty
+	(*CountUserResponse)(nil),        // 23: user.service.v1.CountUserResponse
+	(*timestamppb.Timestamp)(nil),    // 24: google.protobuf.Timestamp
+	(*fieldmaskpb.FieldMask)(nil),    // 25: google.protobuf.FieldMask
+	(*v1.PagingRequest)(nil),         // 26: pagination.PagingRequest
+	(*emptypb.Empty)(nil),            // 27: google.protobuf.Empty
 }
 var file_user_service_v1_user_proto_depIdxs = []int32{
 	0,  // 0: user.service.v1.User.gender:type_name -> user.service.v1.User.Gender
-	23, // 1: user.service.v1.User.last_login_at:type_name -> google.protobuf.Timestamp
+	24, // 1: user.service.v1.User.last_login_at:type_name -> google.protobuf.Timestamp
 	1,  // 2: user.service.v1.User.status:type_name -> user.service.v1.User.Status
-	23, // 3: user.service.v1.User.locked_until:type_name -> google.protobuf.Timestamp
-	23, // 4: user.service.v1.User.created_at:type_name -> google.protobuf.Timestamp
-	23, // 5: user.service.v1.User.updated_at:type_name -> google.protobuf.Timestamp
-	23, // 6: user.service.v1.User.deleted_at:type_name -> google.protobuf.Timestamp
+	24, // 3: user.service.v1.User.locked_until:type_name -> google.protobuf.Timestamp
+	24, // 4: user.service.v1.User.created_at:type_name -> google.protobuf.Timestamp
+	24, // 5: user.service.v1.User.updated_at:type_name -> google.protobuf.Timestamp
+	24, // 6: user.service.v1.User.deleted_at:type_name -> google.protobuf.Timestamp
 	2,  // 7: user.service.v1.ListUserResponse.items:type_name -> user.service.v1.User
-	24, // 8: user.service.v1.GetUserRequest.view_mask:type_name -> google.protobuf.FieldMask
+	25, // 8: user.service.v1.GetUserRequest.view_mask:type_name -> google.protobuf.FieldMask
 	2,  // 9: user.service.v1.CreateUserRequest.data:type_name -> user.service.v1.User
 	2,  // 10: user.service.v1.UpdateUserRequest.data:type_name -> user.service.v1.User
-	24, // 11: user.service.v1.UpdateUserRequest.update_mask:type_name -> google.protobuf.FieldMask
+	25, // 11: user.service.v1.UpdateUserRequest.update_mask:type_name -> google.protobuf.FieldMask
 	2,  // 12: user.service.v1.BatchCreateUsersRequest.data:type_name -> user.service.v1.User
 	18, // 13: user.service.v1.BindContactRequest.phone:type_name -> user.service.v1.BindPhoneRequest
 	19, // 14: user.service.v1.BindContactRequest.email:type_name -> user.service.v1.BindEmailRequest
 	21, // 15: user.service.v1.VerifyContactRequest.phone:type_name -> user.service.v1.PhoneVerification
 	22, // 16: user.service.v1.VerifyContactRequest.email:type_name -> user.service.v1.EmailVerification
-	25, // 17: user.service.v1.UserService.List:input_type -> pagination.PagingRequest
-	4,  // 18: user.service.v1.UserService.Get:input_type -> user.service.v1.GetUserRequest
-	5,  // 19: user.service.v1.UserService.Create:input_type -> user.service.v1.CreateUserRequest
-	6,  // 20: user.service.v1.UserService.Update:input_type -> user.service.v1.UpdateUserRequest
-	7,  // 21: user.service.v1.UserService.Delete:input_type -> user.service.v1.DeleteUserRequest
-	10, // 22: user.service.v1.UserService.BatchCreate:input_type -> user.service.v1.BatchCreateUsersRequest
-	8,  // 23: user.service.v1.UserService.UserExists:input_type -> user.service.v1.UserExistsRequest
-	3,  // 24: user.service.v1.UserService.List:output_type -> user.service.v1.ListUserResponse
-	2,  // 25: user.service.v1.UserService.Get:output_type -> user.service.v1.User
-	26, // 26: user.service.v1.UserService.Create:output_type -> google.protobuf.Empty
-	26, // 27: user.service.v1.UserService.Update:output_type -> google.protobuf.Empty
-	26, // 28: user.service.v1.UserService.Delete:output_type -> google.protobuf.Empty
+	26, // 17: user.service.v1.UserService.List:input_type -> pagination.PagingRequest
+	26, // 18: user.service.v1.UserService.Count:input_type -> pagination.PagingRequest
+	4,  // 19: user.service.v1.UserService.Get:input_type -> user.service.v1.GetUserRequest
+	5,  // 20: user.service.v1.UserService.Create:input_type -> user.service.v1.CreateUserRequest
+	10, // 21: user.service.v1.UserService.BatchCreate:input_type -> user.service.v1.BatchCreateUsersRequest
+	6,  // 22: user.service.v1.UserService.Update:input_type -> user.service.v1.UpdateUserRequest
+	7,  // 23: user.service.v1.UserService.Delete:input_type -> user.service.v1.DeleteUserRequest
+	8,  // 24: user.service.v1.UserService.UserExists:input_type -> user.service.v1.UserExistsRequest
+	3,  // 25: user.service.v1.UserService.List:output_type -> user.service.v1.ListUserResponse
+	23, // 26: user.service.v1.UserService.Count:output_type -> user.service.v1.CountUserResponse
+	2,  // 27: user.service.v1.UserService.Get:output_type -> user.service.v1.User
+	27, // 28: user.service.v1.UserService.Create:output_type -> google.protobuf.Empty
 	11, // 29: user.service.v1.UserService.BatchCreate:output_type -> user.service.v1.BatchCreateUsersResponse
-	9,  // 30: user.service.v1.UserService.UserExists:output_type -> user.service.v1.UserExistsResponse
-	24, // [24:31] is the sub-list for method output_type
-	17, // [17:24] is the sub-list for method input_type
+	27, // 30: user.service.v1.UserService.Update:output_type -> google.protobuf.Empty
+	27, // 31: user.service.v1.UserService.Delete:output_type -> google.protobuf.Empty
+	9,  // 32: user.service.v1.UserService.UserExists:output_type -> user.service.v1.UserExistsResponse
+	25, // [25:33] is the sub-list for method output_type
+	17, // [17:25] is the sub-list for method input_type
 	17, // [17:17] is the sub-list for extension type_name
 	17, // [17:17] is the sub-list for extension extendee
 	0,  // [0:17] is the sub-list for field type_name
@@ -2017,7 +2067,7 @@ func file_user_service_v1_user_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_service_v1_user_proto_rawDesc), len(file_user_service_v1_user_proto_rawDesc)),
 			NumEnums:      2,
-			NumMessages:   21,
+			NumMessages:   22,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -572,6 +572,50 @@ func (x *DeleteLoginPolicyRequest) GetId() uint32 {
 	return 0
 }
 
+type CountLoginPolicyResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Count         uint64                 `protobuf:"varint,1,opt,name=count,proto3" json:"count,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CountLoginPolicyResponse) Reset() {
+	*x = CountLoginPolicyResponse{}
+	mi := &file_authentication_service_v1_login_policy_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CountLoginPolicyResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CountLoginPolicyResponse) ProtoMessage() {}
+
+func (x *CountLoginPolicyResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_authentication_service_v1_login_policy_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CountLoginPolicyResponse.ProtoReflect.Descriptor instead.
+func (*CountLoginPolicyResponse) Descriptor() ([]byte, []int) {
+	return file_authentication_service_v1_login_policy_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *CountLoginPolicyResponse) GetCount() uint64 {
+	if x != nil {
+		return x.Count
+	}
+	return 0
+}
+
 var File_authentication_service_v1_login_policy_proto protoreflect.FileDescriptor
 
 const file_authentication_service_v1_login_policy_proto_rawDesc = "" +
@@ -651,9 +695,12 @@ const file_authentication_service_v1_login_policy_proto_rawDesc = "" +
 	"\rallow_missing\x18\x04 \x01(\bB\x89\x01\xbaG\x85\x01\x92\x02\x81\x01如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。H\x00R\fallowMissing\x88\x01\x01B\x10\n" +
 	"\x0e_allow_missing\"*\n" +
 	"\x18DeleteLoginPolicyRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id2\xdb\x03\n" +
+	"\x02id\x18\x01 \x01(\rR\x02id\"0\n" +
+	"\x18CountLoginPolicyResponse\x12\x14\n" +
+	"\x05count\x18\x01 \x01(\x04R\x05count2\xb6\x04\n" +
 	"\x12LoginPolicyService\x12W\n" +
-	"\x04List\x12\x19.pagination.PagingRequest\x1a2.authentication.service.v1.ListLoginPolicyResponse\"\x00\x12a\n" +
+	"\x04List\x12\x19.pagination.PagingRequest\x1a2.authentication.service.v1.ListLoginPolicyResponse\"\x00\x12Y\n" +
+	"\x05Count\x12\x19.pagination.PagingRequest\x1a3.authentication.service.v1.CountLoginPolicyResponse\"\x00\x12a\n" +
 	"\x03Get\x120.authentication.service.v1.GetLoginPolicyRequest\x1a&.authentication.service.v1.LoginPolicy\"\x00\x12W\n" +
 	"\x06Create\x123.authentication.service.v1.CreateLoginPolicyRequest\x1a\x16.google.protobuf.Empty\"\x00\x12W\n" +
 	"\x06Update\x123.authentication.service.v1.UpdateLoginPolicyRequest\x1a\x16.google.protobuf.Empty\"\x00\x12W\n" +
@@ -673,7 +720,7 @@ func file_authentication_service_v1_login_policy_proto_rawDescGZIP() []byte {
 }
 
 var file_authentication_service_v1_login_policy_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_authentication_service_v1_login_policy_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_authentication_service_v1_login_policy_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_authentication_service_v1_login_policy_proto_goTypes = []any{
 	(LoginPolicy_Type)(0),            // 0: authentication.service.v1.LoginPolicy.Type
 	(LoginPolicy_Method)(0),          // 1: authentication.service.v1.LoginPolicy.Method
@@ -683,34 +730,37 @@ var file_authentication_service_v1_login_policy_proto_goTypes = []any{
 	(*CreateLoginPolicyRequest)(nil), // 5: authentication.service.v1.CreateLoginPolicyRequest
 	(*UpdateLoginPolicyRequest)(nil), // 6: authentication.service.v1.UpdateLoginPolicyRequest
 	(*DeleteLoginPolicyRequest)(nil), // 7: authentication.service.v1.DeleteLoginPolicyRequest
-	(*timestamppb.Timestamp)(nil),    // 8: google.protobuf.Timestamp
-	(*fieldmaskpb.FieldMask)(nil),    // 9: google.protobuf.FieldMask
-	(*v1.PagingRequest)(nil),         // 10: pagination.PagingRequest
-	(*emptypb.Empty)(nil),            // 11: google.protobuf.Empty
+	(*CountLoginPolicyResponse)(nil), // 8: authentication.service.v1.CountLoginPolicyResponse
+	(*timestamppb.Timestamp)(nil),    // 9: google.protobuf.Timestamp
+	(*fieldmaskpb.FieldMask)(nil),    // 10: google.protobuf.FieldMask
+	(*v1.PagingRequest)(nil),         // 11: pagination.PagingRequest
+	(*emptypb.Empty)(nil),            // 12: google.protobuf.Empty
 }
 var file_authentication_service_v1_login_policy_proto_depIdxs = []int32{
 	0,  // 0: authentication.service.v1.LoginPolicy.type:type_name -> authentication.service.v1.LoginPolicy.Type
 	1,  // 1: authentication.service.v1.LoginPolicy.method:type_name -> authentication.service.v1.LoginPolicy.Method
-	8,  // 2: authentication.service.v1.LoginPolicy.created_at:type_name -> google.protobuf.Timestamp
-	8,  // 3: authentication.service.v1.LoginPolicy.updated_at:type_name -> google.protobuf.Timestamp
-	8,  // 4: authentication.service.v1.LoginPolicy.deleted_at:type_name -> google.protobuf.Timestamp
+	9,  // 2: authentication.service.v1.LoginPolicy.created_at:type_name -> google.protobuf.Timestamp
+	9,  // 3: authentication.service.v1.LoginPolicy.updated_at:type_name -> google.protobuf.Timestamp
+	9,  // 4: authentication.service.v1.LoginPolicy.deleted_at:type_name -> google.protobuf.Timestamp
 	2,  // 5: authentication.service.v1.ListLoginPolicyResponse.items:type_name -> authentication.service.v1.LoginPolicy
-	9,  // 6: authentication.service.v1.GetLoginPolicyRequest.view_mask:type_name -> google.protobuf.FieldMask
+	10, // 6: authentication.service.v1.GetLoginPolicyRequest.view_mask:type_name -> google.protobuf.FieldMask
 	2,  // 7: authentication.service.v1.CreateLoginPolicyRequest.data:type_name -> authentication.service.v1.LoginPolicy
 	2,  // 8: authentication.service.v1.UpdateLoginPolicyRequest.data:type_name -> authentication.service.v1.LoginPolicy
-	9,  // 9: authentication.service.v1.UpdateLoginPolicyRequest.update_mask:type_name -> google.protobuf.FieldMask
-	10, // 10: authentication.service.v1.LoginPolicyService.List:input_type -> pagination.PagingRequest
-	4,  // 11: authentication.service.v1.LoginPolicyService.Get:input_type -> authentication.service.v1.GetLoginPolicyRequest
-	5,  // 12: authentication.service.v1.LoginPolicyService.Create:input_type -> authentication.service.v1.CreateLoginPolicyRequest
-	6,  // 13: authentication.service.v1.LoginPolicyService.Update:input_type -> authentication.service.v1.UpdateLoginPolicyRequest
-	7,  // 14: authentication.service.v1.LoginPolicyService.Delete:input_type -> authentication.service.v1.DeleteLoginPolicyRequest
-	3,  // 15: authentication.service.v1.LoginPolicyService.List:output_type -> authentication.service.v1.ListLoginPolicyResponse
-	2,  // 16: authentication.service.v1.LoginPolicyService.Get:output_type -> authentication.service.v1.LoginPolicy
-	11, // 17: authentication.service.v1.LoginPolicyService.Create:output_type -> google.protobuf.Empty
-	11, // 18: authentication.service.v1.LoginPolicyService.Update:output_type -> google.protobuf.Empty
-	11, // 19: authentication.service.v1.LoginPolicyService.Delete:output_type -> google.protobuf.Empty
-	15, // [15:20] is the sub-list for method output_type
-	10, // [10:15] is the sub-list for method input_type
+	10, // 9: authentication.service.v1.UpdateLoginPolicyRequest.update_mask:type_name -> google.protobuf.FieldMask
+	11, // 10: authentication.service.v1.LoginPolicyService.List:input_type -> pagination.PagingRequest
+	11, // 11: authentication.service.v1.LoginPolicyService.Count:input_type -> pagination.PagingRequest
+	4,  // 12: authentication.service.v1.LoginPolicyService.Get:input_type -> authentication.service.v1.GetLoginPolicyRequest
+	5,  // 13: authentication.service.v1.LoginPolicyService.Create:input_type -> authentication.service.v1.CreateLoginPolicyRequest
+	6,  // 14: authentication.service.v1.LoginPolicyService.Update:input_type -> authentication.service.v1.UpdateLoginPolicyRequest
+	7,  // 15: authentication.service.v1.LoginPolicyService.Delete:input_type -> authentication.service.v1.DeleteLoginPolicyRequest
+	3,  // 16: authentication.service.v1.LoginPolicyService.List:output_type -> authentication.service.v1.ListLoginPolicyResponse
+	8,  // 17: authentication.service.v1.LoginPolicyService.Count:output_type -> authentication.service.v1.CountLoginPolicyResponse
+	2,  // 18: authentication.service.v1.LoginPolicyService.Get:output_type -> authentication.service.v1.LoginPolicy
+	12, // 19: authentication.service.v1.LoginPolicyService.Create:output_type -> google.protobuf.Empty
+	12, // 20: authentication.service.v1.LoginPolicyService.Update:output_type -> google.protobuf.Empty
+	12, // 21: authentication.service.v1.LoginPolicyService.Delete:output_type -> google.protobuf.Empty
+	16, // [16:22] is the sub-list for method output_type
+	10, // [10:16] is the sub-list for method input_type
 	10, // [10:10] is the sub-list for extension type_name
 	10, // [10:10] is the sub-list for extension extendee
 	0,  // [0:10] is the sub-list for field type_name
@@ -732,7 +782,7 @@ func file_authentication_service_v1_login_policy_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_authentication_service_v1_login_policy_proto_rawDesc), len(file_authentication_service_v1_login_policy_proto_rawDesc)),
 			NumEnums:      2,
-			NumMessages:   6,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

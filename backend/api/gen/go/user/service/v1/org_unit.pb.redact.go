@@ -57,6 +57,17 @@ func (s *redactedOrgUnitServiceServer) List(ctx context.Context, in *pagination.
 	return res, err
 }
 
+// Count is the redacted wrapper for the actual OrgUnitServiceServer.Count method
+// Unary RPC
+func (s *redactedOrgUnitServiceServer) Count(ctx context.Context, in *pagination.PagingRequest) (*CountOrgUnitResponse, error) {
+	res, err := s.srv.Count(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
 // Get is the redacted wrapper for the actual OrgUnitServiceServer.Get method
 // Unary RPC
 func (s *redactedOrgUnitServiceServer) Get(ctx context.Context, in *GetOrgUnitRequest) (*OrgUnit, error) {
@@ -277,5 +288,15 @@ func (x *BatchCreateOrgUnitsResponse) Redact() string {
 	}
 
 	// Safe field: CreatedIds
+	return x.String()
+}
+
+// Redact method implementation for CountOrgUnitResponse
+func (x *CountOrgUnitResponse) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: Count
 	return x.String()
 }

@@ -22,11 +22,12 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	PositionService_List_FullMethodName        = "/user.service.v1.PositionService/List"
+	PositionService_Count_FullMethodName       = "/user.service.v1.PositionService/Count"
 	PositionService_Get_FullMethodName         = "/user.service.v1.PositionService/Get"
 	PositionService_Create_FullMethodName      = "/user.service.v1.PositionService/Create"
+	PositionService_BatchCreate_FullMethodName = "/user.service.v1.PositionService/BatchCreate"
 	PositionService_Update_FullMethodName      = "/user.service.v1.PositionService/Update"
 	PositionService_Delete_FullMethodName      = "/user.service.v1.PositionService/Delete"
-	PositionService_BatchCreate_FullMethodName = "/user.service.v1.PositionService/BatchCreate"
 )
 
 // PositionServiceClient is the client API for PositionService service.
@@ -37,16 +38,18 @@ const (
 type PositionServiceClient interface {
 	// 查询职位列表
 	List(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*ListPositionResponse, error)
+	// 统计职位数量
+	Count(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*CountPositionResponse, error)
 	// 查询职位详情
 	Get(ctx context.Context, in *GetPositionRequest, opts ...grpc.CallOption) (*Position, error)
 	// 创建职位
 	Create(ctx context.Context, in *CreatePositionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// 批量创建职位
+	BatchCreate(ctx context.Context, in *BatchCreatePositionsRequest, opts ...grpc.CallOption) (*BatchCreatePositionsResponse, error)
 	// 更新职位
 	Update(ctx context.Context, in *UpdatePositionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// 删除职位
 	Delete(ctx context.Context, in *DeletePositionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	// 批量创建职位
-	BatchCreate(ctx context.Context, in *BatchCreatePositionsRequest, opts ...grpc.CallOption) (*BatchCreatePositionsResponse, error)
 }
 
 type positionServiceClient struct {
@@ -61,6 +64,16 @@ func (c *positionServiceClient) List(ctx context.Context, in *v1.PagingRequest, 
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListPositionResponse)
 	err := c.cc.Invoke(ctx, PositionService_List_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *positionServiceClient) Count(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*CountPositionResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CountPositionResponse)
+	err := c.cc.Invoke(ctx, PositionService_Count_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -87,6 +100,16 @@ func (c *positionServiceClient) Create(ctx context.Context, in *CreatePositionRe
 	return out, nil
 }
 
+func (c *positionServiceClient) BatchCreate(ctx context.Context, in *BatchCreatePositionsRequest, opts ...grpc.CallOption) (*BatchCreatePositionsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(BatchCreatePositionsResponse)
+	err := c.cc.Invoke(ctx, PositionService_BatchCreate_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *positionServiceClient) Update(ctx context.Context, in *UpdatePositionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(emptypb.Empty)
@@ -107,16 +130,6 @@ func (c *positionServiceClient) Delete(ctx context.Context, in *DeletePositionRe
 	return out, nil
 }
 
-func (c *positionServiceClient) BatchCreate(ctx context.Context, in *BatchCreatePositionsRequest, opts ...grpc.CallOption) (*BatchCreatePositionsResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(BatchCreatePositionsResponse)
-	err := c.cc.Invoke(ctx, PositionService_BatchCreate_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // PositionServiceServer is the server API for PositionService service.
 // All implementations must embed UnimplementedPositionServiceServer
 // for forward compatibility.
@@ -125,16 +138,18 @@ func (c *positionServiceClient) BatchCreate(ctx context.Context, in *BatchCreate
 type PositionServiceServer interface {
 	// 查询职位列表
 	List(context.Context, *v1.PagingRequest) (*ListPositionResponse, error)
+	// 统计职位数量
+	Count(context.Context, *v1.PagingRequest) (*CountPositionResponse, error)
 	// 查询职位详情
 	Get(context.Context, *GetPositionRequest) (*Position, error)
 	// 创建职位
 	Create(context.Context, *CreatePositionRequest) (*emptypb.Empty, error)
+	// 批量创建职位
+	BatchCreate(context.Context, *BatchCreatePositionsRequest) (*BatchCreatePositionsResponse, error)
 	// 更新职位
 	Update(context.Context, *UpdatePositionRequest) (*emptypb.Empty, error)
 	// 删除职位
 	Delete(context.Context, *DeletePositionRequest) (*emptypb.Empty, error)
-	// 批量创建职位
-	BatchCreate(context.Context, *BatchCreatePositionsRequest) (*BatchCreatePositionsResponse, error)
 	mustEmbedUnimplementedPositionServiceServer()
 }
 
@@ -148,20 +163,23 @@ type UnimplementedPositionServiceServer struct{}
 func (UnimplementedPositionServiceServer) List(context.Context, *v1.PagingRequest) (*ListPositionResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method List not implemented")
 }
+func (UnimplementedPositionServiceServer) Count(context.Context, *v1.PagingRequest) (*CountPositionResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Count not implemented")
+}
 func (UnimplementedPositionServiceServer) Get(context.Context, *GetPositionRequest) (*Position, error) {
 	return nil, status.Error(codes.Unimplemented, "method Get not implemented")
 }
 func (UnimplementedPositionServiceServer) Create(context.Context, *CreatePositionRequest) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Create not implemented")
 }
+func (UnimplementedPositionServiceServer) BatchCreate(context.Context, *BatchCreatePositionsRequest) (*BatchCreatePositionsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method BatchCreate not implemented")
+}
 func (UnimplementedPositionServiceServer) Update(context.Context, *UpdatePositionRequest) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Update not implemented")
 }
 func (UnimplementedPositionServiceServer) Delete(context.Context, *DeletePositionRequest) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Delete not implemented")
-}
-func (UnimplementedPositionServiceServer) BatchCreate(context.Context, *BatchCreatePositionsRequest) (*BatchCreatePositionsResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method BatchCreate not implemented")
 }
 func (UnimplementedPositionServiceServer) mustEmbedUnimplementedPositionServiceServer() {}
 func (UnimplementedPositionServiceServer) testEmbeddedByValue()                         {}
@@ -202,6 +220,24 @@ func _PositionService_List_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PositionService_Count_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(v1.PagingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PositionServiceServer).Count(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PositionService_Count_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PositionServiceServer).Count(ctx, req.(*v1.PagingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _PositionService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetPositionRequest)
 	if err := dec(in); err != nil {
@@ -234,6 +270,24 @@ func _PositionService_Create_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(PositionServiceServer).Create(ctx, req.(*CreatePositionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PositionService_BatchCreate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BatchCreatePositionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PositionServiceServer).BatchCreate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PositionService_BatchCreate_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PositionServiceServer).BatchCreate(ctx, req.(*BatchCreatePositionsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -274,24 +328,6 @@ func _PositionService_Delete_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
-func _PositionService_BatchCreate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(BatchCreatePositionsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(PositionServiceServer).BatchCreate(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: PositionService_BatchCreate_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PositionServiceServer).BatchCreate(ctx, req.(*BatchCreatePositionsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // PositionService_ServiceDesc is the grpc.ServiceDesc for PositionService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -304,6 +340,10 @@ var PositionService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _PositionService_List_Handler,
 		},
 		{
+			MethodName: "Count",
+			Handler:    _PositionService_Count_Handler,
+		},
+		{
 			MethodName: "Get",
 			Handler:    _PositionService_Get_Handler,
 		},
@@ -312,16 +352,16 @@ var PositionService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _PositionService_Create_Handler,
 		},
 		{
+			MethodName: "BatchCreate",
+			Handler:    _PositionService_BatchCreate_Handler,
+		},
+		{
 			MethodName: "Update",
 			Handler:    _PositionService_Update_Handler,
 		},
 		{
 			MethodName: "Delete",
 			Handler:    _PositionService_Delete_Handler,
-		},
-		{
-			MethodName: "BatchCreate",
-			Handler:    _PositionService_BatchCreate_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

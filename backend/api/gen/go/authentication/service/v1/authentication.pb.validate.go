@@ -428,13 +428,23 @@ func (m *ValidateTokenRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for UserId
-
 	// no validation rules for Token
 
 	// no validation rules for ClientType
 
 	// no validation rules for TokenCategory
+
+	if m.UserId != nil {
+		// no validation rules for UserId
+	}
+
+	if m.SkipRedis != nil {
+		// no validation rules for SkipRedis
+	}
+
+	if m.SkipBlacklist != nil {
+		// no validation rules for SkipBlacklist
+	}
 
 	if len(errors) > 0 {
 		return ValidateTokenRequestMultiError(errors)
@@ -540,14 +550,16 @@ func (m *ValidateTokenResponse) validate(all bool) error {
 
 	// no validation rules for IsValid
 
-	if m.Claim != nil {
+	// no validation rules for IsBlocked
+
+	if m.Payload != nil {
 
 		if all {
-			switch v := interface{}(m.GetClaim()).(type) {
+			switch v := interface{}(m.GetPayload()).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
 					errors = append(errors, ValidateTokenResponseValidationError{
-						field:  "Claim",
+						field:  "Payload",
 						reason: "embedded message failed validation",
 						cause:  err,
 					})
@@ -555,16 +567,16 @@ func (m *ValidateTokenResponse) validate(all bool) error {
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
 					errors = append(errors, ValidateTokenResponseValidationError{
-						field:  "Claim",
+						field:  "Payload",
 						reason: "embedded message failed validation",
 						cause:  err,
 					})
 				}
 			}
-		} else if v, ok := interface{}(m.GetClaim()).(interface{ Validate() error }); ok {
+		} else if v, ok := interface{}(m.GetPayload()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return ValidateTokenResponseValidationError{
-					field:  "Claim",
+					field:  "Payload",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
@@ -683,6 +695,10 @@ func (m *RegisterUserRequest) validate(all bool) error {
 
 	if m.Email != nil {
 		// no validation rules for Email
+	}
+
+	if m.ClientType != nil {
+		// no validation rules for ClientType
 	}
 
 	if len(errors) > 0 {
@@ -1180,3 +1196,553 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = GetAccessTokensResponseValidationError{}
+
+// Validate checks the field values on BlockTokenRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *BlockTokenRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on BlockTokenRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// BlockTokenRequestMultiError, or nil if none found.
+func (m *BlockTokenRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *BlockTokenRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for UserId
+
+	// no validation rules for ClientType
+
+	// no validation rules for Reason
+
+	switch v := m.Target.(type) {
+	case *BlockTokenRequest_Token:
+		if v == nil {
+			err := BlockTokenRequestValidationError{
+				field:  "Target",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		// no validation rules for Token
+	case *BlockTokenRequest_Jti:
+		if v == nil {
+			err := BlockTokenRequestValidationError{
+				field:  "Target",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		// no validation rules for Jti
+	default:
+		_ = v // ensures v is used
+	}
+
+	if m.Duration != nil {
+
+		if all {
+			switch v := interface{}(m.GetDuration()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, BlockTokenRequestValidationError{
+						field:  "Duration",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, BlockTokenRequestValidationError{
+						field:  "Duration",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetDuration()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return BlockTokenRequestValidationError{
+					field:  "Duration",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return BlockTokenRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// BlockTokenRequestMultiError is an error wrapping multiple validation errors
+// returned by BlockTokenRequest.ValidateAll() if the designated constraints
+// aren't met.
+type BlockTokenRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m BlockTokenRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m BlockTokenRequestMultiError) AllErrors() []error { return m }
+
+// BlockTokenRequestValidationError is the validation error returned by
+// BlockTokenRequest.Validate if the designated constraints aren't met.
+type BlockTokenRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e BlockTokenRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e BlockTokenRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e BlockTokenRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e BlockTokenRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e BlockTokenRequestValidationError) ErrorName() string {
+	return "BlockTokenRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e BlockTokenRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sBlockTokenRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = BlockTokenRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = BlockTokenRequestValidationError{}
+
+// Validate checks the field values on UnblockTokenRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *UnblockTokenRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on UnblockTokenRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// UnblockTokenRequestMultiError, or nil if none found.
+func (m *UnblockTokenRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *UnblockTokenRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for UserId
+
+	// no validation rules for ClientType
+
+	switch v := m.Target.(type) {
+	case *UnblockTokenRequest_Token:
+		if v == nil {
+			err := UnblockTokenRequestValidationError{
+				field:  "Target",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		// no validation rules for Token
+	case *UnblockTokenRequest_Jti:
+		if v == nil {
+			err := UnblockTokenRequestValidationError{
+				field:  "Target",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		// no validation rules for Jti
+	default:
+		_ = v // ensures v is used
+	}
+
+	if len(errors) > 0 {
+		return UnblockTokenRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// UnblockTokenRequestMultiError is an error wrapping multiple validation
+// errors returned by UnblockTokenRequest.ValidateAll() if the designated
+// constraints aren't met.
+type UnblockTokenRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UnblockTokenRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UnblockTokenRequestMultiError) AllErrors() []error { return m }
+
+// UnblockTokenRequestValidationError is the validation error returned by
+// UnblockTokenRequest.Validate if the designated constraints aren't met.
+type UnblockTokenRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UnblockTokenRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UnblockTokenRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UnblockTokenRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UnblockTokenRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UnblockTokenRequestValidationError) ErrorName() string {
+	return "UnblockTokenRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UnblockTokenRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUnblockTokenRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UnblockTokenRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UnblockTokenRequestValidationError{}
+
+// Validate checks the field values on BlockTokenResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *BlockTokenResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on BlockTokenResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// BlockTokenResponseMultiError, or nil if none found.
+func (m *BlockTokenResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *BlockTokenResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetBlockedUntil()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, BlockTokenResponseValidationError{
+					field:  "BlockedUntil",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, BlockTokenResponseValidationError{
+					field:  "BlockedUntil",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetBlockedUntil()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return BlockTokenResponseValidationError{
+				field:  "BlockedUntil",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return BlockTokenResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// BlockTokenResponseMultiError is an error wrapping multiple validation errors
+// returned by BlockTokenResponse.ValidateAll() if the designated constraints
+// aren't met.
+type BlockTokenResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m BlockTokenResponseMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m BlockTokenResponseMultiError) AllErrors() []error { return m }
+
+// BlockTokenResponseValidationError is the validation error returned by
+// BlockTokenResponse.Validate if the designated constraints aren't met.
+type BlockTokenResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e BlockTokenResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e BlockTokenResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e BlockTokenResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e BlockTokenResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e BlockTokenResponseValidationError) ErrorName() string {
+	return "BlockTokenResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e BlockTokenResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sBlockTokenResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = BlockTokenResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = BlockTokenResponseValidationError{}
+
+// Validate checks the field values on RevokeTokenByIdRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *RevokeTokenByIdRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on RevokeTokenByIdRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// RevokeTokenByIdRequestMultiError, or nil if none found.
+func (m *RevokeTokenByIdRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *RevokeTokenByIdRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Jti
+
+	// no validation rules for Reason
+
+	if m.ClientType != nil {
+		// no validation rules for ClientType
+	}
+
+	if m.UserId != nil {
+		// no validation rules for UserId
+	}
+
+	if len(errors) > 0 {
+		return RevokeTokenByIdRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// RevokeTokenByIdRequestMultiError is an error wrapping multiple validation
+// errors returned by RevokeTokenByIdRequest.ValidateAll() if the designated
+// constraints aren't met.
+type RevokeTokenByIdRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RevokeTokenByIdRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RevokeTokenByIdRequestMultiError) AllErrors() []error { return m }
+
+// RevokeTokenByIdRequestValidationError is the validation error returned by
+// RevokeTokenByIdRequest.Validate if the designated constraints aren't met.
+type RevokeTokenByIdRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e RevokeTokenByIdRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e RevokeTokenByIdRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e RevokeTokenByIdRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e RevokeTokenByIdRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e RevokeTokenByIdRequestValidationError) ErrorName() string {
+	return "RevokeTokenByIdRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e RevokeTokenByIdRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sRevokeTokenByIdRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = RevokeTokenByIdRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = RevokeTokenByIdRequestValidationError{}

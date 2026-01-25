@@ -1161,3 +1161,107 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DeleteDictTypeRequestValidationError{}
+
+// Validate checks the field values on CountDictTypeResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CountDictTypeResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CountDictTypeResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CountDictTypeResponseMultiError, or nil if none found.
+func (m *CountDictTypeResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CountDictTypeResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Count
+
+	if len(errors) > 0 {
+		return CountDictTypeResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// CountDictTypeResponseMultiError is an error wrapping multiple validation
+// errors returned by CountDictTypeResponse.ValidateAll() if the designated
+// constraints aren't met.
+type CountDictTypeResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CountDictTypeResponseMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CountDictTypeResponseMultiError) AllErrors() []error { return m }
+
+// CountDictTypeResponseValidationError is the validation error returned by
+// CountDictTypeResponse.Validate if the designated constraints aren't met.
+type CountDictTypeResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CountDictTypeResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CountDictTypeResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CountDictTypeResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CountDictTypeResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CountDictTypeResponseValidationError) ErrorName() string {
+	return "CountDictTypeResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CountDictTypeResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCountDictTypeResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CountDictTypeResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CountDictTypeResponseValidationError{}

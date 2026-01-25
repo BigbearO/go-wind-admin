@@ -18,6 +18,9 @@ service ApiService {
   // 查询API资源列表
   rpc List (pagination.PagingRequest) returns (ListApiResponse) {}
 
+  // 统计API资源数量
+  rpc Count (pagination.PagingRequest) returns (CountApiResponse) {}
+
   // 查询API资源详情
   rpc Get (GetApiRequest) returns (Api) {}
 
@@ -155,4 +158,8 @@ message UpdateApiRequest {
 // 删除 - 请求
 message DeleteApiRequest {
   uint32 id = 1;
+}
+
+message CountApiResponse {
+  uint64 count = 1;
 }

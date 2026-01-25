@@ -16,20 +16,22 @@ service UserService {
   // 查询用户列表
   rpc List (pagination.PagingRequest) returns (ListUserResponse) {}
 
+  // 统计用户数量
+  rpc Count (pagination.PagingRequest) returns (CountUserResponse) {}
+
   // 查询用户详情
   rpc Get (GetUserRequest) returns (User) {}
 
   // 创建用户
   rpc Create (CreateUserRequest) returns (google.protobuf.Empty) {}
+  // 批量创建用户
+  rpc BatchCreate (BatchCreateUsersRequest) returns (BatchCreateUsersResponse) {}
 
   // 更新用户
   rpc Update (UpdateUserRequest) returns (google.protobuf.Empty) {}
 
   // 删除用户
   rpc Delete (DeleteUserRequest) returns (google.protobuf.Empty) {}
-
-  // 批量创建用户
-  rpc BatchCreate (BatchCreateUsersRequest) returns (BatchCreateUsersResponse) {}
 
   // 用户是否存在
   rpc UserExists (UserExistsRequest) returns (UserExistsResponse) {}
@@ -429,4 +431,8 @@ message EmailVerification {
     (google.api.field_behavior) = REQUIRED,
     (gnostic.openapi.v3.property) = { description: "邮箱验证码" }
   ];
+}
+
+message CountUserResponse {
+  uint64 count = 1;
 }

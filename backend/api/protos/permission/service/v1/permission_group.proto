@@ -17,6 +17,9 @@ service PermissionGroupService {
   // 查询权限组列表
   rpc List (pagination.PagingRequest) returns (ListPermissionGroupResponse) {}
 
+  // 统计权限组数量
+  rpc Count (pagination.PagingRequest) returns (CountPermissionGroupResponse) {}
+
   // 查询权限组详情
   rpc Get (GetPermissionGroupRequest) returns (PermissionGroup) {}
 
@@ -133,4 +136,8 @@ message UpdatePermissionGroupRequest {
 // 删除 - 请求
 message DeletePermissionGroupRequest {
   uint32 id = 1;
+}
+
+message CountPermissionGroupResponse {
+  uint64 count = 1;
 }

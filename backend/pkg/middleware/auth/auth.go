@@ -53,7 +53,7 @@ func Server(opts ...Option) middleware.Middleware {
 
 			authnClaims, ok := authn.FromContext(ctx)
 			if !ok {
-				op.log.Errorf("auth middleware: missing transport in context")
+				op.log.Errorf("auth middleware: missing authn claims in context")
 				return nil, ErrWrongContext
 			}
 

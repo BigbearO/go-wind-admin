@@ -1387,3 +1387,107 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = BatchCreateOrgUnitsResponseValidationError{}
+
+// Validate checks the field values on CountOrgUnitResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CountOrgUnitResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CountOrgUnitResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CountOrgUnitResponseMultiError, or nil if none found.
+func (m *CountOrgUnitResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CountOrgUnitResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Count
+
+	if len(errors) > 0 {
+		return CountOrgUnitResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// CountOrgUnitResponseMultiError is an error wrapping multiple validation
+// errors returned by CountOrgUnitResponse.ValidateAll() if the designated
+// constraints aren't met.
+type CountOrgUnitResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CountOrgUnitResponseMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CountOrgUnitResponseMultiError) AllErrors() []error { return m }
+
+// CountOrgUnitResponseValidationError is the validation error returned by
+// CountOrgUnitResponse.Validate if the designated constraints aren't met.
+type CountOrgUnitResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CountOrgUnitResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CountOrgUnitResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CountOrgUnitResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CountOrgUnitResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CountOrgUnitResponseValidationError) ErrorName() string {
+	return "CountOrgUnitResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CountOrgUnitResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCountOrgUnitResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CountOrgUnitResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CountOrgUnitResponseValidationError{}

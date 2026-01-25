@@ -57,6 +57,17 @@ func (s *redactedPositionServiceServer) List(ctx context.Context, in *pagination
 	return res, err
 }
 
+// Count is the redacted wrapper for the actual PositionServiceServer.Count method
+// Unary RPC
+func (s *redactedPositionServiceServer) Count(ctx context.Context, in *pagination.PagingRequest) (*CountPositionResponse, error) {
+	res, err := s.srv.Count(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
 // Get is the redacted wrapper for the actual PositionServiceServer.Get method
 // Unary RPC
 func (s *redactedPositionServiceServer) Get(ctx context.Context, in *GetPositionRequest) (*Position, error) {
@@ -79,6 +90,17 @@ func (s *redactedPositionServiceServer) Create(ctx context.Context, in *CreatePo
 	return res, err
 }
 
+// BatchCreate is the redacted wrapper for the actual PositionServiceServer.BatchCreate method
+// Unary RPC
+func (s *redactedPositionServiceServer) BatchCreate(ctx context.Context, in *BatchCreatePositionsRequest) (*BatchCreatePositionsResponse, error) {
+	res, err := s.srv.BatchCreate(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
 // Update is the redacted wrapper for the actual PositionServiceServer.Update method
 // Unary RPC
 func (s *redactedPositionServiceServer) Update(ctx context.Context, in *UpdatePositionRequest) (*emptypb.Empty, error) {
@@ -94,17 +116,6 @@ func (s *redactedPositionServiceServer) Update(ctx context.Context, in *UpdatePo
 // Unary RPC
 func (s *redactedPositionServiceServer) Delete(ctx context.Context, in *DeletePositionRequest) (*emptypb.Empty, error) {
 	res, err := s.srv.Delete(ctx, in)
-	if !s.bypass.CheckInternal(ctx) {
-		// Apply redaction to the response
-		redact.Apply(res)
-	}
-	return res, err
-}
-
-// BatchCreate is the redacted wrapper for the actual PositionServiceServer.BatchCreate method
-// Unary RPC
-func (s *redactedPositionServiceServer) BatchCreate(ctx context.Context, in *BatchCreatePositionsRequest) (*BatchCreatePositionsResponse, error) {
-	res, err := s.srv.BatchCreate(ctx, in)
 	if !s.bypass.CheckInternal(ctx) {
 		// Apply redaction to the response
 		redact.Apply(res)
@@ -255,5 +266,15 @@ func (x *BatchCreatePositionsResponse) Redact() string {
 	}
 
 	// Safe field: CreatedIds
+	return x.String()
+}
+
+// Redact method implementation for CountPositionResponse
+func (x *CountPositionResponse) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: Count
 	return x.String()
 }

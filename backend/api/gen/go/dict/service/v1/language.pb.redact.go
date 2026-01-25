@@ -59,6 +59,17 @@ func (s *redactedLanguageServiceServer) List(ctx context.Context, in *pagination
 	return res, err
 }
 
+// Count is the redacted wrapper for the actual LanguageServiceServer.Count method
+// Unary RPC
+func (s *redactedLanguageServiceServer) Count(ctx context.Context, in *pagination.PagingRequest) (*CountLanguageResponse, error) {
+	res, err := s.srv.Count(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
 // Get is the redacted wrapper for the actual LanguageServiceServer.Get method
 // Unary RPC
 func (s *redactedLanguageServiceServer) Get(ctx context.Context, in *GetLanguageRequest) (*Language, error) {
@@ -81,6 +92,17 @@ func (s *redactedLanguageServiceServer) Create(ctx context.Context, in *CreateLa
 	return res, err
 }
 
+// BatchCreate is the redacted wrapper for the actual LanguageServiceServer.BatchCreate method
+// Unary RPC
+func (s *redactedLanguageServiceServer) BatchCreate(ctx context.Context, in *BatchCreateLanguagesRequest) (*emptypb.Empty, error) {
+	res, err := s.srv.BatchCreate(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
 // Update is the redacted wrapper for the actual LanguageServiceServer.Update method
 // Unary RPC
 func (s *redactedLanguageServiceServer) Update(ctx context.Context, in *UpdateLanguageRequest) (*emptypb.Empty, error) {
@@ -96,17 +118,6 @@ func (s *redactedLanguageServiceServer) Update(ctx context.Context, in *UpdateLa
 // Unary RPC
 func (s *redactedLanguageServiceServer) Delete(ctx context.Context, in *DeleteLanguageRequest) (*emptypb.Empty, error) {
 	res, err := s.srv.Delete(ctx, in)
-	if !s.bypass.CheckInternal(ctx) {
-		// Apply redaction to the response
-		redact.Apply(res)
-	}
-	return res, err
-}
-
-// BatchCreate is the redacted wrapper for the actual LanguageServiceServer.BatchCreate method
-// Unary RPC
-func (s *redactedLanguageServiceServer) BatchCreate(ctx context.Context, in *BatchCreateLanguagesRequest) (*emptypb.Empty, error) {
-	res, err := s.srv.BatchCreate(ctx, in)
 	if !s.bypass.CheckInternal(ctx) {
 		// Apply redaction to the response
 		redact.Apply(res)
@@ -227,5 +238,15 @@ func (x *BatchCreateLanguagesResponse) Redact() string {
 	}
 
 	// Safe field: CreatedIds
+	return x.String()
+}
+
+// Redact method implementation for CountLanguageResponse
+func (x *CountLanguageResponse) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: Count
 	return x.String()
 }

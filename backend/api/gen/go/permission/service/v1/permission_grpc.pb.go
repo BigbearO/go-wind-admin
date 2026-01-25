@@ -22,6 +22,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	PermissionService_List_FullMethodName            = "/permission.service.v1.PermissionService/List"
+	PermissionService_Count_FullMethodName           = "/permission.service.v1.PermissionService/Count"
 	PermissionService_Get_FullMethodName             = "/permission.service.v1.PermissionService/Get"
 	PermissionService_Create_FullMethodName          = "/permission.service.v1.PermissionService/Create"
 	PermissionService_Update_FullMethodName          = "/permission.service.v1.PermissionService/Update"
@@ -37,6 +38,8 @@ const (
 type PermissionServiceClient interface {
 	// 查询权限点列表
 	List(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*ListPermissionResponse, error)
+	// 统计权限点数量
+	Count(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*CountPermissionResponse, error)
 	// 查询权限点详情
 	Get(ctx context.Context, in *GetPermissionRequest, opts ...grpc.CallOption) (*Permission, error)
 	// 创建权限点
@@ -61,6 +64,16 @@ func (c *permissionServiceClient) List(ctx context.Context, in *v1.PagingRequest
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListPermissionResponse)
 	err := c.cc.Invoke(ctx, PermissionService_List_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *permissionServiceClient) Count(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*CountPermissionResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CountPermissionResponse)
+	err := c.cc.Invoke(ctx, PermissionService_Count_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -125,6 +138,8 @@ func (c *permissionServiceClient) SyncPermissions(ctx context.Context, in *empty
 type PermissionServiceServer interface {
 	// 查询权限点列表
 	List(context.Context, *v1.PagingRequest) (*ListPermissionResponse, error)
+	// 统计权限点数量
+	Count(context.Context, *v1.PagingRequest) (*CountPermissionResponse, error)
 	// 查询权限点详情
 	Get(context.Context, *GetPermissionRequest) (*Permission, error)
 	// 创建权限点
@@ -147,6 +162,9 @@ type UnimplementedPermissionServiceServer struct{}
 
 func (UnimplementedPermissionServiceServer) List(context.Context, *v1.PagingRequest) (*ListPermissionResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method List not implemented")
+}
+func (UnimplementedPermissionServiceServer) Count(context.Context, *v1.PagingRequest) (*CountPermissionResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Count not implemented")
 }
 func (UnimplementedPermissionServiceServer) Get(context.Context, *GetPermissionRequest) (*Permission, error) {
 	return nil, status.Error(codes.Unimplemented, "method Get not implemented")
@@ -198,6 +216,24 @@ func _PermissionService_List_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(PermissionServiceServer).List(ctx, req.(*v1.PagingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PermissionService_Count_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(v1.PagingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PermissionServiceServer).Count(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PermissionService_Count_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PermissionServiceServer).Count(ctx, req.(*v1.PagingRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -302,6 +338,10 @@ var PermissionService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "List",
 			Handler:    _PermissionService_List_Handler,
+		},
+		{
+			MethodName: "Count",
+			Handler:    _PermissionService_Count_Handler,
 		},
 		{
 			MethodName: "Get",

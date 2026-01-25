@@ -87,6 +87,18 @@ func (m *UserTokenPayload) validate(all bool) error {
 		// no validation rules for OrgUnitId
 	}
 
+	if m.IsPlatformAdmin != nil {
+		// no validation rules for IsPlatformAdmin
+	}
+
+	if m.IsTenantAdmin != nil {
+		// no validation rules for IsTenantAdmin
+	}
+
+	if m.Jti != nil {
+		// no validation rules for Jti
+	}
+
 	if len(errors) > 0 {
 		return UserTokenPayloadMultiError(errors)
 	}

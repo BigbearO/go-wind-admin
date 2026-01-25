@@ -18,20 +18,22 @@ service LanguageService {
   // 分页查询语言列表
   rpc List (pagination.PagingRequest) returns (ListLanguageResponse) {}
 
+  // 统计语言数量
+  rpc Count (pagination.PagingRequest) returns (CountLanguageResponse) {}
+
   // 查询语言详情
   rpc Get (GetLanguageRequest) returns (Language) {}
 
   // 创建语言
   rpc Create (CreateLanguageRequest) returns (google.protobuf.Empty) {}
+  // 批量创建语言
+  rpc BatchCreate ( BatchCreateLanguagesRequest ) returns (google.protobuf.Empty) {}
 
   // 更新语言
   rpc Update (UpdateLanguageRequest) returns (google.protobuf.Empty) {}
 
   // 删除语言
   rpc Delete (DeleteLanguageRequest) returns (google.protobuf.Empty) {}
-
-  // 批量创建语言
-  rpc BatchCreate ( BatchCreateLanguagesRequest ) returns (google.protobuf.Empty) {}
 }
 
 // 语言
@@ -160,4 +162,8 @@ message BatchCreateLanguagesResponse {
       description: "创建成功的语言ID列表"
     }
   ]; // 创建成功的语言ID列表
+}
+
+message CountLanguageResponse {
+  uint64 count = 1;
 }

@@ -22,6 +22,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	PermissionGroupService_List_FullMethodName   = "/permission.service.v1.PermissionGroupService/List"
+	PermissionGroupService_Count_FullMethodName  = "/permission.service.v1.PermissionGroupService/Count"
 	PermissionGroupService_Get_FullMethodName    = "/permission.service.v1.PermissionGroupService/Get"
 	PermissionGroupService_Create_FullMethodName = "/permission.service.v1.PermissionGroupService/Create"
 	PermissionGroupService_Update_FullMethodName = "/permission.service.v1.PermissionGroupService/Update"
@@ -36,6 +37,8 @@ const (
 type PermissionGroupServiceClient interface {
 	// 查询权限组列表
 	List(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*ListPermissionGroupResponse, error)
+	// 统计权限组数量
+	Count(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*CountPermissionGroupResponse, error)
 	// 查询权限组详情
 	Get(ctx context.Context, in *GetPermissionGroupRequest, opts ...grpc.CallOption) (*PermissionGroup, error)
 	// 创建权限组
@@ -58,6 +61,16 @@ func (c *permissionGroupServiceClient) List(ctx context.Context, in *v1.PagingRe
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListPermissionGroupResponse)
 	err := c.cc.Invoke(ctx, PermissionGroupService_List_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *permissionGroupServiceClient) Count(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*CountPermissionGroupResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CountPermissionGroupResponse)
+	err := c.cc.Invoke(ctx, PermissionGroupService_Count_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -112,6 +125,8 @@ func (c *permissionGroupServiceClient) Delete(ctx context.Context, in *DeletePer
 type PermissionGroupServiceServer interface {
 	// 查询权限组列表
 	List(context.Context, *v1.PagingRequest) (*ListPermissionGroupResponse, error)
+	// 统计权限组数量
+	Count(context.Context, *v1.PagingRequest) (*CountPermissionGroupResponse, error)
 	// 查询权限组详情
 	Get(context.Context, *GetPermissionGroupRequest) (*PermissionGroup, error)
 	// 创建权限组
@@ -132,6 +147,9 @@ type UnimplementedPermissionGroupServiceServer struct{}
 
 func (UnimplementedPermissionGroupServiceServer) List(context.Context, *v1.PagingRequest) (*ListPermissionGroupResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method List not implemented")
+}
+func (UnimplementedPermissionGroupServiceServer) Count(context.Context, *v1.PagingRequest) (*CountPermissionGroupResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Count not implemented")
 }
 func (UnimplementedPermissionGroupServiceServer) Get(context.Context, *GetPermissionGroupRequest) (*PermissionGroup, error) {
 	return nil, status.Error(codes.Unimplemented, "method Get not implemented")
@@ -181,6 +199,24 @@ func _PermissionGroupService_List_Handler(srv interface{}, ctx context.Context, 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(PermissionGroupServiceServer).List(ctx, req.(*v1.PagingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PermissionGroupService_Count_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(v1.PagingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PermissionGroupServiceServer).Count(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PermissionGroupService_Count_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PermissionGroupServiceServer).Count(ctx, req.(*v1.PagingRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -267,6 +303,10 @@ var PermissionGroupService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "List",
 			Handler:    _PermissionGroupService_List_Handler,
+		},
+		{
+			MethodName: "Count",
+			Handler:    _PermissionGroupService_Count_Handler,
 		},
 		{
 			MethodName: "Get",

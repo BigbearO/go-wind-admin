@@ -22,11 +22,12 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	UserService_List_FullMethodName        = "/user.service.v1.UserService/List"
+	UserService_Count_FullMethodName       = "/user.service.v1.UserService/Count"
 	UserService_Get_FullMethodName         = "/user.service.v1.UserService/Get"
 	UserService_Create_FullMethodName      = "/user.service.v1.UserService/Create"
+	UserService_BatchCreate_FullMethodName = "/user.service.v1.UserService/BatchCreate"
 	UserService_Update_FullMethodName      = "/user.service.v1.UserService/Update"
 	UserService_Delete_FullMethodName      = "/user.service.v1.UserService/Delete"
-	UserService_BatchCreate_FullMethodName = "/user.service.v1.UserService/BatchCreate"
 	UserService_UserExists_FullMethodName  = "/user.service.v1.UserService/UserExists"
 )
 
@@ -38,16 +39,18 @@ const (
 type UserServiceClient interface {
 	// 查询用户列表
 	List(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*ListUserResponse, error)
+	// 统计用户数量
+	Count(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*CountUserResponse, error)
 	// 查询用户详情
 	Get(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*User, error)
 	// 创建用户
 	Create(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// 批量创建用户
+	BatchCreate(ctx context.Context, in *BatchCreateUsersRequest, opts ...grpc.CallOption) (*BatchCreateUsersResponse, error)
 	// 更新用户
 	Update(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// 删除用户
 	Delete(ctx context.Context, in *DeleteUserRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	// 批量创建用户
-	BatchCreate(ctx context.Context, in *BatchCreateUsersRequest, opts ...grpc.CallOption) (*BatchCreateUsersResponse, error)
 	// 用户是否存在
 	UserExists(ctx context.Context, in *UserExistsRequest, opts ...grpc.CallOption) (*UserExistsResponse, error)
 }
@@ -64,6 +67,16 @@ func (c *userServiceClient) List(ctx context.Context, in *v1.PagingRequest, opts
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListUserResponse)
 	err := c.cc.Invoke(ctx, UserService_List_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) Count(ctx context.Context, in *v1.PagingRequest, opts ...grpc.CallOption) (*CountUserResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CountUserResponse)
+	err := c.cc.Invoke(ctx, UserService_Count_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -90,6 +103,16 @@ func (c *userServiceClient) Create(ctx context.Context, in *CreateUserRequest, o
 	return out, nil
 }
 
+func (c *userServiceClient) BatchCreate(ctx context.Context, in *BatchCreateUsersRequest, opts ...grpc.CallOption) (*BatchCreateUsersResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(BatchCreateUsersResponse)
+	err := c.cc.Invoke(ctx, UserService_BatchCreate_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *userServiceClient) Update(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(emptypb.Empty)
@@ -104,16 +127,6 @@ func (c *userServiceClient) Delete(ctx context.Context, in *DeleteUserRequest, o
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, UserService_Delete_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *userServiceClient) BatchCreate(ctx context.Context, in *BatchCreateUsersRequest, opts ...grpc.CallOption) (*BatchCreateUsersResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(BatchCreateUsersResponse)
-	err := c.cc.Invoke(ctx, UserService_BatchCreate_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -138,16 +151,18 @@ func (c *userServiceClient) UserExists(ctx context.Context, in *UserExistsReques
 type UserServiceServer interface {
 	// 查询用户列表
 	List(context.Context, *v1.PagingRequest) (*ListUserResponse, error)
+	// 统计用户数量
+	Count(context.Context, *v1.PagingRequest) (*CountUserResponse, error)
 	// 查询用户详情
 	Get(context.Context, *GetUserRequest) (*User, error)
 	// 创建用户
 	Create(context.Context, *CreateUserRequest) (*emptypb.Empty, error)
+	// 批量创建用户
+	BatchCreate(context.Context, *BatchCreateUsersRequest) (*BatchCreateUsersResponse, error)
 	// 更新用户
 	Update(context.Context, *UpdateUserRequest) (*emptypb.Empty, error)
 	// 删除用户
 	Delete(context.Context, *DeleteUserRequest) (*emptypb.Empty, error)
-	// 批量创建用户
-	BatchCreate(context.Context, *BatchCreateUsersRequest) (*BatchCreateUsersResponse, error)
 	// 用户是否存在
 	UserExists(context.Context, *UserExistsRequest) (*UserExistsResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
@@ -163,20 +178,23 @@ type UnimplementedUserServiceServer struct{}
 func (UnimplementedUserServiceServer) List(context.Context, *v1.PagingRequest) (*ListUserResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method List not implemented")
 }
+func (UnimplementedUserServiceServer) Count(context.Context, *v1.PagingRequest) (*CountUserResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Count not implemented")
+}
 func (UnimplementedUserServiceServer) Get(context.Context, *GetUserRequest) (*User, error) {
 	return nil, status.Error(codes.Unimplemented, "method Get not implemented")
 }
 func (UnimplementedUserServiceServer) Create(context.Context, *CreateUserRequest) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Create not implemented")
 }
+func (UnimplementedUserServiceServer) BatchCreate(context.Context, *BatchCreateUsersRequest) (*BatchCreateUsersResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method BatchCreate not implemented")
+}
 func (UnimplementedUserServiceServer) Update(context.Context, *UpdateUserRequest) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Update not implemented")
 }
 func (UnimplementedUserServiceServer) Delete(context.Context, *DeleteUserRequest) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Delete not implemented")
-}
-func (UnimplementedUserServiceServer) BatchCreate(context.Context, *BatchCreateUsersRequest) (*BatchCreateUsersResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method BatchCreate not implemented")
 }
 func (UnimplementedUserServiceServer) UserExists(context.Context, *UserExistsRequest) (*UserExistsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method UserExists not implemented")
@@ -220,6 +238,24 @@ func _UserService_List_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_Count_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(v1.PagingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).Count(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_Count_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).Count(ctx, req.(*v1.PagingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _UserService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetUserRequest)
 	if err := dec(in); err != nil {
@@ -252,6 +288,24 @@ func _UserService_Create_Handler(srv interface{}, ctx context.Context, dec func(
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).Create(ctx, req.(*CreateUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_BatchCreate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BatchCreateUsersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).BatchCreate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_BatchCreate_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).BatchCreate(ctx, req.(*BatchCreateUsersRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -292,24 +346,6 @@ func _UserService_Delete_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UserService_BatchCreate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(BatchCreateUsersRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UserServiceServer).BatchCreate(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: UserService_BatchCreate_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).BatchCreate(ctx, req.(*BatchCreateUsersRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _UserService_UserExists_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UserExistsRequest)
 	if err := dec(in); err != nil {
@@ -340,6 +376,10 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _UserService_List_Handler,
 		},
 		{
+			MethodName: "Count",
+			Handler:    _UserService_Count_Handler,
+		},
+		{
 			MethodName: "Get",
 			Handler:    _UserService_Get_Handler,
 		},
@@ -348,16 +388,16 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _UserService_Create_Handler,
 		},
 		{
+			MethodName: "BatchCreate",
+			Handler:    _UserService_BatchCreate_Handler,
+		},
+		{
 			MethodName: "Update",
 			Handler:    _UserService_Update_Handler,
 		},
 		{
 			MethodName: "Delete",
 			Handler:    _UserService_Delete_Handler,
-		},
-		{
-			MethodName: "BatchCreate",
-			Handler:    _UserService_BatchCreate_Handler,
 		},
 		{
 			MethodName: "UserExists",

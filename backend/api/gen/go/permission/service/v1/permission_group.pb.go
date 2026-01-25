@@ -518,6 +518,50 @@ func (x *DeletePermissionGroupRequest) GetId() uint32 {
 	return 0
 }
 
+type CountPermissionGroupResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Count         uint64                 `protobuf:"varint,1,opt,name=count,proto3" json:"count,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CountPermissionGroupResponse) Reset() {
+	*x = CountPermissionGroupResponse{}
+	mi := &file_permission_service_v1_permission_group_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CountPermissionGroupResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CountPermissionGroupResponse) ProtoMessage() {}
+
+func (x *CountPermissionGroupResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_permission_service_v1_permission_group_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CountPermissionGroupResponse.ProtoReflect.Descriptor instead.
+func (*CountPermissionGroupResponse) Descriptor() ([]byte, []int) {
+	return file_permission_service_v1_permission_group_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *CountPermissionGroupResponse) GetCount() uint64 {
+	if x != nil {
+		return x.Count
+	}
+	return 0
+}
+
 var File_permission_service_v1_permission_group_proto protoreflect.FileDescriptor
 
 const file_permission_service_v1_permission_group_proto_rawDesc = "" +
@@ -587,9 +631,12 @@ const file_permission_service_v1_permission_group_proto_rawDesc = "" +
 	"\rallow_missing\x18\x04 \x01(\bB\x89\x01\xbaG\x85\x01\x92\x02\x81\x01如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。H\x00R\fallowMissing\x88\x01\x01B\x10\n" +
 	"\x0e_allow_missing\".\n" +
 	"\x1cDeletePermissionGroupRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id2\xdf\x03\n" +
+	"\x02id\x18\x01 \x01(\rR\x02id\"4\n" +
+	"\x1cCountPermissionGroupResponse\x12\x14\n" +
+	"\x05count\x18\x01 \x01(\x04R\x05count2\xba\x04\n" +
 	"\x16PermissionGroupService\x12W\n" +
-	"\x04List\x12\x19.pagination.PagingRequest\x1a2.permission.service.v1.ListPermissionGroupResponse\"\x00\x12a\n" +
+	"\x04List\x12\x19.pagination.PagingRequest\x1a2.permission.service.v1.ListPermissionGroupResponse\"\x00\x12Y\n" +
+	"\x05Count\x12\x19.pagination.PagingRequest\x1a3.permission.service.v1.CountPermissionGroupResponse\"\x00\x12a\n" +
 	"\x03Get\x120.permission.service.v1.GetPermissionGroupRequest\x1a&.permission.service.v1.PermissionGroup\"\x00\x12W\n" +
 	"\x06Create\x123.permission.service.v1.CreatePermissionGroupRequest\x1a\x16.google.protobuf.Empty\"\x00\x12W\n" +
 	"\x06Update\x123.permission.service.v1.UpdatePermissionGroupRequest\x1a\x16.google.protobuf.Empty\"\x00\x12W\n" +
@@ -609,7 +656,7 @@ func file_permission_service_v1_permission_group_proto_rawDescGZIP() []byte {
 }
 
 var file_permission_service_v1_permission_group_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_permission_service_v1_permission_group_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_permission_service_v1_permission_group_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_permission_service_v1_permission_group_proto_goTypes = []any{
 	(PermissionGroup_Status)(0),          // 0: permission.service.v1.PermissionGroup.Status
 	(*PermissionGroup)(nil),              // 1: permission.service.v1.PermissionGroup
@@ -618,34 +665,37 @@ var file_permission_service_v1_permission_group_proto_goTypes = []any{
 	(*CreatePermissionGroupRequest)(nil), // 4: permission.service.v1.CreatePermissionGroupRequest
 	(*UpdatePermissionGroupRequest)(nil), // 5: permission.service.v1.UpdatePermissionGroupRequest
 	(*DeletePermissionGroupRequest)(nil), // 6: permission.service.v1.DeletePermissionGroupRequest
-	(*timestamppb.Timestamp)(nil),        // 7: google.protobuf.Timestamp
-	(*fieldmaskpb.FieldMask)(nil),        // 8: google.protobuf.FieldMask
-	(*v1.PagingRequest)(nil),             // 9: pagination.PagingRequest
-	(*emptypb.Empty)(nil),                // 10: google.protobuf.Empty
+	(*CountPermissionGroupResponse)(nil), // 7: permission.service.v1.CountPermissionGroupResponse
+	(*timestamppb.Timestamp)(nil),        // 8: google.protobuf.Timestamp
+	(*fieldmaskpb.FieldMask)(nil),        // 9: google.protobuf.FieldMask
+	(*v1.PagingRequest)(nil),             // 10: pagination.PagingRequest
+	(*emptypb.Empty)(nil),                // 11: google.protobuf.Empty
 }
 var file_permission_service_v1_permission_group_proto_depIdxs = []int32{
 	0,  // 0: permission.service.v1.PermissionGroup.status:type_name -> permission.service.v1.PermissionGroup.Status
 	1,  // 1: permission.service.v1.PermissionGroup.children:type_name -> permission.service.v1.PermissionGroup
-	7,  // 2: permission.service.v1.PermissionGroup.created_at:type_name -> google.protobuf.Timestamp
-	7,  // 3: permission.service.v1.PermissionGroup.updated_at:type_name -> google.protobuf.Timestamp
-	7,  // 4: permission.service.v1.PermissionGroup.deleted_at:type_name -> google.protobuf.Timestamp
+	8,  // 2: permission.service.v1.PermissionGroup.created_at:type_name -> google.protobuf.Timestamp
+	8,  // 3: permission.service.v1.PermissionGroup.updated_at:type_name -> google.protobuf.Timestamp
+	8,  // 4: permission.service.v1.PermissionGroup.deleted_at:type_name -> google.protobuf.Timestamp
 	1,  // 5: permission.service.v1.ListPermissionGroupResponse.items:type_name -> permission.service.v1.PermissionGroup
-	8,  // 6: permission.service.v1.GetPermissionGroupRequest.view_mask:type_name -> google.protobuf.FieldMask
+	9,  // 6: permission.service.v1.GetPermissionGroupRequest.view_mask:type_name -> google.protobuf.FieldMask
 	1,  // 7: permission.service.v1.CreatePermissionGroupRequest.data:type_name -> permission.service.v1.PermissionGroup
 	1,  // 8: permission.service.v1.UpdatePermissionGroupRequest.data:type_name -> permission.service.v1.PermissionGroup
-	8,  // 9: permission.service.v1.UpdatePermissionGroupRequest.update_mask:type_name -> google.protobuf.FieldMask
-	9,  // 10: permission.service.v1.PermissionGroupService.List:input_type -> pagination.PagingRequest
-	3,  // 11: permission.service.v1.PermissionGroupService.Get:input_type -> permission.service.v1.GetPermissionGroupRequest
-	4,  // 12: permission.service.v1.PermissionGroupService.Create:input_type -> permission.service.v1.CreatePermissionGroupRequest
-	5,  // 13: permission.service.v1.PermissionGroupService.Update:input_type -> permission.service.v1.UpdatePermissionGroupRequest
-	6,  // 14: permission.service.v1.PermissionGroupService.Delete:input_type -> permission.service.v1.DeletePermissionGroupRequest
-	2,  // 15: permission.service.v1.PermissionGroupService.List:output_type -> permission.service.v1.ListPermissionGroupResponse
-	1,  // 16: permission.service.v1.PermissionGroupService.Get:output_type -> permission.service.v1.PermissionGroup
-	10, // 17: permission.service.v1.PermissionGroupService.Create:output_type -> google.protobuf.Empty
-	10, // 18: permission.service.v1.PermissionGroupService.Update:output_type -> google.protobuf.Empty
-	10, // 19: permission.service.v1.PermissionGroupService.Delete:output_type -> google.protobuf.Empty
-	15, // [15:20] is the sub-list for method output_type
-	10, // [10:15] is the sub-list for method input_type
+	9,  // 9: permission.service.v1.UpdatePermissionGroupRequest.update_mask:type_name -> google.protobuf.FieldMask
+	10, // 10: permission.service.v1.PermissionGroupService.List:input_type -> pagination.PagingRequest
+	10, // 11: permission.service.v1.PermissionGroupService.Count:input_type -> pagination.PagingRequest
+	3,  // 12: permission.service.v1.PermissionGroupService.Get:input_type -> permission.service.v1.GetPermissionGroupRequest
+	4,  // 13: permission.service.v1.PermissionGroupService.Create:input_type -> permission.service.v1.CreatePermissionGroupRequest
+	5,  // 14: permission.service.v1.PermissionGroupService.Update:input_type -> permission.service.v1.UpdatePermissionGroupRequest
+	6,  // 15: permission.service.v1.PermissionGroupService.Delete:input_type -> permission.service.v1.DeletePermissionGroupRequest
+	2,  // 16: permission.service.v1.PermissionGroupService.List:output_type -> permission.service.v1.ListPermissionGroupResponse
+	7,  // 17: permission.service.v1.PermissionGroupService.Count:output_type -> permission.service.v1.CountPermissionGroupResponse
+	1,  // 18: permission.service.v1.PermissionGroupService.Get:output_type -> permission.service.v1.PermissionGroup
+	11, // 19: permission.service.v1.PermissionGroupService.Create:output_type -> google.protobuf.Empty
+	11, // 20: permission.service.v1.PermissionGroupService.Update:output_type -> google.protobuf.Empty
+	11, // 21: permission.service.v1.PermissionGroupService.Delete:output_type -> google.protobuf.Empty
+	16, // [16:22] is the sub-list for method output_type
+	10, // [10:16] is the sub-list for method input_type
 	10, // [10:10] is the sub-list for extension type_name
 	10, // [10:10] is the sub-list for extension extendee
 	0,  // [0:10] is the sub-list for field type_name
@@ -667,7 +717,7 @@ func file_permission_service_v1_permission_group_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_permission_service_v1_permission_group_proto_rawDesc), len(file_permission_service_v1_permission_group_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   6,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
