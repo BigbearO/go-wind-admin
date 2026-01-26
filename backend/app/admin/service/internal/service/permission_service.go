@@ -124,7 +124,7 @@ func (s *PermissionService) fetchRelationInfo(
 	return nil
 }
 
-func (s *PermissionService) populateRelationInfos(
+func (s *PermissionService) bindRelations(
 	permissions []*permissionV1.Permission,
 	groupSet aggregator.ResourceMap[uint32, *permissionV1.PermissionGroup],
 ) {
@@ -136,6 +136,16 @@ func (s *PermissionService) populateRelationInfos(
 			ou.GroupName = g.Name
 		},
 	)
+}
+
+func (s *PermissionService) enrichRelations(ctx context.Context, permissions []*permissionV1.Permission) error {
+	var groupSet = make(aggregator.ResourceMap[uint32, *permissionV1.PermissionGroup])
+	s.extractRelationIDs(permissions, groupSet)
+	if err := s.fetchRelationInfo(ctx, groupSet); err != nil {
+		return err
+	}
+	s.bindRelations(permissions, groupSet)
+	return nil
 }
 
 func (s *PermissionService) List(ctx context.Context, req *paginationV1.PagingRequest) (*permissionV1.ListPermissionResponse, error) {
@@ -166,10 +176,7 @@ func (s *PermissionService) List(ctx context.Context, req *paginationV1.PagingRe
 		return nil, err
 	}
 
-	var groupSet = make(aggregator.ResourceMap[uint32, *permissionV1.PermissionGroup])
-	s.extractRelationIDs(resp.Items, groupSet)
-	_ = s.fetchRelationInfo(ctx, groupSet)
-	s.populateRelationInfos(resp.Items, groupSet)
+	_ = s.enrichRelations(ctx, resp.Items)
 
 	return resp, nil
 }
@@ -205,10 +212,7 @@ func (s *PermissionService) Get(ctx context.Context, req *permissionV1.GetPermis
 	}
 
 	fakeItems := []*permissionV1.Permission{resp}
-	var groupSet = make(aggregator.ResourceMap[uint32, *permissionV1.PermissionGroup])
-	s.extractRelationIDs(fakeItems, groupSet)
-	_ = s.fetchRelationInfo(ctx, groupSet)
-	s.populateRelationInfos(fakeItems, groupSet)
+	_ = s.enrichRelations(ctx, fakeItems)
 
 	return resp, nil
 }

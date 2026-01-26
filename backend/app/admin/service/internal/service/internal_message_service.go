@@ -96,7 +96,7 @@ func (s *InternalMessageService) fetchRelationInfo(
 	return nil
 }
 
-func (s *InternalMessageService) populateRelationInfos(
+func (s *InternalMessageService) bindRelations(
 	messages []*internalMessageV1.InternalMessage,
 	categorySet aggregator.ResourceMap[uint32, *internalMessageV1.InternalMessageCategory],
 ) {
@@ -110,16 +110,23 @@ func (s *InternalMessageService) populateRelationInfos(
 	)
 }
 
+func (s *InternalMessageService) enrichRelations(ctx context.Context, messages []*internalMessageV1.InternalMessage) error {
+	var categorySet = make(aggregator.ResourceMap[uint32, *internalMessageV1.InternalMessageCategory])
+	s.extractRelationIDs(messages, categorySet)
+	if err := s.fetchRelationInfo(ctx, categorySet); err != nil {
+		return err
+	}
+	s.bindRelations(messages, categorySet)
+	return nil
+}
+
 func (s *InternalMessageService) ListMessage(ctx context.Context, req *paginationV1.PagingRequest) (*internalMessageV1.ListInternalMessageResponse, error) {
 	resp, err := s.internalMessageRepo.List(ctx, req)
 	if err != nil {
 		return nil, err
 	}
 
-	var categorySet = make(aggregator.ResourceMap[uint32, *internalMessageV1.InternalMessageCategory])
-	s.extractRelationIDs(resp.Items, categorySet)
-	_ = s.fetchRelationInfo(ctx, categorySet)
-	s.populateRelationInfos(resp.Items, categorySet)
+	_ = s.enrichRelations(ctx, resp.Items)
 
 	return resp, nil
 }
@@ -131,10 +138,7 @@ func (s *InternalMessageService) GetMessage(ctx context.Context, req *internalMe
 	}
 
 	fakeItems := []*internalMessageV1.InternalMessage{resp}
-	var categorySet = make(aggregator.ResourceMap[uint32, *internalMessageV1.InternalMessageCategory])
-	s.extractRelationIDs(fakeItems, categorySet)
-	_ = s.fetchRelationInfo(ctx, categorySet)
-	s.populateRelationInfos(fakeItems, categorySet)
+	_ = s.enrichRelations(ctx, fakeItems)
 
 	return resp, nil
 }

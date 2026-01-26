@@ -74,7 +74,7 @@ func (s *PositionService) fetchRelationInfo(
 	return nil
 }
 
-func (s *PositionService) populateRelationInfos(
+func (s *PositionService) bindRelations(
 	positions []*userV1.Position,
 	orgUnitSet aggregator.ResourceMap[uint32, *userV1.OrgUnit],
 ) {
@@ -88,16 +88,23 @@ func (s *PositionService) populateRelationInfos(
 	)
 }
 
+func (s *PositionService) enrichRelations(ctx context.Context, positions []*userV1.Position) error {
+	var orgUnitSet = make(aggregator.ResourceMap[uint32, *userV1.OrgUnit])
+	s.extractRelationIDs(positions, orgUnitSet)
+	if err := s.fetchRelationInfo(ctx, orgUnitSet); err != nil {
+		return err
+	}
+	s.bindRelations(positions, orgUnitSet)
+	return nil
+}
+
 func (s *PositionService) List(ctx context.Context, req *paginationV1.PagingRequest) (*userV1.ListPositionResponse, error) {
 	resp, err := s.positionRepo.List(ctx, req)
 	if err != nil {
 		return nil, err
 	}
 
-	var orgUnitSet = make(aggregator.ResourceMap[uint32, *userV1.OrgUnit])
-	s.extractRelationIDs(resp.Items, orgUnitSet)
-	_ = s.fetchRelationInfo(ctx, orgUnitSet)
-	s.populateRelationInfos(resp.Items, orgUnitSet)
+	_ = s.enrichRelations(ctx, resp.Items)
 
 	return resp, nil
 }
@@ -109,11 +116,7 @@ func (s *PositionService) Get(ctx context.Context, req *userV1.GetPositionReques
 	}
 
 	fakeItems := []*userV1.Position{resp}
-
-	var orgUnitSet = make(aggregator.ResourceMap[uint32, *userV1.OrgUnit])
-	s.extractRelationIDs(fakeItems, orgUnitSet)
-	_ = s.fetchRelationInfo(ctx, orgUnitSet)
-	s.populateRelationInfos(fakeItems, orgUnitSet)
+	_ = s.enrichRelations(ctx, fakeItems)
 
 	return resp, nil
 }

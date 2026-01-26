@@ -195,7 +195,7 @@ func (s *UserService) fetchRelationInfo(
 	return nil
 }
 
-func (s *UserService) populateRelationInfos(
+func (s *UserService) bindRelations(
 	users []*userV1.User,
 	roleSet aggregator.ResourceMap[uint32, *userV1.Role],
 	tenantSet aggregator.ResourceMap[uint32, *userV1.Tenant],
@@ -271,20 +271,27 @@ func (s *UserService) populateRelationInfos(
 	)
 }
 
+func (s *UserService) enrichRelations(ctx context.Context, users []*userV1.User) error {
+	var roleSet = make(aggregator.ResourceMap[uint32, *userV1.Role])
+	var tenantSet = make(aggregator.ResourceMap[uint32, *userV1.Tenant])
+	var orgUnitSet = make(aggregator.ResourceMap[uint32, *userV1.OrgUnit])
+	var posSet = make(aggregator.ResourceMap[uint32, *userV1.Position])
+
+	s.extractRelationIDs(users, roleSet, tenantSet, orgUnitSet, posSet)
+	if err := s.fetchRelationInfo(ctx, roleSet, tenantSet, orgUnitSet, posSet); err != nil {
+		return err
+	}
+	s.bindRelations(users, roleSet, tenantSet, orgUnitSet, posSet)
+	return nil
+}
+
 func (s *UserService) List(ctx context.Context, req *paginationV1.PagingRequest) (*userV1.ListUserResponse, error) {
 	resp, err := s.userRepo.List(ctx, req)
 	if err != nil {
 		return nil, err
 	}
 
-	var roleSet = make(aggregator.ResourceMap[uint32, *userV1.Role])
-	var tenantSet = make(aggregator.ResourceMap[uint32, *userV1.Tenant])
-	var orgUnitSet = make(aggregator.ResourceMap[uint32, *userV1.OrgUnit])
-	var posSet = make(aggregator.ResourceMap[uint32, *userV1.Position])
-
-	s.extractRelationIDs(resp.Items, roleSet, tenantSet, orgUnitSet, posSet)
-	_ = s.fetchRelationInfo(ctx, roleSet, tenantSet, orgUnitSet, posSet)
-	s.populateRelationInfos(resp.Items, roleSet, tenantSet, orgUnitSet, posSet)
+	_ = s.enrichRelations(ctx, resp.Items)
 
 	return resp, nil
 }
@@ -296,15 +303,7 @@ func (s *UserService) Get(ctx context.Context, req *userV1.GetUserRequest) (*use
 	}
 
 	fakeItems := []*userV1.User{resp}
-
-	var roleSet = make(aggregator.ResourceMap[uint32, *userV1.Role])
-	var tenantSet = make(aggregator.ResourceMap[uint32, *userV1.Tenant])
-	var orgUnitSet = make(aggregator.ResourceMap[uint32, *userV1.OrgUnit])
-	var posSet = make(aggregator.ResourceMap[uint32, *userV1.Position])
-
-	s.extractRelationIDs(fakeItems, roleSet, tenantSet, orgUnitSet, posSet)
-	_ = s.fetchRelationInfo(ctx, roleSet, tenantSet, orgUnitSet, posSet)
-	s.populateRelationInfos(fakeItems, roleSet, tenantSet, orgUnitSet, posSet)
+	_ = s.enrichRelations(ctx, fakeItems)
 
 	return resp, nil
 }

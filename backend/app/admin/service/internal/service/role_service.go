@@ -93,7 +93,7 @@ func (s *RoleService) fetchRelationInfo(
 	return nil
 }
 
-func (s *RoleService) populateRelationInfos(
+func (s *RoleService) bindRelations(
 	roles []*userV1.Role,
 	tenantSet aggregator.ResourceMap[uint32, *userV1.Tenant],
 ) {
@@ -107,16 +107,23 @@ func (s *RoleService) populateRelationInfos(
 	)
 }
 
+func (s *RoleService) enrichRelations(ctx context.Context, roles []*userV1.Role) error {
+	var tenantSet = make(aggregator.ResourceMap[uint32, *userV1.Tenant])
+	s.extractRelationIDs(roles, tenantSet)
+	if err := s.fetchRelationInfo(ctx, tenantSet); err != nil {
+		return err
+	}
+	s.bindRelations(roles, tenantSet)
+	return nil
+}
+
 func (s *RoleService) List(ctx context.Context, req *paginationV1.PagingRequest) (*userV1.ListRoleResponse, error) {
 	resp, err := s.roleRepo.List(ctx, req)
 	if err != nil {
 		return nil, err
 	}
 
-	var tenantSet = make(aggregator.ResourceMap[uint32, *userV1.Tenant])
-	s.extractRelationIDs(resp.Items, tenantSet)
-	_ = s.fetchRelationInfo(ctx, tenantSet)
-	s.populateRelationInfos(resp.Items, tenantSet)
+	_ = s.enrichRelations(ctx, resp.Items)
 
 	return resp, nil
 }
@@ -128,10 +135,7 @@ func (s *RoleService) Get(ctx context.Context, req *userV1.GetRoleRequest) (*use
 	}
 
 	fakeItems := []*userV1.Role{resp}
-	var tenantSet = make(aggregator.ResourceMap[uint32, *userV1.Tenant])
-	s.extractRelationIDs(fakeItems, tenantSet)
-	_ = s.fetchRelationInfo(ctx, tenantSet)
-	s.populateRelationInfos(fakeItems, tenantSet)
+	_ = s.enrichRelations(ctx, fakeItems)
 
 	return resp, nil
 }

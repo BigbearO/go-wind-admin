@@ -39,6 +39,7 @@ func NewOrgUnitService(
 	}
 }
 
+// extractRelationIDs 提取关联数据ID
 func (s *OrgUnitService) extractRelationIDs(
 	orgUnits []*userV1.OrgUnit,
 	userSet aggregator.ResourceMap[uint32, *userV1.User],
@@ -60,6 +61,7 @@ func (s *OrgUnitService) extractRelationIDs(
 	}
 }
 
+// fetchRelationInfo 获取关联数据
 func (s *OrgUnitService) fetchRelationInfo(
 	ctx context.Context,
 	userSet aggregator.ResourceMap[uint32, *userV1.User],
@@ -85,7 +87,8 @@ func (s *OrgUnitService) fetchRelationInfo(
 	return nil
 }
 
-func (s *OrgUnitService) populateRelationInfos(
+// bindRelations 绑定关联数据
+func (s *OrgUnitService) bindRelations(
 	orgUnits []*userV1.OrgUnit,
 	userSet aggregator.ResourceMap[uint32, *userV1.User],
 ) {
@@ -114,16 +117,24 @@ func (s *OrgUnitService) populateRelationInfos(
 	)
 }
 
+// enrichRelations 填充关联数据
+func (s *OrgUnitService) enrichRelations(ctx context.Context, orgUnits []*userV1.OrgUnit) error {
+	var userSet = make(aggregator.ResourceMap[uint32, *userV1.User])
+	s.extractRelationIDs(orgUnits, userSet)
+	if err := s.fetchRelationInfo(ctx, userSet); err != nil {
+		return err
+	}
+	s.bindRelations(orgUnits, userSet)
+	return nil
+}
+
 func (s *OrgUnitService) List(ctx context.Context, req *paginationV1.PagingRequest) (*userV1.ListOrgUnitResponse, error) {
 	resp, err := s.orgUnitRepo.List(ctx, req)
 	if err != nil {
 		return nil, err
 	}
 
-	var userSet = make(aggregator.ResourceMap[uint32, *userV1.User])
-	s.extractRelationIDs(resp.Items, userSet)
-	_ = s.fetchRelationInfo(ctx, userSet)
-	s.populateRelationInfos(resp.Items, userSet)
+	_ = s.enrichRelations(ctx, resp.Items)
 
 	return resp, nil
 }
@@ -135,22 +146,7 @@ func (s *OrgUnitService) Get(ctx context.Context, req *userV1.GetOrgUnitRequest)
 	}
 
 	fakeItems := []*userV1.OrgUnit{resp}
-	var userSet = make(aggregator.ResourceMap[uint32, *userV1.User])
-
-	s.extractRelationIDs(fakeItems, userSet)
-	_ = s.fetchRelationInfo(ctx, userSet)
-
-	// 回填 LeaderName
-	aggregator.PopulateOne(resp, userSet,
-		func(r *userV1.OrgUnit) uint32 { return r.GetLeaderId() },
-		func(r *userV1.OrgUnit, u *userV1.User) { r.LeaderName = u.Username },
-	)
-
-	// 回填 ContactUser
-	aggregator.PopulateOne(resp, userSet,
-		func(r *userV1.OrgUnit) uint32 { return r.GetContactUserId() },
-		func(r *userV1.OrgUnit, u *userV1.User) { r.ContactUserName = u.Username },
-	)
+	_ = s.enrichRelations(ctx, fakeItems)
 
 	return resp, nil
 }
