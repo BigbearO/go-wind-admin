@@ -896,8 +896,8 @@ github.com/tx7do/go-crud/api v0.0.7 h1:SDMo1rkQ+Ey9T9vDljaO/Q6Ty3UFiDi3PFJXqKUpc
 github.com/tx7do/go-crud/api v0.0.7/go.mod h1:++hrhWo1vnieqD7vn8Ft1Sg67PzM4lu9KDbeg+X6Cdc=
 github.com/tx7do/go-crud/audit v0.0.2 h1:fXoy2Bbqjow/fpK+0DESYt4vf7tswR4VVaKCA0UfYMU=
 github.com/tx7do/go-crud/audit v0.0.2/go.mod h1:cBcCo1uDvAjhCpRF29L4NmIUnEX7qDl2FF83a1xPeA4=
-github.com/tx7do/go-crud/entgo v0.0.38 h1:P6Y6pyH1YezLOEk9vnaI+455mQQcb8YS/P7D8U4ktrE=
-github.com/tx7do/go-crud/entgo v0.0.38/go.mod h1:rawbQPbY6KPWKbCWIBZKa871iuAfPXIpExMAMZTfsJ4=
+github.com/tx7do/go-crud/entgo v0.0.39 h1:ZzZBd2h2KfFJIYc0JQyMSOfl92YOEP5C1Y16U94hU1c=
+github.com/tx7do/go-crud/entgo v0.0.39/go.mod h1:rawbQPbY6KPWKbCWIBZKa871iuAfPXIpExMAMZTfsJ4=
 github.com/tx7do/go-crud/gorm v0.0.18 h1:BToHTO52/ighuXvdUtHX+pT88/ES0WtjEB8XHce78PM=
 github.com/tx7do/go-crud/gorm v0.0.18/go.mod h1:DmD/BUancYBjtprKu8HjYI7iVmWEIEpEAHjqGIfG+KM=
 github.com/tx7do/go-crud/pagination v0.0.11 h1:x0TAzoUs2wUAw//GEHZhzQ69La3RKkgycY6qXmSJ7Xo=

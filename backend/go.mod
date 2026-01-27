@@ -24,7 +24,7 @@ require (
 	github.com/redis/go-redis/v9 v9.17.3
 	github.com/stretchr/testify v1.11.1
 	github.com/tx7do/go-crud/api v0.0.7
-	github.com/tx7do/go-crud/entgo v0.0.38
+	github.com/tx7do/go-crud/entgo v0.0.39
 	github.com/tx7do/go-crud/gorm v0.0.18
 	github.com/tx7do/go-crud/viewer v0.0.5
 	github.com/tx7do/go-utils v1.1.34
