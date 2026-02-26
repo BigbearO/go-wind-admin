@@ -91,7 +91,7 @@ function Install-DockerDesktop {
         try {
             & winget install --id Docker.DockerDesktop `
                 -e --accept-package-agreements --accept-source-agreements `
-                --silent --disable-interactivity 2>$null
+                --silent 2>$null
             Log "Docker Desktop install submitted via Winget (wait for background completion)"
         } catch {
             Warn "Winget install Docker failed: $($_.Exception.Message)"
