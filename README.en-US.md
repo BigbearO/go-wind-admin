@@ -14,7 +14,7 @@ Easy to get started, feature-rich, suitable for rapid development of enterprise 
 
 ## Demo
 
-> Frontend: <http://124.221.26.30:8080/>
+> Frontend: <https://demo.admin.gowind.cloud>
 >
 > Backend Swagger: <http://124.221.26.30:7788/docs/>
 >

@@ -14,7 +14,7 @@
 
 ## デモ
 
-- フロントエンド: <http://124.221.26.30:8080/>
+- フロントエンド: <https://demo.admin.gowind.cloud>
 - バックエンド Swagger: <http://124.221.26.30:7788/docs/>
 - デフォルトユーザー: `admin` / `admin`
 
