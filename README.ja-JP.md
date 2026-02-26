@@ -15,7 +15,7 @@
 ## デモ
 
 - フロントエンド: <https://demo.admin.gowind.cloud>
-- バックエンド Swagger: <http://124.221.26.30:7788/docs/>
+- バックエンド Swagger: <https://api.demo.admin.gowind.cloud/docs/>
 - デフォルトユーザー: `admin` / `admin`
 
 ## コア技術スタック

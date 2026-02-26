@@ -16,7 +16,7 @@ Easy to get started, feature-rich, suitable for rapid development of enterprise 
 
 > Frontend: <https://demo.admin.gowind.cloud>
 >
-> Backend Swagger: <http://124.221.26.30:7788/docs/>
+> Backend Swagger: <https://api.demo.admin.gowind.cloud/docs/>
 >
 > Default account/password: `admin` / `admin`
 
