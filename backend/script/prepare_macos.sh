@@ -68,11 +68,22 @@ echo "Docker 状态检查完成。"
 ####################################
 ## 安装 Golang
 ####################################
-echo "尝试运行本仓库的 install_golang.sh..."
-if [ -x "./install_golang.sh" ]; then
-  ./install_golang.sh || { echo "install_golang.sh 执行失败，尝试通过 brew 安装 go"; brew install go; }
+echo "运行项目内的 Golang 安装脚本（如果存在且可执行）"
+# 获取当前脚本所在目录的绝对路径
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+GOLANG_INSTALL_SCRIPT="${SCRIPT_DIR}/install_golang.sh"
+
+if [ -f "${GOLANG_INSTALL_SCRIPT}" ]; then
+  echo "找到 Golang 安装脚本: ${GOLANG_INSTALL_SCRIPT}"
+  if [ -x "${GOLANG_INSTALL_SCRIPT}" ]; then
+    echo "执行 Golang 安装脚本..."
+    "${GOLANG_INSTALL_SCRIPT}"
+  else
+    echo "脚本存在但不可执行，尝试用 bash 执行..."
+    bash "${GOLANG_INSTALL_SCRIPT}"
+  fi
 else
-  echo "未找到可执行的 install_golang.sh，使用 brew 安装 go"
+  echo "未找到 Golang 安装脚本: ${GOLANG_INSTALL_SCRIPT}，使用 brew 安装 go"
   brew install go
 fi
 

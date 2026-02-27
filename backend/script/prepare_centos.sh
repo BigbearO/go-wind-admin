@@ -71,10 +71,21 @@ ${SUDO} groupadd -f docker || true
 ${SUDO} usermod -aG docker "${TARGET_USER}" || true
 
 log "运行项目内的 Golang 安装脚本（如果存在且可执行）"
-if [ -x ./install_golang.sh ]; then
-  ./install_golang.sh
+# 获取当前脚本所在目录的绝对路径
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+GOLANG_INSTALL_SCRIPT="${SCRIPT_DIR}/install_golang.sh"
+
+if [ -f "${GOLANG_INSTALL_SCRIPT}" ]; then
+  log "找到 Golang 安装脚本: ${GOLANG_INSTALL_SCRIPT}"
+  if [ -x "${GOLANG_INSTALL_SCRIPT}" ]; then
+    log "执行 Golang 安装脚本..."
+    "${GOLANG_INSTALL_SCRIPT}"
+  else
+    log "脚本存在但不可执行，尝试用 bash 执行..."
+    bash "${GOLANG_INSTALL_SCRIPT}"
+  fi
 else
-  log "未找到可执行的 ./install_golang.sh，跳过"
+  log "未找到 Golang 安装脚本: ${GOLANG_INSTALL_SCRIPT}，跳过"
 fi
 
 log "清理与完成"

@@ -1,6 +1,14 @@
+#!/usr/bin/env bash
 ####################################
 ## 安装Golang
 ####################################
+
+set -euo pipefail
+
+log() { echo "==> $*"; }
+err_trap() { echo "Error: $*" >&2; exit 1; }
+
+trap 'err_trap "安装 Golang 失败 (行 $LINENO)"' ERR
 
 # 获取当前操作系统和架构
 get_os_arch() {
@@ -14,8 +22,7 @@ get_os_arch() {
           # 支持的操作系统，继续处理架构
           ;;
       *)
-          echo "Unsupported OS: $os"
-          exit 1
+          err_trap "不支持的操作系统: $os"
           ;;
   esac
 
@@ -61,8 +68,7 @@ get_os_arch() {
           arch="mipsle"   # MIPS 32位（小端模式）
           ;;
       *)
-          echo "Unsupported architecture: $arch_raw"
-          exit 1
+          err_trap "不支持的架构: $arch_raw"
           ;;
   esac
 
@@ -74,57 +80,80 @@ install_go() {
     local version=$1
     local os=$2
     local arch=$3
+    local sudo_cmd=""
 
-    echo "Downloading Go $version for $os-$arch..."
-    wget -q https://go.dev/dl/$version.$os-$arch.tar.gz
+    if [ "$EUID" -ne 0 ]; then
+      sudo_cmd="sudo"
+    fi
 
-    echo "Removing old Go version..."
-    sudo rm -rf /usr/local/go
-    echo "Installing..."
-    sudo tar -C /usr/local -xzf $version.$os-$arch.tar.gz
+    log "下载 Go $version for $os-$arch..."
+    if ! wget -q https://go.dev/dl/$version.$os-$arch.tar.gz; then
+      err_trap "下载 Go 失败，请检查网络连接"
+    fi
 
-    echo "Cleaning up..."
-    rm $version.$os-$arch.tar.gz
+    log "删除旧版本 Go..."
+    ${sudo_cmd} rm -rf /usr/local/go
 
-    echo "Adding Go to PATH..."
+    log "安装 Go $version..."
+    if ! ${sudo_cmd} tar -C /usr/local -xzf $version.$os-$arch.tar.gz; then
+      err_trap "解压 Go 安装包失败"
+    fi
+
+    log "清理临时文件..."
+    rm -f $version.$os-$arch.tar.gz
+
+    log "更新 PATH..."
     export PATH=$PATH:/usr/local/go/bin
     if [[ "$SHELL" == *"zsh"* ]]; then
         echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.zshrc
-        source ~/.zshrc
+        source ~/.zshrc || true
     else
         echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc
-        source ~/.bashrc
+        source ~/.bashrc || true
     fi
 
-    echo "Go $version installed!"
-
-    go version
+    log "Go $version 安装完成！"
+    /usr/local/go/bin/go version
 }
 
 # 获取本地Go的版本
 get_go_local_version() {
     if ! command -v go &> /dev/null; then
-        echo "Go is not installed!"
+        echo "未安装"
         return
     fi
-    echo $(go version | awk '{print $3}')
+    go version | awk '{print $3}'
 }
 
 # 获取最新版本的Go
 get_go_latest_version() {
-    echo $(curl -s https://go.dev/dl/?mode=json | jq -r '.[0].version')
+    if ! command -v curl &> /dev/null; then
+      log "curl 未安装，跳过获取最新版本"
+      return 1
+    fi
+    curl -s https://go.dev/dl/?mode=json 2>/dev/null | jq -r '.[0].version' 2>/dev/null || echo "获取失败"
 }
 
+log "检查 Golang..."
 GO_LOCAL_VERSION=$(get_go_local_version)
-GO_LATEST_VERSION=$(get_go_latest_version)
-
-echo "Current Go version: $GO_LOCAL_VERSION"
+log "当前 Go 版本: $GO_LOCAL_VERSION"
 
 read OS ARCH <<< $(get_os_arch)
+log "操作系统: $OS, 架构: $ARCH"
 
-if [ "$GO_LOCAL_VERSION" = "$GO_LATEST_VERSION" ]; then
-    echo "Go is already up to date!"
-else
-    echo "Installing Go $GO_LATEST_VERSION..."
+if [ "$GO_LOCAL_VERSION" = "未安装" ]; then
+    log "Go 未安装，开始安装最新版本..."
+    GO_LATEST_VERSION=$(get_go_latest_version) || GO_LATEST_VERSION="go1.25.3"
     install_go $GO_LATEST_VERSION $OS $ARCH
+elif GO_LATEST=$(get_go_latest_version); then
+    if [ "$GO_LOCAL_VERSION" = "$GO_LATEST" ]; then
+        log "Go 已是最新版本 ($GO_LOCAL_VERSION)"
+    else
+        log "发现新版本: $GO_LATEST (当前: $GO_LOCAL_VERSION)，开始升级..."
+        install_go $GO_LATEST $OS $ARCH
+    fi
+else
+    log "无法获取最新版本，跳过升级"
 fi
+
+log "Golang 检查/安装完成！"

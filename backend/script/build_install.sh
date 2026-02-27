@@ -49,7 +49,11 @@ install_root="${HOME}/app/${project_name}"
 app_root="${project_root}/app"
 
 # 收集 app 子目录（只取第一层目录）
-mapfile -t apps < <(find "$app_root" -maxdepth 1 -mindepth 1 -type d -print)
+# 使用兼容的方式替代 mapfile（支持 macOS bash 等旧版本）
+apps=()
+while IFS= read -r -d '' app_dir; do
+  apps+=("$app_dir")
+done < <(find "$app_root" -maxdepth 1 -mindepth 1 -type d -print0)
 
 # 如果没有服务，直接退出
 if [ "${#apps[@]}" -eq 0 ]; then
