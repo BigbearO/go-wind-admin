@@ -48,16 +48,16 @@ for dep in "${deps[@]}"; do
 done
 
 # 选择 docker compose 命令（支持 v2 插件或旧的 docker-compose）
-DOCKER_COMPOSE_CMD=""
+DOCKER_COMPOSE_CMD=()
 if command -v docker >/dev/null 2>&1 && docker compose version >/dev/null 2>&1; then
-  DOCKER_COMPOSE_CMD="docker compose"
+  DOCKER_COMPOSE_CMD=(docker compose)
 elif command -v docker-compose >/dev/null 2>&1; then
-  DOCKER_COMPOSE_CMD="docker-compose"
+  DOCKER_COMPOSE_CMD=(docker-compose)
 else
-  echo "Neither 'docker compose' nor 'docker-compose' found. Please install docker compose." >&2
+  echo "Neither 'docker compose' plugin nor 'docker-compose' found. Please install docker compose." >&2
   exit 1
 fi
 
 # 部署
 echo "Bringing up services with: $DOCKER_COMPOSE_CMD -f $COMPOSE_FILE up -d --force-recreate"
-$DOCKER_COMPOSE_CMD -f "$COMPOSE_FILE" up -d --force-recreate
+${DOCKER_COMPOSE_CMD[@]} -f "$COMPOSE_FILE" up -d --force-recreate

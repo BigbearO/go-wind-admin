@@ -3,9 +3,10 @@
 ##################################
 
 # 使用官方的 Go 基础镜像作为构建环境
-FROM golang:1.24.6 AS builder
+ARG GO_VERSION=1.25.4
+FROM golang:${GO_VERSION}-alpine AS builder
 
-ARG SERVICE_NAME=app
+ARG SERVICE_NAME=admin
 ARG APP_VERSION=1.0.0
 
 # 设置工作目录
@@ -14,25 +15,29 @@ WORKDIR /src
 # 复制项目源代码到工作目录
 COPY . /src
 
-# 进入到服务目录
-RUN cd /src/app/$SERVICE_NAME/service
-# 创建二进制文件目录
-RUN mkdir -p /src/app/$SERVICE_NAME/service/bin
+# 下载依赖，国内代理链：首选 goproxy.cn，备选 direct（直接下载）
+# 增加 GOSUMDB 配置避免校验服务器访问失败
+RUN GOPROXY=https://goproxy.cn,direct GOSUMDB=off go mod download
 
-# 下载依赖，在中国国内，请使用国内代理。有可能会出现下载失败的情况，多试几次即可。
-RUN GOPROXY=https://goproxy.cn go mod download
-# 编译可执行文件
+# 编译可执行文件（使用WORKDIR和相对路径，而不是cd）
 RUN CGO_ENABLED=0 \
     GOOS=linux \
     GOARCH=amd64 \
-    go build -ldflags "-X main.version=$APP_VERSION" -o /src/app/$SERVICE_NAME/service/bin/ ./...
+    go build -ldflags "-X main.version=$APP_VERSION" \
+    -o /src/bin/${SERVICE_NAME}-server ./app/${SERVICE_NAME}/service/cmd/server/
+
+# 复制配置文件到统一目录
+RUN mkdir -p /src/bin/configs && \
+    if [ -d "/src/app/${SERVICE_NAME}/service/configs" ]; then \
+      cp -r /src/app/${SERVICE_NAME}/service/configs/* /src/bin/configs/ 2>/dev/null || true; \
+    fi
 
 ##################################
 # 第二阶段：创建最终的运行时镜像
 ##################################
 
 # 使用 Alpine 作为基础镜像，因为它非常轻量级
-FROM alpine:3.18
+FROM docker.io/alpine:latest
 
 ARG SERVICE_NAME=app
 
@@ -43,10 +48,10 @@ RUN apk --no-cache add ca-certificates
 WORKDIR /app
 
 # 从第一阶段的构建结果中复制可执行文件到当前工作目录
-COPY --from=builder /src/app/$SERVICE_NAME/service/bin/ /app/bin
+COPY --from=builder /src/bin/${SERVICE_NAME}-server /app/bin/server
 
 # 拷贝配置文件
-COPY --from=builder /src/app/$SERVICE_NAME/service/configs/ /app/configs
+COPY --from=builder /src/bin/configs/ /app/configs/
 
 # 创建一个名为 appuser 的非 root 用户
 RUN adduser -D appuser
