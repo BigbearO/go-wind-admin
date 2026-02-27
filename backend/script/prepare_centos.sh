@@ -38,8 +38,8 @@ log "安装基础工具与 EPEL"
 ${SUDO} ${PKG} -y install epel-release || true
 ${SUDO} ${PKG} -y install -y htop wget unzip git jq curl gnupg2 yum-utils || true
 
-log "安装 Node.js (NodeSource 18.x) 并安装 pm2"
-curl -fsSL https://rpm.nodesource.com/setup_18.x | ${SUDO} bash - || true
+log "安装 Node.js (NodeSource 22.x LTS) 并安装 pm2"
+curl -fsSL https://rpm.nodesource.com/setup_22.x | ${SUDO} bash - || true
 ${SUDO} ${PKG} -y install nodejs || true
 
 # 全局安装 pm2（以 root 安装以保证 system-wide 可用）

@@ -30,9 +30,9 @@ ${SUDO} dnf -y install \
 
 ${SUDO} dnf -y install epel-release htop wget unzip git jq curl gnupg2 dnf-plugins-core make gcc
 
-log "安装 Node.js (NodeSource) 并安装 pm2"
-# 使用 Node.js 18.x；如需 20.x 可改为 setup_20.x
-curl -fsSL https://rpm.nodesource.com/setup_18.x | ${SUDO} bash -
+log "安装 Node.js (NodeSource 22.x LTS) 并安装 pm2"
+# 使用 Node.js 22.x LTS（pm2 推荐版本）
+curl -fsSL https://rpm.nodesource.com/setup_22.x | ${SUDO} bash -
 ${SUDO} dnf -y install nodejs
 
 # 全局安装 pm2（以 root 安装以保证 system-wide 可用）

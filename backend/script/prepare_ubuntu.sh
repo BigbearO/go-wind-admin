@@ -22,9 +22,9 @@ ${SUDO} apt-get upgrade -y
 log "安装常用工具"
 ${SUDO} apt-get install -y htop wget unzip git jq ca-certificates curl gnupg lsb-release apt-transport-https software-properties-common make
 
-log "安装 Node.js (使用 NodeSource)"
-# 使用 Node.js 18.x，必要时可改为 20.x 或其他
-curl -fsSL https://deb.nodesource.com/setup_18.x | ${SUDO} -E bash -
+log "安装 Node.js (使用 NodeSource 22.x LTS)"
+# 使用 Node.js 22.x LTS（pm2 推荐版本）
+curl -fsSL https://deb.nodesource.com/setup_22.x | ${SUDO} -E bash -
 ${SUDO} apt-get install -y nodejs
 node -v || true
 npm -v || true
