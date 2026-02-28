@@ -122,6 +122,7 @@ const [BaseForm, baseFormApi] = useVbenForm({
       formItemClass: 'col-span-2 md:col-span-2',
       componentProps: {
         height: '100%',
+        placeholder: $t('ui.editor.please_input_content'),
         editorType: EditorType.RICH_TEXT,
         uploadImage: handleUploadImage,
       },
