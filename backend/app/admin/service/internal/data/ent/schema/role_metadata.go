@@ -109,11 +109,6 @@ func (RoleMetadata) Indexes() []ent.Index {
 			Unique().
 			StorageKey("idx_role_metadata_tenant_role"),
 
-		// 防止同一租户中同一适用对象在同一版本/作用域下有重复的模版记录
-		index.Fields("tenant_id", "is_template", "template_for", "template_version", "scope").
-			Unique().
-			StorageKey("idx_role_metadata_unique_template"),
-
 		// 常用于查询某个适用对象的所有模版（按租户 + 是否为模版 + 适用对象）
 		index.Fields("tenant_id", "is_template", "template_for").
 			StorageKey("idx_role_metadata_template_lookup"),

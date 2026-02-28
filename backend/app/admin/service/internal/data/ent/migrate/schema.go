@@ -2187,11 +2187,6 @@ var (
 				Columns: []*schema.Column{SysRoleMetadataColumns[7], SysRoleMetadataColumns[8]},
 			},
 			{
-				Name:    "idx_role_metadata_unique_template",
-				Unique:  true,
-				Columns: []*schema.Column{SysRoleMetadataColumns[7], SysRoleMetadataColumns[9], SysRoleMetadataColumns[10], SysRoleMetadataColumns[11], SysRoleMetadataColumns[15]},
-			},
-			{
 				Name:    "idx_role_metadata_template_lookup",
 				Unique:  false,
 				Columns: []*schema.Column{SysRoleMetadataColumns[7], SysRoleMetadataColumns[9], SysRoleMetadataColumns[10]},
