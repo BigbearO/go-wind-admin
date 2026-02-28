@@ -1,5 +1,4 @@
 import type { App } from 'vue';
-import VueUeditorWrap from 'vue-ueditor-wrap';
 
 import {
   Button,
@@ -10,6 +9,7 @@ import {
   Layout,
   Menu,
   Popconfirm,
+  Select,
   Space,
   Switch,
   Tabs,
@@ -35,6 +35,6 @@ export function registerGlobComp(app: App) {
     .use(Tabs)
     .use(Divider)
     .use(Menu)
-    .use(VueUeditorWrap)
+    .use(Select)
     .use(Tree);
 }
