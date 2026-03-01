@@ -15,7 +15,8 @@ ROOT_DIR	:= $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 
 SRCS_MK		:= $(foreach dir, app, $(wildcard $(dir)/*/*/Makefile))
 
-.PHONY: help wire gen ent build api openapi init all vendor dep test cover vet lint docker
+.PHONY: help wire gen ent build api openapi init all vendor dep test cover vet lint docker \
+		install-dev install-prod docker-up docker-down docker-libs pm2-deploy
 
 # show environment variables
 env:
@@ -157,6 +158,53 @@ docker:
       cd $(dir);\
       make docker;\
     )
+
+# ============================================================================
+# Script Commands - 脚本命令
+# ============================================================================
+
+# install development environment (Unix/Linux/macOS)
+install-dev:
+	@echo "Installing development environment..."
+	@bash scripts/env/install_unix_dev.sh
+
+# install production environment (Unix/Linux/macOS)
+install-prod:
+	@echo "Installing production environment..."
+	@bash scripts/env/install_unix_prod.sh
+
+# install golang only
+install-golang:
+	@echo "Installing Golang..."
+	@bash scripts/env/install_golang.sh
+
+# start all services with docker compose (application + dependencies)
+docker-up:
+	@echo "Starting all services (application + dependencies)..."
+ifdef IS_WINDOWS
+	@powershell -ExecutionPolicy Bypass -File scripts/docker/full_deploy.ps1
+else
+	@bash scripts/docker/full_deploy.sh
+endif
+
+# start only dependency services with docker compose (without application)
+docker-libs:
+	@echo "Starting dependency services only..."
+ifdef IS_WINDOWS
+	@powershell -ExecutionPolicy Bypass -File scripts/docker/libs_only.ps1
+else
+	@bash scripts/docker/libs_only.sh
+endif
+
+# stop all docker compose services
+docker-down:
+	@echo "Stopping all services..."
+	@docker compose down
+
+# deploy services with PM2
+pm2-deploy:
+	@echo "Deploying services with PM2..."
+	@bash scripts/deploy/pm2_service.sh
 
 # show help
 help:
