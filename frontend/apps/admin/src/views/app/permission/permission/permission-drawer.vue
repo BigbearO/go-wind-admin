@@ -17,6 +17,7 @@ import {
   usePermissionGroupStore,
   usePermissionStore,
 } from '#/stores';
+import { deepClone, filterNumbers } from '#/utils';
 
 const permissionStore = usePermissionStore();
 const permissionGroupStore = usePermissionGroupStore();
@@ -177,6 +178,25 @@ const [Drawer, drawerApi] = useVbenDrawer({
 
     // 获取表单数据
     const values = await baseFormApi.getValues();
+
+    // @ts-ignore JSON.stringify
+    const finalValues = deepClone(values);
+
+    if (
+      finalValues.apiIds !== null &&
+      Array.isArray(finalValues.apiIds) &&
+      finalValues.apiIds.length > 0
+    ) {
+      finalValues.apiIds = filterNumbers(values.apiIds);
+    }
+
+    if (
+      finalValues.menuIds !== null &&
+      Array.isArray(finalValues.menuIds) &&
+      finalValues.menuIds.length > 0
+    ) {
+      finalValues.menuIds = filterNumbers(values.menuIds);
+    }
 
     console.log(getTitle.value, values);
 
