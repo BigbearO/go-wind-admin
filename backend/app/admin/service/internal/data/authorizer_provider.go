@@ -2,6 +2,7 @@ package data
 
 import (
 	"context"
+	appViewer "go-wind-admin/pkg/entgo/viewer"
 
 	"github.com/go-kratos/kratos/v2/log"
 	paginationV1 "github.com/tx7do/go-crud/api/gen/go/pagination/v1"
@@ -53,6 +54,8 @@ func (p *AuthorizerProvider) ProvideModels(engineName string) authorizer.ModelDa
 
 // ProvidePolicies 提供策略数据
 func (p *AuthorizerProvider) ProvidePolicies(ctx context.Context) (authorizer.PermissionDataMap, error) {
+	ctx = appViewer.NewSystemViewerContext(context.Background())
+
 	roles, err := p.roleRepo.List(ctx, &paginationV1.PagingRequest{NoPaging: trans.Ptr(true)})
 	if err != nil {
 		p.log.Errorf("failed to list roles: %v", err)
