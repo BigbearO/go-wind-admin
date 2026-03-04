@@ -2,7 +2,7 @@ package data
 
 import (
 	"context"
-	appViewer "go-wind-admin/pkg/entgo/viewer"
+	"strconv"
 
 	"github.com/go-kratos/kratos/v2/log"
 	paginationV1 "github.com/tx7do/go-crud/api/gen/go/pagination/v1"
@@ -15,6 +15,7 @@ import (
 
 	"go-wind-admin/pkg/authorizer"
 	"go-wind-admin/pkg/constants"
+	appViewer "go-wind-admin/pkg/entgo/viewer"
 )
 
 const defaultDomain = "*"
@@ -99,7 +100,7 @@ func (p *AuthorizerProvider) ProvidePolicies(ctx context.Context) (authorizer.Pe
 			}
 
 			var data = authorizer.PermissionData{
-				Domain: defaultDomain,
+				Domain: strconv.FormatUint(uint64(role.GetTenantId()), 10),
 				Path:   api.GetPath(),
 				Method: api.GetMethod(),
 			}
