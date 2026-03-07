@@ -729,7 +729,7 @@ export type resourceservicev1_UpdateApiRequest = {
 
 // 删除 - 请求
 export type resourceservicev1_DeleteApiRequest = {
-  id: number | undefined;
+  id?: number;
 };
 
 // API审计日志管理服务
@@ -1929,7 +1929,7 @@ export type storageservicev1_UpdateFileRequest = {
 
 // 删除 - 请求
 export type storageservicev1_DeleteFileRequest = {
-  id: number | undefined;
+  id?: number;
 };
 
 // 文件传输服务
@@ -2402,7 +2402,7 @@ export type internal_messageservicev1_UpdateInternalMessageRequest = {
 
 // 删除站内信消息 - 请求
 export type internal_messageservicev1_DeleteInternalMessageRequest = {
-  id: number | undefined;
+  id?: number;
 };
 
 export type internal_messageservicev1_SendMessageRequest = {
@@ -2649,7 +2649,7 @@ export type internal_messageservicev1_UpdateInternalMessageCategoryRequest = {
 
 // 删除站内信消息分类 - 请求
 export type internal_messageservicev1_DeleteInternalMessageCategoryRequest = {
-  id: number | undefined;
+  id?: number;
 };
 
 // 站内信消息管理服务
@@ -3069,7 +3069,7 @@ export type dictservicev1_UpdateLanguageRequest = {
 
 // 删除语言 - 请求
 export type dictservicev1_DeleteLanguageRequest = {
-  id: number | undefined;
+  id?: number;
 };
 
 export type dictservicev1_BatchCreateLanguagesRequest = {
@@ -3499,7 +3499,7 @@ export type authenticationservicev1_UpdateLoginPolicyRequest = {
 
 // 删除登录策略 - 请求
 export type authenticationservicev1_DeleteLoginPolicyRequest = {
-  id: number | undefined;
+  id?: number;
 };
 
 // 后台菜单管理服务
@@ -3758,7 +3758,7 @@ export type resourceservicev1_UpdateMenuRequest = {
 // 删除菜单 - 请求
 export type resourceservicev1_DeleteMenuRequest = {
   operatorId?: number;
-  id: number | undefined;
+  id?: number;
 };
 
 // 操作审计日志管理服务
@@ -4191,7 +4191,7 @@ export type identityservicev1_UpdateOrgUnitRequest = {
 
 // 删除组织单元 - 请求
 export type identityservicev1_DeleteOrgUnitRequest = {
-  id: number | undefined;
+  id?: number;
 };
 
 // 权限点管理服务
@@ -4852,7 +4852,7 @@ export type permissionservicev1_UpdatePermissionGroupRequest = {
 
 // 删除 - 请求
 export type permissionservicev1_DeletePermissionGroupRequest = {
-  id: number | undefined;
+  id?: number;
 };
 
 // 策略评估日志服务
@@ -5261,7 +5261,7 @@ export type identityservicev1_UpdatePositionRequest = {
 
 // 删除职位 - 请求
 export type identityservicev1_DeletePositionRequest = {
-  id: number | undefined;
+  id?: number;
 };
 
 // 角色管理服务
@@ -5508,7 +5508,7 @@ export type permissionservicev1_UpdateRoleRequest = {
 
 // 删除角色 - 请求
 export type permissionservicev1_DeleteRoleRequest = {
-  id: number | undefined;
+  id?: number;
 };
 
 // 调度任务管理服务
@@ -5891,7 +5891,7 @@ export type taskservicev1_UpdateTaskRequest = {
 
 // 删除调度任务 - 请求
 export type taskservicev1_DeleteTaskRequest = {
-  id: number | undefined;
+  id?: number;
 };
 
 // 任务类型名称列表 - 回应
@@ -6222,7 +6222,7 @@ export type identityservicev1_UpdateTenantRequest = {
 
 // 删除租户 - 请求
 export type identityservicev1_DeleteTenantRequest = {
-  id: number | undefined;
+  id?: number;
 };
 
 // 创建租户及管理员用户 - 请求

@@ -632,8 +632,11 @@ func (x *CreateUserCredentialRequest) GetData() *UserCredential {
 
 // 删除 - 请求
 type DeleteUserCredentialRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to QueryBy:
+	//
+	//	*DeleteUserCredentialRequest_Id
+	QueryBy       isDeleteUserCredentialRequest_QueryBy `protobuf_oneof:"query_by"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -668,12 +671,31 @@ func (*DeleteUserCredentialRequest) Descriptor() ([]byte, []int) {
 	return file_authentication_service_v1_user_credential_proto_rawDescGZIP(), []int{4}
 }
 
+func (x *DeleteUserCredentialRequest) GetQueryBy() isDeleteUserCredentialRequest_QueryBy {
+	if x != nil {
+		return x.QueryBy
+	}
+	return nil
+}
+
 func (x *DeleteUserCredentialRequest) GetId() uint32 {
 	if x != nil {
-		return x.Id
+		if x, ok := x.QueryBy.(*DeleteUserCredentialRequest_Id); ok {
+			return x.Id
+		}
 	}
 	return 0
 }
+
+type isDeleteUserCredentialRequest_QueryBy interface {
+	isDeleteUserCredentialRequest_QueryBy()
+}
+
+type DeleteUserCredentialRequest_Id struct {
+	Id uint32 `protobuf:"varint,1,opt,name=id,proto3,oneof"` // ID
+}
+
+func (*DeleteUserCredentialRequest_Id) isDeleteUserCredentialRequest_QueryBy() {}
 
 // 查询 - 请求
 type GetUserCredentialRequest struct {
@@ -1222,9 +1244,12 @@ const file_authentication_service_v1_user_credential_proto_rawDesc = "" +
 	"\rallow_missing\x18\x04 \x01(\bB\x89\x01\xbaG\x85\x01\x92\x02\x81\x01如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。H\x00R\fallowMissing\x88\x01\x01B\x10\n" +
 	"\x0e_allow_missing\"\\\n" +
 	"\x1bCreateUserCredentialRequest\x12=\n" +
-	"\x04data\x18\x01 \x01(\v2).authentication.service.v1.UserCredentialR\x04data\"-\n" +
-	"\x1bDeleteUserCredentialRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\"\xcb\x01\n" +
+	"\x04data\x18\x01 \x01(\v2).authentication.service.v1.UserCredentialR\x04data\"G\n" +
+	"\x1bDeleteUserCredentialRequest\x12\x1c\n" +
+	"\x02id\x18\x01 \x01(\rB\n" +
+	"\xbaG\a\x18\x01\x92\x02\x02IDH\x00R\x02idB\n" +
+	"\n" +
+	"\bquery_by\"\xcb\x01\n" +
 	"\x18GetUserCredentialRequest\x12\x1c\n" +
 	"\x02id\x18\x01 \x01(\rB\n" +
 	"\xbaG\a\x18\x01\x92\x02\x02IDH\x00R\x02id\x12w\n" +
@@ -1364,6 +1389,9 @@ func file_authentication_service_v1_user_credential_proto_init() {
 	}
 	file_authentication_service_v1_user_credential_proto_msgTypes[0].OneofWrappers = []any{}
 	file_authentication_service_v1_user_credential_proto_msgTypes[2].OneofWrappers = []any{}
+	file_authentication_service_v1_user_credential_proto_msgTypes[4].OneofWrappers = []any{
+		(*DeleteUserCredentialRequest_Id)(nil),
+	}
 	file_authentication_service_v1_user_credential_proto_msgTypes[5].OneofWrappers = []any{
 		(*GetUserCredentialRequest_Id)(nil),
 	}

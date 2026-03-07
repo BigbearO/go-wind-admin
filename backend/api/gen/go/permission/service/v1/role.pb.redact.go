@@ -276,12 +276,6 @@ func (x *GetRoleRequest) Redact() string {
 		return ""
 	}
 
-	// Safe field: Id
-
-	// Safe field: Name
-
-	// Safe field: Code
-
 	// Safe field: ViewMask
 	return x.String()
 }
@@ -317,8 +311,6 @@ func (x *DeleteRoleRequest) Redact() string {
 	if x == nil {
 		return ""
 	}
-
-	// Safe field: Id
 	return x.String()
 }
 

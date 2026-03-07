@@ -747,11 +747,11 @@ func (x *UpdateUserRequest) GetAllowMissing() bool {
 // 删除用户 - 请求
 type DeleteUserRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Types that are valid to be assigned to DeleteBy:
+	// Types that are valid to be assigned to QueryBy:
 	//
 	//	*DeleteUserRequest_Id
 	//	*DeleteUserRequest_Username
-	DeleteBy      isDeleteUserRequest_DeleteBy `protobuf_oneof:"delete_by"`
+	QueryBy       isDeleteUserRequest_QueryBy `protobuf_oneof:"query_by"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -786,16 +786,16 @@ func (*DeleteUserRequest) Descriptor() ([]byte, []int) {
 	return file_identity_service_v1_user_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *DeleteUserRequest) GetDeleteBy() isDeleteUserRequest_DeleteBy {
+func (x *DeleteUserRequest) GetQueryBy() isDeleteUserRequest_QueryBy {
 	if x != nil {
-		return x.DeleteBy
+		return x.QueryBy
 	}
 	return nil
 }
 
 func (x *DeleteUserRequest) GetId() uint32 {
 	if x != nil {
-		if x, ok := x.DeleteBy.(*DeleteUserRequest_Id); ok {
+		if x, ok := x.QueryBy.(*DeleteUserRequest_Id); ok {
 			return x.Id
 		}
 	}
@@ -804,15 +804,15 @@ func (x *DeleteUserRequest) GetId() uint32 {
 
 func (x *DeleteUserRequest) GetUsername() string {
 	if x != nil {
-		if x, ok := x.DeleteBy.(*DeleteUserRequest_Username); ok {
+		if x, ok := x.QueryBy.(*DeleteUserRequest_Username); ok {
 			return x.Username
 		}
 	}
 	return ""
 }
 
-type isDeleteUserRequest_DeleteBy interface {
-	isDeleteUserRequest_DeleteBy()
+type isDeleteUserRequest_QueryBy interface {
+	isDeleteUserRequest_QueryBy()
 }
 
 type DeleteUserRequest_Id struct {
@@ -823,9 +823,9 @@ type DeleteUserRequest_Username struct {
 	Username string `protobuf:"bytes,2,opt,name=username,proto3,oneof"` // 用户登录名
 }
 
-func (*DeleteUserRequest_Id) isDeleteUserRequest_DeleteBy() {}
+func (*DeleteUserRequest_Id) isDeleteUserRequest_QueryBy() {}
 
-func (*DeleteUserRequest_Username) isDeleteUserRequest_DeleteBy() {}
+func (*DeleteUserRequest_Username) isDeleteUserRequest_QueryBy() {}
 
 // 用户是否存在 - 请求
 type UserExistsRequest struct {
@@ -1875,11 +1875,12 @@ const file_identity_service_v1_user_proto_rawDesc = "" +
 	"updateMask\x12\xb4\x01\n" +
 	"\rallow_missing\x18\x05 \x01(\bB\x89\x01\xbaG\x85\x01\x92\x02\x81\x01如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。H\x01R\fallowMissing\x88\x01\x01B\v\n" +
 	"\t_passwordB\x10\n" +
-	"\x0e_allow_missing\"{\n" +
+	"\x0e_allow_missing\"z\n" +
 	"\x11DeleteUserRequest\x12\"\n" +
 	"\x02id\x18\x01 \x01(\rB\x10\xbaG\r\x18\x01\x92\x02\b用户IDH\x00R\x02id\x125\n" +
-	"\busername\x18\x02 \x01(\tB\x17\xbaG\x14\x18\x01\x92\x02\x0f用户登录名H\x00R\busernameB\v\n" +
-	"\tdelete_by\"z\n" +
+	"\busername\x18\x02 \x01(\tB\x17\xbaG\x14\x18\x01\x92\x02\x0f用户登录名H\x00R\busernameB\n" +
+	"\n" +
+	"\bquery_by\"z\n" +
 	"\x11UserExistsRequest\x12\"\n" +
 	"\x02id\x18\x01 \x01(\rB\x10\xbaG\r\x18\x01\x92\x02\b用户IDH\x00R\x02id\x125\n" +
 	"\busername\x18\x02 \x01(\tB\x17\xbaG\x14\x18\x01\x92\x02\x0f用户登录名H\x00R\busernameB\n" +

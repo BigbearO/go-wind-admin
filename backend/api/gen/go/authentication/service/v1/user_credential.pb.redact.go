@@ -241,8 +241,6 @@ func (x *DeleteUserCredentialRequest) Redact() string {
 	if x == nil {
 		return ""
 	}
-
-	// Safe field: Id
 	return x.String()
 }
 
@@ -251,8 +249,6 @@ func (x *GetUserCredentialRequest) Redact() string {
 	if x == nil {
 		return ""
 	}
-
-	// Safe field: Id
 
 	// Safe field: ViewMask
 	return x.String()
