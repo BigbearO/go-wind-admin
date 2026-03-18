@@ -19,7 +19,7 @@ export interface BasicLayoutProps extends ProLayoutProps {
 const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
   const {children} = props;
   const intl = useIntl();
-  const {initialState, setInitialState} = useModel('@@initialState');
+  const {initialState} = useModel('@@initialState');
 
   return (
     <ProLayout
@@ -41,12 +41,12 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
       fixedHeader
       splitMenus
       waterMarkProps={{
-        content: initialState?.currentUser?.name,
+        content: initialState?.currentUser?.username,
       }}
       avatarProps={{
         src: initialState?.currentUser?.avatar,
         size: 'small',
-        title: <span>{initialState?.currentUser?.name}</span>,
+        title: <span>{initialState?.currentUser?.username}</span>,
         render: (_, avatarChildren) => {
           return <AvatarDropdown>{avatarChildren}</AvatarDropdown>;
         },
@@ -56,7 +56,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         <SelectLang key="selectLang"/>,
       ]}
       footerRender={() => <Footer/>}
-      onPageChange={(routeConfig) => {
+      onPageChange={() => {
         // 页面切换时的权限检查
         const {location} = history;
         if (!initialState?.currentUser && location.pathname !== '/user/login') {
@@ -66,9 +66,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
       menuDataRender={() => {
         // 渲染菜单数据 - 从路由配置中提取
         return props.route?.routes || [];
-      }}
-      route={{
-        routes: props.route?.routes || [],
       }}
       menuItemRender={(item, dom) => (
         <div
