@@ -33,7 +33,7 @@ export const layout: RunTimeLayoutConfig = ({initialState, setInitialState}) => 
 
     // 水印配置
     waterMarkProps: {
-      content: initialState?.currentUser?.name,
+      content: initialState?.currentUser?.username,
     },
 
     // 页脚渲染

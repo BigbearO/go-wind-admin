@@ -1,7 +1,6 @@
 import {MoonOutlined, QuestionCircleOutlined, SunOutlined} from '@ant-design/icons';
 import {SelectLang as UmiSelectLang, useModel} from '@umijs/max';
-import type {MenuProps} from 'antd';
-import {Dropdown, Space, Tooltip} from 'antd';
+import {Space, Tooltip} from 'antd';
 import React, {useMemo, useCallback} from 'react';
 
 export type SiderTheme = 'light' | 'dark';
@@ -10,10 +9,10 @@ export type SiderTheme = 'light' | 'dark';
  * 主题切换按钮组件
  */
 export const ThemeToggle: React.FC = () => {
-  const {theme, setMode} = useModel('core.theme');
+  const {mode, setMode} = useModel('core.theme');
 
   // 使用 useMemo 缓存主题值，避免不必要的重新渲染
-  const currentTheme = useMemo(() => theme || 'light', [theme]);
+  const currentTheme = useMemo(() => mode || 'light', [mode]);
 
   const handleToggle = useCallback(() => {
     setMode(currentTheme === 'dark' ? 'light' : 'dark');
@@ -39,7 +38,7 @@ export const ThemeToggle: React.FC = () => {
         }}
       >
         <Space>
-          {currentTheme === 'dark' ? <SunOutlined /> : <MoonOutlined />}
+          {currentTheme === 'dark' ? <SunOutlined/> : <MoonOutlined/>}
         </Space>
       </a>
     </Tooltip>
@@ -69,7 +68,7 @@ export const Question: React.FC = () => {
         color: 'inherit',
       }}
     >
-      <QuestionCircleOutlined />
+      <QuestionCircleOutlined/>
     </a>
   );
 };

@@ -1,11 +1,13 @@
+import {IUser} from "@/models/types";
+
 /**
  * @see https://umijs.org/docs/max/access#access
  * */
 export default function access(
-  initialState: { currentUser?: API.CurrentUser } | undefined,
+  initialState: { currentUser?: IUser } | undefined,
 ) {
-  const { currentUser } = initialState ?? {};
+  const {currentUser} = initialState ?? {};
   return {
-    canAdmin: currentUser && currentUser.access === 'admin',
+    canAdmin: currentUser,
   };
 }

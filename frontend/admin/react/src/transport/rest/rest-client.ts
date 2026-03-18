@@ -88,6 +88,7 @@ export function createRequestClient(baseURL: string) {
   return client;
 }
 
+
 export const API_URL = process.env.API_URL || '';
 
 export const requestClient = createRequestClient(API_URL);

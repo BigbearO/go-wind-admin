@@ -7,10 +7,11 @@ import proxy from './proxy';
 
 import routes from './routes';
 
-const {REACT_APP_ENV = 'dev', REACT_APP_API_URL} = process.env;
+const {REACT_APP_ENV = 'dev', REACT_APP_API_URL, REACT_APP_SSE_URL, REACT_AES_KEY} = process.env;
 
-// 定义 API 地址，优先使用环境变量，否则使用默认值
-const API_URL = REACT_APP_API_URL || 'http://localhost:7788';
+const API_URL = REACT_APP_API_URL || '';
+const SSE_URL = REACT_APP_SSE_URL || '';
+const AES_KEY = REACT_AES_KEY || '';
 
 /**
  * @name 使用公共路径
@@ -23,6 +24,8 @@ export default defineConfig({
   // 定义全局常量替换方式
   define: {
     'process.env.API_URL': API_URL,
+    'process.env.SSE_URL': SSE_URL,
+    'process.env.AES_KEY': AES_KEY,
   },
   /**
    * @name 开启 hash 模式

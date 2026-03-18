@@ -35,7 +35,7 @@ export default function AuthenticationModel() {
    * 加密密码
    */
   function encryptPassword(password: string): string {
-    const key = process.env.NEXT_PUBLIC_AES_KEY || '';
+    const key = process.env.AES_KEY || '';
     return encryptByAES(password, key);
   }
 
@@ -53,7 +53,7 @@ export default function AuthenticationModel() {
     async (
       params: LoginParams,
       onSuccess?: () => Promise<void> | void,
-    ): Promise<{userInfo: IUser | null}> => {
+    ): Promise<{ userInfo: IUser | null }> => {
       let userInfo: IUser | null = null;
 
       try {
