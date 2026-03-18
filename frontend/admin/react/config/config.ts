@@ -7,7 +7,10 @@ import proxy from './proxy';
 
 import routes from './routes';
 
-const {REACT_APP_ENV = 'dev'} = process.env;
+const {REACT_APP_ENV = 'dev', REACT_APP_API_URL} = process.env;
+
+// 定义 API 地址，优先使用环境变量，否则使用默认值
+const API_URL = REACT_APP_API_URL || 'http://localhost:7788';
 
 /**
  * @name 使用公共路径
@@ -17,6 +20,10 @@ const {REACT_APP_ENV = 'dev'} = process.env;
 const PUBLIC_PATH: string = '/';
 
 export default defineConfig({
+  // 定义全局常量替换方式
+  define: {
+    'process.env.API_URL': API_URL,
+  },
   /**
    * @name 开启 hash 模式
    * @description 让 build 之后的产物包含 hash 后缀。通常用于增量发布和避免浏览器加载缓存。
