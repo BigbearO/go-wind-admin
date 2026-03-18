@@ -91,7 +91,7 @@ const ChartCard: React.FC<ChartCardProps> = (props) => {
     );
   };
 
-  const { loading = false, ...rest } = props;
+  const { loading = false, contentHeight, ...rest } = props;
   return (
     <Card
       loading={loading}

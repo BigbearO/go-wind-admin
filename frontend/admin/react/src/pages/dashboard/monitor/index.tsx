@@ -35,7 +35,7 @@ const Monitor: FC = () => {
             marginBottom: 24,
           }}
         >
-          <Card title="活动实时交易情况" bordered={false}>
+          <Card title="活动实时交易情况" variant="filled">
             <Row>
               <Col md={6} sm={12} xs={24}>
                 <Statistic
@@ -73,7 +73,7 @@ const Monitor: FC = () => {
             style={{
               marginBottom: 24,
             }}
-            bordered={false}
+            variant="filled"
           >
             <ActiveChart />
           </Card>
@@ -85,7 +85,7 @@ const Monitor: FC = () => {
             bodyStyle={{
               textAlign: 'center',
             }}
-            bordered={false}
+            variant="filled"
           >
             <Gauge
               height={180}
@@ -156,7 +156,7 @@ const Monitor: FC = () => {
           <Card
             title="热门搜索"
             loading={loading}
-            bordered={false}
+            variant="filled"
             bodyStyle={{
               overflow: 'hidden',
             }}
@@ -185,7 +185,7 @@ const Monitor: FC = () => {
               textAlign: 'center',
               fontSize: 0,
             }}
-            bordered={false}
+            variant="filled"
           >
             <Liquid height={160} percent={0.35} />
           </Card>
