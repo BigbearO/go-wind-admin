@@ -106,7 +106,7 @@ openapi:
 # generate protobuf api Typescript code
 ts:
 	@cd api && \
-	buf generate --template buf.admin.typescript.gen.yaml
+	buf generate --template buf.vue.admin.typescript.gen.yaml
 
 # build all service applications
 build: api openapi
