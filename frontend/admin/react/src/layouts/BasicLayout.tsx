@@ -64,8 +64,11 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         }
       }}
       menuDataRender={() => {
-        // TODO: 渲染菜单数据
+        // 渲染菜单数据 - 从路由配置中提取
         return props.route?.routes || [];
+      }}
+      route={{
+        routes: props.route?.routes || [],
       }}
       menuItemRender={(item, dom) => (
         <div

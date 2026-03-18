@@ -36,8 +36,10 @@
   ],
   "dependencies": {
     "@ant-design/icons": "^5.6.1",
+    "@ant-design/plots": "^2.6.8",
     "@ant-design/pro-components": "^2.7.19",
     "@ant-design/v5-patch-for-react-19": "^1.0.3",
+    "@antv/l7-react": "^2.4.3",
     "antd": "^5.25.4",
     "antd-style": "^3.7.0",
     "axios": "^1.13.6",
@@ -46,6 +48,7 @@
     "dayjs": "^1.11.13",
     "defu": "^6.1.4",
     "nprogress": "^0.2.0",
+    "numeral": "^2.0.6",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "swagger-ui-dist": "^5.32.1"

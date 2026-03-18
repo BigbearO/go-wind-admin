@@ -2,7 +2,7 @@ const dashboardRoutes = [
   {
     path: '/dashboard',
     name: 'dashboard',
-    icon: 'dashboard',
+    icon: 'DashboardOutlined',
     routes: [
       {
         path: '/dashboard',
@@ -10,19 +10,19 @@ const dashboardRoutes = [
       },
       {
         name: 'analysis',
-        icon: 'smile',
+        icon: 'BarChartOutlined',
         path: '/dashboard/analysis',
         component: './dashboard/analysis',
       },
       {
         name: 'monitor',
-        icon: 'smile',
+        icon: 'MonitorOutlined',
         path: '/dashboard/monitor',
         component: './dashboard/monitor',
       },
       {
         name: 'workplace',
-        icon: 'smile',
+        icon: 'HomeOutlined',
         path: '/dashboard/workplace',
         component: './dashboard/workplace',
       },
