@@ -17,9 +17,9 @@ export const layout: RunTimeLayoutConfig = ({initialState, setInitialState}) => 
   return {
     // 顶部操作区域渲染
     actionsRender: () => [
-      <ThemeToggle key="theme" />,
-      <Question key="question" />,
-      <SelectLang key="SelectLang" />,
+      <ThemeToggle key="theme"/>,
+      <Question key="question"/>,
+      <SelectLang key="SelectLang"/>,
     ],
 
     // 头像配置

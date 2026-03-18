@@ -15,18 +15,17 @@ import systemRoutes from './routes/system';
  * @doc https://umijs.org/docs/guides/routes
  */
 export default [
-  // 1. 内核路由 (登录、异常)
-  ...coreRoutes,
-
-  // 2. 主布局下的业务路由
   {
     path: '/',
-    // component: '../layouts/BasicLayout', // 统一在这里配置主布局
     routes: [
       {path: '/', redirect: '/dashboard/analysis'},
-      // 引入各个业务模块
-      ...dashboardRoutes,
-      ...systemRoutes,
     ],
   },
+
+  // 内核路由 (登录、异常)
+  ...coreRoutes,
+
+  // 引入各个业务模块
+  ...dashboardRoutes,
+  ...systemRoutes,
 ];
