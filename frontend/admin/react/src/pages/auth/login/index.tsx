@@ -14,7 +14,7 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (values: { username: string; password: string }) => {
     console.log('[Login] Form submitted with values:', values);
-      
+
     try {
       console.log('[Login] Calling login function...');
       const result = await login(
@@ -23,11 +23,10 @@ const Login: React.FC = () => {
           password: values.password,
           grant_type: 'password',
         },
-        // 不传 onSuccess 回调，避免提前跳转
       );
-        
+
       console.log('[Login] Login function returned result:', result);
-  
+
       // 保存令牌到 AccessModel
       if (result.accessToken || result.refreshToken) {
         console.log('[Login] Saving tokens to AccessModel');
@@ -45,13 +44,12 @@ const Login: React.FC = () => {
       } else {
         console.warn('[Login] No tokens in result');
       }
-        
+
       message.success(intl.formatMessage({id: 'pages.login.success'}));
-      
-      // 保存完令牌后再跳转
-      setTimeout(() => {
-        window.location.href = '/';
-      }, 500);
+
+
+      const urlParams = new URL(window.location.href).searchParams;
+      window.location.href = urlParams.get('redirect') || '/';
     } catch (error: any) {
       console.error('[Login] Error occurred:', error);
       // 错误已在 model 中处理
