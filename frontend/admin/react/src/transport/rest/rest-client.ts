@@ -4,7 +4,7 @@ import {
   authenticateResponseInterceptor,
   errorMessageResponseInterceptor
 } from "@/transport/rest/preset-interceptors";
-import {message} from 'antd';
+import {message, notification} from 'antd';
 
 // 用于存储获取 token 的函数
 let getTokenCallback: (() => string | null) | null = null;
@@ -82,15 +82,6 @@ export function createRequestClient(baseURL: string) {
   // 通用的错误处理，如果没有进入上面的错误处理逻辑，就会进入这里
   client.addResponseInterceptor(
     errorMessageResponseInterceptor(async (msg: string, error) => {
-      const responseData = (error as unknown as {
-        response?: { data?: Record<string, unknown> }
-      })?.response?.data ?? {};
-      const errorMessage = responseData?.error ?? responseData?.message ?? '';
-
-      // 只显示有效的错误消息
-      if (errorMessage || msg) {
-        message.error(errorMessage || msg);
-      }
     }),
   );
 
