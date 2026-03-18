@@ -9,7 +9,7 @@ import MonitorMap from './components/Map';
 import { queryTags } from './service';
 import useStyles from './style.style';
 
-const { Countdown } = Statistic;
+const { Timer } = Statistic;
 const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30; // Moment is also OK
 
 const Monitor: FC = () => {
@@ -35,7 +35,7 @@ const Monitor: FC = () => {
             marginBottom: 24,
           }}
         >
-          <Card title="活动实时交易情况" variant="filled">
+          <Card title="活动实时交易情况" variant="borderless">
             <Row>
               <Col md={6} sm={12} xs={24}>
                 <Statistic
@@ -48,10 +48,11 @@ const Monitor: FC = () => {
                 <Statistic title="销售目标完成率" value="92%" />
               </Col>
               <Col md={6} sm={12} xs={24}>
-                <Countdown
+                <Timer
                   title="活动剩余时间"
                   value={deadline}
                   format="HH:mm:ss:SSS"
+                  type="countdown"
                 />
               </Col>
               <Col md={6} sm={12} xs={24}>
@@ -73,7 +74,7 @@ const Monitor: FC = () => {
             style={{
               marginBottom: 24,
             }}
-            variant="filled"
+            variant="borderless"
           >
             <ActiveChart />
           </Card>
@@ -82,10 +83,12 @@ const Monitor: FC = () => {
             style={{
               marginBottom: 24,
             }}
-            bodyStyle={{
-              textAlign: 'center',
+            styles={{
+              body: {
+                textAlign: 'center',
+              },
             }}
-            variant="filled"
+            variant="borderless"
           >
             <Gauge
               height={180}
@@ -126,7 +129,7 @@ const Monitor: FC = () => {
             marginBottom: 24,
           }}
         >
-          <Card title="各品类占比" bordered={false}>
+          <Card title="各品类占比" variant="borderless">
             <Row
               style={{
                 padding: '16px 0',
@@ -156,9 +159,11 @@ const Monitor: FC = () => {
           <Card
             title="热门搜索"
             loading={loading}
-            variant="filled"
-            bodyStyle={{
-              overflow: 'hidden',
+            variant="borderless"
+            styles={{
+              body: {
+                overflow: 'hidden',
+              },
             }}
           >
             <WordCloud
@@ -181,11 +186,13 @@ const Monitor: FC = () => {
         >
           <Card
             title="资源剩余"
-            bodyStyle={{
-              textAlign: 'center',
-              fontSize: 0,
+            styles={{
+              body: {
+                textAlign: 'center',
+                fontSize: 0,
+              },
             }}
-            variant="filled"
+            variant="borderless"
           >
             <Liquid height={160} percent={0.35} />
           </Card>
