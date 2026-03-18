@@ -6,7 +6,7 @@ import {history} from '@umijs/max';
 import defaultSettings from '../config/defaultSettings';
 import {layout as proLayoutConfig} from './layouts/ProLayoutConfig';
 import type {IUser} from "@/models/types";
-import {useUserProfileModel} from '@/models';
+import {getUserProfile} from '@/models/business/userProfile';
 
 const loginPath = '/user/login';
 
@@ -21,15 +21,18 @@ export async function getInitialState(): Promise<{
 }> {
   const fetchUserInfo = async () => {
     try {
-      // 使用 UserProfileModel 获取用户信息
-      const userProfileModel = useUserProfileModel();
-      const user = await userProfileModel.fetchUserProfile();
+      console.log('[App] Fetching user info...');
+      // 使用独立的 getUserProfile 函数 (不依赖 React Hooks)
+      const user = await getUserProfile();
+      console.log('[App] User info fetched:', user);
       return user || undefined;
-    } catch (_error) {
+    } catch (error: any) {
+      console.error('[App] Failed to fetch user info:', error);
       history.push(loginPath);
+      return undefined;
     }
-    return undefined;
   };
+
   // 如果不是登录页面，执行
   const {location} = history;
   if (

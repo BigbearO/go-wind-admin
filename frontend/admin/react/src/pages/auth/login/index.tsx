@@ -47,9 +47,13 @@ const Login: React.FC = () => {
 
       message.success(intl.formatMessage({id: 'pages.login.success'}));
 
-
-      const urlParams = new URL(window.location.href).searchParams;
-      window.location.href = urlParams.get('redirect') || '/';
+      // 等待一小段时间确保 localStorage 写入完成，然后跳转
+      setTimeout(() => {
+        const urlParams = new URL(window.location.href).searchParams;
+        const redirect = urlParams.get('redirect') || '/';
+        console.log('[Login] Redirecting to:', redirect);
+        window.location.href = redirect;
+      }, 300);
     } catch (error: any) {
       console.error('[Login] Error occurred:', error);
       // 错误已在 model 中处理

@@ -76,16 +76,22 @@ export default function AuthenticationModel() {
           accessToken = response.access_token;
           refreshToken = response.refresh_token;
 
-          saveAccessToken({
+          // 保存到 localStorage (使用 access 模块的工具函数)
+          const accessTokenPayload = {
             value: accessToken,
-            expiresAt: response.expires_in || 0,
-          });
+            expiresAt: Date.now() + (response.expires_in || 7200) * 1000, // 默认 2 小时
+          };
+          
+          saveAccessToken(accessTokenPayload);
+          console.log('[Authentication] Access token saved:', accessTokenPayload);
 
           if (refreshToken) {
-            saveRefreshToken({
+            const refreshTokenPayload = {
               value: refreshToken,
-              expiresAt: response.refresh_expires_in,
-            });
+              expiresAt: Date.now() + (response.refresh_expires_in || 2592000) * 1000, // 默认 30 天
+            };
+            saveRefreshToken(refreshTokenPayload);
+            console.log('[Authentication] Refresh token saved:', refreshTokenPayload);
           }
 
           console.log('Login successful', {
@@ -95,6 +101,13 @@ export default function AuthenticationModel() {
 
           // 获取用户信息
           userInfo = await fetchUserInfo();
+          
+          // 保存用户信息到 localStorage
+          if (userInfo) {
+            const userKey = 'gowind-admin-user-info';
+            localStorage.setItem(userKey, JSON.stringify(userInfo));
+            console.log('[Authentication] User info saved to localStorage:', userInfo);
+          }
 
           // 执行成功回调
           if (onSuccess) {

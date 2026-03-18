@@ -18,7 +18,7 @@ export default function UserProfileModel() {
   const userProfileService = createUserProfileServiceClient(requestApi);
 
   /**
-   * 获取用户档案信息
+   * 获取用户档案信息 (静态方法，可在非组件环境中使用)
    */
   const fetchUserProfile = useCallback(async (): Promise<IUser | null> => {
     try {
@@ -73,4 +73,22 @@ export default function UserProfileModel() {
     clearError,
     resetState,
   };
+}
+
+/**
+ * 获取用户档案信息 (独立函数，不依赖 React 组件)
+ * 可以在 getInitialState 等非组件环境中使用
+ */
+export async function getUserProfile(): Promise<IUser | null> {
+  try {
+    console.log('[UserProfile] Fetching user profile...');
+    const userProfileService = createUserProfileServiceClient(requestApi);
+    const profile = await userProfileService.GetUser({});
+    const user = profile as unknown as IUser;
+    console.log('[UserProfile] User profile fetched:', user);
+    return user;
+  } catch (err: any) {
+    console.error('[UserProfile] Failed to fetch user profile:', err);
+    throw err;
+  }
 }
