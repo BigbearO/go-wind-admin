@@ -1,18 +1,18 @@
-import { InfoCircleOutlined } from '@ant-design/icons';
-import { Area } from '@ant-design/plots';
-import { Card, Col, Row, Table, Tooltip } from 'antd';
+import {InfoCircleOutlined} from '@ant-design/icons';
+import {Area} from '@ant-design/plots';
+import {Card, Col, Row, Table, Tooltip} from 'antd';
 import numeral from 'numeral';
 import React from 'react';
-import type { DataItem } from '../data.d';
+import type {DataItem} from '../data.d';
 import NumberInfo from './NumberInfo';
 import Trend from './Trend';
 
 const TopSearch = ({
-  loading,
-  visitData2,
-  searchData,
-  dropdownGroup,
-}: {
+                     loading,
+                     visitData2,
+                     searchData,
+                     dropdownGroup,
+                   }: {
   loading: boolean;
   visitData2: DataItem[];
   dropdownGroup: React.ReactNode;
@@ -76,7 +76,7 @@ const TopSearch = ({
   return (
     <Card
       loading={loading}
-      variant="filled"
+      variant="borderless"
       title="线上热门搜索"
       extra={dropdownGroup}
       style={{

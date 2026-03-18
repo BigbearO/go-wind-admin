@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Card } from 'antd';
-import type { CardProps } from 'antd/es/card';
+import {Card} from 'antd';
+import type {CardProps} from 'antd/es/card';
 import classNames from 'classnames';
 import React from 'react';
 import useStyles from './index.style';
@@ -18,12 +18,12 @@ export type ChartCardProps = {
 } & CardProps;
 
 const ChartCard: React.FC<ChartCardProps> = (props) => {
-  const { styles } = useStyles();
+  const {styles} = useStyles();
   const renderTotal = (total?: number | totalType | React.ReactNode) => {
     if (!total && total !== 0) {
       return null;
     }
-    let totalDom: React.ReactNode | null = null;
+    let totalDom: React.ReactNode | null;
     switch (typeof total) {
       case 'undefined':
         totalDom = null;
@@ -91,7 +91,7 @@ const ChartCard: React.FC<ChartCardProps> = (props) => {
     );
   };
 
-  const { loading = false, contentHeight, ...rest } = props;
+  const {loading = false, contentHeight, ...rest} = props;
   return (
     <Card
       loading={loading}

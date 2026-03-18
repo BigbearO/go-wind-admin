@@ -1,12 +1,12 @@
-import { Column } from '@ant-design/plots';
-import { Button, Card, Col, DatePicker, Row, Tabs } from 'antd';
-import type { RangePickerProps } from 'antd/es/date-picker';
+import {Column} from '@ant-design/plots';
+import {Button, Card, Col, DatePicker, Row, Tabs} from 'antd';
+import type {RangePickerProps} from 'antd/es/date-picker';
 import numeral from 'numeral';
-import type { DataItem } from '../data.d';
+import type {DataItem} from '../data.d';
 import useStyles from '../style.style';
 
 export type TimeType = 'today' | 'week' | 'month' | 'year';
-const { RangePicker } = DatePicker;
+const {RangePicker} = DatePicker;
 
 const rankingListData: {
   title: string;
@@ -21,13 +21,13 @@ for (let i = 0; i < 7; i += 1) {
 }
 
 const SalesCard = ({
-  rangePickerValue,
-  salesData,
-  isActive,
-  handleRangePickerChange,
-  loading,
-  selectDate,
-}: {
+                     rangePickerValue,
+                     salesData,
+                     isActive,
+                     handleRangePickerChange,
+                     loading,
+                     selectDate,
+                   }: {
   rangePickerValue: RangePickerProps['value'];
   isActive: (key: TimeType) => string;
   salesData: DataItem[];
@@ -35,7 +35,7 @@ const SalesCard = ({
   handleRangePickerChange: RangePickerProps['onChange'];
   selectDate: (key: TimeType) => void;
 }) => {
-  const { styles } = useStyles();
+  const {styles} = useStyles();
   return (
     <Card
       loading={loading}
@@ -119,7 +119,7 @@ const SalesCard = ({
                         },
                       }}
                       scale={{
-                        x: { paddingInner: 0.4 },
+                        x: {paddingInner: 0.4},
                       }}
                       tooltip={{
                         name: '销售量',
@@ -178,7 +178,7 @@ const SalesCard = ({
                         },
                       }}
                       scale={{
-                        x: { paddingInner: 0.4 },
+                        x: {paddingInner: 0.4},
                       }}
                       tooltip={{
                         name: '访问量',

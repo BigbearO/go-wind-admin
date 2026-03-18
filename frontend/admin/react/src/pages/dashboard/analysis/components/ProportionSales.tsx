@@ -1,25 +1,25 @@
-import { Pie } from '@ant-design/plots';
-import { Card, Segmented, Typography } from 'antd';
+import {Pie} from '@ant-design/plots';
+import {Card, Segmented, Typography} from 'antd';
 import numeral from 'numeral';
 import React from 'react';
-import type { DataItem } from '../data.d';
+import type {DataItem} from '../data.d';
 import useStyles from '../style.style';
 
-const { Text } = Typography;
+const {Text} = Typography;
 const ProportionSales = ({
-  dropdownGroup,
-  salesType,
-  loading,
-  salesPieData,
-  handleChangeSalesType,
-}: {
+                           dropdownGroup,
+                           salesType,
+                           loading,
+                           salesPieData,
+                           handleChangeSalesType,
+                         }: {
   loading: boolean;
   dropdownGroup: React.ReactNode;
   salesType: 'all' | 'online' | 'stores';
   salesPieData: DataItem[];
   handleChangeSalesType?: (value: 'all' | 'online' | 'stores') => void;
 }) => {
-  const { styles } = useStyles();
+  const {styles} = useStyles();
   return (
     <Card
       loading={loading}
@@ -37,9 +37,9 @@ const ProportionSales = ({
             value={salesType}
             onChange={handleChangeSalesType}
             options={[
-              { label: '全部渠道', value: 'all' },
-              { label: '线上', value: 'online' },
-              { label: '门店', value: 'stores' },
+              {label: '全部渠道', value: 'all'},
+              {label: '线上', value: 'online'},
+              {label: '门店', value: 'stores'},
             ]}
             size="middle"
           />

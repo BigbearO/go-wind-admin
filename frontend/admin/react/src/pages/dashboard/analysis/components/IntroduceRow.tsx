@@ -1,11 +1,11 @@
-import { InfoCircleOutlined } from '@ant-design/icons';
-import { Area, Column } from '@ant-design/plots';
-import { Col, Progress, Row, Tooltip } from 'antd';
+import {InfoCircleOutlined} from '@ant-design/icons';
+import {Area, Column} from '@ant-design/plots';
+import {Col, Progress, Row, Tooltip} from 'antd';
 import numeral from 'numeral';
-import type { DataItem } from '../data.d';
+import type {DataItem} from '../data.d';
 import useStyles from '../style.style';
 import Yuan from '../utils/Yuan';
-import { ChartCard, Field } from './Charts';
+import {ChartCard, Field} from './Charts';
 import Trend from './Trend';
 
 const topColResponsiveProps = {
@@ -19,22 +19,22 @@ const topColResponsiveProps = {
   },
 };
 const IntroduceRow = ({
-  loading,
-  visitData,
-}: {
+                        loading,
+                        visitData,
+                      }: {
   loading: boolean;
   visitData: DataItem[];
 }) => {
-  const { styles } = useStyles();
+  const {styles} = useStyles();
   return (
     <Row gutter={24}>
       <Col {...topColResponsiveProps}>
         <ChartCard
-          variant="filled"
+          variant="borderless"
           title="总销售额"
           action={
             <Tooltip title="指标说明">
-              <InfoCircleOutlined />
+              <InfoCircleOutlined/>
             </Tooltip>
           }
           loading={loading}
@@ -65,17 +65,17 @@ const IntroduceRow = ({
 
       <Col {...topColResponsiveProps}>
         <ChartCard
-          variant="filled"
+          variant="borderless"
           loading={loading}
           title="访问量"
           action={
             <Tooltip title="指标说明">
-              <InfoCircleOutlined />
+              <InfoCircleOutlined/>
             </Tooltip>
           }
           total={numeral(8846).format('0,0')}
           footer={
-            <Field label="日访问量" value={numeral(1234).format('0,0')} />
+            <Field label="日访问量" value={numeral(1234).format('0,0')}/>
           }
           contentHeight={46}
         >
@@ -97,16 +97,16 @@ const IntroduceRow = ({
       </Col>
       <Col {...topColResponsiveProps}>
         <ChartCard
-          variant="filled"
+          variant="borderless"
           loading={loading}
           title="支付笔数"
           action={
             <Tooltip title="指标说明">
-              <InfoCircleOutlined />
+              <InfoCircleOutlined/>
             </Tooltip>
           }
           total={numeral(6560).format('0,0')}
-          footer={<Field label="转化率" value="60%" />}
+          footer={<Field label="转化率" value="60%"/>}
           contentHeight={46}
         >
           <Column
@@ -116,18 +116,18 @@ const IntroduceRow = ({
             axis={false}
             height={46}
             data={visitData}
-            scale={{ x: { paddingInner: 0.4 } }}
+            scale={{x: {paddingInner: 0.4}}}
           />
         </ChartCard>
       </Col>
       <Col {...topColResponsiveProps}>
         <ChartCard
           loading={loading}
-          bordered={false}
+          variant="borderless"
           title="运营活动效果"
           action={
             <Tooltip title="指标说明">
-              <InfoCircleOutlined />
+              <InfoCircleOutlined/>
             </Tooltip>
           }
           total="78%"
@@ -157,7 +157,7 @@ const IntroduceRow = ({
         >
           <Progress
             percent={78}
-            strokeColor={{ from: '#108ee9', to: '#87d068' }}
+            strokeColor={{from: '#108ee9', to: '#87d068'}}
             status="active"
           />
         </ChartCard>
