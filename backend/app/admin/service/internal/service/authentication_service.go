@@ -65,13 +65,17 @@ func NewAuthenticationService(
 	}
 }
 
-// Login 登录
-func (s *AuthenticationService) Login(ctx context.Context, req *authenticationV1.LoginRequest) (*authenticationV1.LoginResponse, error) {
+func (s *AuthenticationService) resetContextForLogin(ctx context.Context) context.Context {
 	// 没有 viewer 信息，使用空的 NoopContext
 	ctx = viewer.WithContext(ctx, viewer.NewNoopContext())
 	// 绕过隐私保护中间件
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
+	return ctx
+}
+
+// Login 登录
+func (s *AuthenticationService) Login(ctx context.Context, req *authenticationV1.LoginRequest) (*authenticationV1.LoginResponse, error) {
 	switch req.GetGrantType() {
 	case authenticationV1.GrantType_password:
 		return s.doGrantTypePassword(ctx, req)
@@ -326,6 +330,8 @@ func (s *AuthenticationService) resolveUserAuthority(ctx context.Context, user *
 
 // doGrantTypePassword 处理授权类型 - 密码
 func (s *AuthenticationService) doGrantTypePassword(ctx context.Context, req *authenticationV1.LoginRequest) (*authenticationV1.LoginResponse, error) {
+	ctx = s.resetContextForLogin(ctx)
+
 	var err error
 	if _, err = s.userCredentialRepo.VerifyCredential(ctx, &authenticationV1.VerifyCredentialRequest{
 		IdentityType: authenticationV1.UserCredential_USERNAME,
