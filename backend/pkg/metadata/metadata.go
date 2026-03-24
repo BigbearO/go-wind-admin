@@ -13,8 +13,8 @@ import (
 )
 
 const (
-	mdOperatorKey  = "x-md-operator"
-	mdSignatureKey = "x-md-signature"
+	mdOperatorKey  = "x-md-global-operator"
+	mdSignatureKey = "x-md-global-signature"
 )
 
 var codec = encoding.GetCodec("proto")
