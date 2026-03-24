@@ -77,4 +77,58 @@ export function extendsDefaultFormatter(vxeUI: VxeUIExport) {
       return formatDateTime(cellValue);
     },
   });
+
+  vxeUI.formats.add('formatCent', {
+    tableCellFormatMethod({ cellValue }) {
+      if (
+        cellValue === null ||
+        cellValue === undefined ||
+        Number.isNaN(cellValue)
+      ) {
+        return '-';
+      }
+      // 假设金额以分为单位，转换为元并保留两位小数
+      return (cellValue / 100).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+    },
+  });
+
+  vxeUI.formats.add('formatPercent', {
+    tableCellFormatMethod({ cellValue }) {
+      if (
+        cellValue === null ||
+        cellValue === undefined ||
+        Number.isNaN(cellValue)
+      ) {
+        return '-';
+      }
+      return `${(Number(cellValue) * 100).toFixed(2).replace(/\.00$/, '')}%`;
+    },
+  });
+
+  vxeUI.formats.add('formatThousand', {
+    tableCellFormatMethod({ cellValue }) {
+      if (
+        cellValue === null ||
+        cellValue === undefined ||
+        Number.isNaN(cellValue)
+      ) {
+        return '-';
+      }
+      return Number(cellValue).toLocaleString();
+    },
+  });
+
+  vxeUI.formats.add('formatStr', {
+    tableCellFormatMethod({ cellValue }) {
+      const str = String(cellValue);
+      // 如果是数字，前面补零
+      if (/^\d+$/.test(str)) {
+        return str.padStart(2, '0');
+      }
+      return str;
+    },
+  });
 }
