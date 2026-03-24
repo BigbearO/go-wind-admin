@@ -188,6 +188,8 @@ func (x *LoginRequest) Redact() string {
 	// Safe field: ClientType
 
 	// Safe field: DeviceId
+
+	// Safe field: Jti
 	return x.String()
 }
 

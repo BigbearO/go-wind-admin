@@ -173,6 +173,13 @@ message LoginRequest {
       description: "设备唯一标识（可选），用于设备绑定、推送、风控等"
     }
   ];
+
+  optional string jti = 60 [
+    json_name = "jti",
+    (gnostic.openapi.v3.property) = {
+      description: "建议客户端生成并提供 jti（JWT ID）作为唯一标识，服务端可据此防止重放攻击"
+    }
+  ];
 }
 
 // 用户后台登录 - 回应

@@ -140,6 +140,10 @@ func (m *LoginRequest) validate(all bool) error {
 		// no validation rules for DeviceId
 	}
 
+	if m.Jti != nil {
+		// no validation rules for Jti
+	}
+
 	if len(errors) > 0 {
 		return LoginRequestMultiError(errors)
 	}

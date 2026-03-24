@@ -5782,6 +5782,9 @@ components:
                 device_id:
                     type: string
                     description: 设备唯一标识（可选），用于设备绑定、推送、风控等
+                jti:
+                    type: string
+                    description: 建议客户端生成并提供 jti（JWT ID）作为唯一标识，服务端可据此防止重放攻击
             description: 用户后台登录 - 请求
         LoginResponse:
             type: object

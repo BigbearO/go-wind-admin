@@ -1025,6 +1025,7 @@ export type authenticationservicev1_LoginRequest = {
   code?: string;
   client_type?: authenticationservicev1_ClientType;
   device_id?: string;
+  jti?: string;
 };
 
 // 授权类型

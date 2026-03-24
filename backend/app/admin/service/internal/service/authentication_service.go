@@ -456,6 +456,15 @@ func (s *AuthenticationService) RefreshToken(ctx context.Context, req *authentic
 		return nil, authenticationV1.ErrorInvalidGrantType("invalid grant type")
 	}
 
+	operator, err := auth.FromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	req.ClientType = trans.Ptr(authenticationV1.ClientType_admin)
+	req.UserId = trans.Ptr(operator.GetUserId())
+	req.Jti = operator.Jti
+
 	return s.doGrantTypeRefreshToken(ctx, req)
 }
 
