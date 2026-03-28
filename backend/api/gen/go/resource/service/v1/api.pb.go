@@ -9,7 +9,6 @@ package resourcepb
 import (
 	_ "github.com/google/gnostic/openapiv3"
 	v1 "github.com/tx7do/go-crud/api/gen/go/pagination/v1"
-	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
@@ -638,7 +637,7 @@ var File_resource_service_v1_api_proto protoreflect.FileDescriptor
 
 const file_resource_service_v1_api_proto_rawDesc = "" +
 	"\n" +
-	"\x1dresource/service/v1/api.proto\x12\x13resource.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\"\x98\n" +
+	"\x1dresource/service/v1/api.proto\x12\x13resource.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\"\x98\n" +
 	"\n" +
 	"\x03Api\x12#\n" +
 	"\x02id\x18\x01 \x01(\rB\x0e\xbaG\v\x92\x02\b资源IDH\x00R\x02id\x88\x01\x01\x128\n" +

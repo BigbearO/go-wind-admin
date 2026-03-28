@@ -8,7 +8,6 @@ package storagepb
 
 import (
 	_ "github.com/google/gnostic/openapiv3"
-	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
@@ -847,7 +846,7 @@ var File_storage_service_v1_oss_proto protoreflect.FileDescriptor
 
 const file_storage_service_v1_oss_proto_rawDesc = "" +
 	"\n" +
-	"\x1cstorage/service/v1/oss.proto\x12\x12storage.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xe4\x03\n" +
+	"\x1cstorage/service/v1/oss.proto\x12\x12storage.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xe4\x03\n" +
 	"\rStorageObject\x12A\n" +
 	"\vbucket_name\x18\x01 \x01(\tB\x1b\xbaG\x18\x92\x02\x15目标文件桶名称H\x00R\n" +
 	"bucketName\x88\x01\x01\x12\xaa\x01\n" +

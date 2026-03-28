@@ -7,8 +7,6 @@
 package identitypb
 
 import (
-	_ "github.com/google/gnostic/openapiv3"
-	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
@@ -27,7 +25,7 @@ var File_identity_service_v1_user_profile_proto protoreflect.FileDescriptor
 
 const file_identity_service_v1_user_profile_proto_rawDesc = "" +
 	"\n" +
-	"&identity/service/v1/user_profile.proto\x12\x13identity.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1eidentity/service/v1/user.proto2\xa4\x01\n" +
+	"&identity/service/v1/user_profile.proto\x12\x13identity.service.v1\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1eidentity/service/v1/user.proto2\xa4\x01\n" +
 	"\x12UserProfileService\x12>\n" +
 	"\aGetUser\x12\x16.google.protobuf.Empty\x1a\x19.identity.service.v1.User\"\x00\x12N\n" +
 	"\n" +

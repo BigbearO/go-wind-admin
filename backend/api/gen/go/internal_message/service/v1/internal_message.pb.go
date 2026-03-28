@@ -818,7 +818,7 @@ var File_internal_message_service_v1_internal_message_proto protoreflect.FileDes
 
 const file_internal_message_service_v1_internal_message_proto_rawDesc = "" +
 	"\n" +
-	"2internal_message/service/v1/internal_message.proto\x12\x1binternal_message.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\"\x92\f\n" +
+	"2internal_message/service/v1/internal_message.proto\x12\x1binternal_message.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\"\x92\f\n" +
 	"\x0fInternalMessage\x12&\n" +
 	"\x02id\x18\x01 \x01(\rB\x11\xe0A\x01\xbaG\v\x92\x02\b消息IDH\x00R\x02id\x88\x01\x01\x12-\n" +
 	"\x05title\x18\x02 \x01(\tB\x12\xbaG\x0f\x92\x02\f消息标题H\x01R\x05title\x88\x01\x01\x121\n" +

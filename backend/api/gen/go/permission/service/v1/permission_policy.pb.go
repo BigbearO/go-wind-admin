@@ -8,13 +8,8 @@ package permissionpb
 
 import (
 	_ "github.com/google/gnostic/openapiv3"
-	_ "github.com/tx7do/go-crud/api/gen/go/pagination/v1"
-	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	_ "google.golang.org/protobuf/types/known/durationpb"
-	_ "google.golang.org/protobuf/types/known/emptypb"
-	_ "google.golang.org/protobuf/types/known/fieldmaskpb"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
@@ -292,7 +287,7 @@ var File_permission_service_v1_permission_policy_proto protoreflect.FileDescript
 
 const file_permission_service_v1_permission_policy_proto_rawDesc = "" +
 	"\n" +
-	"-permission/service/v1/permission_policy.proto\x12\x15permission.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1epagination/v1/pagination.proto\"\xac\v\n" +
+	"-permission/service/v1/permission_policy.proto\x12\x15permission.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xac\v\n" +
 	"\x10PermissionPolicy\x12)\n" +
 	"\x02id\x18\x01 \x01(\rB\x14\xbaG\x11\x92\x02\x0e权限策略IDH\x00R\x02id\x88\x01\x01\x12D\n" +
 	"\rpermission_id\x18\x02 \x01(\rB\x1a\xbaG\x17\x92\x02\x14包含的权限点IDH\x01R\fpermissionId\x88\x01\x01\x12r\n" +

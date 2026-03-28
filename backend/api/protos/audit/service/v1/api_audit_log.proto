@@ -6,7 +6,6 @@ import "gnostic/openapi/v3/annotations.proto";
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/field_mask.proto";
-import "google/protobuf/duration.proto";
 import "google/protobuf/empty.proto";
 
 import "validate/validate.proto";

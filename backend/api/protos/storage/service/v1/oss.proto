@@ -3,7 +3,6 @@ syntax = "proto3";
 package storage.service.v1;
 
 import "gnostic/openapi/v3/annotations.proto";
-import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 
 // OSS服务

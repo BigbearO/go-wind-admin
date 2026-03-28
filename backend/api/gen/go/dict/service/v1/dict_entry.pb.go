@@ -9,7 +9,6 @@ package dictpb
 import (
 	_ "github.com/google/gnostic/openapiv3"
 	v1 "github.com/tx7do/go-crud/api/gen/go/pagination/v1"
-	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
@@ -40,8 +39,8 @@ type DictEntry struct {
 	CurrentI18N   *DictEntryI18N            `protobuf:"bytes,8,opt,name=current_i18n,json=currentI18n,proto3,oneof" json:"current_i18n,omitempty"`                                    // 当前语言的翻译（由服务端自动填充）
 	TenantId      *uint32                   `protobuf:"varint,50,opt,name=tenant_id,json=tenantId,proto3,oneof" json:"tenant_id,omitempty"`                                           // 租户ID，0代表系统全局角色
 	TenantName    *string                   `protobuf:"bytes,51,opt,name=tenant_name,json=tenantName,proto3,oneof" json:"tenant_name,omitempty"`                                      // 租户名称
-	CreatedBy     *uint32                   `protobuf:"varint,100,opt,name=created_by,json=createdBy,proto3,oneof" json:"created_by,omitempty"`                                       // 创建者ID
-	UpdatedBy     *uint32                   `protobuf:"varint,101,opt,name=updated_by,json=updatedBy,proto3,oneof" json:"updated_by,omitempty"`                                       // 更新者ID
+	CreatedBy     *uint32                   `protobuf:"varint,100,opt,name=created_by,json=createdBy,proto3,oneof" json:"created_by,omitempty"`                                       // 创建者用户ID
+	UpdatedBy     *uint32                   `protobuf:"varint,101,opt,name=updated_by,json=updatedBy,proto3,oneof" json:"updated_by,omitempty"`                                       // 更新者用户ID
 	DeletedBy     *uint32                   `protobuf:"varint,102,opt,name=deleted_by,json=deletedBy,proto3,oneof" json:"deleted_by,omitempty"`                                       // 删除者用户ID
 	CreatedAt     *timestamppb.Timestamp    `protobuf:"bytes,200,opt,name=created_at,json=createdAt,proto3,oneof" json:"created_at,omitempty"`                                        // 创建时间
 	UpdatedAt     *timestamppb.Timestamp    `protobuf:"bytes,201,opt,name=updated_at,json=updatedAt,proto3,oneof" json:"updated_at,omitempty"`                                        // 更新时间
@@ -608,11 +607,107 @@ func (x *CountDictEntryResponse) GetCount() uint64 {
 	return 0
 }
 
+type ListDictEntryByTypeCodeRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TypeCode      string                 `protobuf:"bytes,1,opt,name=type_code,json=typeCode,proto3" json:"type_code,omitempty"`
+	Local         *string                `protobuf:"bytes,2,opt,name=local,proto3,oneof" json:"local,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListDictEntryByTypeCodeRequest) Reset() {
+	*x = ListDictEntryByTypeCodeRequest{}
+	mi := &file_dict_service_v1_dict_entry_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListDictEntryByTypeCodeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListDictEntryByTypeCodeRequest) ProtoMessage() {}
+
+func (x *ListDictEntryByTypeCodeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_dict_service_v1_dict_entry_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListDictEntryByTypeCodeRequest.ProtoReflect.Descriptor instead.
+func (*ListDictEntryByTypeCodeRequest) Descriptor() ([]byte, []int) {
+	return file_dict_service_v1_dict_entry_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *ListDictEntryByTypeCodeRequest) GetTypeCode() string {
+	if x != nil {
+		return x.TypeCode
+	}
+	return ""
+}
+
+func (x *ListDictEntryByTypeCodeRequest) GetLocal() string {
+	if x != nil && x.Local != nil {
+		return *x.Local
+	}
+	return ""
+}
+
+type ListDictEntryByTypeCodeResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Items         []*DictEntry           `protobuf:"bytes,1,rep,name=items,proto3" json:"items,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListDictEntryByTypeCodeResponse) Reset() {
+	*x = ListDictEntryByTypeCodeResponse{}
+	mi := &file_dict_service_v1_dict_entry_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListDictEntryByTypeCodeResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListDictEntryByTypeCodeResponse) ProtoMessage() {}
+
+func (x *ListDictEntryByTypeCodeResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_dict_service_v1_dict_entry_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListDictEntryByTypeCodeResponse.ProtoReflect.Descriptor instead.
+func (*ListDictEntryByTypeCodeResponse) Descriptor() ([]byte, []int) {
+	return file_dict_service_v1_dict_entry_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *ListDictEntryByTypeCodeResponse) GetItems() []*DictEntry {
+	if x != nil {
+		return x.Items
+	}
+	return nil
+}
+
 var File_dict_service_v1_dict_entry_proto protoreflect.FileDescriptor
 
 const file_dict_service_v1_dict_entry_proto_rawDesc = "" +
 	"\n" +
-	" dict/service/v1/dict_entry.proto\x12\x0fdict.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\"\x80\r\n" +
+	" dict/service/v1/dict_entry.proto\x12\x0fdict.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\"\x8c\r\n" +
 	"\tDictEntry\x12&\n" +
 	"\x02id\x18\x01 \x01(\rB\x11\xbaG\x0e\x92\x02\v字典项IDH\x00R\x02id\x88\x01\x01\x122\n" +
 	"\atype_id\x18\x02 \x01(\rB\x14\xbaG\x11\x92\x02\x0e字典类型IDH\x01R\x06typeId\x88\x01\x01\x12g\n" +
@@ -627,11 +722,11 @@ const file_dict_service_v1_dict_entry_proto_rawDesc = "" +
 	"\fcurrent_i18n\x18\b \x01(\v2\x1e.dict.service.v1.DictEntryI18nB;\xbaG8\x18\x01\x92\x023当前语言的翻译（由服务端自动填充）H\x06R\vcurrentI18n\x88\x01\x01\x12L\n" +
 	"\ttenant_id\x182 \x01(\rB*\xbaG'\x92\x02$租户ID，0代表系统全局角色H\aR\btenantId\x88\x01\x01\x128\n" +
 	"\vtenant_name\x183 \x01(\tB\x12\xbaG\x0f\x92\x02\f租户名称H\bR\n" +
-	"tenantName\x88\x01\x01\x125\n" +
+	"tenantName\x88\x01\x01\x12;\n" +
 	"\n" +
-	"created_by\x18d \x01(\rB\x11\xbaG\x0e\x92\x02\v创建者IDH\tR\tcreatedBy\x88\x01\x01\x125\n" +
+	"created_by\x18d \x01(\rB\x17\xbaG\x14\x92\x02\x11创建者用户IDH\tR\tcreatedBy\x88\x01\x01\x12;\n" +
 	"\n" +
-	"updated_by\x18e \x01(\rB\x11\xbaG\x0e\x92\x02\v更新者IDH\n" +
+	"updated_by\x18e \x01(\rB\x17\xbaG\x14\x92\x02\x11更新者用户IDH\n" +
 	"R\tupdatedBy\x88\x01\x01\x12;\n" +
 	"\n" +
 	"deleted_by\x18f \x01(\rB\x17\xbaG\x14\x92\x02\x11删除者用户IDH\vR\tdeletedBy\x88\x01\x01\x12S\n" +
@@ -693,13 +788,20 @@ const file_dict_service_v1_dict_entry_proto_rawDesc = "" +
 	"\x16DeleteDictEntryRequest\x12\x10\n" +
 	"\x03ids\x18\x01 \x03(\rR\x03ids\".\n" +
 	"\x16CountDictEntryResponse\x12\x14\n" +
-	"\x05count\x18\x01 \x01(\x04R\x05count2\x95\x03\n" +
+	"\x05count\x18\x01 \x01(\x04R\x05count\"\xc3\x01\n" +
+	"\x1eListDictEntryByTypeCodeRequest\x12W\n" +
+	"\ttype_code\x18\x01 \x01(\tB:\xbaG7\x92\x024字典类型编码：app_type、platform、risk_typeR\btypeCode\x12>\n" +
+	"\x05local\x18\x02 \x01(\tB#\xbaG \x92\x02\x1d语言环境，默认为zh-CNH\x00R\x05local\x88\x01\x01B\b\n" +
+	"\x06_local\"S\n" +
+	"\x1fListDictEntryByTypeCodeResponse\x120\n" +
+	"\x05items\x18\x01 \x03(\v2\x1a.dict.service.v1.DictEntryR\x05items2\x8c\x04\n" +
 	"\x10DictEntryService\x12K\n" +
 	"\x04List\x12\x19.pagination.PagingRequest\x1a&.dict.service.v1.ListDictEntryResponse\"\x00\x12M\n" +
 	"\x05Count\x12\x19.pagination.PagingRequest\x1a'.dict.service.v1.CountDictEntryResponse\"\x00\x12K\n" +
 	"\x06Create\x12'.dict.service.v1.CreateDictEntryRequest\x1a\x16.google.protobuf.Empty\"\x00\x12K\n" +
 	"\x06Update\x12'.dict.service.v1.UpdateDictEntryRequest\x1a\x16.google.protobuf.Empty\"\x00\x12K\n" +
-	"\x06Delete\x12'.dict.service.v1.DeleteDictEntryRequest\x1a\x16.google.protobuf.Empty\"\x00B\xb4\x01\n" +
+	"\x06Delete\x12'.dict.service.v1.DeleteDictEntryRequest\x1a\x16.google.protobuf.Empty\"\x00\x12u\n" +
+	"\x0eListByTypeCode\x12/.dict.service.v1.ListDictEntryByTypeCodeRequest\x1a0.dict.service.v1.ListDictEntryByTypeCodeResponse\"\x00B\xb4\x01\n" +
 	"\x13com.dict.service.v1B\x0eDictEntryProtoP\x01Z/go-wind-admin/api/gen/go/dict/service/v1;dictpb\xa2\x02\x03DSX\xaa\x02\x0fDict.Service.V1\xca\x02\x0fDict\\Service\\V1\xe2\x02\x1bDict\\Service\\V1\\GPBMetadata\xea\x02\x11Dict::Service::V1b\x06proto3"
 
 var (
@@ -714,49 +816,54 @@ func file_dict_service_v1_dict_entry_proto_rawDescGZIP() []byte {
 	return file_dict_service_v1_dict_entry_proto_rawDescData
 }
 
-var file_dict_service_v1_dict_entry_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_dict_service_v1_dict_entry_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_dict_service_v1_dict_entry_proto_goTypes = []any{
-	(*DictEntry)(nil),              // 0: dict.service.v1.DictEntry
-	(*DictEntryI18N)(nil),          // 1: dict.service.v1.DictEntryI18n
-	(*ListDictEntryResponse)(nil),  // 2: dict.service.v1.ListDictEntryResponse
-	(*GetDictEntryRequest)(nil),    // 3: dict.service.v1.GetDictEntryRequest
-	(*CreateDictEntryRequest)(nil), // 4: dict.service.v1.CreateDictEntryRequest
-	(*UpdateDictEntryRequest)(nil), // 5: dict.service.v1.UpdateDictEntryRequest
-	(*DeleteDictEntryRequest)(nil), // 6: dict.service.v1.DeleteDictEntryRequest
-	(*CountDictEntryResponse)(nil), // 7: dict.service.v1.CountDictEntryResponse
-	nil,                            // 8: dict.service.v1.DictEntry.I18nEntry
-	(*timestamppb.Timestamp)(nil),  // 9: google.protobuf.Timestamp
-	(*fieldmaskpb.FieldMask)(nil),  // 10: google.protobuf.FieldMask
-	(*v1.PagingRequest)(nil),       // 11: pagination.PagingRequest
-	(*emptypb.Empty)(nil),          // 12: google.protobuf.Empty
+	(*DictEntry)(nil),                       // 0: dict.service.v1.DictEntry
+	(*DictEntryI18N)(nil),                   // 1: dict.service.v1.DictEntryI18n
+	(*ListDictEntryResponse)(nil),           // 2: dict.service.v1.ListDictEntryResponse
+	(*GetDictEntryRequest)(nil),             // 3: dict.service.v1.GetDictEntryRequest
+	(*CreateDictEntryRequest)(nil),          // 4: dict.service.v1.CreateDictEntryRequest
+	(*UpdateDictEntryRequest)(nil),          // 5: dict.service.v1.UpdateDictEntryRequest
+	(*DeleteDictEntryRequest)(nil),          // 6: dict.service.v1.DeleteDictEntryRequest
+	(*CountDictEntryResponse)(nil),          // 7: dict.service.v1.CountDictEntryResponse
+	(*ListDictEntryByTypeCodeRequest)(nil),  // 8: dict.service.v1.ListDictEntryByTypeCodeRequest
+	(*ListDictEntryByTypeCodeResponse)(nil), // 9: dict.service.v1.ListDictEntryByTypeCodeResponse
+	nil,                                     // 10: dict.service.v1.DictEntry.I18nEntry
+	(*timestamppb.Timestamp)(nil),           // 11: google.protobuf.Timestamp
+	(*fieldmaskpb.FieldMask)(nil),           // 12: google.protobuf.FieldMask
+	(*v1.PagingRequest)(nil),                // 13: pagination.PagingRequest
+	(*emptypb.Empty)(nil),                   // 14: google.protobuf.Empty
 }
 var file_dict_service_v1_dict_entry_proto_depIdxs = []int32{
-	8,  // 0: dict.service.v1.DictEntry.i18n:type_name -> dict.service.v1.DictEntry.I18nEntry
+	10, // 0: dict.service.v1.DictEntry.i18n:type_name -> dict.service.v1.DictEntry.I18nEntry
 	1,  // 1: dict.service.v1.DictEntry.current_i18n:type_name -> dict.service.v1.DictEntryI18n
-	9,  // 2: dict.service.v1.DictEntry.created_at:type_name -> google.protobuf.Timestamp
-	9,  // 3: dict.service.v1.DictEntry.updated_at:type_name -> google.protobuf.Timestamp
-	9,  // 4: dict.service.v1.DictEntry.deleted_at:type_name -> google.protobuf.Timestamp
+	11, // 2: dict.service.v1.DictEntry.created_at:type_name -> google.protobuf.Timestamp
+	11, // 3: dict.service.v1.DictEntry.updated_at:type_name -> google.protobuf.Timestamp
+	11, // 4: dict.service.v1.DictEntry.deleted_at:type_name -> google.protobuf.Timestamp
 	0,  // 5: dict.service.v1.ListDictEntryResponse.items:type_name -> dict.service.v1.DictEntry
-	10, // 6: dict.service.v1.GetDictEntryRequest.view_mask:type_name -> google.protobuf.FieldMask
+	12, // 6: dict.service.v1.GetDictEntryRequest.view_mask:type_name -> google.protobuf.FieldMask
 	0,  // 7: dict.service.v1.CreateDictEntryRequest.data:type_name -> dict.service.v1.DictEntry
 	0,  // 8: dict.service.v1.UpdateDictEntryRequest.data:type_name -> dict.service.v1.DictEntry
-	10, // 9: dict.service.v1.UpdateDictEntryRequest.update_mask:type_name -> google.protobuf.FieldMask
-	1,  // 10: dict.service.v1.DictEntry.I18nEntry.value:type_name -> dict.service.v1.DictEntryI18n
-	11, // 11: dict.service.v1.DictEntryService.List:input_type -> pagination.PagingRequest
-	11, // 12: dict.service.v1.DictEntryService.Count:input_type -> pagination.PagingRequest
-	4,  // 13: dict.service.v1.DictEntryService.Create:input_type -> dict.service.v1.CreateDictEntryRequest
-	5,  // 14: dict.service.v1.DictEntryService.Update:input_type -> dict.service.v1.UpdateDictEntryRequest
-	6,  // 15: dict.service.v1.DictEntryService.Delete:input_type -> dict.service.v1.DeleteDictEntryRequest
-	2,  // 16: dict.service.v1.DictEntryService.List:output_type -> dict.service.v1.ListDictEntryResponse
-	7,  // 17: dict.service.v1.DictEntryService.Count:output_type -> dict.service.v1.CountDictEntryResponse
-	12, // 18: dict.service.v1.DictEntryService.Create:output_type -> google.protobuf.Empty
-	12, // 19: dict.service.v1.DictEntryService.Update:output_type -> google.protobuf.Empty
-	12, // 20: dict.service.v1.DictEntryService.Delete:output_type -> google.protobuf.Empty
-	16, // [16:21] is the sub-list for method output_type
-	11, // [11:16] is the sub-list for method input_type
-	11, // [11:11] is the sub-list for extension type_name
-	11, // [11:11] is the sub-list for extension extendee
-	0,  // [0:11] is the sub-list for field type_name
+	12, // 9: dict.service.v1.UpdateDictEntryRequest.update_mask:type_name -> google.protobuf.FieldMask
+	0,  // 10: dict.service.v1.ListDictEntryByTypeCodeResponse.items:type_name -> dict.service.v1.DictEntry
+	1,  // 11: dict.service.v1.DictEntry.I18nEntry.value:type_name -> dict.service.v1.DictEntryI18n
+	13, // 12: dict.service.v1.DictEntryService.List:input_type -> pagination.PagingRequest
+	13, // 13: dict.service.v1.DictEntryService.Count:input_type -> pagination.PagingRequest
+	4,  // 14: dict.service.v1.DictEntryService.Create:input_type -> dict.service.v1.CreateDictEntryRequest
+	5,  // 15: dict.service.v1.DictEntryService.Update:input_type -> dict.service.v1.UpdateDictEntryRequest
+	6,  // 16: dict.service.v1.DictEntryService.Delete:input_type -> dict.service.v1.DeleteDictEntryRequest
+	8,  // 17: dict.service.v1.DictEntryService.ListByTypeCode:input_type -> dict.service.v1.ListDictEntryByTypeCodeRequest
+	2,  // 18: dict.service.v1.DictEntryService.List:output_type -> dict.service.v1.ListDictEntryResponse
+	7,  // 19: dict.service.v1.DictEntryService.Count:output_type -> dict.service.v1.CountDictEntryResponse
+	14, // 20: dict.service.v1.DictEntryService.Create:output_type -> google.protobuf.Empty
+	14, // 21: dict.service.v1.DictEntryService.Update:output_type -> google.protobuf.Empty
+	14, // 22: dict.service.v1.DictEntryService.Delete:output_type -> google.protobuf.Empty
+	9,  // 23: dict.service.v1.DictEntryService.ListByTypeCode:output_type -> dict.service.v1.ListDictEntryByTypeCodeResponse
+	18, // [18:24] is the sub-list for method output_type
+	12, // [12:18] is the sub-list for method input_type
+	12, // [12:12] is the sub-list for extension type_name
+	12, // [12:12] is the sub-list for extension extendee
+	0,  // [0:12] is the sub-list for field type_name
 }
 
 func init() { file_dict_service_v1_dict_entry_proto_init() }
@@ -771,13 +878,14 @@ func file_dict_service_v1_dict_entry_proto_init() {
 		(*GetDictEntryRequest_Value)(nil),
 	}
 	file_dict_service_v1_dict_entry_proto_msgTypes[5].OneofWrappers = []any{}
+	file_dict_service_v1_dict_entry_proto_msgTypes[8].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_dict_service_v1_dict_entry_proto_rawDesc), len(file_dict_service_v1_dict_entry_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   9,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

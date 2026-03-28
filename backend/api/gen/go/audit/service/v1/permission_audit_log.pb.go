@@ -9,10 +9,8 @@ package auditpb
 import (
 	_ "github.com/google/gnostic/openapiv3"
 	v1 "github.com/tx7do/go-crud/api/gen/go/pagination/v1"
-	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	_ "google.golang.org/protobuf/types/known/durationpb"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
 	fieldmaskpb "google.golang.org/protobuf/types/known/fieldmaskpb"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
@@ -459,7 +457,7 @@ var File_audit_service_v1_permission_audit_log_proto protoreflect.FileDescriptor
 
 const file_audit_service_v1_permission_audit_log_proto_rawDesc = "" +
 	"\n" +
-	"+audit/service/v1/permission_audit_log.proto\x12\x10audit.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1epagination/v1/pagination.proto\"\x97\f\n" +
+	"+audit/service/v1/permission_audit_log.proto\x12\x10audit.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\"\x97\f\n" +
 	"\x12PermissionAuditLog\x125\n" +
 	"\x02id\x18\x01 \x01(\rB \xbaG\x1d\x92\x02\x1a权限变更审计日志IDH\x00R\x02id\x88\x01\x01\x120\n" +
 	"\ttenant_id\x18\x02 \x01(\rB\x0e\xbaG\v\x92\x02\b租户IDH\x01R\btenantId\x88\x01\x01\x12=\n" +

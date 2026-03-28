@@ -12,12 +12,13 @@ import (
 	paginationV1 "github.com/tx7do/go-crud/api/gen/go/pagination/v1"
 	entCrud "github.com/tx7do/go-crud/entgo"
 
-	"go-wind-admin/app/admin/service/internal/data/ent"
-	"go-wind-admin/app/admin/service/internal/data/ent/dictentry"
-	"go-wind-admin/app/admin/service/internal/data/ent/predicate"
-
 	"github.com/tx7do/go-utils/copierutil"
 	"github.com/tx7do/go-utils/mapper"
+
+	"go-wind-admin/app/admin/service/internal/data/ent"
+	"go-wind-admin/app/admin/service/internal/data/ent/dictentry"
+	"go-wind-admin/app/admin/service/internal/data/ent/dicttype"
+	"go-wind-admin/app/admin/service/internal/data/ent/predicate"
 
 	dictV1 "go-wind-admin/api/gen/go/dict/service/v1"
 )
@@ -102,7 +103,7 @@ func (r *DictEntryRepo) List(ctx context.Context, req *paginationV1.PagingReques
 	}
 
 	for _, item := range ret.Items {
-		i18ns, err := r.i18n.Get(ctx, item.GetId())
+		i18ns, err := r.i18n.ListByEntryID(ctx, item.GetId())
 		if err != nil {
 			return nil, err
 		}
@@ -136,7 +137,7 @@ func (r *DictEntryRepo) Get(ctx context.Context, req *dictV1.GetDictEntryRequest
 		return nil, err
 	}
 
-	i18ns, err := r.i18n.Get(ctx, dto.GetId())
+	i18ns, err := r.i18n.ListByEntryID(ctx, dto.GetId())
 	if err != nil {
 		return nil, err
 	}
@@ -340,4 +341,56 @@ func (r *DictEntryRepo) BatchDelete(ctx context.Context, ids []uint32) error {
 	}
 
 	return nil
+}
+
+func (r *DictEntryRepo) ListByTypeCode(ctx context.Context, req *dictV1.ListDictEntryByTypeCodeRequest) (*dictV1.ListDictEntryByTypeCodeResponse, error) {
+	if req == nil {
+		return nil, dictV1.ErrorBadRequest("invalid parameter")
+	}
+
+	builder := r.entClient.Client().DictEntry.Query().
+		Where(
+			dictentry.HasDictTypeWith(
+				dicttype.TypeCodeEQ(req.GetTypeCode()),
+			),
+			dictentry.IsEnabledEQ(true),
+		).
+		Order(ent.Asc(dictentry.FieldSortOrder))
+
+	entities, err := builder.All(ctx)
+	if err != nil {
+		r.log.Errorf("query dict entry by type code failed: %s", err.Error())
+		return nil, dictV1.ErrorInternalServerError("query dict entry by type code failed")
+	}
+
+	var dtos []*dictV1.DictEntry
+	for _, entity := range entities {
+		dtos = append(dtos, r.mapper.ToDTO(entity))
+	}
+
+	if req.GetLocal() != "" {
+		var i18n *dictV1.DictEntryI18N
+		for _, item := range dtos {
+			i18n, err = r.i18n.GetByEntryIDAndLangCode(ctx, item.GetId(), req.GetLocal())
+			if err != nil {
+				return nil, err
+			}
+			item.I18N = map[string]*dictV1.DictEntryI18N{
+				req.GetLocal(): i18n,
+			}
+		}
+	} else {
+		var i18ns map[string]*dictV1.DictEntryI18N
+		for _, item := range dtos {
+			i18ns, err = r.i18n.ListByEntryID(ctx, item.GetId())
+			if err != nil {
+				return nil, err
+			}
+			item.I18N = i18ns
+		}
+	}
+
+	return &dictV1.ListDictEntryByTypeCodeResponse{
+		Items: dtos,
+	}, nil
 }

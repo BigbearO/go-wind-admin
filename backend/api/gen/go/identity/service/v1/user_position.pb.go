@@ -8,11 +8,8 @@ package identitypb
 
 import (
 	_ "github.com/google/gnostic/openapiv3"
-	_ "github.com/tx7do/go-crud/api/gen/go/pagination/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	_ "google.golang.org/protobuf/types/known/emptypb"
-	_ "google.golang.org/protobuf/types/known/fieldmaskpb"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
@@ -257,7 +254,7 @@ var File_identity_service_v1_user_position_proto protoreflect.FileDescriptor
 
 const file_identity_service_v1_user_position_proto_rawDesc = "" +
 	"\n" +
-	"'identity/service/v1/user_position.proto\x12\x13identity.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\"\xa0\v\n" +
+	"'identity/service/v1/user_position.proto\x12\x13identity.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xa0\v\n" +
 	"\fUserPosition\x12\x1d\n" +
 	"\x02id\x18\x01 \x01(\rB\b\xbaG\x05\x92\x02\x02IDH\x00R\x02id\x88\x01\x01\x12,\n" +
 	"\auser_id\x18\x02 \x01(\rB\x0e\xbaG\v\x92\x02\b用户IDH\x01R\x06userId\x88\x01\x01\x120\n" +

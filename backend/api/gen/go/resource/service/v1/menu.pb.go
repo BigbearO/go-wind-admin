@@ -982,7 +982,7 @@ var File_resource_service_v1_menu_proto protoreflect.FileDescriptor
 
 const file_resource_service_v1_menu_proto_rawDesc = "" +
 	"\n" +
-	"\x1eresource/service/v1/menu.proto\x12\x13resource.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\"\xcd\v\n" +
+	"\x1eresource/service/v1/menu.proto\x12\x13resource.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\"\xcd\v\n" +
 	"\x04Menu\x12&\n" +
 	"\x02id\x18\x01 \x01(\rB\x11\xe0A\x01\xbaG\v\x92\x02\b菜单IDH\x00R\x02id\x88\x01\x01\x12Q\n" +
 	"\x06status\x18\x02 \x01(\x0e2 .resource.service.v1.Menu.StatusB\x12\xbaG\x0f\x92\x02\f菜单状态H\x01R\x06status\x88\x01\x01\x12K\n" +

@@ -7,7 +7,6 @@ import (
 	context "context"
 	redact "github.com/menta2k/protoc-gen-redact/v3/redact/v3"
 	storagepb "go-wind-admin/api/gen/go/storage/service/v1"
-	httpbody "google.golang.org/genproto/googleapis/api/httpbody"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -20,9 +19,7 @@ var (
 	_ redact.Redactor
 	_ codes.Code
 	_ status.Status
-	_ httpbody.HttpBody
 	_ storagepb.DownloadFileRequest
-	_ storagepb.UEditorRequest
 )
 
 // RegisterRedactedFileTransferServiceServer wraps the FileTransferServiceServer with the redacted server and registers the service in GRPC
@@ -74,20 +71,4 @@ func (s *redactedFileTransferServiceServer) PostUploadFile(ctx context.Context, 
 		redact.Apply(res)
 	}
 	return res, err
-}
-
-// UEditorPostUploadFile is the redacted wrapper for the actual FileTransferServiceServer.UEditorPostUploadFile method
-// Client streaming
-func (s *redactedFileTransferServiceServer) UEditorPostUploadFile(stream grpc.ClientStreamingServer[storagepb.UEditorUploadRequest, storagepb.UEditorUploadResponse]) error {
-	// Note: Redaction for client streaming is not fully implemented
-	// Streaming methods pass through without redaction
-	return s.srv.UEditorPostUploadFile(stream)
-}
-
-// UEditorPutUploadFile is the redacted wrapper for the actual FileTransferServiceServer.UEditorPutUploadFile method
-// Client streaming
-func (s *redactedFileTransferServiceServer) UEditorPutUploadFile(stream grpc.ClientStreamingServer[storagepb.UEditorUploadRequest, storagepb.UEditorUploadResponse]) error {
-	// Note: Redaction for client streaming is not fully implemented
-	// Streaming methods pass through without redaction
-	return s.srv.UEditorPutUploadFile(stream)
 }

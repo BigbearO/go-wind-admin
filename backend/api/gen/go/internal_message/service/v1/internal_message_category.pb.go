@@ -9,7 +9,6 @@ package internalmessagepb
 import (
 	_ "github.com/google/gnostic/openapiv3"
 	v1 "github.com/tx7do/go-crud/api/gen/go/pagination/v1"
-	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
@@ -533,7 +532,7 @@ var File_internal_message_service_v1_internal_message_category_proto protoreflec
 
 const file_internal_message_service_v1_internal_message_category_proto_rawDesc = "" +
 	"\n" +
-	";internal_message/service/v1/internal_message_category.proto\x12\x1binternal_message.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\"\xb0\b\n" +
+	";internal_message/service/v1/internal_message_category.proto\x12\x1binternal_message.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\"\xb0\b\n" +
 	"\x17InternalMessageCategory\x12#\n" +
 	"\x02id\x18\x01 \x01(\rB\x0e\xbaG\v\x92\x02\b分类IDH\x00R\x02id\x88\x01\x01\x12%\n" +
 	"\x04name\x18\x02 \x01(\tB\f\xbaG\t\x92\x02\x06名称H\x01R\x04name\x88\x01\x01\x12%\n" +

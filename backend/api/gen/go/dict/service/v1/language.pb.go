@@ -9,7 +9,6 @@ package dictpb
 import (
 	_ "github.com/google/gnostic/openapiv3"
 	v1 "github.com/tx7do/go-crud/api/gen/go/pagination/v1"
-	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
@@ -629,7 +628,7 @@ var File_dict_service_v1_language_proto protoreflect.FileDescriptor
 
 const file_dict_service_v1_language_proto_rawDesc = "" +
 	"\n" +
-	"\x1edict/service/v1/language.proto\x12\x0fdict.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\"\xa3\b\n" +
+	"\x1edict/service/v1/language.proto\x12\x0fdict.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\"\xa3\b\n" +
 	"\bLanguage\x12#\n" +
 	"\x02id\x18\x01 \x01(\rB\x0e\xbaG\v\x92\x02\b语言IDH\x00R\x02id\x88\x01\x01\x12B\n" +
 	"\rlanguage_code\x18\x02 \x01(\tB\x18\xbaG\x15\x92\x02\x12标准语言代码H\x01R\flanguageCode\x88\x01\x01\x12<\n" +

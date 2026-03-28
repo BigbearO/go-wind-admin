@@ -3,7 +3,6 @@ syntax = "proto3";
 package audit.service.v1;
 
 import "gnostic/openapi/v3/annotations.proto";
-import "validate/validate.proto";
 
 // 地理位置
 message GeoLocation {

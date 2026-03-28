@@ -1249,6 +1249,8 @@ export interface DictEntryService {
   Update(request: dictservicev1_UpdateDictEntryRequest): Promise<wellKnownEmpty>;
   // 删除字典条目
   Delete(request: dictservicev1_DeleteDictEntryRequest): Promise<wellKnownEmpty>;
+  // 查询启用的字典条目
+  ListByTypeCode(request: dictservicev1_ListDictEntryByTypeCodeRequest): Promise<dictservicev1_ListDictEntryByTypeCodeResponse>;
 }
 
 export function createDictEntryServiceClient(
@@ -1393,6 +1395,29 @@ export function createDictEntryServiceClient(
         method: "Delete",
       }) as Promise<wellKnownEmpty>;
     },
+    ListByTypeCode(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      const path = `admin/v1/dict/entries/by-type-code`; // eslint-disable-line quotes
+      const body = null;
+      const queryParams: string[] = [];
+      if (request.typeCode) {
+        queryParams.push(`typeCode=${encodeURIComponent(request.typeCode.toString())}`)
+      }
+      if (request.local) {
+        queryParams.push(`local=${encodeURIComponent(request.local.toString())}`)
+      }
+      let uri = path;
+      if (queryParams.length > 0) {
+        uri += `?${queryParams.join("&")}`
+      }
+      return handler({
+        path: uri,
+        method: "GET",
+        body,
+      }, {
+        service: "DictEntryService",
+        method: "ListByTypeCode",
+      }) as Promise<dictservicev1_ListDictEntryByTypeCodeResponse>;
+    },
   };
 }
 // 查询字典项列表 - 回应
@@ -1445,6 +1470,15 @@ export type dictservicev1_UpdateDictEntryRequest = {
 // 批量删除字典 - 请求
 export type dictservicev1_DeleteDictEntryRequest = {
   ids: number[] | undefined;
+};
+
+export type dictservicev1_ListDictEntryByTypeCodeRequest = {
+  typeCode: string | undefined;
+  local?: string;
+};
+
+export type dictservicev1_ListDictEntryByTypeCodeResponse = {
+  items: dictservicev1_DictEntry[] | undefined;
 };
 
 // 数据字典分类管理服务
@@ -1641,10 +1675,9 @@ export type dictservicev1_ListDictTypeResponse = {
 export type dictservicev1_DictType = {
   id?: number;
   typeCode?: string;
+  typeName?: string;
   isEnabled?: boolean;
   sortOrder?: number;
-  i18n: { [key: string]: dictservicev1_DictTypeI18n } | undefined;
-  currentI18n?: dictservicev1_DictTypeI18n;
   tenantId?: number;
   tenantName?: string;
   createdBy?: number;
@@ -1653,14 +1686,6 @@ export type dictservicev1_DictType = {
   createdAt?: wellKnownTimestamp;
   updatedAt?: wellKnownTimestamp;
   deletedAt?: wellKnownTimestamp;
-};
-
-// 字典类型多语言信息
-export type dictservicev1_DictTypeI18n = {
-  typeName: string | undefined;
-  description?: string;
-  languageCode?: string;
-  languageName?: string;
 };
 
 // 查询字典类型详情 - 请求
@@ -2033,40 +2058,6 @@ export function createFileTransferServiceClient(
         method: "PostUploadFile",
       }) as Promise<storageservicev1_UploadFileResponse>;
     },
-    UEditorPostUploadFile(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
-      const path = `admin/v1/ueditor`; // eslint-disable-line quotes
-      const body = JSON.stringify(request);
-      const queryParams: string[] = [];
-      let uri = path;
-      if (queryParams.length > 0) {
-        uri += `?${queryParams.join("&")}`
-      }
-      return handler({
-        path: uri,
-        method: "POST",
-        body,
-      }, {
-        service: "FileTransferService",
-        method: "UEditorPostUploadFile",
-      }) as Promise<storageservicev1_UEditorUploadResponse>;
-    },
-    UEditorPutUploadFile(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
-      const path = `admin/v1/ueditor`; // eslint-disable-line quotes
-      const body = JSON.stringify(request);
-      const queryParams: string[] = [];
-      let uri = path;
-      if (queryParams.length > 0) {
-        uri += `?${queryParams.join("&")}`
-      }
-      return handler({
-        path: uri,
-        method: "PUT",
-        body,
-      }, {
-        service: "FileTransferService",
-        method: "UEditorPutUploadFile",
-      }) as Promise<storageservicev1_UEditorUploadResponse>;
-    },
   };
 }
 // 文件下载请求
@@ -2121,32 +2112,6 @@ export type storageservicev1_PresignOption = {
 export type storageservicev1_UploadFileResponse = {
   objectName?: string;
   presignedUrl?: string;
-};
-
-export type storageservicev1_UEditorUploadRequest = {
-  action?: string;
-  file?: string;
-  sourceFileName?: string;
-  mime?: string;
-};
-
-export type storageservicev1_UEditorUploadResponse = {
-  state?: string;
-  url?: string;
-  title?: string;
-  original?: string;
-  type?: string;
-  size?: number;
-  list: storageservicev1_UEditorUploadResponse_Item[] | undefined;
-};
-
-export type storageservicev1_UEditorUploadResponse_Item = {
-  state: string | undefined;
-  url?: string;
-  title?: string;
-  original?: string;
-  type?: string;
-  size?: number;
 };
 
 // 站内信消息管理服务
@@ -6298,120 +6263,6 @@ export type identityservicev1_TenantExistsRequest = {
 // 租户是否存在 - 答复
 export type identityservicev1_TenantExistsResponse = {
   exist: boolean | undefined;
-};
-
-// UEditor后端服务
-export interface UEditorService {
-  // UEditor API
-  UEditorAPI(request: storageservicev1_UEditorRequest): Promise<storageservicev1_UEditorResponse>;
-}
-
-export function createUEditorServiceClient(
-  handler: RequestHandler
-): UEditorService {
-  return {
-    UEditorAPI(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
-      const path = `admin/v1/ueditor`; // eslint-disable-line quotes
-      const body = null;
-      const queryParams: string[] = [];
-      if (request.action) {
-        queryParams.push(`action=${encodeURIComponent(request.action.toString())}`)
-      }
-      if (request.encode) {
-        queryParams.push(`encode=${encodeURIComponent(request.encode.toString())}`)
-      }
-      if (request.start) {
-        queryParams.push(`start=${encodeURIComponent(request.start.toString())}`)
-      }
-      if (request.size) {
-        queryParams.push(`size=${encodeURIComponent(request.size.toString())}`)
-      }
-      let uri = path;
-      if (queryParams.length > 0) {
-        uri += `?${queryParams.join("&")}`
-      }
-      return handler({
-        path: uri,
-        method: "GET",
-        body,
-      }, {
-        service: "UEditorService",
-        method: "UEditorAPI",
-      }) as Promise<storageservicev1_UEditorResponse>;
-    },
-  };
-}
-export type storageservicev1_UEditorRequest = {
-  action: string | undefined;
-  encode: string | undefined;
-  start: number | undefined;
-  size: number | undefined;
-};
-
-export type storageservicev1_UEditorResponse = {
-  imageActionName?: string;
-  imageFieldName?: string;
-  imageMaxSize?: number;
-  imageAllowFiles: string[] | undefined;
-  imageCompressEnable?: boolean;
-  imageCompressBorder?: number;
-  imageInsertAlign?: string;
-  imageUrlPrefix?: string;
-  imagePathFormat?: string;
-  scrawlActionName?: string;
-  scrawlFieldName?: string;
-  scrawlMaxSize?: number;
-  scrawlUrlPrefix?: string;
-  scrawlInsertAlign?: string;
-  scrawlPathFormat?: string;
-  snapscreenActionName?: string;
-  snapscreenUrlPrefix?: string;
-  snapscreenInsertAlign?: string;
-  snapscreenPathFormat?: string;
-  catcherActionName?: string;
-  catcherFieldName?: string;
-  catcherLocalDomain: string[] | undefined;
-  catcherUrlPrefix?: string;
-  catcherMaxSize?: number;
-  catcherAllowFiles: string[] | undefined;
-  catcherPathFormat?: string;
-  videoActionName?: string;
-  videoFieldName?: string;
-  videoUrlPrefix?: string;
-  videoMaxSize?: number;
-  videoAllowFiles: string[] | undefined;
-  videoPathFormat?: string;
-  fileActionName?: string;
-  fileFieldName?: string;
-  fileUrlPrefix?: string;
-  fileMaxSize?: number;
-  fileAllowFiles: string[] | undefined;
-  filePathFormat?: string;
-  imageManagerActionName?: string;
-  imageManagerListSize?: number;
-  imageManagerUrlPrefix?: string;
-  imageManagerInsertAlign?: string;
-  imageManagerAllowFiles: string[] | undefined;
-  imageManagerListPath?: string;
-  fileManagerActionName?: string;
-  fileManagerUrlPrefix?: string;
-  fileManagerListSize?: number;
-  fileManagerAllowFiles: string[] | undefined;
-  FileManagerListPath?: string;
-  formulaConfig?: storageservicev1_UEditorResponse_FormulaConfig;
-  state?: string;
-  start?: number;
-  total?: number;
-  list: storageservicev1_UEditorResponse_Item[] | undefined;
-};
-
-export type storageservicev1_UEditorResponse_FormulaConfig = {
-  imageUrlTemplate: string | undefined;
-};
-
-export type storageservicev1_UEditorResponse_Item = {
-  url: string | undefined;
-  mtime: number | undefined;
 };
 
 // 用户管理服务

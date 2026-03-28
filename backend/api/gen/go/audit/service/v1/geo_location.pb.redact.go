@@ -5,7 +5,6 @@ package auditpb
 
 import (
 	context "context"
-	validate "github.com/envoyproxy/protoc-gen-validate/validate"
 	redact "github.com/menta2k/protoc-gen-redact/v3/redact/v3"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
@@ -19,7 +18,6 @@ var (
 	_ redact.Redactor
 	_ codes.Code
 	_ status.Status
-	_ validate.FieldRules
 )
 
 // Redact method implementation for GeoLocation

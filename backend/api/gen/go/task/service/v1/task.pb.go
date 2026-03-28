@@ -910,7 +910,7 @@ var File_task_service_v1_task_proto protoreflect.FileDescriptor
 
 const file_task_service_v1_task_proto_rawDesc = "" +
 	"\n" +
-	"\x1atask/service/v1/task.proto\x12\x0ftask.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/duration.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\"\xf7\x06\n" +
+	"\x1atask/service/v1/task.proto\x12\x0ftask.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/duration.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\"\xf7\x06\n" +
 	"\n" +
 	"TaskOption\x12L\n" +
 	"\tmax_retry\x18\x01 \x01(\rB*\xe0A\x01\xbaG$\x92\x02!任务最多可以重试的次数H\x00R\bmaxRetry\x88\x01\x01\x12U\n" +

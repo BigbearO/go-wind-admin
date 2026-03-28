@@ -7,7 +7,6 @@
 package auditpb
 
 import (
-	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "github.com/google/gnostic/openapiv3"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -120,7 +119,7 @@ var File_audit_service_v1_geo_location_proto protoreflect.FileDescriptor
 
 const file_audit_service_v1_geo_location_proto_rawDesc = "" +
 	"\n" +
-	"#audit/service/v1/geo_location.proto\x12\x10audit.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x17validate/validate.proto\"\xc0\x05\n" +
+	"#audit/service/v1/geo_location.proto\x12\x10audit.service.v1\x1a$gnostic/openapi/v3/annotations.proto\"\xc0\x05\n" +
 	"\vGeoLocation\x12f\n" +
 	"\fcountry_code\x18\x01 \x01(\tB>\xbaG;\x92\x028国家代码（CN/US），遵循ISO 3166-1 alpha-2标准H\x00R\vcountryCode\x88\x01\x01\x12_\n" +
 	"\bprovince\x18\x02 \x01(\tB>\xbaG;\x92\x028省份/州（中文：北京市，英文：California）H\x01R\bprovince\x88\x01\x01\x12Q\n" +

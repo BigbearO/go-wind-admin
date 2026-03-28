@@ -8,12 +8,9 @@ package permissionpb
 
 import (
 	_ "github.com/google/gnostic/openapiv3"
-	_ "github.com/tx7do/go-crud/api/gen/go/pagination/v1"
 	v1 "go-wind-admin/api/gen/go/identity/service/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	_ "google.golang.org/protobuf/types/known/emptypb"
-	_ "google.golang.org/protobuf/types/known/fieldmaskpb"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
@@ -260,7 +257,7 @@ var File_permission_service_v1_user_role_proto protoreflect.FileDescriptor
 
 const file_permission_service_v1_user_role_proto_rawDesc = "" +
 	"\n" +
-	"%permission/service/v1/user_role.proto\x12\x15permission.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\x1a\x1fidentity/service/v1/types.proto\"\xd8\v\n" +
+	"%permission/service/v1/user_role.proto\x12\x15permission.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1fidentity/service/v1/types.proto\"\xd8\v\n" +
 	"\bUserRole\x12\x1d\n" +
 	"\x02id\x18\x01 \x01(\rB\b\xbaG\x05\x92\x02\x02IDH\x00R\x02id\x88\x01\x01\x12,\n" +
 	"\auser_id\x18\x02 \x01(\rB\x0e\xbaG\v\x92\x02\b用户IDH\x01R\x06userId\x88\x01\x01\x120\n" +

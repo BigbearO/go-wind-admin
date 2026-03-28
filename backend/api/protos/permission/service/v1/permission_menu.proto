@@ -4,14 +4,6 @@ package permission.service.v1;
 
 import "gnostic/openapi/v3/annotations.proto";
 
-import "google/api/annotations.proto";
-
-import "google/protobuf/empty.proto";
-import "google/protobuf/timestamp.proto";
-import "google/protobuf/field_mask.proto";
-
-import "pagination/v1/pagination.proto";
-
 // 权限点 - 菜单 关联关系
 message PermissionMenu {
   optional uint32 id = 1 [

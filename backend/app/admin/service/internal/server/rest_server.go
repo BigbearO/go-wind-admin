@@ -87,7 +87,6 @@ func NewRestServer(
 	portalService *service.AdminPortalService,
 	taskService *service.TaskService,
 
-	uEditorService *service.UEditorService,
 	fileService *service.FileService,
 	fileTransferService *service.FileTransferService,
 
@@ -170,8 +169,6 @@ func NewRestServer(
 	// TODO 它不能够使用代码生成器生成的Handler，需要手动注册。代码生成器生成的Handler无法处理文件上传下载的请求。
 	// 但，代码生成器生成代码可以提供给OpenAPI使用。
 	registerFileTransferServiceHandler(srv, fileTransferService)
-
-	adminV1.RegisterUEditorServiceHTTPServer(srv, uEditorService)
 
 	adminV1.RegisterInternalMessageServiceHTTPServer(srv, internalMessageService)
 	adminV1.RegisterInternalMessageCategoryServiceHTTPServer(srv, internalMessageCategoryService)
