@@ -1,0 +1,157 @@
+syntax = "proto3";
+
+package game.service.v1;
+
+import "gnostic/openapi/v3/annotations.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+import "pagination/v1/pagination.proto";
+
+option go_package = "go-wind-admin/api/gen/go/game/service/v1;gamepb";
+
+// 游戏账号服务
+service GameAccountService {
+  // 获取游戏账号列表
+  rpc List (pagination.PagingRequest) returns (ListGameAccountResponse) {
+    option (google.api.http) = {
+      get: "/game/v1/game_accounts"
+    };
+  }
+
+  // 获取游戏账号数据
+  rpc Get (GetGameAccountRequest) returns (GameAccount) {
+    option (google.api.http) = {
+      get: "/game/v1/game_accounts/{id}"
+    };
+  }
+
+  // 创建游戏账号
+  rpc Create (CreateGameAccountRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/game/v1/game_accounts"
+      body: "*"
+    };
+  }
+
+  // 更新游戏账号
+  rpc Update (UpdateGameAccountRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/game/v1/game_accounts/{id}"
+      body: "*"
+    };
+  }
+
+  // 删除游戏账号
+  rpc Delete (DeleteGameAccountRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/game/v1/game_accounts/{id}"
+    };
+  }
+}
+
+// 游戏账号
+message GameAccount {
+  optional uint32 id = 1 [
+    json_name = "id",
+    (gnostic.openapi.v3.property) = {description: "游戏账号ID"}
+  ]; // 游戏账号ID
+
+  optional uint32 tenant_id = 2 [
+    json_name = "tenantId",
+    (gnostic.openapi.v3.property) = {description: "租户ID"}
+  ];  // 租户ID
+
+  optional string user_account = 3 [
+    json_name = "userAccount",
+    (gnostic.openapi.v3.property) = {description: "用户账号"}
+  ]; // 用户账号
+
+  optional string credential = 4 [
+    json_name = "credential",
+    (gnostic.openapi.v3.property) = {description: "用户登录凭证"}
+  ]; // 用户登录凭证
+
+  optional google.protobuf.Timestamp start_time = 5 [
+    json_name = "startTime",
+    (gnostic.openapi.v3.property) = {description: "开始时间"}
+  ]; // 开始时间
+
+  optional google.protobuf.Timestamp expire_time = 6 [
+    json_name = "expireTime",
+    (gnostic.openapi.v3.property) = {description: "过期时间"}
+  ]; // 过期时间
+
+  optional int32 type = 7 [
+    json_name = "type",
+    (gnostic.openapi.v3.property) = {description: "游戏类型"}
+  ]; // 游戏类型
+
+  optional bool enabled = 8 [
+    json_name = "enabled",
+    (gnostic.openapi.v3.property) = {description: "是否启用"}
+  ]; // 是否启用
+
+  optional int64 emulator_id = 9 [
+    json_name = "emulatorId",
+    (gnostic.openapi.v3.property) = {description: "分配的模拟器ID"}
+  ]; // 分配的模拟器ID
+
+  optional string create_by = 100 [json_name = "createBy", (gnostic.openapi.v3.property) = {description: "创建者"}]; // 创建者
+  optional google.protobuf.Timestamp create_at = 101 [json_name = "createAt", (gnostic.openapi.v3.property) = {description: "创建时间"}]; // 创建时间
+  optional string update_by = 102 [json_name = "updateBy", (gnostic.openapi.v3.property) = {description: "更新者"}]; // 更新者
+  optional google.protobuf.Timestamp update_at = 103 [json_name = "updateAt", (gnostic.openapi.v3.property) = {description: "更新时间"}]; // 更新时间
+  optional bool del_flag = 104 [json_name = "delFlag", (gnostic.openapi.v3.property) = {description: "删除标志"}]; // 删除标志
+}
+
+// 获取游戏账号列表 - 答复
+message ListGameAccountResponse {
+  repeated GameAccount items = 1;
+  uint64 total = 2;
+}
+
+// 获取游戏账号数据 - 请求
+message GetGameAccountRequest {
+  uint32 id = 1 [
+    json_name = "id",
+    (gnostic.openapi.v3.property) = {description: "游戏账号ID"}
+  ]; // 游戏账号ID
+}
+
+// 创建游戏账号 - 请求
+message CreateGameAccountRequest {
+  GameAccount data = 1 [
+    json_name = "data",
+    (gnostic.openapi.v3.property) = {description: "游戏账号数据"}
+  ]; // 游戏账号数据
+}
+
+// 更新游戏账号 - 请求
+message UpdateGameAccountRequest {
+  uint32 id = 1 [
+    json_name = "id",
+    (gnostic.openapi.v3.property) = {description: "游戏账号ID"}
+  ]; // 游戏账号ID
+
+  GameAccount data = 2 [
+    json_name = "data",
+    (gnostic.openapi.v3.property) = {description: "游戏账号数据"}
+  ]; // 游戏账号数据
+
+  google.protobuf.FieldMask update_mask = 3 [
+    json_name = "updateMask",
+    (gnostic.openapi.v3.property) = {
+      description: "要更新的字段列表"
+    }
+  ]; // 要更新的字段列表
+}
+
+// 删除游戏账号 - 请求
+message DeleteGameAccountRequest {
+  uint32 id = 1 [
+    json_name = "id",
+    (gnostic.openapi.v3.property) = {description: "游戏账号ID"}
+  ]; // 游戏账号ID
+}
