@@ -34,6 +34,6 @@ server:
         refresh_token_key_prefix: "urt_"
 
   grpc:
-    addr: ":8899"
+    addr: ":8999"
     timeout: 10s
     middleware:
