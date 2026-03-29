@@ -20,4 +20,5 @@ import (
 var ProviderSet = wire.NewSet(
 	data.NewEntClient,
 	data.NewGameAccountRepo,
+	data.NewAdminClient,
 )

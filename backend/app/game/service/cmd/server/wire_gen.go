@@ -14,6 +14,11 @@ import (
 	"go-wind-admin/app/game/service/internal/service"
 )
 
+import (
+	_ "github.com/tx7do/kratos-bootstrap/config/nacos"
+	_ "github.com/tx7do/kratos-bootstrap/registry/nacos"
+)
+
 // Injectors from wire.go:
 
 func initApp(context *bootstrap.Context) (*kratos.App, func(), error) {
@@ -23,7 +28,13 @@ func initApp(context *bootstrap.Context) (*kratos.App, func(), error) {
 	}
 	gameAccountRepo := data.NewGameAccountRepo(context, entClient)
 	gameAccountService := service.NewGameAccountService(context, gameAccountRepo)
-	httpServer, err := server.NewRestServer(context, gameAccountService)
+	adminClient, err := data.NewAdminClient(context)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	testService := service.NewTestService(context, adminClient)
+	httpServer, err := server.NewRestServer(context, gameAccountService, testService)
 	if err != nil {
 		cleanup()
 		return nil, nil, err

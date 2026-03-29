@@ -249,3 +249,64 @@ func (c *GameAccountServiceHTTPClientImpl) Update(ctx context.Context, in *Updat
 	}
 	return &out, nil
 }
+
+const OperationTestServiceGetUser = "/game.service.v1.TestService/GetUser"
+
+type TestServiceHTTPServer interface {
+	// GetUser 获取用户测试
+	GetUser(context.Context, *GetUserRequest) (*GetUserResponse, error)
+}
+
+func RegisterTestServiceHTTPServer(s *http.Server, srv TestServiceHTTPServer) {
+	r := s.Route("/")
+	r.GET("/game/v1/test/user/{id}", _TestService_GetUser0_HTTP_Handler(srv))
+}
+
+func _TestService_GetUser0_HTTP_Handler(srv TestServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetUserRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationTestServiceGetUser)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetUser(ctx, req.(*GetUserRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetUserResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
+type TestServiceHTTPClient interface {
+	// GetUser 获取用户测试
+	GetUser(ctx context.Context, req *GetUserRequest, opts ...http.CallOption) (rsp *GetUserResponse, err error)
+}
+
+type TestServiceHTTPClientImpl struct {
+	cc *http.Client
+}
+
+func NewTestServiceHTTPClient(client *http.Client) TestServiceHTTPClient {
+	return &TestServiceHTTPClientImpl{client}
+}
+
+// GetUser 获取用户测试
+func (c *TestServiceHTTPClientImpl) GetUser(ctx context.Context, in *GetUserRequest, opts ...http.CallOption) (*GetUserResponse, error) {
+	var out GetUserResponse
+	pattern := "/game/v1/test/user/{id}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationTestServiceGetUser))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}

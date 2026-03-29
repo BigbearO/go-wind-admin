@@ -11,3 +11,10 @@ client:
       auth:
         method: ""
         key: "some_api_key"
+
+  discovery:
+    type: nacos
+    nacos:
+      addr: "127.0.0.1:8848"
+      namespace: "public"
+      group: "DEFAULT_GROUP"
