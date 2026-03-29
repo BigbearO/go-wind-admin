@@ -6,7 +6,7 @@ import (
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/transport/http"
 
-	_ "github.com/tx7do/kratos-bootstrap/config/nacos"
+	//_ "github.com/tx7do/kratos-bootstrap/config/nacos"
 
 	_ "github.com/tx7do/kratos-bootstrap/registry/nacos"
 
