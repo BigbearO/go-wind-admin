@@ -15,24 +15,24 @@ registry:
 
 
 #
-#config:
-#  type: "nacos"               # 远程配置类型（支持 etcd/nacos/consul 等）
-#  nacos:
-#    address:  "192.168.50.235"  # nacos 集群地址
-#    port: 8848
-#    username: nacos
-#    password: nacos
-#    key: DEFAULT_GROUP
-#    timeout: 5000                  # 连接超时时间
-#    namespaceId: xhf
-#    group: DEFAULT_GROUP
-#    beat_interval: 1000
-#    data_id: wind.yaml
-#    not_load_cache_at_start: false
-#    update_cache_when_empty: true
-#    log_dir: ./tmp/nacos/log    # 日志目录
-#    cache_dir: ./tmp/nacos/cache  # 缓存目录
-#    log_level: info             # 日志级别: debug/info/warn/error
+config:
+  type: "nacos"               # 远程配置类型（支持 etcd/nacos/consul 等）
+  nacos:
+    address:  "192.168.50.235"  # nacos 集群地址
+    port: 8848
+    username: nacos
+    password: nacos
+    key: DEFAULT_GROUP
+    timeout: 5000                  # 连接超时时间
+    namespaceId: xhf
+    group: DEFAULT_GROUP
+    beat_interval: 1000
+    data_id: wind.yaml
+    not_load_cache_at_start: false
+    update_cache_when_empty: true
+    log_dir: ./tmp/nacos/log    # 日志目录
+    cache_dir: ./tmp/nacos/cache  # 缓存目录
+    log_level: info             # 日志级别: debug/info/warn/error
 
 
 trace:
