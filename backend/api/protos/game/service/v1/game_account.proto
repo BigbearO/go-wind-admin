@@ -52,6 +52,16 @@ service GameAccountService {
   }
 }
 
+// 测试服务
+service TestService {
+  // 获取用户测试
+  rpc GetUser (GetUserRequest) returns (GetUserResponse) {
+    option (google.api.http) = {
+      get: "/game/v1/test/user/{id}"
+    };
+  }
+}
+
 // 游戏账号
 message GameAccount {
   optional uint32 id = 1 [
@@ -154,4 +164,22 @@ message DeleteGameAccountRequest {
     json_name = "id",
     (gnostic.openapi.v3.property) = {description: "游戏账号ID"}
   ]; // 游戏账号ID
+}
+
+// 获取用户测试 - 请求
+message GetUserRequest {
+  uint32 id = 1 [
+    json_name = "id",
+    (gnostic.openapi.v3.property) = {description: "用户ID"}
+  ]; // 用户ID
+}
+
+// 获取用户测试 - 响应
+message GetUserResponse {
+  uint32 id = 1 [json_name = "id"]; // 用户ID
+  string username = 2 [json_name = "username"]; // 用户名
+  string nickname = 3 [json_name = "nickname"]; // 昵称
+  string email = 4 [json_name = "email"]; // 邮箱
+  string mobile = 5 [json_name = "mobile"]; // 手机
+  uint32 tenant_id = 6 [json_name = "tenantId"]; // 租户ID
 }

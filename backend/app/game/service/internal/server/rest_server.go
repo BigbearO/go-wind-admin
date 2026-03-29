@@ -42,6 +42,7 @@ func newRestMiddleware(logger log.Logger) []middleware.Middleware {
 func NewRestServer(
 	ctx *bootstrap.Context,
 	gameAccountService *service.GameAccountService,
+	testService *service.TestService,
 ) (*http.Server, error) {
 	cfg := ctx.GetConfig()
 
@@ -55,6 +56,7 @@ func NewRestServer(
 	}
 
 	gameV1.RegisterGameAccountServiceHTTPServer(srv, gameAccountService)
+	gameV1.RegisterTestServiceHTTPServer(srv, testService)
 
 	if cfg.GetServer().GetRest().GetEnableSwagger() {
 		swaggerUI.RegisterSwaggerUIServerWithOption(

@@ -101,6 +101,35 @@ func (s *redactedGameAccountServiceServer) Delete(ctx context.Context, in *Delet
 	return res, err
 }
 
+// RegisterRedactedTestServiceServer wraps the TestServiceServer with the redacted server and registers the service in GRPC
+func RegisterRedactedTestServiceServer(s grpc.ServiceRegistrar, srv TestServiceServer, bypass redact.Bypass) {
+	RegisterTestServiceServer(s, RedactedTestServiceServer(srv, bypass))
+}
+
+func RedactedTestServiceServer(srv TestServiceServer, bypass redact.Bypass) TestServiceServer {
+	if bypass == nil {
+		bypass = redact.Falsy
+	}
+	return &redactedTestServiceServer{srv: srv, bypass: bypass}
+}
+
+type redactedTestServiceServer struct {
+	UnsafeTestServiceServer
+	srv    TestServiceServer
+	bypass redact.Bypass
+}
+
+// GetUser is the redacted wrapper for the actual TestServiceServer.GetUser method
+// Unary RPC
+func (s *redactedTestServiceServer) GetUser(ctx context.Context, in *GetUserRequest) (*GetUserResponse, error) {
+	res, err := s.srv.GetUser(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
 // Redact method implementation for GameAccount
 func (x *GameAccount) Redact() string {
 	if x == nil {
@@ -190,5 +219,35 @@ func (x *DeleteGameAccountRequest) Redact() string {
 	}
 
 	// Safe field: Id
+	return x.String()
+}
+
+// Redact method implementation for GetUserRequest
+func (x *GetUserRequest) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: Id
+	return x.String()
+}
+
+// Redact method implementation for GetUserResponse
+func (x *GetUserResponse) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: Id
+
+	// Safe field: Username
+
+	// Safe field: Nickname
+
+	// Safe field: Email
+
+	// Safe field: Mobile
+
+	// Safe field: TenantId
 	return x.String()
 }

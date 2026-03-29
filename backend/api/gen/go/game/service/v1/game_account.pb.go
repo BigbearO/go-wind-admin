@@ -425,6 +425,136 @@ func (x *DeleteGameAccountRequest) GetId() uint32 {
 	return 0
 }
 
+// 获取用户测试 - 请求
+type GetUserRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"` // 用户ID
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetUserRequest) Reset() {
+	*x = GetUserRequest{}
+	mi := &file_game_service_v1_game_account_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetUserRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserRequest) ProtoMessage() {}
+
+func (x *GetUserRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_game_service_v1_game_account_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserRequest.ProtoReflect.Descriptor instead.
+func (*GetUserRequest) Descriptor() ([]byte, []int) {
+	return file_game_service_v1_game_account_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *GetUserRequest) GetId() uint32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+// 获取用户测试 - 响应
+type GetUserResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`                             // 用户ID
+	Username      string                 `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`                  // 用户名
+	Nickname      string                 `protobuf:"bytes,3,opt,name=nickname,proto3" json:"nickname,omitempty"`                  // 昵称
+	Email         string                 `protobuf:"bytes,4,opt,name=email,proto3" json:"email,omitempty"`                        // 邮箱
+	Mobile        string                 `protobuf:"bytes,5,opt,name=mobile,proto3" json:"mobile,omitempty"`                      // 手机
+	TenantId      uint32                 `protobuf:"varint,6,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"` // 租户ID
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetUserResponse) Reset() {
+	*x = GetUserResponse{}
+	mi := &file_game_service_v1_game_account_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetUserResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserResponse) ProtoMessage() {}
+
+func (x *GetUserResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_game_service_v1_game_account_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserResponse.ProtoReflect.Descriptor instead.
+func (*GetUserResponse) Descriptor() ([]byte, []int) {
+	return file_game_service_v1_game_account_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *GetUserResponse) GetId() uint32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *GetUserResponse) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
+func (x *GetUserResponse) GetNickname() string {
+	if x != nil {
+		return x.Nickname
+	}
+	return ""
+}
+
+func (x *GetUserResponse) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+func (x *GetUserResponse) GetMobile() string {
+	if x != nil {
+		return x.Mobile
+	}
+	return ""
+}
+
+func (x *GetUserResponse) GetTenantId() uint32 {
+	if x != nil {
+		return x.TenantId
+	}
+	return 0
+}
+
 var File_game_service_v1_game_account_proto protoreflect.FileDescriptor
 
 const file_game_service_v1_game_account_proto_rawDesc = "" +
@@ -484,13 +614,24 @@ const file_game_service_v1_game_account_proto_rawDesc = "" +
 	"\vupdate_mask\x18\x03 \x01(\v2\x1a.google.protobuf.FieldMaskB\x1e\xbaG\x1b\x92\x02\x18要更新的字段列表R\n" +
 	"updateMask\"@\n" +
 	"\x18DeleteGameAccountRequest\x12$\n" +
-	"\x02id\x18\x01 \x01(\rB\x14\xbaG\x11\x92\x02\x0e游戏账号IDR\x02id2\xca\x04\n" +
+	"\x02id\x18\x01 \x01(\rB\x14\xbaG\x11\x92\x02\x0e游戏账号IDR\x02id\"0\n" +
+	"\x0eGetUserRequest\x12\x1e\n" +
+	"\x02id\x18\x01 \x01(\rB\x0e\xbaG\v\x92\x02\b用户IDR\x02id\"\xa4\x01\n" +
+	"\x0fGetUserResponse\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\rR\x02id\x12\x1a\n" +
+	"\busername\x18\x02 \x01(\tR\busername\x12\x1a\n" +
+	"\bnickname\x18\x03 \x01(\tR\bnickname\x12\x14\n" +
+	"\x05email\x18\x04 \x01(\tR\x05email\x12\x16\n" +
+	"\x06mobile\x18\x05 \x01(\tR\x06mobile\x12\x1b\n" +
+	"\ttenant_id\x18\x06 \x01(\rR\btenantId2\xca\x04\n" +
 	"\x12GameAccountService\x12k\n" +
 	"\x04List\x12\x19.pagination.PagingRequest\x1a(.game.service.v1.ListGameAccountResponse\"\x1e\x82\xd3\xe4\x93\x02\x18\x12\x16/game/v1/game_accounts\x12p\n" +
 	"\x03Get\x12&.game.service.v1.GetGameAccountRequest\x1a\x1c.game.service.v1.GameAccount\"#\x82\xd3\xe4\x93\x02\x1d\x12\x1b/game/v1/game_accounts/{id}\x12n\n" +
 	"\x06Create\x12).game.service.v1.CreateGameAccountRequest\x1a\x16.google.protobuf.Empty\"!\x82\xd3\xe4\x93\x02\x1b:\x01*\"\x16/game/v1/game_accounts\x12s\n" +
 	"\x06Update\x12).game.service.v1.UpdateGameAccountRequest\x1a\x16.google.protobuf.Empty\"&\x82\xd3\xe4\x93\x02 :\x01*\x1a\x1b/game/v1/game_accounts/{id}\x12p\n" +
-	"\x06Delete\x12).game.service.v1.DeleteGameAccountRequest\x1a\x16.google.protobuf.Empty\"#\x82\xd3\xe4\x93\x02\x1d*\x1b/game/v1/game_accounts/{id}B\xb6\x01\n" +
+	"\x06Delete\x12).game.service.v1.DeleteGameAccountRequest\x1a\x16.google.protobuf.Empty\"#\x82\xd3\xe4\x93\x02\x1d*\x1b/game/v1/game_accounts/{id}2|\n" +
+	"\vTestService\x12m\n" +
+	"\aGetUser\x12\x1f.game.service.v1.GetUserRequest\x1a .game.service.v1.GetUserResponse\"\x1f\x82\xd3\xe4\x93\x02\x19\x12\x17/game/v1/test/user/{id}B\xb6\x01\n" +
 	"\x13com.game.service.v1B\x10GameAccountProtoP\x01Z/go-wind-admin/api/gen/go/game/service/v1;gamepb\xa2\x02\x03GSX\xaa\x02\x0fGame.Service.V1\xca\x02\x0fGame\\Service\\V1\xe2\x02\x1bGame\\Service\\V1\\GPBMetadata\xea\x02\x11Game::Service::V1b\x06proto3"
 
 var (
@@ -505,7 +646,7 @@ func file_game_service_v1_game_account_proto_rawDescGZIP() []byte {
 	return file_game_service_v1_game_account_proto_rawDescData
 }
 
-var file_game_service_v1_game_account_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_game_service_v1_game_account_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_game_service_v1_game_account_proto_goTypes = []any{
 	(*GameAccount)(nil),              // 0: game.service.v1.GameAccount
 	(*ListGameAccountResponse)(nil),  // 1: game.service.v1.ListGameAccountResponse
@@ -513,32 +654,36 @@ var file_game_service_v1_game_account_proto_goTypes = []any{
 	(*CreateGameAccountRequest)(nil), // 3: game.service.v1.CreateGameAccountRequest
 	(*UpdateGameAccountRequest)(nil), // 4: game.service.v1.UpdateGameAccountRequest
 	(*DeleteGameAccountRequest)(nil), // 5: game.service.v1.DeleteGameAccountRequest
-	(*timestamppb.Timestamp)(nil),    // 6: google.protobuf.Timestamp
-	(*fieldmaskpb.FieldMask)(nil),    // 7: google.protobuf.FieldMask
-	(*v1.PagingRequest)(nil),         // 8: pagination.PagingRequest
-	(*emptypb.Empty)(nil),            // 9: google.protobuf.Empty
+	(*GetUserRequest)(nil),           // 6: game.service.v1.GetUserRequest
+	(*GetUserResponse)(nil),          // 7: game.service.v1.GetUserResponse
+	(*timestamppb.Timestamp)(nil),    // 8: google.protobuf.Timestamp
+	(*fieldmaskpb.FieldMask)(nil),    // 9: google.protobuf.FieldMask
+	(*v1.PagingRequest)(nil),         // 10: pagination.PagingRequest
+	(*emptypb.Empty)(nil),            // 11: google.protobuf.Empty
 }
 var file_game_service_v1_game_account_proto_depIdxs = []int32{
-	6,  // 0: game.service.v1.GameAccount.start_time:type_name -> google.protobuf.Timestamp
-	6,  // 1: game.service.v1.GameAccount.expire_time:type_name -> google.protobuf.Timestamp
-	6,  // 2: game.service.v1.GameAccount.create_at:type_name -> google.protobuf.Timestamp
-	6,  // 3: game.service.v1.GameAccount.update_at:type_name -> google.protobuf.Timestamp
+	8,  // 0: game.service.v1.GameAccount.start_time:type_name -> google.protobuf.Timestamp
+	8,  // 1: game.service.v1.GameAccount.expire_time:type_name -> google.protobuf.Timestamp
+	8,  // 2: game.service.v1.GameAccount.create_at:type_name -> google.protobuf.Timestamp
+	8,  // 3: game.service.v1.GameAccount.update_at:type_name -> google.protobuf.Timestamp
 	0,  // 4: game.service.v1.ListGameAccountResponse.items:type_name -> game.service.v1.GameAccount
 	0,  // 5: game.service.v1.CreateGameAccountRequest.data:type_name -> game.service.v1.GameAccount
 	0,  // 6: game.service.v1.UpdateGameAccountRequest.data:type_name -> game.service.v1.GameAccount
-	7,  // 7: game.service.v1.UpdateGameAccountRequest.update_mask:type_name -> google.protobuf.FieldMask
-	8,  // 8: game.service.v1.GameAccountService.List:input_type -> pagination.PagingRequest
+	9,  // 7: game.service.v1.UpdateGameAccountRequest.update_mask:type_name -> google.protobuf.FieldMask
+	10, // 8: game.service.v1.GameAccountService.List:input_type -> pagination.PagingRequest
 	2,  // 9: game.service.v1.GameAccountService.Get:input_type -> game.service.v1.GetGameAccountRequest
 	3,  // 10: game.service.v1.GameAccountService.Create:input_type -> game.service.v1.CreateGameAccountRequest
 	4,  // 11: game.service.v1.GameAccountService.Update:input_type -> game.service.v1.UpdateGameAccountRequest
 	5,  // 12: game.service.v1.GameAccountService.Delete:input_type -> game.service.v1.DeleteGameAccountRequest
-	1,  // 13: game.service.v1.GameAccountService.List:output_type -> game.service.v1.ListGameAccountResponse
-	0,  // 14: game.service.v1.GameAccountService.Get:output_type -> game.service.v1.GameAccount
-	9,  // 15: game.service.v1.GameAccountService.Create:output_type -> google.protobuf.Empty
-	9,  // 16: game.service.v1.GameAccountService.Update:output_type -> google.protobuf.Empty
-	9,  // 17: game.service.v1.GameAccountService.Delete:output_type -> google.protobuf.Empty
-	13, // [13:18] is the sub-list for method output_type
-	8,  // [8:13] is the sub-list for method input_type
+	6,  // 13: game.service.v1.TestService.GetUser:input_type -> game.service.v1.GetUserRequest
+	1,  // 14: game.service.v1.GameAccountService.List:output_type -> game.service.v1.ListGameAccountResponse
+	0,  // 15: game.service.v1.GameAccountService.Get:output_type -> game.service.v1.GameAccount
+	11, // 16: game.service.v1.GameAccountService.Create:output_type -> google.protobuf.Empty
+	11, // 17: game.service.v1.GameAccountService.Update:output_type -> google.protobuf.Empty
+	11, // 18: game.service.v1.GameAccountService.Delete:output_type -> google.protobuf.Empty
+	7,  // 19: game.service.v1.TestService.GetUser:output_type -> game.service.v1.GetUserResponse
+	14, // [14:20] is the sub-list for method output_type
+	8,  // [8:14] is the sub-list for method input_type
 	8,  // [8:8] is the sub-list for extension type_name
 	8,  // [8:8] is the sub-list for extension extendee
 	0,  // [0:8] is the sub-list for field type_name
@@ -556,9 +701,9 @@ func file_game_service_v1_game_account_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_game_service_v1_game_account_proto_rawDesc), len(file_game_service_v1_game_account_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   8,
 			NumExtensions: 0,
-			NumServices:   1,
+			NumServices:   2,
 		},
 		GoTypes:           file_game_service_v1_game_account_proto_goTypes,
 		DependencyIndexes: file_game_service_v1_game_account_proto_depIdxs,
