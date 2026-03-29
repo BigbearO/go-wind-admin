@@ -36,3 +36,4 @@ bin/
 
 # Go workspace file
 go.work
+/tmp/
