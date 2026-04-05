@@ -37,3 +37,4 @@ bin/
 # Go workspace file
 go.work
 /tmp/
+/go-wind-admin-rpc/
