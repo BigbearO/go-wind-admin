@@ -964,8 +964,8 @@ github.com/tx7do/kratos-transport/tracing v1.1.1 h1:KlqURDvzKX62krbfAUgot3laMuak
 github.com/tx7do/kratos-transport/tracing v1.1.1/go.mod h1:a2eozcWrX0Xfgq121tCw2s3vGiu05QARUKkZ48wRadI=
 github.com/tx7do/kratos-transport/transport v1.3.3 h1:MUkd6H6PwdJLjXDPbdzAHdGHYuBMLv11NS0vImrrv2I=
 github.com/tx7do/kratos-transport/transport v1.3.3/go.mod h1:tB8IyCI1+Dc6gOLfT2g8GJFsXRG+24bm4Vky3y4Ao9M=
-github.com/tx7do/kratos-transport/transport/asynq v1.3.8 h1:RCF4b3OxY4AYCy19edjfjXZ4rP5xaNAo5WoVY9l+yeE=
-github.com/tx7do/kratos-transport/transport/asynq v1.3.8/go.mod h1:XA7NvU3702W2g+zUUO6I/1ZSSlkKegS+ALuqUojL1uM=
+github.com/tx7do/kratos-transport/transport/asynq v1.3.10 h1:C46BO0xi2c2un//6AmDwRdS4N2djLjYDoPglGqGUZ3Q=
+github.com/tx7do/kratos-transport/transport/asynq v1.3.10/go.mod h1:XA7NvU3702W2g+zUUO6I/1ZSSlkKegS+ALuqUojL1uM=
 github.com/tx7do/kratos-transport/transport/keepalive v1.3.4 h1:qu8Z+JVPw62D3h25KOq3L0QtKEFNhH+YEN/9gxMJjRQ=
 github.com/tx7do/kratos-transport/transport/keepalive v1.3.4/go.mod h1:qHv9LLJTvon40EpDWbbMhkRUqPuc0QcAHLy1LdPUeuE=
 github.com/tx7do/kratos-transport/transport/sse v1.3.2 h1:pJlTqMWwUbo9C5AFvc4n/qgoujgj0wFZsCog6wdr+D4=

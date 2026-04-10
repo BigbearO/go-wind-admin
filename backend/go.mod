@@ -51,7 +51,7 @@ require (
 	github.com/tx7do/kratos-bootstrap/transport/asynq v0.0.6
 	github.com/tx7do/kratos-bootstrap/transport/sse v0.0.4
 	github.com/tx7do/kratos-swagger-ui v0.0.1
-	github.com/tx7do/kratos-transport/transport/asynq v1.3.8
+	github.com/tx7do/kratos-transport/transport/asynq v1.3.10
 	github.com/tx7do/kratos-transport/transport/sse v1.3.2
 	github.com/yuin/gopher-lua v1.1.2
 	go.opentelemetry.io/otel/trace v1.43.0
