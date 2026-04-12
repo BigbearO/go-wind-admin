@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/google/uuid"
+	"github.com/tx7do/go-utils/id"
 )
 
 // Context represents the execution context for a Lua script
@@ -46,7 +46,7 @@ type HTTPContext struct {
 // NewContext creates a new execution context
 func NewContext(hookName string) *Context {
 	return &Context{
-		ID:        uuid.New().String(),
+		ID:        id.NewGUIDv4(false),
 		HookName:  hookName,
 		Data:      make(map[string]interface{}),
 		StartTime: time.Now(),
@@ -140,7 +140,7 @@ func (c *Context) Clone() *Context {
 	}
 
 	return &Context{
-		ID:         uuid.New().String(),
+		ID:         id.NewGUIDv4(false),
 		HookName:   c.HookName,
 		Data:       newData,
 		User:       c.User,

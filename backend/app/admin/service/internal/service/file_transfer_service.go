@@ -10,8 +10,8 @@ import (
 	"strings"
 
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/google/uuid"
 	"github.com/minio/minio-go/v7"
+	"github.com/tx7do/go-utils/id"
 	"github.com/tx7do/go-utils/trans"
 	"github.com/tx7do/kratos-bootstrap/bootstrap"
 
@@ -110,7 +110,7 @@ func (s *FileTransferService) recordFile(
 			FileDirectory: trans.Ptr(dir),
 			FileName:      trans.Ptr(sourceFileName),
 			Extension:     trans.Ptr(ext),
-			FileGuid:      trans.Ptr(uuid.New().String()),
+			FileGuid:      trans.Ptr(id.NewGUIDv4(false)),
 			Size:          trans.Ptr(uint64(info.Size)),
 			LinkUrl:       trans.Ptr(downloadUrl),
 			CreatedBy:     trans.Ptr(userID),
