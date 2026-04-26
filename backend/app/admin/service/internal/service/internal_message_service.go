@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/google/uuid"
 	paginationV1 "github.com/tx7do/go-crud/api/gen/go/pagination/v1"
 	"github.com/tx7do/go-utils/aggregator"
+	"github.com/tx7do/go-utils/id"
 	"github.com/tx7do/go-utils/timeutil"
 	"github.com/tx7do/go-utils/trans"
 	"github.com/tx7do/kratos-bootstrap/bootstrap"
@@ -286,7 +286,7 @@ func (s *InternalMessageService) sendNotification(ctx context.Context, messageId
 	recipientStreamIds := s.authenticator.GetAccessTokens(ctx, s.clientType, recipientUserId)
 	for _, streamId := range recipientStreamIds {
 		s.sseServer.Publish(ctx, sse.StreamID(streamId), &sse.Event{
-			ID:    []byte(uuid.New().String()),
+			ID:    []byte(id.NewGUIDv4(false)),
 			Data:  recipientJson,
 			Event: []byte("notification"),
 		})

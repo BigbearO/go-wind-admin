@@ -22,7 +22,10 @@ func NewAsynqServer(ctx *bootstrap.Context, taskService *service.TaskService) (*
 		return nil, nil
 	}
 
-	srv := bootstrapAsynq.NewAsynqServer(cfg.Server.Asynq)
+	srv := bootstrapAsynq.NewAsynqServer(
+		cfg.Server.Asynq,
+		asynqServer.WithEnableKeepAlive(false),
+	)
 
 	taskService.RegisterTaskScheduler(srv)
 

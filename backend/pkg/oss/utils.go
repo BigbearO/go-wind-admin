@@ -11,8 +11,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/minio/minio-go/v7"
+	"github.com/tx7do/go-utils/id"
 )
 
 type GenerateFileNameType string
@@ -324,7 +324,7 @@ func DetectFileType(fileContent []byte) (mimeType, ext string) {
 // - 适用：高并发、无需去重、希望最小碰撞风险的通用场景。
 func GeneraUUIDFileName(fileExt string) string {
 	// 生成 UUID 并去除横线
-	name := strings.ReplaceAll(uuid.New().String(), "-", "")
+	name := id.NewGUIDv4(false) // 生成不带横线的 UUID
 
 	// 确保扩展名没有开头的点
 	cleanExt := strings.TrimPrefix(fileExt, ".")
@@ -387,7 +387,7 @@ func GeneraTimeBaseFileName(fileExt string) string {
 	cleanExt := strings.TrimPrefix(fileExt, ".")
 
 	// 使用 UUID 去掉横线后取前 8 字符作为随机后缀
-	suffix := strings.ReplaceAll(uuid.New().String(), "-", "")
+	suffix := id.NewGUIDv4(false)
 	if len(suffix) > 8 {
 		suffix = suffix[:8]
 	}
@@ -449,7 +449,7 @@ func JoinObjectName(contentType string, filePath, fileName *string) (string, str
 
 	var _fileName string
 	if fileName == nil {
-		_fileName = uuid.New().String() + fileSuffix
+		_fileName = id.NewGUIDv4(false) + fileSuffix
 	} else {
 		_fileName = *fileName
 	}
